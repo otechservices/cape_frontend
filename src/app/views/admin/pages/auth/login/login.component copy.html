@@ -1,0 +1,65 @@
+<div class="app-container app-theme-white body-tabs-shadow">
+    
+    <div class="app-container">
+        
+    <div class="h-100 bg-plum-plate bg-animation">
+        <!--div class="d-flex justify-content-around">
+            <div class="">
+                            <img src="assets/template2/images/logo.png" alt="">
+
+            </div>
+            <div class="">
+                            <img src="assets/template2/images/fem.jfif" alt="">
+
+            </div>
+            <div class="">
+                            <img src="assets/template2/images/onu.png" alt="">
+
+            </div>
+    
+        </div-->
+    <div class="d-flex h-100 justify-content-center align-items-center">
+    <div class="mx-auto app-login-box col-md-8">
+    <div class=" mx-auto mb-3 text-center text-white fw-bold h2">Système d'Information des Statistiques Environnementales du Bénin (SISEB)</div>
+    <div class="modal-dialog w-100 mx-auto">
+    <div class="modal-content">
+    <div class="modal-body">
+    <div class="h5 modal-title text-white text-center">
+    <h4 class="mt-2">
+    <div>Bienvenue,</div>
+    <span>Connectez vous svp.</span>
+    </h4>
+    </div>
+    <form class="" #loginForm="ngForm" (ngSubmit)="login(loginForm.value)">
+    <div class="form-row">
+    <div class="col-md-12">
+    <div class="position-relative form-group">
+    <input name="email" id="exampleEmail" placeholder="Email ici" type="email" class="form-control" required ngModel>
+    </div>
+    </div>
+    <div class="col-md-12">
+    <div class="position-relative form-group">
+    <input name="password" id="examplePassword" placeholder="Mot de passe ici..." type="password" class="form-control" required ngModel>
+    </div>
+    </div>
+    </div>
+    <div class="d-flex justify-content-center">
+        <button class="btn btn-primary btn-lg" [disabled]="loginForm.invalid || loading">Se connecter <app-loading [isVisible]="loading"></app-loading></button>
+
+    </div>
+    </form>
+    <div class="divider"></div>
+    <div class=" clearfix">
+    <div class="float-left">
+    <a routerLink="/admin/forget-password" class="btn-lg btn btn-link">Mot de passe oublié</a>
+    </div>
+   
+    </div>
+    </div>
+    </div>
+    <div class="text-center text-white opacity-8 mt-3">Copyright © GLOBAL IT NET 2022</div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>

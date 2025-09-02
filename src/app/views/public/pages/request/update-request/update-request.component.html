@@ -1,0 +1,650 @@
+<igx-stepper #stepper [linear]="false" [orientation]="'horizontal'" (activeStepChanging)="handleActiveStepChanging($event)">
+    <igx-step> 
+        <p igxStepTitle>Infos Promoteur</p>
+   
+        <div igxStepContent>
+         <div class="">
+            <h4 class="mb-3 cape-text-blue"><b><u>Identification</u></b></h4>
+
+             <div class="row clearfix">
+                 <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                     <label for="">Nom<span class="mx-1 text-danger">*</span></label>
+                     <input type="text" maxlength="100" name="name_pomoter" class="form-control"  required [(ngModel)]="myRequestForm.name_pomoter">
+                 </div>
+                 <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                     <label for="">Prénom(s) <span class="mx-1 text-danger">*</span></label>
+                     <input type="text" maxlength="100" name="firstname_pomoter" class="form-control"  required  [(ngModel)]="myRequestForm.firstname_pomoter">
+                 </div>
+
+                 <div class="form-group mb-3 col-12 d-flex justify-content-between">
+                    <div class="align-self-center">
+                        <label for="">Etes vous le directeur du centre ? <span class="mx-1 text-danger">*</span></label>
+                        <ng-toggle
+                   
+                        [values]="{
+                            unchecked: false,
+                            checked:true
+                        }"
+                            name="chief_is_directeor" [(ngModel)]="myRequestForm.chief_is_directeor"
+                            [color]="{
+                                unchecked: '#939da2',
+                                checked: '#21804C'
+                            }"
+
+                            (change)="changed($event)"
+                            ></ng-toggle>     
+                    </div>
+                      
+                        
+                        
+                </div>
+   
+                 <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                     <label for="">Email <span class="mx-1 text-danger">*</span></label>
+                     <input type="email" name="email_pomoter" class="form-control"  required  [(ngModel)]="myRequestForm.email_pomoter" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$">
+                 </div>
+                 <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                     <label for="">Téléphone <span class="mx-1 text-danger">*</span></label>
+                     <input type="text" name="phone_pomoter" maxlength="30" class="form-control"  required  [(ngModel)]="myRequestForm.phone_pomoter">
+                 </div>
+
+
+             </div>
+
+             <h4 class="mb-3"><b><u>Document du Promoteur</u></b></h4>
+             <div class="row">
+                <ng-container  *ngFor="let f of requiredFiles; let i=index;">
+                 <ng-container *ngIf="f.type =='DP'">
+                    <div class="col-12 col-md-6">
+                    <div class=" p-2 bg-light mb-2 " >
+                        <div class="d-flex justify-content-between" >
+                            <div>
+                                <h5 class="m-1">{{f.name}}</h5>
+                                <h6 class="m-1">{{f.description}}</h6>
+                                <ng-container *ngIf="!f.isSetted">
+                                    <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                                        <label for="">Fichier</label>
+                                        <input type="file" #fileInp (change)="upload($event,i)">
+        
+                                    </div>
+                                </ng-container>
+                               
+                            </div>
+                            <div class="align-self-center">
+                                <ng-container *ngIf="f.isSetted">
+                                    <div >
+                                        <div class="">
+                                              <div class="d-flex justify-content-around">
+                                            <i class="fa fa-eye text-info mx-1" (click)="open(content,i)" style="cursor: pointer;"></i>
+                                            <i class="fa fa-trash text-danger  mx-1" (click)="removeFile(i)"  style="cursor: pointer;"></i> 
+                                        </div>
+                                        </div>
+                                      
+                                      
+                                    </div>
+                                </ng-container>
+                        
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                 </ng-container>
+                 
+                
+                </ng-container>
+              
+               </div>
+         </div>
+         <div class="sample-step-actions mt-5">
+            
+             <button igxButton="raised" class="cape-bg-green text-white  btn btn-sm" (click)="next()">
+                Suivant <i class="fa fa-long-arrow-right"></i>
+            </button>
+         </div>
+        </div>
+     </igx-step>
+
+     <igx-step>
+        <p igxStepTitle>Infos Directeur</p>
+        <div igxStepContent>
+         <div class="">
+            <h4 class="mb-3 cape-text-blue"><b><u>Identification</u></b></h4>
+            <div class="row clearfix">
+
+                   <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                     <label for="">Nom </label>
+                     <input type="text" [readonly]="myRequestForm.chief_is_directeor" maxlength="100" name="name_chief" class="form-control"   [(ngModel)]="myRequestForm.name_chief">
+                 </div>
+ 
+                 <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                     <label for="">Prénom(s) <span class="mx-1 text-danger">*</span></label>
+                     <input type="text" [readonly]="myRequestForm.chief_is_directeor" maxlength="100" name="firstname_chief" class="form-control"  required  [(ngModel)]="myRequestForm.firstname_chief">
+                 </div>
+                 <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                     <label for="">Téléphone <span class="mx-1 text-danger">*</span></label>
+                     <input type="text" [readonly]="myRequestForm.chief_is_directeor" maxlength="100" name="phone_chief" class="form-control"  required  [(ngModel)]="myRequestForm.phone_chief">
+                 </div>
+                 <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                     <label for="">Email <span class="mx-1 text-danger">*</span></label>
+                     <input type="email" [readonly]="myRequestForm.chief_is_directeor" maxlength="100" name="email_chief" class="form-control"  required  [(ngModel)]="myRequestForm.email_chief" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$">
+                 </div>
+ 
+     
+             </div>
+        
+             <h4 class="mb-3"><b><u>Document du Directeur</u></b></h4>
+             <div class="row">
+                <ng-container  *ngFor="let f of requiredFiles; let i=index;">
+                   <ng-container *ngIf="myRequestForm.chief_is_directeor">
+                    <ng-container *ngIf="f.type == 'DP'">
+                        <div class="col-12 col-md-6">
+                        <div class=" p-2 bg-light mb-2 " >
+                            <div class="d-flex justify-content-between" >
+                                <div>
+                                    <h5 class="m-1">{{f.name}}</h5>
+                                    <h6 class="m-1">{{f.description}}</h6>
+                                    <ng-container *ngIf="!f.isSetted">
+                                        <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                                            <label for="">Fichier</label>
+                                            <input type="file" #fileInp (change)="upload($event,i)">
+            
+                                        </div>
+                                    </ng-container>
+                                   
+                                </div>
+                                <div class="align-self-center">
+                                    <ng-container *ngIf="f.isSetted">
+                                        <div >
+                                            <div class="">
+                                                  <div class="d-flex justify-content-around">
+                                                <i class="fa fa-eye text-info mx-1" (click)="open(content,i)" style="cursor: pointer;"></i>
+                                                <i class="fa fa-trash text-danger  mx-1" (click)="removeFile(i)"  style="cursor: pointer;"></i> 
+                                            </div>
+                                            </div>
+                                          
+                                          
+                                        </div>
+                                    </ng-container>
+                            
+                                </div>
+                            </div>
+                        </div>
+                            </div>
+                       </ng-container>
+                      
+                   </ng-container>
+                   <ng-container *ngIf="!myRequestForm.chief_is_directeor">
+                    <ng-container *ngIf="f.type == 'DD'">
+                        <div class="col-12 col-md-6">
+                        <div class=" p-2 bg-light mb-2 " >
+                            <div class="d-flex justify-content-between" >
+                                <div>
+                                    <h5 class="m-1">{{f.name}}</h5>
+                                    <h6 class="m-1">{{f.description}}</h6>
+                                    <ng-container *ngIf="!f.isSetted">
+                                        <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                                            <label for="">Fichier</label>
+                                            <input type="file" #fileInp (change)="upload($event,i)">
+            
+                                        </div>
+                                    </ng-container>
+                                   
+                                </div>
+                                <div class="align-self-center">
+                                    <ng-container *ngIf="f.isSetted">
+                                        <div >
+                                            <div class="">
+                                                  <div class="d-flex justify-content-around">
+                                                <i class="fa fa-eye text-info mx-1" (click)="open(content,i)" style="cursor: pointer;"></i>
+                                                <i class="fa fa-trash text-danger  mx-1" (click)="removeFile(i)"  style="cursor: pointer;"></i> 
+                                            </div>
+                                            </div>
+                                          
+                                          
+                                        </div>
+                                    </ng-container>
+                            
+                                </div>
+                            </div>
+                        </div>
+                            </div>
+                       </ng-container>
+                      
+                   </ng-container>
+               
+                </ng-container>
+              
+               </div>
+         </div>
+         <div class="sample-step-actions mt-5">
+             <button igxButton="raised" class="cape-btn-outline-blue btn btn-sm me-2" (click)="prev()">
+                 Précédent <i class="fa fa-long-arrow-left"></i></button>
+             <button igxButton="raised" class="cape-bg-green text-white  btn btn-sm" (click)="next()">Suivant
+                 <i class="fa fa-long-arrow-right"></i>
+             </button>
+         </div>
+        </div>
+     </igx-step>
+    <igx-step> 
+       
+
+       <p igxStepTitle>Infos centre</p>
+       <div igxStepContent>
+        <div class="">
+            <h4 class="mb-3 cape-text-blue"><b><u>Identification</u></b></h4>
+
+            <div class="row clearfix">
+                <div class="form-group mb-3 col-12 d-flex justify-content-between">
+                    <div class="align-self-center">
+                        <label for="">Possédez vous déjà un agrément pour votre centre? <span class="mx-1 text-danger">*</span></label>
+                        <ng-toggle
+                   
+                        [values]="{
+                            unchecked: false,
+                            checked:true
+                        }"
+                            name="has_aggrement" [(ngModel)]="myRequestForm.has_aggrement"
+                            [color]="{
+                                unchecked: '#939da2',
+                                checked: '#21804C'
+                            }"
+
+                            (change)="changed2($event)"
+                            ></ng-toggle>     
+                    </div>
+                      
+                        
+                        
+                </div>
+                <div *ngIf="myRequestForm.has_aggrement" class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                    <label for="">Référence de l'agrément<span class="mx-1 text-danger">*</span></label>
+                    <input type="text" name="aggreement_reference" [(ngModel)]="myRequestForm.aggreement_reference" class="form-control"  required >
+                </div>
+                <div *ngIf="myRequestForm.aggreement_year" class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                    <label for="">Date de l'agrément<span class="mx-1 text-danger">*</span></label>
+                    <input type="text" name="aggreement_year" [(ngModel)]="myRequestForm.aggreement_year" class="form-control"  required >
+                </div>
+                <div *ngIf="myRequestForm.has_aggrement" class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                    <label for="">Chargez l'agrément reçu, version PDF <span class="mx-1 text-danger">*</span></label>
+                    <input type="file" (change)="upload2($event)" class="form-control"  required >
+                </div>
+                <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                    <label for="">Type de centre <span class="mx-1 text-danger">*</span></label>
+                    <select class="form-control" name="type_cape_id" [(ngModel)]="myRequestForm.type_cape_id">
+                        <option *ngFor="let d of tds" [value]="d.id">{{d.name}}</option>
+                    </select>                                    </div>
+                <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                    <label for="">Dénomination du centre <span class="mx-1 text-danger">*</span></label>
+                    <input type="text" name="name" maxlength="255"  class="form-control" required [(ngModel)]="myRequestForm.name">
+                </div>
+                <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+
+                    <label for="">Capacité du centre <span class="mx-1 text-danger">*</span></label>
+                    <input type="number" min="0"  name="capacity" class="form-control"   [(ngModel)]="myRequestForm.capacity">
+                </div>
+
+      
+          
+                <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                    <label for="">Email<span class="mx-1 text-danger">*</span></label>
+                    <input type="email" maxlength="100" name="email" class="form-control"  required  [(ngModel)]="myRequestForm.email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$">
+                </div>
+                <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                    <label for="">Téléphone <span class="mx-1 text-danger">*</span></label>
+                    <input type="text" maxlength="100" name="phone" class="form-control"  required  [(ngModel)]="myRequestForm.phone">
+                </div>
+
+                <div class="col-lg-12 col-md-12 col-sm-12 mb-3">
+                    <label for="">Cibles accueillies <span class="mx-1 text-danger">*</span></label> 
+                    <br>
+                    <!--angular2-multiselect
+                    [data]="dropdownList"
+                   [(ngModel)]="selectedItems" 
+                   [settings]="dropdownSettings"
+                   name="selectedItems"
+                    
+                    >
+                   </angular2-multiselect-->
+                   <ng-select2 
+                   *ngIf="dropdownList.length>0"
+                   [data]="dropdownList"
+                   [(ngModel)]="selectedItems" 
+                   name="selectedItems"
+                    [options]="dropdownSettings"
+                    >
+</ng-select2>
+                </div>
+            </div>
+            <h4 class="mb-3 cape-text-blue"><b><u>Localisation du centre</u></b></h4>
+            <div class="row clearfix">
+        
+                <!-- Form Group -->
+                <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                    <label for="">Sélectionnez un département <span class="mx-1 text-danger">*</span></label>
+                    <select class="form-control" (change)="loadMunicipalities($event)" name="department_id" [(ngModel)]="myRequestForm.department_id">
+                        <option selected disabled>Choisir</option>
+                        <option *ngFor="let d of data" [value]="d.id">{{d.name}}</option>
+                    </select>
+                </div>
+                <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                    <label for="">Sélectionnez une commune <span class="mx-1 text-danger">*</span></label>
+                    <select class="form-control" (change)="loadDistricts($event)" name="municipality_id" [(ngModel)]="myRequestForm.municipality_id">
+                        <option selected disabled>Choisir</option>
+                        <option *ngFor="let d of municipalities" [value]="d.id">{{d.name}}</option>
+                    </select>
+                </div>
+                <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                    <label for="">Sélectionnez un arrondissement <span class="mx-1 text-danger">*</span></label>
+                    <select class="form-control" [(ngModel)]="myRequestForm.district_id" name="district_id" [(ngModel)]="myRequestForm.district_id">
+                        <option selected disabled>Choisir</option>
+                        <option *ngFor="let d of districts" [value]="d.id">{{d.name}}</option>
+                    </select>
+                </div>
+                
+                <!-- Form Group -->
+                <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                    <label for="">Quartier de ville / Village
+                        <span class="mx-1 text-danger">*</span>
+                    </label>
+                    <input type="text" maxlength="255"  name="town" class="form-control"  required [(ngModel)]="myRequestForm.town">
+                </div>
+                <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                    <label for="">Adresse
+                        <span class="mx-1 text-danger">*</span>
+                    </label>
+                    <input type="text" maxlength="255"  name="address" class="form-control"  required [(ngModel)]="myRequestForm.address">
+                </div>
+                <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                    <label for="">Image de la zone</label>
+                    <input type="file" class="form-control" (change)="upload3($event)" accept="image/*">
+                    <span><a class="text-dark" target="_blank" [href]="getImageUrl()">Voir l'existant</a></span>
+                </div>
+
+                <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                    <label for="">Coordonnées géographiques de la zone <span class="mx-1 text-danger">*</span></label>
+                    <input type="text" name="coords" maxlength="255" class="form-control"   [(ngModel)]="myRequestForm.coords">
+                    <span class="help-text">Ex: 6,2830003;2.7388335</span>
+                </div>
+            </div>
+       
+            <h4 class="mb-3"><b><u>Document du centre</u></b></h4>
+            <div class="row">
+               <ng-container *ngFor="let f of requiredFiles; let i=index;">
+                <ng-container *ngIf="f.type =='DC'">
+                    <div class="col-12 col-md-6" >
+                         <div class=" p-2 bg-light mb-2 " >
+                       <div class="d-flex justify-content-between" >
+                           <div>
+                               <h5 class="m-1">{{f.name}}</h5>
+                               <h6 class="m-1">{{f.description}}</h6>
+                               <ng-container *ngIf="!f.isSetted">
+                                   <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                                       <label for="">Fichier</label>
+                                       <input type="file" #fileInp (change)="upload($event,i)">
+       
+                                   </div>
+                               </ng-container>
+                              
+                           </div>
+                           <div class="align-self-center">
+                               <ng-container *ngIf="f.isSetted">
+                                   <div >
+                                       <div class="">
+                                             <div class="d-flex justify-content-around">
+                                           <i class="fa fa-eye text-info mx-1" (click)="open(content,i)" style="cursor: pointer;"></i>
+                                           <i class="fa fa-trash text-danger  mx-1" (click)="removeFile(i)"  style="cursor: pointer;"></i> 
+                                       </div>
+                                       </div>
+                                     
+                                     
+                                   </div>
+                               </ng-container>
+                       
+                           </div>
+                       </div>
+                   </div>
+                </div>
+                </ng-container>  
+              
+               </ng-container>
+             
+              </div>
+        </div>
+        <div class="sample-step-actions mt-5">
+            <button igxButton="raised" class="cape-btn-outline-blue btn btn-sm me-2" (click)="prev()">
+                Précédent <i class="fa fa-long-arrow-left"></i></button>
+            <button igxButton="raised" class="cape-bg-green text-white  btn btn-sm" (click)="next()">Suivant
+                <i class="fa fa-long-arrow-right"></i>
+            </button>
+        </div>
+       </div>
+  
+    </igx-step>
+
+   
+    <igx-step> 
+        <igx-icon igxStepIndicator><i class="fa fa-file text-info fa-2x"></i></igx-icon>
+        <p igxStepTitle>Récapitulatif de votre demande</p>
+        <div igxStepContent>
+            <fieldset>
+                <legend><h5><b>Information sur le promoteur</b></h5></legend>
+                <div class="row">
+                    <div class="col-4 col-sm-6 col-md-4">
+                        <dl>
+                            <dt> <strong>Nom</strong></dt>
+                            <dd>{{myRequestForm.name_pomoter}}</dd>
+                        </dl>
+                    </div>
+                    <div class="col-4 col-sm-6 col-md-4">
+                        <dl>
+                            <dt> <strong>Prénom(s)</strong></dt>
+                            <dd>{{myRequestForm.firstname_pomoter}}</dd>
+                        </dl>
+                    </div>
+                    <div class="col-4 col-sm-6 col-md-4">
+                        <dl>
+                            <dt> <strong>Contact</strong></dt>
+                            <dd>{{myRequestForm.phone_pomoter}}</dd>
+                        </dl>
+                    </div>
+                    <div class="col-4 col-sm-6 col-md-4">
+                        <dl>
+                            <dt> <strong>Email</strong></dt>
+                            <dd>{{myRequestForm.email}}</dd>
+                        </dl>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend><h5><b>Information sur le directeur</b></h5></legend>
+                <div class="row">
+                    <div class="col-4 col-sm-6 col-md-4">
+                        <dl>
+                            <dt> <strong>Nom</strong></dt>
+                            <dd>{{myRequestForm.name_chief}}</dd>
+                        </dl>
+                    </div>
+                    <div class="col-4 col-sm-6 col-md-4">
+                        <dl>
+                            <dt> <strong>Prénom(s)</strong></dt>
+                            <dd>{{myRequestForm.firstname_chief}}</dd>
+                        </dl>
+                    </div>
+                    <div class="col-4 col-sm-6 col-md-4">
+                        <dl>
+                            <dt> <strong>Contact</strong></dt>
+                            <dd>{{myRequestForm.phone_chief}}</dd>
+                        </dl>
+                    </div>
+                    <div class="col-4 col-sm-6 col-md-4">
+                        <dl>
+                            <dt> <strong>Email</strong></dt>
+                            <dd>{{myRequestForm.email_chief}}</dd>
+                        </dl>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend><h5><b>Information du centre</b></h5></legend>
+                <div class="row">
+                    <div class="col-4 col-sm-6 col-md-4">
+                        <dl>
+                            <dt> <strong>Nom</strong></dt>
+                            <dd>{{myRequestForm.name}}</dd>
+                        </dl>
+                    </div>
+                    <div class="col-4 col-sm-6 col-md-4">
+                        <dl>
+                            <dt> <strong>Type</strong></dt>
+                            <dd>{{getTCName(myRequestForm.type_cape_id)}}</dd>
+                        </dl>
+                    </div>
+                    <div class="col-4 col-sm-6 col-md-4">
+                        <dl>
+                            <dt> <strong>Capacité</strong></dt>
+                            <dd>{{myRequestForm.capacity}}</dd>
+                        </dl>
+                    </div>
+                   
+                   
+                    <div class="col-4 col-sm-6 col-md-4">
+                        <dl>
+                            <dt> <strong>Cibles</strong></dt>
+                            <dd>
+                                <ul>
+                                    <li *ngFor="let s of selectedItems">{{s}}</li>
+                                </ul>
+                            </dd>
+                        </dl>
+                    </div>
+                    <div class="col-4 col-sm-6 col-md-4">
+                        <dl>
+                            <dt> <strong>Email</strong></dt>
+                            <dd>{{myRequestForm.email}}</dd>
+                        </dl>
+                    </div>
+                    <div class="col-4 col-sm-6 col-md-4">
+                        <dl>
+                            <dt> <strong>Contact</strong></dt>
+                            <dd>{{myRequestForm.phone}}</dd>
+                        </dl>
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend><h5><b>Localisation du centre</b></h5></legend>
+                <div class="row">
+                    <div class="col-4 col-sm-6 col-md-4">
+                        <dl>
+                            <dt> <strong>Département</strong></dt>
+                            <dd>{{getDepartName(myRequestForm.department_id)}}</dd>
+                        </dl>
+                    </div>
+                    <div class="col-4 col-sm-6 col-md-4">
+                        <dl>
+                            <dt> <strong>Commune</strong></dt>
+                            <dd>{{getMunicipName(myRequestForm.municipality_id)}}</dd>
+                        </dl>
+                    </div>
+                    <div class="col-4 col-sm-6 col-md-4">
+                        <dl>
+                            <dt> <strong>Arrondissement</strong></dt>
+                            <dd>{{getDistrictName(myRequestForm.district_id)}}</dd>
+                        </dl>
+                    </div>
+                    <div class="col-4 col-sm-6 col-md-4">
+                        <dl>
+                            <dt> <strong>Quartier de ville / Village</strong></dt>
+                            <dd>{{myRequestForm.town}}</dd>
+                        </dl>
+                    </div>
+                    <div class="col-4 col-sm-6 col-md-4">
+                        <dl>
+                            <dt> <strong>Adresse</strong></dt>
+                            <dd>{{myRequestForm.address}}</dd>
+                        </dl>
+                    </div>
+                    <div class="col-4 col-sm-6 col-md-4">
+                        <dl>
+                            <dt> <strong>Coordonnées géographiques de la zone</strong></dt>
+                            <dd>{{myRequestForm.coords}}</dd>
+                        </dl>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend><h5><b>Documents joints</b></h5></legend>
+                <table class="table table-sm">
+                    <thead>
+                        <th>#</th>
+                        <th>Libellé</th>
+                        <th>Fichier</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="3"><h4 class="mb-3"><b><u>Document du promoteur</u></b></h4></td>
+                        </tr>
+                        <tr *ngFor="let f of filterByType('DP');let i=index">
+                            <td>{{i+1}}</td>
+                            <td>{{f.name}}</td>
+                            <td class="text-center"> 
+                                <i class="fa fa-eye text-info" (click)="open(content,i)" style="cursor: pointer;"></i>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3"><h4 class="mb-3"><b><u>Document du Directeur</u></b></h4></td>
+                        </tr>
+                        <tr *ngFor="let f of filterByType('DD');let i=index">
+                            <td>{{i+1}}</td>
+                            <td>{{f.name}}</td>
+                            <td class="text-center"> 
+                                <i class="fa fa-eye text-info" (click)="open(content,i)" style="cursor: pointer;"></i>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3"><h4 class="mb-3"><b><u>Document du centre</u></b></h4></td>
+                        </tr>
+                        <tr *ngFor="let f of filterByType('DC');let i=index">
+                            <td>{{i+1}}</td>
+                            <td>{{f.name}}</td>
+                            <td class="text-center"> 
+                                <i class="fa fa-eye text-info" (click)="open(content,i)" style="cursor: pointer;"></i>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3"><h4 class="mb-3"><b><u>Document joints</u></b></h4></td>
+                        </tr>
+                        <tr *ngFor="let f of filterByType('DJ');let i=index">
+                            <td>{{i+1}}</td>
+                            <td>{{f.name}}</td>
+                            <td class="text-center"> 
+                                <i class="fa fa-eye text-info" (click)="open(content,i)" style="cursor: pointer;"></i>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </fieldset>
+           
+        <div class="sample-step-actions mt-5">
+            <button igxButton="raised" class="cape-btn-outline-blue btn btn-sm me-2" (click)="prev()">
+                Précédent <i class="fa fa-long-arrow-left"></i></button>
+           
+            <button  class="cape-bg-green text-white  btn btn-sm" (click)="store()"
+                [disabled]="loading">Soumettre <app-loading [isVisible]="loading"></app-loading></button>
+        </div>    
+        </div>
+    </igx-step>
+</igx-stepper>
+
+
+<ng-template #content let-offcanvas id="myCanvas">
+	<div class="offcanvas-header">
+		<h4 class="offcanvas-title">Visualisation du document</h4>
+		<button type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss('Cross click')"></button>
+	</div>
+	<div class="offcanvas-body">
+        <object [data]="imageSrc" type="application/pdf" width="100%" height="600px"></object>
+
+	</div>
+</ng-template>

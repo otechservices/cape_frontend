@@ -1,0 +1,117 @@
+<section class="main-slider result">
+    <div class="welcome_section">
+        <h1 class="welcome_title">
+            Résultats des sessions
+        </h1>
+       
+    </div>
+  </section>
+  <div class="body_content">
+    <div class="container">
+      <div class="row clearfix">
+        <div class="content-side col-lg-12 col-md-12 col-sm-12">
+            
+            <div class="row process_agreement p-5">
+              <div class="col-lg-12 list_step">
+                <div class="project-detail">
+                    <div class="inner-box">
+                        <p>{{data.length}} élément(s)</p>
+                        <div class="table-responsive">
+                        <table class="table" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+                            <thead class="">
+                                <tr>
+                                    <th style="width: 10px;">#</th>
+                                    <th>Année </th>
+                                    <th>Session </th>
+                                    <th>Période </th>
+                                    <th>Dossiers Inscrits</th>
+                                    <th>Dossiers Validés</th>
+                                    <th>Dossiers rejetés </th>                        
+                                    <th>Voir mon résultat</th>                        
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let d of data; let i=index ">
+                                    <td>
+                                        <div class="form-check mb-2">
+                                                    {{i+1}}                                        
+                                        </div>
+                                    </td>
+                                    <td>{{d.year}}</td>
+                                    <td>{{d.name}}</td>
+                                    <td>Du {{d.date_start | date:"shortDate"}} au {{d.date_end | date:"shortDate"}}</td>
+                                    <td>{{d.requetes_count}}</td>
+                                    <td>{{d.requetes_ok_count}}</td>
+                                    <td>{{d.requetes_nok_count}}</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-primary" (click)="add(addContent)">Consulter le résultat</button>
+                                    </td>
+                                </tr>
+                            
+                            </tbody>
+                        </table>
+                        </div>
+        </div>
+                  </div>
+                
+              </div>
+              
+            </div>
+
+
+            
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <ng-template #addContent let-c="close" let-d="dismiss">
+    <form #addForm="ngForm" (ngSubmit)="verify(addForm.value,content)">
+        <div class="modal-header bg-secondary">
+            <button type="button" class="btn-close" aria-label="Close" (click)="d('Cross click')"></button>
+          </div>
+    <div class="modal-body" >
+        <div class="row mb-3" >
+      
+            <div class=" form-goup col-12 mb-3">
+                <label for="">Saisissez le code de votre dossier <span class="text-danger ml-2">(*)</span></label>
+                <input type="text" name="code" class="form-control" ngModel required>
+            </div>
+
+        </div>
+       
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-outline-dark" [disabled]="addForm.invalid"  >Vérifier <app-loading [isVisible]="loading"></app-loading></button>
+    </div>
+</form>
+  </ng-template>
+
+
+  <ng-template #content let-offcanvas id="myCanvas">
+	<div class="offcanvas-header">
+		<h4 class="offcanvas-title">Résultat de votre dossier</h4>
+		<button type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss('Cross click')"></button>
+	</div>
+	<div class="offcanvas-body">
+        <dl class="mb-3">
+            <dt>Resultat à la session</dt>
+            <dd>
+                <span *ngIf="result?.has_agreemant" class="bg-success text-white p-1">Autorisation accordée</span>
+                <span *ngIf="!result?.has_agreemant" class="bg-danger text-white p-1">Autorisation non accordée</span>
+
+            </dd>
+        </dl>
+
+        <dl class="mb-3" *ngIf="result?.has_agreemant">
+            <dt>Accord du ministre</dt>
+            <dd>
+                <span *ngIf="result?.is_authorized" class="bg-success text-white p-1">Autorisation accordée</span>
+                <span *ngIf="!result?.is_authorized" class="bg-warning text-white p-1">Autorisation en attente </span>
+
+            </dd>
+        </dl>
+	</div>
+</ng-template>
+  

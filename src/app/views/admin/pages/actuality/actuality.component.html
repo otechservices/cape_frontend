@@ -1,0 +1,209 @@
+    <!--breadcrumb-->
+    <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-5">
+        <div class="breadcrumb-title pe-3">CAPE </div>
+        <div class="ps-3">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 p-0">
+              <li class="breadcrumb-item"><a routerLink="/admin/dashboard"><i class="bx bx-home-alt"></i></a>
+              </li>
+              <li class="breadcrumb-item active" aria-current="page">Liste des départements</li>
+            </ol>
+          </nav>
+        </div>
+        <div class="ms-auto">
+        </div>
+      </div>
+  
+      <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+              
+                <div class="card-body">
+                    <div class="d-flex mb-5 " *ngIf="buttonsPermission">
+                      <button type="button" class="btn btn-primary btn-sm me-3" (click)="add(addContent)">Ajouter une actualité</button>
+  
+                        <button *ngIf="buttonsPermission.show"  (click)="show(showContent)" type="button" class="btn btn-outline-primary btn-sm  me-3">
+                             <span>Consulter</span></button>
+                        <button *ngIf="buttonsPermission.edit" (click)="edit(editContent)" type="button"  class="btn btn-outline-warning btn-sm  me-3">
+                           Editer</button>
+                        <button *ngIf="buttonsPermission.delete" (click)="delete()" type="button" class="btn btn-outline-danger btn-sm  me-3">
+                             Supprimer</button>
+                             <button *ngIf="is_active!=null && !is_active" (click)="setStatus(1)" type="button" class="btn btn-outline-success btn-sm  me-3">
+                                Activer</button>
+                               <button  *ngIf="is_active!=null &&  is_active" (click)="setStatus(0)" type="button" class="btn btn-outline-danger btn-sm  me-3">
+                                Désactiver</button>
+                    </div>
+    
+                            <p>{{data.length}} élément(s)</p>
+                            <div class="table-responsive">
+                            <table class="table" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+                                <thead class="">
+                                    <tr>
+                                        <th style="width: 10px;">#</th>
+                                        <th>Image</th>
+                                        <th>titre</th>
+                                        <th>Résumé</th>
+                                        <th>Statut</th>
+                            
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let d of data ">
+                                        <td>
+                                            <div class="form-check mb-2">
+                                                <input (click)="checked(d)" class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                                            
+                                            </div>
+                                        </td>
+                                        <td><img [src]="getLink(d.big_photo)" alt=""></td>
+                                        <td>{{d.title}}</td>
+                                        <td>{{d.resume}}</td>
+                               
+                                        <td>
+                                          <span *ngIf="d.is_active" class="p-1 bg-success text-white rounded">Actif</span>
+                                          <span *ngIf="!d.is_active" class="p-1 bg-danger text-white rounded">Bloqué</span>
+  
+                                          </td>
+                                    </tr>
+                                
+                                </tbody>
+                            </table>
+                            </div>
+    
+                </div><!-- end card -->
+            </div>
+            <!-- end col -->
+        </div>
+        <!-- end col -->
+    </div>
+    
+    <ng-template #addContent let-c="close" let-d="dismiss">
+        <form #addForm="ngForm" (ngSubmit)="store(addForm.value)">
+        <div class="modal-header bg-secondary">
+          <h6 class="modal-title text-white" id="modal-basic-title">Enregistrer une actualité</h6>
+          <button type="button" class="btn-close" aria-label="Close" (click)="d('Cross click')"></button>
+        </div>
+        <div class="modal-body" >
+            <div class="row mb-3" >
+          
+                <div class=" form-goup col-12 mb-3">
+                    <label for="">Titre <span class="text-danger ml-2">(*)</span></label>
+                    <input type="text" name="title" class="form-control" ngModel required>
+                </div>
+                <div class=" form-goup col-12 mb-3">
+                    <label for="">Sous titre <span class="text-danger ml-2">(*)</span></label>
+                    <input type="text" name="subtitle" class="form-control" ngModel required>
+                </div>
+                <div class=" form-goup col-12 mb-3">
+                    <label for="">Résumé <span class="text-danger ml-2">(*)</span></label>
+                    <textarea name="resume" class="form-control" ngModel required></textarea>
+                </div>
+                <div class=" form-goup col-12 mb-3">
+                    <label for="">Contenu<span class="text-danger ml-2">(*)</span></label>
+                    <textarea name="content" class="form-control" ngModel required></textarea>
+                </div>
+                <div class=" form-goup col-12 mb-3">
+                    <label for="">Image couverture<span class="text-danger ml-2">(*)</span></label>
+                    <input type="file"  (change)="upload1($event)">
+                </div>
+                <div class=" form-goup col-12 mb-3">
+                    <label for="">Image minuature<span class="text-danger ml-2">(*)</span></label>
+                    <input type="file"  (change)="upload2($event)">
+                </div>
+    
+            </div>
+           
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-outline-dark" [disabled]="addForm.invalid"  >Enregistrer <app-loading [isVisible]="loading"></app-loading></button>
+        </div>
+    </form>
+      </ng-template>
+    
+      <ng-template #editContent let-c="close" let-d="dismiss">
+        <form #editForm="ngForm" (ngSubmit)="update(editForm.value)">
+        <div class="modal-header bg-secondary">
+          <h6 class="modal-title text-white" id="modal-basic-title">Modifier une actualité</h6>
+          <button type="button" class="btn-close" aria-label="Close" (click)="d('Cross click')"></button>
+        </div>
+        <div class="modal-body" >
+            <div class="row mb-3">
+            
+                <div class=" form-goup col-12 mb-3">
+                    <label for="">Titre <span class="text-danger ml-2">(*)</span></label>
+                    <input type="text" name="title" class="form-control" [(ngModel)]="selected_data.title" required>
+                </div>
+                <div class=" form-goup col-12 mb-3">
+                    <label for="">Sous titre <span class="text-danger ml-2">(*)</span></label>
+                    <input type="text" name="subtitle" class="form-control" [(ngModel)]="selected_data.subtitle" required>
+                </div>
+                <div class=" form-goup col-12 mb-3">
+                    <label for="">Résumé <span class="text-danger ml-2">(*)</span></label>
+                    <textarea name="resume" class="form-control" [(ngModel)]="selected_data.resume" required></textarea>
+                </div>
+                <div class=" form-goup col-12 mb-3">
+                    <label for="">Contenu<span class="text-danger ml-2">(*)</span></label>
+                    <textarea name="content" class="form-control" [(ngModel)]="selected_data.content" required></textarea>
+                </div>
+                <div class=" form-goup col-12 mb-3">
+                    <label for="">Image couverture<span class="text-danger ml-2">(*)</span></label>
+                    <input type="file"  (change)="upload1($event)">
+                </div>
+                <div class=" form-goup col-12 mb-3">
+                    <label for="">Image minuature<span class="text-danger ml-2">(*)</span></label>
+                    <input type="file"  (change)="upload2($event)">
+                </div>
+            </div>
+           
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-outline-dark" [disabled]="editForm.invalid" >Sauvegarder <app-loading [isVisible]="loading"></app-loading></button>
+        </div>
+    </form>
+      </ng-template>
+    
+      <ng-template #showContent let-c="close" let-d="dismiss">
+        <div class="modal-header bg-secondary">
+            <h6 class="modal-title text-white" id="modal-basic-title">Détails des informations</h6>
+            <button type="button" class="btn-close" aria-label="Close" (click)="d('Cross click')"></button>
+          </div>
+    
+          <div class="modal-body">
+            <div class="table-responsive table-card">
+                <div class="d-flex justify-content-around">
+                    <img [src]="getLink(selected_data.big_photo)" alt="" style="height: 100px;">
+                    <img [src]="getLink(selected_data.short_photo)" alt="" style="height: 100px;">
+                </div>
+                <table class="table table-borderless align-middle mb-0">
+                    <tbody>
+                      
+                   
+                        <tr >
+                            <td class="fw-medium">Titre</td>
+                            <td >{{selected_data.title}} </td>
+                          
+                        </tr>
+                   
+                        <tr >
+                            <td class="fw-medium">Sous titre</td>
+                            <td >{{selected_data.subtitle}} </td>
+                          
+                        </tr>
+                   
+                        <tr >
+                            <td class="fw-medium">Résumé</td>
+                            <td >{{selected_data.resume}} </td>
+                          
+                        </tr>
+                   
+                        <tr >
+                            <td class="fw-medium">Contenu</td>
+                            <td >{{selected_data.content}} </td>
+                          
+                        </tr>
+                   
+                    </tbody>
+                </table>
+            </div>
+          </div>
+    </ng-template>

@@ -1,0 +1,470 @@
+    <!--breadcrumb-->
+    <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-5">
+        <div class="breadcrumb-title pe-3">CAPE </div>
+        <div class="ps-3">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 p-0">
+              <li class="breadcrumb-item"><a routerLink="/admin/dashboard"><i class="bx bx-home-alt"></i></a>
+              </li>
+              <li class="breadcrumb-item active" aria-current="page">Cape ayant déjà un agrément</li>
+            </ol>
+          </nav>
+        </div>
+        <div class="ms-auto">
+        </div>
+      </div>
+  
+      <ng-container  *ngIf="!showPreview">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                  
+                    <div class="card-body">
+                        <div class="d-flex mb-5 " *ngIf="buttonsPermission">
+                            <button type="button" class="btn btn-primary btn-sm me-3" (click)="add(addContent)">Ajouter un cape</button>
+
+                            <button  (click)="show(showContent)" type="button" class="btn btn-outline-primary btn-sm  me-3">
+                                 <span>Consulter</span></button>
+                            <button  (click)="edit(editContent)" type="button"  class="btn btn-outline-warning btn-sm  me-3">
+                               Editer</button>
+                         
+
+                                 <button *ngIf="selected_data && !selected_data.is_validate"  (click)="setStatus(1)" type="button" class="btn btn-outline-success btn-sm  me-3">
+                                    Valider </button>
+                                   <button *ngIf="selected_data && selected_data.is_validate"  (click)="setStatus(0)" type="button" class="btn btn-outline-danger btn-sm  me-3">
+                                    Rejeter</button>
+
+                        <!-- <button [disabled]="loading" class="pull-right btn  btn-sm btn-outline-info" (click)="show2(imporContent)">Importer en masse les données</button> -->
+
+                                    </div>
+
+                                <p>{{data.length}} élément(s)</p>
+                                <div class="table-responsive">
+                                <table class="table" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+                                    <thead class="">
+                                        <tr>
+                                            <th style="width: 10px;">#</th>
+                                            <th>Libellé</th>
+                                            <th>Identité promoteur</th>
+                                            <th>Localisation</th>
+                                            <th>Adresse</th>
+                                            <th>Statut</th>
+    
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let d of data ">
+                                            <td>
+                                                <div class="form-check mb-2">
+                                                    <input (click)="checked(d)" class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                                                
+                                                </div>
+                                            </td>
+                                            <td>{{d.name}}</td>
+                                            <td>{{d.name_pomoter}} {{d.first_pomoter}}</td>
+                                            <td>
+                                                <small>
+                                                    <ul>
+                                                        <li><strong>Département  : </strong> {{d.district?.municipality?.department?.name}}</li>
+                                                        <li><strong>Commune  : </strong> {{d.district?.municipality?.name}}</li>
+                                                        <li><strong>Arrondissement  : </strong> {{d.district?.name}}</li>
+                                                        <li><strong>Quartier de ville / Village  : </strong> {{d.district?.name}}</li>
+                                                    </ul>
+                                                </small>
+                                            </td>
+                                            <td>{{d.address}}</td>
+                                            <td>
+                                                <span *ngIf="d.is_validated == null" class="text-secondary" style="font-weight: 700; color: gray;">En attente de validation</span>
+                                                <span *ngIf="d.is_validated == 1" class="text-success" style="font-weight: 700; color: green;">Validé</span>
+                                                <span *ngIf="d.is_validated == 0" class="text-secondary" style="font-weight: 700; color: red;">Validation retirée</span>
+                                            </td>
+                                       
+                                        </tr>
+                                    
+                                    </tbody>
+                                </table>
+                                </div>
+        
+                    </div><!-- end card -->
+                </div>
+                <!-- end col -->
+            </div>
+            <!-- end col -->
+        </div>
+        
+      </ng-container>
+      <ng-container *ngIf="showPreview"  class="container">
+        <div class="d-flex justify-content-around">
+            <button class="btn btn-dark mb-3 " (click)="back()">Fermer le visualiseur</button>
+            <!--button  *ngIf="!showResponseFilePreview"  class="btn btn-success mb-3 " [disabled]="!activeobsPanel"  (click)="openWindow(contentTemplateAmendement)">Faire des observations</!--button-->
+    
+        </div>
+
+
+     
+        <object [data]="url" type="application/pdf" width="100%" height="600px"></object>
+</ng-container>
+<ng-template #imporContent let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Importation en masse</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="d('Cross click')"></button>
+      </div>
+
+      <div class="modal-body">
+             <button type="button" class="btn btn-outline-primary" (click)="download()">Télécharger le fichier d'importation  </button>
+        <hr>
+                    <form #importForm2="ngForm" (ngSubmit)="import(importForm2.value)">
+
+                        <div class="form-group">
+                            <label for="">Charger le fichier d'importation</label>
+                            <input type="file" class="form-control" (change)="upload($event)">
+                        </div>
+                        <button type="submit" class="btn btn-outline-dark" [disabled]="importForm2.invalid" >Importer les données  <app-loading [isVisible]="loading"></app-loading></button>
+
+                    </form>
+       
+      </div>
+   
+</ng-template>
+
+
+
+<ng-template #addContent let-c="close" let-d="dismiss">
+    <form #addForm="ngForm" (ngSubmit)="store(addForm.value)">
+    <div class="modal-header bg-secondary">
+      <h6 class="modal-title text-white" id="modal-basic-title">Enregistrer un CAPE</h6>
+      <button type="button" class="btn-close" aria-label="Close" (click)="d('Cross click')"></button>
+    </div>
+    <div class="modal-body" >
+        <div class="text-center">
+            <button type="submit" class="btn btn-outline-dark" [disabled]="addForm.invalid"  >Enregistrer <app-loading [isVisible]="loading"></app-loading></button>
+          </div>
+
+          <fieldset>
+            <legend>Localisation du centre</legend>
+            <div class="row">
+                <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                    <label for="">Type de centre <span class="mx-1 text-danger">*</span></label>
+                    <select class="form-control" name="type_cape_id" [(ngModel)]="myRequestForm.type_cape_id">
+                        <option *ngFor="let d of tds" [value]="d.id">{{d.name}}</option>
+                    </select>                                    </div>
+                <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                    <label for="">Dénomination du centre <span class="mx-1 text-danger">*</span></label>
+                    <input type="text" name="name" maxlength="255"  class="form-control"  [(ngModel)]="myRequestForm.name">
+                </div>
+                <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                    <label for="">Sélectionnez un département <span class="mx-1 text-danger">*</span></label>
+                    <select class="form-control" (change)="loadMunicipalities($event)" name="department_id" [(ngModel)]="myRequestForm.department_id">
+                        <option selected disabled></option>
+                        <option *ngFor="let d of departments" [value]="d.id">{{d.name}}</option>
+                    </select>
+                </div>
+                <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                    <label for="">Sélectionnez une commune <span class="mx-1 text-danger">*</span></label>
+                    <select class="form-control" (change)="loadDistricts($event)" name="municipality_id" [(ngModel)]="myRequestForm.municipality_id">
+                        <option selected disabled></option>
+                        <option *ngFor="let d of municipalities" [value]="d.id">{{d.name}}</option>
+                    </select>
+                </div>
+                <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                    <label for="">Sélectionnez un arrondissement <span class="mx-1 text-danger">*</span></label>
+                    <select class="form-control" [(ngModel)]="myRequestForm.district_id" name="district_id" [(ngModel)]="myRequestForm.district_id">
+                        <option selected disabled></option>
+                        <option *ngFor="let d of districts" [value]="d.id">{{d.name}}</option>
+                    </select>
+                </div>
+                
+                <!-- Form Group -->
+                <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                    <label for="">Quartier de ville / Village
+                        <span class="mx-1 text-danger">*</span>
+                    </label>
+                    <input type="text" maxlength="255"  name="town" class="form-control"   [(ngModel)]="myRequestForm.town">
+                </div>
+                <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                    <label for="">Adresse
+                        <span class="mx-1 text-danger">*</span>
+                    </label>
+                    <input type="text" maxlength="255"  name="address" class="form-control"   [(ngModel)]="myRequestForm.address">
+                </div>
+            </div>
+        </fieldset>
+
+            <fieldset>
+                <legend>Information du promoteur</legend>
+                <div class="row mb-3" >
+                    <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                        <label for="">Nom<span class="mx-1 text-danger">*</span></label>
+                        <input type="text" maxlength="100" name="name_pomoter" class="form-control"   [(ngModel)]="myRequestForm.name_pomoter">
+                    </div>
+                    <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                        <label for="">Prénom(s) <span class="mx-1 text-danger">*</span></label>
+                        <input type="text" maxlength="100" name="firstname_pomoter" class="form-control"    [(ngModel)]="myRequestForm.firstname_pomoter">
+                    </div>
+        
+              
+        
+                    <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                        <label for="">Email <span class="mx-1 text-danger">*</span></label>
+                        <input type="email" name="email_pomoter" class="form-control"    [(ngModel)]="myRequestForm.email_pomoter" [email]="true" >
+                    </div>
+                    <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                        <label for="">Téléphone <span class="mx-1 text-danger">*</span></label>
+                        <input type="text" name="phone_pomoter" maxlength="30" class="form-control"    [(ngModel)]="myRequestForm.phone_pomoter">
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend>Information du centre</legend>
+                <div class="row">
+                 
+                    <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+    
+                        <label for="">Capacité d'accueil du centre <span class="mx-1 text-danger">*</span></label>
+                        <input type="number" min="0"  name="capacity" class="form-control"   [(ngModel)]="myRequestForm.capacity">
+                    </div>
+                    <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                        <label for="">Email<span class="mx-1 text-danger">*</span></label>
+                        <input type="email" maxlength="100" name="email" class="form-control"    [(ngModel)]="myRequestForm.email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$">
+                    </div>
+                    <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                        <label for="">Téléphone <span class="mx-1 text-danger">*</span></label>
+                        <input type="text" maxlength="100" name="phone" class="form-control"    [(ngModel)]="myRequestForm.phone">
+                    </div>
+    
+                    <div class="col-lg-12 col-md-12 col-sm-12 mb-3">
+                        <label for="">Cibles accueillies <span class="mx-1 text-danger">*</span></label> 
+                        <br>
+                        <!--angular2-multiselect
+                        [data]="dropdownList"
+                       [(ngModel)]="selectedItems" 
+                       [settings]="dropdownSettings"
+                       name="selectedItems"
+                        
+                        >
+                       </angular2-multiselect-->
+                       <!-- <ng-select2 
+                       *ngIf="dropdownList.length>0"
+                       [data]="dropdownList"
+                       [(ngModel)]="selectedItems" 
+                       name="selectedItems"
+                        [options]="dropdownSettings"
+                        >
+    </ng-select2> -->
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>Information du directeur</legend>
+                <div class="row">
+                    <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                        <label for="">Nom </label>
+                        <input type="text" [readonly]="myRequestForm.chief_is_directeor" maxlength="100" name="name_chief" class="form-control"   [(ngModel)]="myRequestForm.name_chief">
+                    </div>
+    
+                    <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                        <label for="">Prénom(s) <span class="mx-1 text-danger">*</span></label>
+                        <input type="text" [readonly]="myRequestForm.chief_is_directeor" maxlength="100" name="firstname_chief" class="form-control"    [(ngModel)]="myRequestForm.firstname_chief">
+                    </div>
+                    <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                        <label for="">Téléphone <span class="mx-1 text-danger">*</span></label>
+                        <input type="text" [readonly]="myRequestForm.chief_is_directeor" maxlength="100" name="phone_chief" class="form-control"    [(ngModel)]="myRequestForm.phone_chief">
+                    </div>
+                    <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                        <label for="">Email <span class="mx-1 text-danger">*</span></label>
+                        <input type="email" [readonly]="myRequestForm.chief_is_directeor" maxlength="100" name="email_chief" class="form-control"    [(ngModel)]="myRequestForm.email_chief" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$">
+                    </div>
+    
+                </div>
+            </fieldset>
+
+          
+       
+          
+    </div>
+   
+</form>
+  </ng-template>
+
+  <ng-template #editContent let-c="close" let-d="dismiss">
+    <form #editForm="ngForm" (ngSubmit)="update(editForm.value)">
+    <div class="modal-header bg-secondary">
+      <h6 class="modal-title text-white" id="modal-basic-title">Modifier un CAPE</h6>
+      <button type="button" class="btn-close" aria-label="Close" (click)="d('Cross click')"></button>
+    </div>
+    <div class="modal-body" >
+        <fieldset>
+            <legend>Information du promoteur</legend>
+            <div class="row mb-3" >
+                <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                    <label for="">Nom<span class="mx-1 text-danger">*</span></label>
+                    <input type="text" maxlength="100" name="name_pomoter" class="form-control"   [(ngModel)]="myRequestForm.name_pomoter">
+                </div>
+                <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                    <label for="">Prénom(s) <span class="mx-1 text-danger">*</span></label>
+                    <input type="text" maxlength="100" name="firstname_pomoter" class="form-control"    [(ngModel)]="myRequestForm.firstname_pomoter">
+                </div>
+    
+          
+    
+                <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                    <label for="">Email <span class="mx-1 text-danger">*</span></label>
+                    <input type="email" name="email_pomoter" class="form-control"    [(ngModel)]="myRequestForm.email_pomoter" [email]="true" >
+                </div>
+                <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                    <label for="">Téléphone <span class="mx-1 text-danger">*</span></label>
+                    <input type="text" name="phone_pomoter" maxlength="30" class="form-control"    [(ngModel)]="myRequestForm.phone_pomoter">
+                </div>
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>Information du directeur</legend>
+            <div class="row">
+                <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                    <label for="">Nom </label>
+                    <input type="text" [readonly]="myRequestForm.chief_is_directeor" maxlength="100" name="name_chief" class="form-control"   [(ngModel)]="myRequestForm.name_chief">
+                </div>
+
+                <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                    <label for="">Prénom(s) <span class="mx-1 text-danger">*</span></label>
+                    <input type="text" [readonly]="myRequestForm.chief_is_directeor" maxlength="100" name="firstname_chief" class="form-control"    [(ngModel)]="myRequestForm.firstname_chief">
+                </div>
+                <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                    <label for="">Téléphone <span class="mx-1 text-danger">*</span></label>
+                    <input type="text" [readonly]="myRequestForm.chief_is_directeor" maxlength="100" name="phone_chief" class="form-control"    [(ngModel)]="myRequestForm.phone_chief">
+                </div>
+                <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                    <label for="">Email <span class="mx-1 text-danger">*</span></label>
+                    <input type="email" [readonly]="myRequestForm.chief_is_directeor" maxlength="100" name="email_chief" class="form-control"    [(ngModel)]="myRequestForm.email_chief" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$">
+                </div>
+
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>Information du centre</legend>
+            <div class="row">
+                <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                    <label for="">Type de centre <span class="mx-1 text-danger">*</span></label>
+                    <select class="form-control" name="type_cape_id" [(ngModel)]="myRequestForm.type_cape_id">
+                        <option *ngFor="let d of tds" [value]="d.id">{{d.name}}</option>
+                    </select>                                    </div>
+                <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                    <label for="">Dénomination du centre <span class="mx-1 text-danger">*</span></label>
+                    <input type="text" name="name" maxlength="255"  class="form-control"  [(ngModel)]="myRequestForm.name">
+                </div>
+                <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+
+                    <label for="">Capacité d'accueil du centre <span class="mx-1 text-danger">*</span></label>
+                    <input type="number" min="0"  name="capacity" class="form-control"   [(ngModel)]="myRequestForm.capacity">
+                </div>
+                <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                    <label for="">Email<span class="mx-1 text-danger">*</span></label>
+                    <input type="email" maxlength="100" name="email" class="form-control"    [(ngModel)]="myRequestForm.email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$">
+                </div>
+                <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                    <label for="">Téléphone <span class="mx-1 text-danger">*</span></label>
+                    <input type="text" maxlength="100" name="phone" class="form-control"    [(ngModel)]="myRequestForm.phone">
+                </div>
+
+                <div class="col-lg-12 col-md-12 col-sm-12 mb-3">
+                    <label for="">Cibles accueillies <span class="mx-1 text-danger">*</span></label> 
+                    <br>
+                    <!--angular2-multiselect
+                    [data]="dropdownList"
+                   [(ngModel)]="selectedItems" 
+                   [settings]="dropdownSettings"
+                   name="selectedItems"
+                    
+                    >
+                   </angular2-multiselect-->
+                   <!-- <ng-select2 
+                   *ngIf="dropdownList.length>0"
+                   [data]="dropdownList"
+                   [(ngModel)]="selectedItems" 
+                   name="selectedItems"
+                    [options]="dropdownSettings"
+                    >
+</ng-select2> -->
+                </div>
+            </div>
+        </fieldset>
+   
+        <fieldset>
+            <legend>Localisation du centre</legend>
+            <div class="row">
+                <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                    <label for="">Sélectionnez un département <span class="mx-1 text-danger">*</span></label>
+                    <select class="form-control" (change)="loadMunicipalities($event)" name="department_id" [(ngModel)]="myRequestForm.department_id">
+                        <option selected disabled></option>
+                        <option *ngFor="let d of departments" [value]="d.id">{{d.name}}</option>
+                    </select>
+                </div>
+                <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                    <label for="">Sélectionnez une commune <span class="mx-1 text-danger">*</span></label>
+                    <select class="form-control" (change)="loadDistricts($event)" name="municipality_id" [(ngModel)]="myRequestForm.municipality_id">
+                        <option selected disabled></option>
+                        <option *ngFor="let d of municipalities" [value]="d.id">{{d.name}}</option>
+                    </select>
+                </div>
+                <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                    <label for="">Sélectionnez un arrondissement <span class="mx-1 text-danger">*</span></label>
+                    <select class="form-control" [(ngModel)]="myRequestForm.district_id" name="district_id" [(ngModel)]="myRequestForm.district_id">
+                        <option selected disabled></option>
+                        <option *ngFor="let d of districts" [value]="d.id">{{d.name}}</option>
+                    </select>
+                </div>
+                
+                <!-- Form Group -->
+                <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                    <label for="">Quartier de ville / Village
+                        <span class="mx-1 text-danger">*</span>
+                    </label>
+                    <input type="text" maxlength="255"  name="town" class="form-control"   [(ngModel)]="myRequestForm.town">
+                </div>
+                <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                    <label for="">Adresse
+                        <span class="mx-1 text-danger">*</span>
+                    </label>
+                    <input type="text" maxlength="255"  name="address" class="form-control"   [(ngModel)]="myRequestForm.address">
+                </div>
+            </div>
+        </fieldset>
+       
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-outline-dark" [disabled]="editForm.invalid" >Sauvegarder <app-loading [isVisible]="loading"></app-loading></button>
+    </div>
+</form>
+  </ng-template>
+
+  <ng-template #showContent let-c="close" let-d="dismiss">
+    <div class="modal-header bg-secondary">
+        <h6 class="modal-title text-white" id="modal-basic-title">Détails des informations</h6>
+        <button type="button" class="btn-close" aria-label="Close" (click)="d('Cross click')"></button>
+      </div>
+
+      <div class="modal-body">
+        <div class="table-responsive table-card">
+            <table class="table table-borderless align-middle mb-0">
+                <tbody>
+                  
+               
+                    <tr >
+                        <td class="fw-medium">Libellé</td>
+                        <td >{{selected_data.name}} </td>
+                      
+                    </tr>
+               
+           
+               
+               
+            
+               
+                </tbody>
+            </table>
+        </div>
+      </div>
+</ng-template>

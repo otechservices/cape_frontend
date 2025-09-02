@@ -1,0 +1,83 @@
+<section class="main-slider contact">
+    <div class="welcome_section">
+        <h1 class="welcome_title">
+            Ouvrir un ticket
+        </h1>
+       
+    </div>
+  </section>
+  <div class="body_content">
+    <div class="container">
+      <div class="row clearfix">
+        <div class="content-side col-lg-12 col-md-12 col-sm-12">
+            
+            <div class="row process_agreement p-lg-5 p-md-3 p-3">
+              <div class="col-lg-12 list_step">
+              <h2>Ouvrir mon ticket
+                
+              </h2>
+
+               <div class="row">
+
+                <div class="col-12 contact-form">
+                    <!-- Contact Form -->
+                <div class="contact-form">
+                    <!-- Title Box -->
+   
+                    <form  #contactForm="ngForm" (ngSubmit)="sendContact(contactForm)">
+                        <div class="row clearfix">
+                        
+                            <div class="form-group col-lg-6 col-md-6 col-sm-12">
+                                <select name="type_billing_id" class="form-control" required ngModel>
+                                    <option selected disabled>Choiri le service concerné</option>
+                                    <option *ngFor="let d of data" [value]="d.id">{{d.name}}</option>
+                                </select>
+                            </div>
+
+                            <!-- Form Group -->
+                            <div class="form-group col-lg-6 col-md-6 col-sm-12">
+                                <input type="text" name="object" placeholder="Entrez votre objet*" required ngModel>
+                            </div>
+                            <div class="form-group col-lg-6 col-md-6 col-sm-12">
+                                <input type="text" name="name" placeholder="Entrez votre nom*" required ngModel>
+                            </div>
+                            
+                            <!-- Form Group -->
+                            <div class="form-group col-lg-6 col-md-6 col-sm-12">
+                                <input type="email" name="email" placeholder="Entrez votre mail*" required ngModel>
+                            </div>
+                            
+
+
+                     
+                            
+                            <!-- Form Group -->
+                            <div class="form-group col-lg-12 col-md-12 col-sm-12">
+                                <textarea name="content" placeholder="Expliquez nous en détail votre demande*" required ngModel></textarea>
+                            </div>
+                            
+                            <div class="form-group col-lg-12 col-md-12 col-sm-12">
+                                <button type="submit" class="cape-bg-green text-white rounded-2" 
+                                [disabled]="contactForm.invalid">
+                                
+                                <span class="txt">Ouvir</span> <i class="fa fa fa-send text-yellow ml-3"></i></button>
+                            </div>
+                            
+                        </div>
+                    </form>
+                        
+                </div>
+                <!-- eND Contact Form -->
+                </div>
+               </div>
+                
+              </div>
+              
+            </div>
+            
+        </div>
+      </div>
+    </div>
+  </div>
+  
+

@@ -1,0 +1,63 @@
+    <!--breadcrumb-->
+    <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-5">
+        <div class="breadcrumb-title pe-3">CAPE </div>
+        <div class="ps-3">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 p-0">
+              <li class="breadcrumb-item"><a routerLink="/admin/dashboard"><i class="bx bx-home-alt"></i></a>
+              </li>
+              <li class="breadcrumb-item active" aria-current="page">Liste des CAPE inscrits</li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+        <div class="row">
+          <div class="col-lg-12">
+              <div class="card">
+                
+                  <div class="card-body">
+                              <p>{{data.length}} élément(s)</p>
+                              <div class="table-responsive">
+                                <table class="table" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+                                    <thead class="">
+                                        <tr>
+                                            <th style="width: 10px;">#</th>
+                                            <th>Type Cape</th>
+                                            <th>Libellé Centre</th>
+                                            <th>Nom promoteur</th>
+                                            <th>Cible</th>
+                                            <th>Adresse</th>
+                                            <th>email</th>
+                                            <th>phone</th>
+                                
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let d of data;let i=index ">
+                                            <td>
+                                                {{i+1}}
+                                            </td>
+                                            <td>{{d.type_cape?.name}}</td>
+                                            <td>{{d.name}}</td>
+                                            <td>{{d.name_pomoter}} {{d.firstname_pomoter}}</td>
+                                            <td>
+                                                <ul>
+                                                    <li *ngFor="let el of getJson(d.target)">{{el.itemName}}</li>
+                                                </ul>
+                                            </td>
+                                            <td>{{d.address}}</td>
+                                            <td>{{d.email}}</td>
+                                            <td>{{d.phone}}</td>
+                                         
+                                        </tr>
+                                    
+                                    </tbody>
+                                </table>
+                                </div>
+      
+                  </div><!-- end card -->
+              </div>
+              <!-- end col -->
+          </div>
+          <!-- end col -->
+      </div>

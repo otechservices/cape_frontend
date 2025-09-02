@@ -1,0 +1,94 @@
+<section class="main-slider contact">
+    <div class="welcome_section">
+        <h1 class="welcome_title">
+            J'ai besoin d'une information
+        </h1>
+       
+    </div>
+  </section>
+  <div class="body_content">
+    <div class="container">
+      <div class="row clearfix">
+        <div class="content-side col-lg-12 col-md-12 col-sm-12">
+            
+            <div class="row  p-lg-5 p-md-3 p-3">
+              <div class="col-lg-12 list_step">
+              <h2 class="text-center" style="font-weight: normal!important;">Vous avez besoin d'une information sur les centres d'accueil et de protection de l'enfant, également sur les garderies, n'hésitez pas à remplir le formulaire ci-dessous. Une équipe dynamique du Département de la Famille, de l'Enfant et de l'Adolescent vous donne satisfaction dans un délai de 24 heures au plus.
+              </h2>
+
+               <div class="row">
+
+                <div class="col-12 contact-form">
+                    <!-- Contact Form -->
+                <div class="contact-form">
+                    <!-- Title Box -->
+                    <div class="title-box">
+                        <h2>Posez votre préoccupation!</h2>
+                    </div>
+                    <form  #contactForm="ngForm" (ngSubmit)="sendContact(contactForm)">
+                        <div class="row clearfix">
+                        
+                            <!-- Form Group -->
+                            <div class="form-group col-lg-6 col-md-6 col-sm-12">
+                                <input type="text" name="name" placeholder="Entrez votre nom*" required ngModel>
+                            </div>
+                            
+                            <!-- Form Group -->
+                            <div class="form-group col-lg-6 col-md-6 col-sm-12">
+                                <input type="email" name="email" placeholder="Entrez votre mail*" required ngModel>
+                            </div>
+                            
+                            <!-- Form Group -->
+                     
+                            
+                            <!-- Form Group -->
+                            <div class="form-group col-lg-6 col-md-6 col-sm-12">
+                                <input type="text" name="phone" placeholder="Entrez votre contact*" required ngModel>
+                            </div>
+
+                            <div class="form-group col-lg-6 col-md-6 col-sm-12">
+                                <select name="type_info_id" class="form-control" required ngModel>
+                                    <option selected disabled>Quel type d'information désirez vous avoir ?</option>
+                                    <option *ngFor="let d of data" [value]="d.id">{{d.name}}</option>
+                                </select>
+                            </div>
+                            
+                            <!-- Form Group -->
+                            <div class="form-group col-lg-12 col-md-12 col-sm-12">
+                                <textarea name="content" placeholder="Saisissez votre demande*" required ngModel></textarea>
+                            </div>
+                            
+                            <div class="form-group mb-3 col-lg-12 col-md-12 col-sm-12 d-flex justify-content-between bg-gray">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" required 
+                                    ngModel name="has_consent" id="defaultCheck1">
+                                    <label class="form-check-label" for="defaultCheck1">
+                                       <strong><b>J'autorise la collecte de mes données personnelles</b></strong>.
+            
+                                    </label>
+                                  </div>
+                            </div>
+                            <div class="form-group col-lg-12 col-md-12 col-sm-12">
+                                <button type="submit" class="cape-bg-green text-white rounded-2" 
+                                [disabled]="contactForm.invalid || loading">
+                                
+                                <span class="txt">Envoyer ma demande d'information</span> <i class="fa fa fa-send text-yellow ml-3"></i></button>
+                            </div>
+                            
+                        </div>
+                    </form>
+                        
+                </div>
+                <!-- eND Contact Form -->
+                </div>
+               </div>
+                
+              </div>
+              
+            </div>
+            
+        </div>
+      </div>
+    </div>
+  </div>
+  

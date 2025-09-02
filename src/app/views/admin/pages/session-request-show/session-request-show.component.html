@@ -1,0 +1,542 @@
+<div class="page-breadcrumb d-none d-sm-flex align-items-center mb-5">
+    <div class="breadcrumb-title pe-3">CAPE </div>
+    <div class="ps-3">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb mb-0 p-0">
+          <li class="breadcrumb-item"><a routerLink="/admin/dashboard"><i class="bx bx-home-alt"></i></a>
+          </li>
+          <li class="breadcrumb-item active" aria-current="page">Contenu du dossier </li>
+        </ol>
+      </nav>
+    </div>
+    <div class="ms-auto" *ngIf="data != undefined">
+        <button *ngIf="data.has_agreemant!=1 && data.session.is_active && role=='dfea'" type="button" class="btn btn-danger px-5 rounded-0" (click)="add(addContent)">Décision finale sur le dossier</button>
+        <button type="button" *ngIf="data.has_agreemant!=1 && data?.session.is_active!=false && data?.my_avis!=null && user.session_member_id!=null " (click)="decide()" class="btn btn-primary px-5 rounded-0">Modifier mon traitement</button>
+        <button type="button" *ngIf="data.has_agreemant!=1 && data?.session.is_active!=false && data?.my_avis==null && user.session_member_id!=null" (click)="decide()" class="btn btn-primary px-5 rounded-0">Décider</button>
+        <button *ngIf="data.session.is_active != null"  class="btn btn-primary px-5 rounded-0" (click)="open(content,data.avis)">Voir tous les avis</button>
+
+      </div>
+  </div>
+
+
+  <ng-container  *ngIf="!showPreview">
+    <ng-container *ngIf="data != undefined">
+        <div class=" container d-flex justify-content-between">
+            <div class="">
+                <p  *ngIf="data.session.is_active ==false" class=" text-white d-flex justify-content-between bg-danger p-1">Session clôturée</p>
+                <p  *ngIf="data.session.is_active == null" class=" text-white d-flex justify-content-between bg-secondary p-1">Session en attente d'ouverture</p>
+                <p  *ngIf="data.session.is_active " class=" text-white d-flex justify-content-between bg-success p-1">Session ouverte</p>
+            
+            </div>
+           
+            <div class="align-self-center">
+                <button class="btn btn-sm btn-outline-dark" (click)="showFile2(data.session.filename)">Consulter la note d'accord à la session</button>
+    
+            </div>
+        </div>
+
+        <div class=" d-flex flex-column">
+
+            <div class="">
+                <h4><b>Note globale Dossier :</b> {{note2.max | number:".2"}} / <b>{{note2.total}}</b> </h4>
+            </div>
+
+            <div class="" *ngIf="role == 'member'">
+                <h4><b>Note globale Membre :</b> {{note3.max | number:".2"}} / <b>{{note3.total}}</b> </h4>
+            </div>
+        </div>
+      
+    </ng-container>
+    
+  <div class="container" *ngIf="data != undefined">
+    <ng-container *ngIf="data.has_agreemant!= null">
+        <div class="mb-3">
+            <h4> <i class="fa fa-chevron-right fw-bold me-3"></i>  <u>Décision de la session</u>  </h4>
+        </div>
+        <div class=" d-flex flex-column">
+            <dl>
+                <dt>Observation</dt>
+                <dd>
+                    {{data.observation}}
+                </dd>
+            </dl>
+
+            <dl>
+                <dt>Décision</dt>
+                <dd>
+                    {{data.has_agreemant==0 ?'Accord non donnée': data.has_agreemant==1 ?'Accord donné sous réserve':'Accord donné provisoirement'}}
+                </dd>
+            </dl>
+
+            <dl *ngIf="data.has_agreemant">
+                <dt>Recommandations</dt>
+                <dd>
+                    <ol>
+                        <li *ngFor="let m of data.referals">{{m.libelle}}</li>
+                    </ol>
+                </dd>
+            </dl>
+        </div>
+        
+    </ng-container>
+    <div class="mb-3">
+        <h4> <i class="fa fa-chevron-right fw-bold me-3"></i>  <u>Informations native du CAPE</u>  </h4>
+    </div>
+
+    <fieldset>
+        <legend class="bg-secondary text-white">Information sur le promoteur</legend>
+        <div class="row">
+            <div class="col-6">
+                <dl>
+                    <dt>Nom </dt>
+                    <dd>{{data.name_pomoter}} {{data.firstname_pomoter}}</dd>
+                </dl>
+            </div>
+            <div class="col-6">
+                <dl>
+                    <dt>Contact</dt>
+                    <dd>{{data.phone_pomoter}}</dd>
+                </dl>
+            </div>
+
+            <div class="col-6">
+                <dl>
+                    <dt>Email </dt>
+                    <dd>{{data.email}}</dd>
+                </dl>
+            </div>
+            <div class="col-6">
+                <dl>
+                    <dt>Contact N° 2</dt>
+                    <dd>{{data.phone}}</dd>
+                </dl>
+            </div>
+        </div>
+    </fieldset>
+    <fieldset>
+        <legend class="bg-secondary text-white">Information sur le centre</legend>
+        <div class="row">
+            <div class="col-6">
+                <dl>
+                    <dt>Type Cape</dt>
+                    <dd>{{data.type_cape?.name}}</dd>
+                </dl>
+            </div>
+            <div class="col-6">
+                <dl>
+                    <dt>Nom du centre</dt>
+                    <dd>{{data.name}}</dd>
+                </dl>
+            </div>
+
+            <div class="col-6">
+                <dl>
+                    <dt>Nom du directeur</dt>
+                    <dd>{{data.name_chief}}</dd>
+                </dl>
+            </div>
+            <div class="col-6">
+                <dl>
+                    <dt>Contact du directeur</dt>
+                    <dd>{{data.phone_chief}}</dd>
+                </dl>
+            </div>
+            <div class="col-6">
+                <dl>
+                    <dt>Cible</dt>
+                    <dd>
+                        <ul>
+                            <li *ngFor="let el of getJson(data.target)">{{el.itemName}}</li>
+                        </ul>
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </fieldset>
+    <fieldset>
+        <legend class="bg-secondary text-white">Localisation</legend>
+       <div class="row">
+        <div class="col-6">
+            <dl>
+                <dt>Département</dt>
+                <dd>{{data.district?.municipality?.department?.name}}</dd>
+            </dl>
+        </div>
+        <div class="col-6">
+            <dl>
+                <dt>Commune</dt>
+                <dd>{{data.district?.municipality?.name}}</dd>
+            </dl>
+        </div>
+        <div class="col-6">
+            <dl>
+                <dt>Arrondissement</dt>
+                <dd>{{data.district?.name}}</dd>
+            </dl>
+        </div>
+        <div class="col-6">
+            <dl>
+                <dt>Adresse</dt>
+                <dd>{{data.address}}</dd>
+            </dl>
+        </div>
+       </div>
+    </fieldset>
+
+    <div class="mb-5">
+        <h4> <i class="fa fa-chevron-right fw-bold me-3"></i>  <u>Documents joints à la soumission</u>  </h4>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead>
+                <th>#</th>
+                <th>Référence</th>
+                <!-- <th>Avis</th> -->
+                <th>Action</th>
+            </thead>
+            <tbody>
+                <tr *ngFor="let f of data.files; let i=index">
+                    <td>{{i+1}}</td>
+                    <td>{{f.file?.name}}</td>
+                    <!-- <td>
+                       <div  *ngIf="role!='dfea' && role!='service'" class="">
+                        <p> {{f.my_avis?.observation ?? "En attente de votre avis "}}</p>
+                        <span><b>Note:</b>  {{f.my_avis?.note}}</span>
+                       </div>
+                      
+                       <div class="d-flex justify-content-between">
+                        <button *ngIf="f.my_avis" class="btn btn-sm btn-warning text-white" (click)="add2(backContentM,f.my_avis)">Modifier mon avis</button>
+                        <button *ngIf="data.session.is_active != null"  class="btn btn-sm cape-bg-blue text-white" (click)="open(content,f.avis)">Voir tous les avis</button>
+                       </div>
+
+                    </td> -->
+                    <td>
+                        <button (click)="showFile(f.filename,f,f.my_avis)" class="btn-sm btn-dark">Voir document</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+  </div>
+  <div class="" *ngIf="data?.has_cps_file">
+    <div class="row">
+        <div class="col-6">
+            <dl>
+                <dt>Nom de l'enquêteur</dt>
+                <dd>{{data.social_investigator_name}}</dd>
+            </dl>
+        </div>
+        <div class="col-6">
+            <dl>
+                <dt>Observation sur  l'enquête</dt>
+                <dd>{{data.social_investigator_observation}}</dd>
+            </dl>
+        </div>
+
+        <div class="col-6">
+            <dl>
+                <dt>Date de l'enquête</dt>
+                <dd>{{data.social_investigator_date | date:"shortDate"}}</dd>
+            </dl>
+        </div>
+
+        <div class="col-6">
+            <dl>
+                <dt>Fiche de l'enquête sociale</dt>
+                <dd>
+                    <button (click)="showFileCpsFile()" class="btn btn-sm btn-dark">Voir document</button>
+
+                </dd>
+            </dl>
+        </div>
+      
+
+        
+    </div>
+</div>
+
+  </ng-container>
+
+
+  <ng-container *ngIf="showPreview"  class="container">
+            <div class="d-flex justify-content-around">
+                <div class="">
+                    <button class="btn btn-dark mb-3 btn-sm" (click)="back()">Fermer le visualiseur</button>
+                </div>
+                <div class="">
+                    <!-- <button class="btn btn-sm btn-primary" *ngIf="!isSessionFile && data.session.is_active!=false && role=='member' && canSetAvis" (click)="add(backContent)">Laisser mon avis</button> -->
+
+                </div>
+                <!--button  *ngIf="!showResponseFilePreview"  class="btn btn-success mb-3 " [disabled]="!activeobsPanel"  (click)="openWindow(contentTemplateAmendement)">Faire des observations</!--button-->
+        
+            </div>
+
+
+         
+            <object [data]="url" type="application/pdf" width="100%" height="600px"></object>
+    </ng-container>
+  
+    <ng-template #backContent let-c="close" let-d="dismiss">
+        <form #addSusp="ngForm" (ngSubmit)="storeAvis(addSusp.value)">
+    
+        <div class="modal-header bg-secondary">
+          <h6 class="text-white " id="modal-basic-title">Avis dossier</h6>
+          <button type="button" class="btn btn-dark"  (click)="d('Cross click')"> <i class="fa fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group mb-3 mb-5">
+                <label for="">Saisissez votre avis</label>
+                <textarea name="observation" ngModel class="form-control"></textarea>
+            </div>
+            <div class="form-group mb-3 mb-5">
+                <label for="">Note <span class="mx-1 text-warning">(Note: {{requete_file.file.max_note}})</span></label>
+                <input type="number" name="note" min="0" [max]="requete_file.file.max_note" ngModel required class="form-control">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-primary" [disabled]="addSusp.invalid || loading">Sauvegarder </button>
+        </div>
+    </form>
+    
+      </ng-template>
+    <ng-template #backContentM let-c="close" let-d="dismiss">
+        <form #addSusp="ngForm" (ngSubmit)="updateAvis(addSusp.value)">
+    
+        <div class="modal-header bg-secondary">
+          <h6 class="text-white " id="modal-basic-title">Avis dossier</h6>
+          <button type="button" class="btn btn-dark"  (click)="d('Cross click')"> <i class="fa fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group mb-3 mb-5">
+                <label for="">Saisissez votre avis</label>
+                <textarea name="observation" [(ngModel)]="myAvis.observation" class="form-control"></textarea>
+            </div>
+      
+
+        <div class="form-group mb-3 mb-5">
+            <label for="">Note <span class="mx-1 text-warning">(Note: {{requete_file.file.max_note}})</span></label>
+            <input type="number" name="note" min="0" [max]="requete_file.file.max_note" [(ngModel)]="myAvis.note" required class="form-control">
+        </div>
+      </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-primary" [disabled]="addSusp.invalid || loading">Sauvegarder </button>
+        </div>
+    </form>
+    
+      </ng-template>
+    
+
+      
+<ng-template #content let-offcanvas id="myCanvas">
+	<div class="offcanvas-header">
+		<h4 class="offcanvas-title">Avis sur le dossier</h4>
+		<button type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss('Cross click')"></button>
+	</div>
+	<div class="offcanvas-body" style="min-height: 80vh; overflow: auto;">
+        <h4><b>Note globale :</b> {{note.max}} / <b>{{note.total}}</b> </h4>
+        <div class="bg-light mb-3 p-3" *ngFor="let a of avis" (click)="showDetails(a)"  style="cursor: pointer;">
+            <h6><small>
+                <strong>{{a.sm?.member?.firstname}} {{a.sm?.member?.lastname}}</strong>
+            , le {{a.created_at | date:"dd-MM-yyyy HH:MM:SS"}}
+            </small>
+            </h6>
+            <p>{{a.observation}}</p>
+            <p class="text-end">
+                <b>Note : </b>
+                {{a.note}} /{{note.total}}</p>
+        </div>
+	</div>
+</ng-template>
+
+
+<ng-template #addContent let-c="close" let-d="dismiss">
+    <form #addForm="ngForm" (ngSubmit)="finish(addForm.value)">
+    <div class="modal-header bg-secondary">
+      <h6 class="modal-title text-white" id="modal-basic-title">Clôture de dossier</h6>
+      <button type="button" class="btn-close" aria-label="Close" (click)="d('Cross click')"></button>
+    </div>
+    <div class="modal-body" >
+        <div class="row mb-3" >
+            <div class="form-group">
+                <label for="">Décision</label>
+                <select name="decision" class="form-control" [(ngModel)]="decision" required >
+                    <option value="0">Rejeté</option>
+                    <option value="1">Favorable sous réserve</option>
+                    <option value="2">Favorable provisoire</option>
+                </select>
+            </div>
+            <div class=" form-group col-12 mb-3">
+                <label for="">Observation <span class="text-danger ml-2">(*)</span></label>
+                <textarea name="observation" class="form-control" ngModel required cols="30" rows="3"></textarea>
+            </div>
+            <!--div class="form-group mb-3 d-flex justify-content-between">
+                <label for="">J'autorise provisoirement ce centre</label>
+                <ng-toggle
+                
+                [values]="{
+                    unchecked: false,
+                    checked:true
+                }"
+                    name="has_agreement" [(ngModel)]="has_agreement"
+                    [color]="{
+                        unchecked: '#939da2',
+                        checked: '#0g0'
+                    }"
+                    ></ng-toggle>
+            </!--div-->
+            <ng-container *ngIf="decision==1 || decision==2">
+                <hr>
+                <h6>Liste des recommandations</h6>
+                <div class="bg-light mb-1" *ngFor="let d of decisions; let i=index">
+                        <p>{{d.observation}}</p>
+               
+               </div>
+
+               <form #refForm="ngForm" (ngSubmit)="onAdd(refForm.value,refForm)">
+               <div class="input-group mb-3">
+                <input type="text" class="form-control" name="observation" required ngModel>
+                <button [disabled]="refForm.invalid" class="btn btn-sm btn-outline-secondary" type="submit" id="button-addon2">Ajouter une recommandation</button>
+              </div>
+            </form>
+            </ng-container>
+           
+        </div>
+       
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-outline-dark" [disabled]="addForm.invalid"  >Enregistrer <app-loading [isVisible]="loading"></app-loading></button>
+    </div>
+</form>
+  </ng-template>
+
+  <ng-template #contentFiche let-offcanvas>
+	<div class="offcanvas-header">
+        <div class="d-flex justify-content-between">
+            <h4 class="offcanvas-title">Grille de notation</h4>
+            <button *ngIf="data?.session.is_active!=false && data?.my_avis!=null" type="button" (click)="open2(contentR)" class="btn btn-warning px-5 rounded-0 text-white">Modifier ma réponse</button>
+
+            <button *ngIf="data?.session.is_active!=false && data?.my_avis==null" (click)="openFinished(contentFinish)"  class="btn btn-sm btn-primary">Finaliser le traitement</button>
+        </div>
+		<button id="closeFicheBtn" type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss('Cross click')"></button>
+	</div>
+	<div class="offcanvas-body">
+        <table class="table table-sm">
+            <thead class="bg-dark text-white">
+                <tr>
+                    <th>#</th>
+                    <th>Critère d'évaluation</th>
+                    <th>Notes sur</th>
+                    <th>Commentaire</th>
+                </tr>
+               
+            </thead>
+            <tbody>
+                <tr *ngFor="let e of elements; let i=index">
+                    <td>{{i+1}}</td>
+                    <td>{{e.name}}</td>
+                    <td>
+                        <input class="form-control-sm {{ e.alert? 'border border-danger border-start-0':'border  border-dark'}}" type="number" min="0" [max]="e.note_max" name="note" [(ngModel)]="e.note"  (change)="changeAlert($event,e.note_max,i)">
+                        <br>
+                        <span class="helper-text text-info"><b>max: {{e.note_max}}</b></span>
+                    </td>
+                    <td>
+                        <input type="text" class="form-control" name="observation" [(ngModel)]="e.observation">
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</ng-template>
+<ng-template #contentFiles let-offcanvas>
+	<div class="offcanvas-header">
+		<button id="closePDFBtn" type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss('Cross click')"></button>
+	</div>
+	<div class="offcanvas-body">
+        <ul class="list-group">
+            <li *ngFor="let f of filesForTreatment" (click)="showFile3(f.url)" class="list-group-item" style="cursor: pointer;">{{f.name}}</li>
+          
+          </ul>
+    </div>
+</ng-template>
+<ng-template #contentDetail let-offcanvas>
+	<div class="offcanvas-header">
+		<button id="closePDFBtn" type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss('Cross click')"></button>
+	</div>
+	<div class="offcanvas-body">
+       <table class="table table-sm">
+        <thead>
+            <th>#</th>
+            <th>Elément</th>
+            <th>Note sur</th>
+            <th>Commentaire</th>
+        </thead>
+        <tbody>
+            <tr *ngFor="let d of detail; let i=index">
+                <td >{{i+1}}</td>
+                <td>{{d.name}}</td>
+                <td>{{d.note}} /{{d.note_max}}</td>
+                <td>{{d.observation}}</td>
+            </tr>
+        </tbody>
+       </table>
+    </div>
+</ng-template>
+<ng-template #contentFilePreview let-offcanvas>
+	<div class="offcanvas-header">
+		<button id="closeFicheBtn" type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss('Cross click')"></button>
+	</div>
+	<div class="offcanvas-body">
+        <ngx-extended-pdf-viewer [src]="pdfSrc"
+        style="width: 100%; height: 100%"
+        ></ngx-extended-pdf-viewer>
+    </div>
+</ng-template>
+<ng-template #contentFinish let-c="close" let-d="dismiss">
+    <form #addForm="ngForm" (ngSubmit)="storeResponse(addForm.value)">
+    <div class="modal-header">
+      <h6 class="modal-title" id="modal-basic-title">Finalisation de votre étude</h6>
+      <button type="button" class="btn-close" aria-label="Close" (click)="d('Cross click')"></button>
+    </div>
+    <div class="modal-body" >
+        <div class="p-3 text-primary-emphasis bg-primary-subtle border border-primary-subtle rounded-3 mb-3">
+        <b>  A la suite de votre étude de dossier, ce dossier obtient la note de {{getFolderNote()}}</b>
+          </div>
+        <div class="row mb-3" >
+
+            <div class=" form-goup col-12 mb-3">
+                <label for="">Observation générale</label>
+                <textarea class="form-control" name="observation" ngModel required></textarea>
+            </div>
+        </div>
+       
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-outline-dark" [disabled]="addForm.invalid"  >Sauvegarder<app-loading [isVisible]="loading"></app-loading></button>
+    </div>
+</form>
+  </ng-template>
+<ng-template #contentR let-c="close" let-d="dismiss">
+    <form #addForm="ngForm" (ngSubmit)="updateResponse(addForm.value)">
+    <div class="modal-header">
+      <h6 class="modal-title" id="modal-basic-title">Décision finale du membre</h6>
+      <button type="button" class="btn-close" aria-label="Close" (click)="d('Cross click')"></button>
+    </div>
+    <div class="modal-body" >
+        <div class="p-3 text-primary-emphasis bg-primary-subtle border border-primary-subtle rounded-3 mb-3">
+            <b>  A la suite de votre modification de traitement du dossier, ce dossier obtient la note de {{getFolderNote()}}</b>
+              </div>
+        <div class="row mb-3" >
+            <div class=" form-goup col-12 mb-3">
+                <label for="">Observation </label>
+                <textarea class="form-control" name="observation" [(ngModel)]="data.my_avis.observation" required></textarea>
+            </div>
+        </div>
+       
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-outline-dark" [disabled]="addForm.invalid"  >Sauvegarder<app-loading [isVisible]="loading"></app-loading></button>
+    </div>
+</form>
+  </ng-template>

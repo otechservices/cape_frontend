@@ -1,0 +1,54 @@
+<div class="page-breadcrumb d-none d-sm-flex align-items-center mb-5">
+    <div class="breadcrumb-title pe-3">CAPE </div>
+    <div class="ps-3">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb mb-0 p-0">
+          <li class="breadcrumb-item"><a routerLink="/admin/dashboard"><i class="bx bx-home-alt"></i></a>
+          </li>
+          <li class="breadcrumb-item active" aria-current="page">Décision </li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+
+
+
+<div class="container row p-5">
+
+    <div class="col-8 mx-auto">
+        <form #reponseForm="ngForm" (ngSubmit)="store(reponseForm.value)">
+            <div class="form-group mb-5">
+                <label for="">Décision</label>
+                <select name="hasPermission" class="form-control" required [(ngModel)]="hasPermission">
+                    <option value="0">Mise en attente</option>
+                    <option value="1">Favorable</option>
+                    <option value="2">Défavorable</option>
+                </select>
+            </div>
+        
+                <ng-container *ngIf="hasPermission==1">
+                    <div class="form-group mb-5">
+                        <label for="">Note</label>
+                        <input type="text" class="form-control" name="reason" ngModel>
+                    </div>
+                    <div class="form-group mb-5">
+                        <label for="">Observation</label>
+                        <textarea class="form-control" name="observation" ngModel cols="30" rows="10"></textarea>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="hasPermission==0 || hasPermission==2">
+                    <div class="form-group mb-5">
+                        <label for="">Motif</label>
+                        <input type="text" class="form-control" name="observation" ngModel>
+                    </div>
+                  
+                </ng-container>
+         
+        
+            <div class="">
+                <button type="submit" [disabled]="reponseForm.invalid" class=" btn btn-sm btn-success">Sauvegarder <app-loading [isVisible]="loading"></app-loading></button>
+            </div>
+            </form>
+    </div>
+
+</div>

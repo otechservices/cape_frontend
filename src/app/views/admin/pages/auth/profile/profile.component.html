@@ -1,0 +1,73 @@
+<div class="page-breadcrumb d-none d-sm-flex align-items-center mb-5">
+  <div class="breadcrumb-title pe-3">CAPE </div>
+  <div class="ps-3">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb mb-0 p-0">
+        <li class="breadcrumb-item"><a routerLink="/admin/dashboard"><i class="bx bx-home-alt"></i></a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">Rôles et permissions</li>
+      </ol>
+    </nav>
+  </div>
+ 
+</div>
+<div>
+
+    <div >
+        <div  class="card mb-3" *ngFor="let r of data">
+            <div class="card-header">
+              
+             <h5 class="d-flex justify-content-between"> 
+              {{r.name}}
+
+              <button class="btn cape-bg-blue text-white btn-sm" (click)="open(dialog,r)" >Ajouter un droit </button>
+
+             </h5>
+
+            </div>
+        
+            <div class="card-body">
+                <div *ngFor="let p of r.permissions">
+                    <i icon="arrowhead-right-outline"></i>  
+                        {{p.name}}
+                        <span class="float-right text-danger hand" (click)="revoke(r.id,p.id)"><u>Retirer</u></span>
+                </div>
+                
+            </div>
+        </div>
+
+    </div>
+</div>
+
+  <ng-template #dialog  let-ref="dialogRef" let-d="dismiss">
+    <form #addForm="ngForm" (ngSubmit)="store(addForm.value,ref)">
+      <div class="modal-header">
+ <h6 class="modal-title text-white">
+              Ajout de droit</h6>
+              <button type="button" class="btn-close" aria-label="Close" (click)="d('Cross click')"></button>
+
+            
+      </div>
+      <div class="modal-body">
+        <div>
+          <div>
+    
+           
+          </div>
+          <div>
+                 
+                    <div class="form-group">
+                        <label for="typeLabel">Permissions</label>
+                        <select type="text" class="form-control" id="typeLabel" aria-describedby="typeLabelHelp" required #type="ngModel" name="permission_id" ngModel>
+                            <option [value]="t.id" *ngFor="let t of permissions">{{t.name}}</option>
+                        </select>
+                       </div>
+                    </div>
+          <div>
+            <button type="submit" class="btn btn-outline-primary" [disabled]="addForm.invalid || loading">Sauvegarder <app-loading [isVisible]="loading"></app-loading> </button>
+          </div>
+        
+        </div>
+      </div>
+</form>
+  </ng-template>

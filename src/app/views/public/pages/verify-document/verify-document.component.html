@@ -1,0 +1,32 @@
+<section class="main-slider home">
+    <div class="welcome_section">
+        <h1 class="welcome_title">
+          Vérification de document
+        </h1>
+       
+    </div>
+  </section>
+  <div class="body_content home_page">
+    <div class="container pt-5">
+        
+        <ng-container *ngIf="showPreview"  class="container">
+            <app-loading [isVisible]="loading"></app-loading>
+        </ng-container>
+
+        <ng-container *ngIf="showPreview"  class="container">
+            <div class="">
+                <ul>
+                    <li><strong><b>Délivré par:</b></strong> {{data.deliver.firstname}} {{data.deliver.lastname}}</li>
+                    <li><strong><b>Date de délivrance:</b></strong> {{data.created_at | date:"shortDate"}}</li>
+                </ul>
+            </div>
+
+
+         
+            <object [data]="url" type="application/pdf" width="100%" height="600px"></object>
+    </ng-container>
+  
+   
+    </div>
+  </div>
+  

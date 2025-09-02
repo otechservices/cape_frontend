@@ -1,0 +1,351 @@
+<section class="main-slider request">
+    <div class="welcome_section">
+        <h1 class="welcome_title" *ngIf="type == 'cape'">
+
+            Inscrivez votre Centre d'Accueil et de Protection de l'Enfant
+        </h1>
+       
+        <h1 class="welcome_title" *ngIf="type == 'garderie'">
+
+            Inscrivez votre Garderie
+        </h1>
+       
+    </div>
+  </section>
+  <div class="body_content">
+    <div class="container">
+        <ng-container *ngIf="type == 'cape'">
+          <div class="row list_pieces">
+            <div class="col-12">
+              <div class="texte">
+                <h2 class="text-center" style="color: orange !important;">
+                  Demande d’autorisation d'ouverture d'un CAPE
+                </h2>
+              </div>
+            </div>
+          </div>
+            <div class="row list_pieces" #pj>
+                <div class="col-lg-12">
+                  <h2> 
+                    <i class="fa fa-file-invoice"></i>
+                    Liste des pièces à fournir</h2>
+                </div>
+                <div class="row p-3">
+                    <div class="col-lg-6">
+                      <ul class="main_list">
+                        <li>
+                          <strong>1<i class="fa fa-circle"></i></strong> <b>Demande d’autorisation d’ouverture</b> adressée au ministre chargé de la famille indiquant :
+                          <ul class="sub_list">
+                            <li><i class="fa fa-check"></i>La dénomination exacte et le type de centre </li>
+                            <li><i class="fa fa-check"></i>L’adresse complète du centre</li>
+                            <li><i class="fa fa-check"></i>Le but de l’accueil</li>
+                            <li><i class="fa fa-check"></i>La capacité d’accueil</li>
+                            <li><i class="fa fa-check"></i>La cible d’enfants à accueillir</li>
+                            <li><i class="fa fa-check"></i>Les équipements disponibles pour le démarrage des activités</li>
+                          </ul>
+                        </li>
+                        <li>
+                          <strong>2<i class="fa fa-circle"></i></strong> <b>Dossier du promoteur</b> personne physique ou du représentant légal s’il s’agit d’une personne morale, contenant sa pièce d’identité ou toute autre pièce y tenant lieu, son casier judiciaire datant de moins de 
+                          trois (03) mois, son curriculum vitae, son certificat de nationalité et la copie de son diplôme
+                        </li>
+                        <li><strong>3<i class="fa fa-circle"></i></strong>  <b>Dossier du directeur</b> contenant les mêmes pièces comme indiqué au point 2</li>
+                        <li><strong>4<i class="fa fa-circle"></i></strong>  <b>Copie de l’acte de propriété, de donation ou du contrat de bail du site </b>
+                          conformément aux dispositions de l’article 9 du présent décret</li>
+                        </ul>
+                    </div>
+        
+                    <div class="col-lg-6">
+                      <ul class="main_list">
+                        <li>
+                          <strong>5<i class="fa fa-circle"></i></strong> <b>Document du projet</b> indiquant les activités du 
+                          centre avec un plan de financement et la précision du mode de financement
+                        </li>
+                        <li>
+                          <strong>6<i class="fa fa-circle"></i></strong> 
+                          <b>Plan architectural du centre :</b> plan des bâtiments et des autres installations réalisées et/ou à construire
+                        </li>
+                        <li><strong>7<i class="fa fa-circle"></i></strong> <b>Nombre d’agents</b> recrutés ou à recruter et leur profil</li>
+                        <li><strong>8<i class="fa fa-circle"></i></strong> <b>Documents légaux de reconnaissance de la structure</b> si elle existait déjà sous forme d’organisation non gouvernementale, notamment le récépissé d’enregistrement, le journal officiel, les statuts, le règlement intérieur, l’accord de siège pour les structures internationales</li>
+                        <li><strong>9<i class="fa fa-circle"></i></strong> <b>Trois (03) lettres de recommandation</b> de personnalités reconnues et/ou d’acteurs de protection de l’enfant attestant de la bonne moralité du promoteur personne physique ou du représentant légal du promoteur personne morale</li>
+                        <li><strong>10<i class="fa fa-circle"></i></strong> <b>Quittance ou preuve justifiant le paiement des frais d’étude</b> de dossier fixés par arrêté conjoint du ministre chargé de la famille et du ministre de l’Economie et des Finances</li>
+        
+                      </ul>
+                    </div>
+                  
+                </div>
+                </div>
+
+                <div class="row process_agreement p-lg-5 pt-lg-0 p-md-3 p-3">
+                    <div class="col-lg-12 list_step">
+                      <h2>
+                        <i class="fa fa-list-numeric"></i>
+                        Procédure d'obtention de l'autorisation d'ouverture
+                      </h2>
+                      <p>Voici les étapes :
+                      </p>
+                      <ul>
+                        <li>
+                          <h3><i class="fa fa-circle"></i><span>Etape1 : </span> Inscription en ligne</h3>
+                          <p>
+                            L'étape d'inscription se fait sur cette plateforme en renseignant toutes les 
+                            informations demandées ainsi que toutes les pièces jointes.
+                            Une fois, le dossier enregistré, vous recevrez un mail de notification.
+                          </p>
+                        </li>
+                        <li><h3><i class="fa fa-circle"></i><span>Etape2 : </span>Etude de demandes d'autorisation
+                          et agrément provisoire</h3>
+                              <p>
+                                Une session chargée de l'étude des demandes d'autorisation des CAPE
+                                est organisée de façon annuelle au MASM afin d'analyser les dossiers des CAPE qui se sont faits 
+                                enregistrés en ligne. Les CAPE dont les dossiers auront été jugés recevables se 
+                                verront délivrer un agrément provisoire. Les résultats de cette délibération seront notifiés 
+                                aux responsables de CAPE concernés dans leurs adresses emails et mise en ligne 
+                                sur le présent site web.
+                              </p>
+                        </li>
+                        <li><h3><i class="fa fa-circle"></i><span>Etape3 : </span> Délivrance de l'agrément définitif</h3>
+                            <p>L'agrément définitif est délivré par le Ministre des Affaires Sociales et de la 
+                            Microfinance.</p>
+                          </li>
+                      </ul>
+                    </div>
+                    
+                  </div>
+
+                  <div class="col-lg-12 list_pieces">
+                    <h2>
+                      <i class="fa fa-folder"></i>
+                      Documentation
+                    </h2>
+                    <div class="row">
+                      <div class="inner-column decret_upload mb-3 col-12 col-md-6">
+                        <div class="opening">
+                          <div class="file_upload_header">
+                            <i class="fa fa-file-pdf"></i>
+                            <h3>
+                              Décret fixant les modalités de création des CAPE
+                            </h3>
+                          </div>
+                          <div class="button_upload">
+                            <button class="btn btn-red-outline" (click)="download(1)">
+                            <i class="fa fa-download"></i>
+                            Télécharger le décret</button>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="inner-column decret_upload mb-3 col-12 col-md-6">
+                        <div class="opening">
+                          <div class="file_upload_header2">
+                            <i class="fa fa-file-word"></i>
+                            <h3>
+                              Le modèle consentement pour la collecte de vos données personnelles
+                            </h3>
+                          </div>
+                          <div class="button_upload">
+                            <button class="btn btn-red-outline" (click)="download(2)">
+                            <i class="fa fa-download"></i>
+                            Télécharger le modèle</button>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="inner-column decret_upload mb-3 col-12 col-md-6">
+                        <div class="opening">
+                          <div class="file_upload_header">
+                            <i class="fa fa-file-pdf"></i>
+                            <h3>
+                              Le guide d'inscription
+                            </h3>
+                          </div>
+                          <div class="button_upload">
+                            <button class="btn btn-red-outline" (click)="download(3)">
+                            <i class="fa fa-download"></i>
+                            Télécharger le guide</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                    <div class="col-lg-12">
+                      <div class="home_main_button mt-3 mb-3">
+                        <a routerLink="/request/cape" class="btn_home_register">
+                          <i class="fa fa-building round-2"></i>
+                          Faire ma demande
+                        </a>
+                      </div>
+                    </div>
+                   
+        </ng-container>
+
+        <ng-container *ngIf="type == 'garderie'">
+          <div class="row list_pieces">
+            <div class="col-12">
+              <div class="texte">
+                <h2 class="text-center " style="color: orange !important;">
+                  Demande d’autorisation d'ouverture d'une garderie
+                </h2>
+              </div>
+            </div>
+          </div>
+         
+            <div class="row list_pieces" #pj>
+                <div class="col-lg-12">
+                  <h2> 
+                    <i class="fa fa-file-invoice"></i>
+                    Liste des pièces à fournir</h2>
+                </div>
+                <div class="row p-3">
+                    <div class="col-lg-6">
+                      <ul class="main_list">
+                        <li>
+                          <strong>1<i class="fa fa-circle"></i></strong> <b>Une fiche de renseignement </b> indiquant la dénomination de la garderie, les tranches d’âge d’enfants à accueillir, l’adresse complète, l’effectif prévisionnel d’enfants en fonction de la superficie des pièces, les équipements disponibles
+                        
+                        </li>
+                        <li>
+                          <strong>2<i class="fa fa-circle"></i></strong> <b>Une copie d’un titre de propriété, d’un bail ou d’une autorisation </b> à occuper les lieux gratuitement
+                        </li>
+                        <li><strong>3<i class="fa fa-circle"></i></strong>  <b>Le document de projet éducatif de la garderie </b> avec le plan et le mode de financement </li>
+                        <li><strong>4<i class="fa fa-circle"></i></strong>  <b>Le certificat de conformité environnementale</b>
+                          ou à défaut, le rapport  hygiène- santé-sécurité réalisé et/ou délivré par les services compétents du ministère en charge du Cadre de Vie</li>
+                          <li>
+                            <strong>5<i class="fa fa-circle"></i></strong> <b>L’engagement à souscrire une assurance </b> contre tous risques d’accidents des enfants dans la structure et une assurance maladie pour le personnel dans les trente (30) jours suivant le démarrage des activités 
+                          </li>
+                        </ul>
+                    </div>
+        
+                    <div class="col-lg-6">
+                      <ul class="main_list">
+                       
+                        <li>
+                          <strong>6<i class="fa fa-circle"></i></strong> 
+                          <b>Le plan architectural de la garderie</b> comportant le plan des bâtiments et des autres installations réalisées et/ou à construire 
+                        </li>
+                        <li><strong>7<i class="fa fa-circle"></i></strong> <b>Le nombre d’agents</b> recrutés ou à recruter et leur profil</li>
+                        <li><strong>8<i class="fa fa-circle"></i></strong> <b>La copie des statuts </b> ou de l’accord de siège et de la publication de la création au Journal officiel pour une association ou organisation non gouvernementale nationale ou internationale, et la copie des statuts et de la publication dans un Journal d’annonce légale pour une société</li>
+                        <li><strong>9<i class="fa fa-circle"></i></strong> <b>La pièce d’identité en cours de validité </b> et l’extrait du casier judiciaire datant de moins de trois (03) mois du promoteur personne physique ou du représentant légal du promoteur personne morale </li>
+                        <li><strong>10<i class="fa fa-circle"></i></strong> <b>La quittance de paiement des frais d’étude de dossiers </b></li>
+        
+                      </ul>
+                    </div>
+  
+                
+        
+                
+                   </div>
+            </div>
+            <div class="row process_agreement p-lg-5 pt-lg-0 p-md-3 p-3">
+                <div class="col-lg-12 list_step">
+                  <h2>
+                    <i class="fa fa-list-numeric"></i>
+                    Procédure d'obtention de l'autorisation d'ouverture
+                  </h2>
+                  <p>Voici les étapes :
+                  </p>
+                  <ul>
+                    <li>
+                      <h3><i class="fa fa-circle"></i><span>Etape1 : </span> Inscription en ligne</h3>
+                      <p>
+                        L'étape d'inscription se fait sur cette plateforme en renseignant toutes les 
+                        informations demandées ainsi que toutes les pièces jointes.
+                        Une fois, le dossier enregistré, vous recevrez un mail de notification.
+                      </p>
+                    </li>
+                    <li><h3><i class="fa fa-circle"></i><span>Etape2 : </span>Etude de demandes d'autorisation
+                      et agrément provisoire</h3>
+                          <p>
+                            Une session chargée de l'étude des demandes d'autorisation des garderies
+                            est organisée de façon annuelle au MASM afin d'analyser les dossiers des garderies qui se sont faits 
+                            enregistrés en ligne. Les garderies dont les dossiers auront été jugés recevables se 
+                            verront délivrer un agrément provisoire. Les résultats de cette délibération seront notifiés 
+                            aux responsables de garderies concernés dans leurs adresses emails et mise en ligne 
+                            sur le présent site web.
+                          </p>
+                    </li>
+                    <li><h3><i class="fa fa-circle"></i><span>Etape3 : </span> Délivrance de l'agrément définitif</h3>
+                        <p>L'agrément définitif est délivré par le Ministre des Affaires Sociales et de la 
+                        Microfinance.</p>
+                      </li>
+                  </ul>
+                </div>
+            
+              </div>
+
+              <div class="col-lg-12 list_pieces">
+                <h2>
+                  <i class="fa fa-folder"></i>
+                  Documentation
+                </h2>
+              <div class="row">
+                <div class="inner-column decret_upload mb-3 col-12 col-md-6">
+                  <div class="opening">
+                    <div class="file_upload_header">
+                      <i class="fa fa-file-pdf"></i>
+                      <h3>
+                        Décret fixant les modalités de création des GARDERIES
+                      </h3>
+                    </div>
+                    <div class="button_upload">
+                      <button class="btn btn-red-outline" (click)="download(2)">
+                      <i class="fa fa-download"></i>
+                      Télécharger le décret</button>
+                    </div>
+                  </div>
+                </div>
+          <div class="inner-column decret_upload mb-3 col-12 col-md-6">
+            <div class="opening">
+              <div class="file_upload_header2">
+                <i class="fa fa-file-word"></i>
+                <h3>
+                  Le modèle consentement pour la collecte de vos données personnelles
+                </h3>
+              </div>
+              <div class="button_upload">
+                <button class="btn btn-red-outline" (click)="download(2)">
+                <i class="fa fa-download"></i>
+                Télécharger le modèle</button>
+              </div>
+            </div>
+          </div>
+            <div class="inner-column decret_upload mb-3 col-12 col-md-6">
+              <div class="opening">
+                <div class="file_upload_header">
+                  <i class="fa fa-file-pdf"></i>
+                  <h3>
+                    Cahier de charge de la GARDERIE
+                  </h3>
+                </div>
+                <div class="button_upload">
+                  <button class="btn btn-red-outline" (click)="download(4)">
+                  <i class="fa fa-download"></i>
+                  Télécharger le cahier des charges des promoteurs</button>
+                </div>
+              </div>
+            </div>
+          <div class="inner-column decret_upload mb-3 col-12 col-md-6">
+            <div class="opening">
+              <div class="file_upload_header">
+                <i class="fa fa-file-pdf"></i>
+                <h3>
+                  Le guide d'inscription
+                </h3>
+              </div>
+              <div class="button_upload">
+                <button class="btn btn-red-outline" (click)="download(3)">
+                <i class="fa fa-download"></i>
+                Télécharger le guide</button>
+              </div>
+            </div>
+          </div>
+              </div>
+              </div>
+              <div class="col-lg-12">
+                <div class="home_main_button mt-3 mb-3">
+                  <a routerLink="/request/garderie" class="btn_home_register2">
+                    <i class="fa fa-child round-3"></i>
+                    Faire ma demande
+                  </a>
+                </div>
+              </div>
+        </ng-container>
+    </div>
+    </div>
+

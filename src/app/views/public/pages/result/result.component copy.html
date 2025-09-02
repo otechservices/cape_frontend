@@ -1,0 +1,119 @@
+<section class="main-slider result">
+    <div class="welcome_section">
+        <h1 class="welcome_title">
+            Résultats des sessions
+        </h1>
+       
+    </div>
+  </section>
+  <div class="body_content">
+    <div class="container">
+      <div class="row clearfix">
+        <div class="content-side col-lg-12 col-md-12 col-sm-12">
+            
+            <div class="row process_agreement p-5">
+              <div class="col-lg-12 list_step">
+                <div class="project-detail">
+                    <div class="inner-box">
+                        <p>{{data.length}} élément(s)</p>
+                        <div class="table-responsive">
+                        <table class="table" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+                            <thead class="">
+                                <tr>
+                                    <th style="width: 10px;">#</th>
+                                    <th>Année </th>
+                                    <th>Session </th>
+                                    <th>Période </th>
+                                    <th>Dossiers Inscrits</th>
+                                    <th>Dossiers Validés</th>
+                                    <th>Dossiers rejetés </th>                        
+                                    <th>Voir mon résultat</th>                        
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let d of data; let i=index ">
+                                    <td>
+                                        <div class="form-check mb-2">
+                                                    {{i+1}}                                        
+                                        </div>
+                                    </td>
+                                    <td>{{d.year}}</td>
+                                    <td>{{d.name}}</td>
+                                    <td>Du {{d.date_start | date:"shortDate"}} au {{d.date_end | date:"shortDate"}}</td>
+                                    <td>{{d.requetes_count}}</td>
+                                    <td>{{d.requetes_ok_count}}</td>
+                                    <td>{{d.requetes_nok_count}}</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-primary">Consulter le résultat</button>
+                                    </td>
+                                </tr>
+                            
+                            </tbody>
+                        </table>
+                        </div>
+        </div>
+                  </div>
+                
+              </div>
+              
+            </div>
+
+
+
+            <ng-container *ngIf="requetes.length>0">
+                <div class="row process_agreement p-5">
+                    <div class="col-lg-12 list_step">
+                      <div class="project-detail">
+                          <div class="inner-box">
+                              <p>{{requetes.length}} élément(s)</p>
+                              <div class="table-responsive">
+                                <table class="table">
+                                    <thead class="">
+                                        <tr>
+                                            <th style="width: 10px;">#</th>
+                                            <th>Type CAPE  </th>
+                                            <th>Dénomination  </th>
+                                            <th>Directeur  </th>
+                                            <th>Localisation  </th>
+                                            <th>Adresse  </th>                                
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let d of requetes; let i=index ">
+                                            <td>
+                                                <div class="form-check mb-2">
+                                                            {{i+1}}                                        
+                                                </div>
+                                            </td>
+                                            <td>{{d.tye_cape?.name}}</td>
+                                            <td>{{d.name}}</td>
+                                            <td>{{d.name_chief}} {{d.firstname_chief}}</td>
+                                            <td>
+                                                <ul>
+                                                    <li><strong>Département  : </strong> {{d.district?.municipality?.department?.name}}</li>
+                                                    <li><strong>Commune  : </strong> {{d.district?.municipality?.name}}</li>
+                                                    <li><strong>Arrondissement  : </strong> {{d.district?.name}}</li>
+                                                    <li><strong>Quartier de ville / Village  : </strong> {{d.district?.name}}</li>
+                                                </ul>
+                                            </td>
+                                            <td>{{d.address}}</td>
+                                   
+                                       
+                                        </tr>
+                                    
+                                    </tbody>
+                                </table>
+                                </div>
+              </div>
+                        </div>
+                      
+                    </div>
+                    
+                  </div>
+            </ng-container>
+            
+        </div>
+      </div>
+    </div>
+  </div>
+  

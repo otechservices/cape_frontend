@@ -1,0 +1,12 @@
+<div class="form-group">
+    <label for="">{{label}}</label>
+    <input class="form-control" #inpEL="ngModel" maxlength="250" required name="{{inputName}}" ngModel>
+    <span *ngIf="inpEL.invalid && (inpEL.dirty || inpEL.touched)" class="text-danger">
+      <small *ngIf="inpEL.errors!['required']">
+        {{label}} est requis
+      </small>
+      <small *ngIf="inpEL.errors!['maxlength']">
+        {{label}}, pas plus de 250 caractères.
+      </small>
+    </span>
+  </div>

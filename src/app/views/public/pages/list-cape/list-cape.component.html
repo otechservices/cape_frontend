@@ -1,0 +1,122 @@
+<section class="main-slider list">
+    <div class="welcome_section">
+        <h1 class="welcome_title" *ngIf="type == 'cape'">
+            Liste des CAPE autorisés
+                </h1>
+        <h1 class="welcome_title" *ngIf="type == 'garderie'">
+            Liste des GARDERIES autorisées
+                </h1>
+       
+    </div>
+  </section>
+  <div class="body_content">
+    <div class="container">
+      <div class="row clearfix">
+        <div class="content-side col-lg-12 col-md-12 col-sm-12">
+            
+            <div class="row process_agreement p-lg-5 p-md-3 p-3">
+              <div class="col-lg-12 list_step">
+                <div class="project-detail">
+                    <div class="inner-box">
+                        <p >{{data.length}} élément(s)</p>
+                        <p >0 élément(s)</p>
+                        <div class="table-responsive">
+                        <table *ngIf="type == 'cape'" class="table" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+                            <thead class="">
+                                <tr>
+                                    <th>#</th>
+                                    <th >Dénomination  </th>
+                                    <th >Type CAPE  </th>
+                                    <th >Couverture</th>
+                                    <th >Localisation  </th>
+                                    <th >Adresse  </th>
+                        
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let d of data; let i=index ">
+                                    <td>
+                                        <div class="form-check mb-2">
+                                                    {{i+1}}                                        
+                                        </div>
+                                    </td>
+                                    <td>{{d.name}}</td>
+                                    <td>{{d.type_cape?.name}}</td>
+                                    <td><p>{{d.district?.cps?.name}}</p></td>
+                                    <td>
+                                        <small>
+                                            <ul>
+                                                <li><strong>Département  : </strong> {{d.district?.municipality?.department?.name}}</li>
+                                                <li><strong>Commune  : </strong> {{d.district?.municipality?.name}}</li>
+                                                <li><strong>Arrondissement  : </strong> {{d.district?.name}}</li>
+                                                <li><strong>Quartier de ville / Village  : </strong> {{d.district?.name}}</li>
+                                            </ul>
+                                        </small>
+                                    
+                                    </td>
+                                    <td>{{d.address}}</td>
+                           
+                               
+                                </tr>
+                            
+                            </tbody>
+                        </table>
+                        <table *ngIf="type == 'garderie'" class="table" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+                            <thead class="">
+                                <tr>
+                                    <th>#</th>
+                                    <th >Dénomination  </th>
+                                    <th >Couverture</th>
+                                    <th >Localisation  </th>
+                                    <th >Adresse  </th>
+                        
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let d of data; let i=index ">
+                                    <td>
+                                        <div class="form-check mb-2">
+                                                    {{i+1}}                                        
+                                        </div>
+                                    </td>
+                                    <td>{{d.name}}</td>
+                                    <td><p>{{d.district?.cps?.name}}</p></td>
+                                    <td>
+                                        <small>
+                                            <ul>
+                                                <li><strong>Département  : </strong> {{d.district?.municipality?.department?.name}}</li>
+                                                <li><strong>Commune  : </strong> {{d.district?.municipality?.name}}</li>
+                                                <li><strong>Arrondissement  : </strong> {{d.district?.name}}</li>
+                                                <li><strong>Quartier de ville / Village  : </strong> {{d.district?.name}}</li>
+                                            </ul>
+                                        </small>
+                                    
+                                    </td>
+                                    <td>{{d.address}}</td>
+                           
+                               
+                                </tr>
+                            
+                            </tbody>
+                        </table>
+                        
+                        </div>
+                        <p>
+                            <b class="underline">NB:</b> Pour contacter un CAPE, veuillez vous référer au Ministère des Affaires Sociales et de 
+                            la Microfinance (MASM): 
+                            <a routerLink="/contact" routerLinkActive="active" class="link_blue">Contactez le MASM
+                                <i class="fa fa-arrow-right ml-2"></i>
+                            </a>
+                        </p>
+        </div>
+                  </div>
+                
+              </div>
+              
+            </div>
+            
+        </div>
+      </div>
+    </div>
+  </div>
+  

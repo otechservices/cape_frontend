@@ -1,0 +1,235 @@
+    <!--breadcrumb-->
+    <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-5">
+        <div class="breadcrumb-title pe-3">CAPE </div>
+        <div class="ps-3">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 p-0">
+              <li class="breadcrumb-item"><a routerLink="/admin/dashboard"><i class="bx bx-home-alt"></i></a>
+              </li>
+              <li class="breadcrumb-item active" aria-current="page">Liste des pensionnaires</li>
+            </ol>
+          </nav>
+        </div>
+        <div class="ms-auto">
+          <button type="button" class="btn btn-primary btn-sm me-3" (click)="add(addContent)">Ajouter un pensionnaire</button>
+        </div>
+      </div>
+  
+      <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+              
+                <div class="card-body">
+                    <div class="d-flex mb-5 " *ngIf="buttonsPermission">
+                        <button *ngIf="buttonsPermission.show"  (click)="show(showContent)" type="button" class="btn btn-outline-primary btn-sm  me-3">
+                             <span>Consulter</span></button>
+                        <button *ngIf="buttonsPermission.edit" (click)="edit(editContent)" type="button"  class="btn btn-outline-warning btn-sm  me-3">
+                           Editer</button>
+                        <button *ngIf="buttonsPermission.delete" (click)="delete()" type="button" class="btn btn-outline-danger btn-sm  me-3">
+                             Supprimer</button>
+                             <button *ngIf="is_active!=null && !is_active" (click)="setStatus(1)" type="button" class="btn btn-outline-success btn-sm  me-3">
+                                Activer</button>
+                               <button  *ngIf="is_active!=null &&  is_active" (click)="setStatus(0)" type="button" class="btn btn-outline-danger btn-sm  me-3">
+                                Désactiver</button>
+                    </div>
+    
+                            <p>{{data.length}} élément(s)</p>
+                            <div class="table-responsive">
+                            <table class="table" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+                                <thead class="">
+                                    <tr>
+                                        <th style="width: 10px;">#</th>
+                                        <th>Identité</th>
+                                        <th>Date de naissance</th>
+                                        <th>Lien de naissance</th>
+                                        <th>Taille / poids</th>
+                            
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let d of data ">
+                                        <td>
+                                            <div class="form-check mb-2">
+                                                <input (click)="checked(d)" class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                                            
+                                            </div>
+                                        </td>
+                                        <td>{{d.firstname}} {{d.lastname}}</td>
+                                        <td>{{d.birthdate | date:"shortDate"}}</td>
+                                        <td>{{d.birthplace}}</td>
+                                        <td>{{d.size}}  /  {{d.weight}}</td>
+                               
+                                   
+                                    </tr>
+                                
+                                </tbody>
+                            </table>
+                            </div>
+    
+                </div><!-- end card -->
+            </div>
+            <!-- end col -->
+        </div>
+        <!-- end col -->
+    </div>
+    
+    <ng-template #addContent let-c="close" let-d="dismiss">
+        <form #addForm="ngForm" (ngSubmit)="store(addForm.value)">
+        <div class="modal-header bg-secondary">
+          <h6 class="modal-title text-white" id="modal-basic-title">Enregistrer un personnel</h6>
+          <button type="button" class="btn-close" aria-label="Close" (click)="d('Cross click')"></button>
+        </div>
+        <div class="modal-body" >
+            <div class="row mb-3" >
+          
+                <div class=" form-goup col-12 mb-3">
+                    <label for="">Prénom(s) <span class="text-danger ml-2">(*)</span></label>
+                    <input type="text" name="firstname" class="form-control" ngModel required>
+                </div>
+                <div class=" form-goup col-12 mb-3">
+                    <label for="">Nom <span class="text-danger ml-2">(*)</span></label>
+                    <input type="text" name="lastname" class="form-control" ngModel required>
+                </div>
+                <div class=" form-goup col-12 mb-3">
+                    <label for="">Date de naissance <span class="text-danger ml-2">(*)</span></label>
+                    <input type="date" name="birthdate" class="form-control" ngModel required>
+                </div>
+                <div class=" form-goup col-12 mb-3">
+                    <label for="">Lieu de naissance <span class="text-danger ml-2">(*)</span></label>
+                    <input type="text" name="birthplace" class="form-control" ngModel required>
+                </div>
+                <div class=" form-goup col-12 mb-3">
+                    <label for="">Adresse <span class="text-danger ml-2">(*)</span></label>
+                    <input type="text" name="address" class="form-control" ngModel required>
+                </div>
+                <div class=" form-goup col-12 mb-3">
+                    <label for="">Sexe <span class="text-danger ml-2">(*)</span></label>
+                    <select name="sex" class="form-control" ngModel required>
+                        <option value="Masculin">Masculin</option>
+                        <option value="Féminin">Féminin</option>
+                    </select>
+                </div>
+                <div class=" form-goup col-12 mb-3">
+                    <label for="">Taille <span class="text-danger ml-2">(*)</span></label>
+                    <input type="text" name="size" class="form-control" ngModel required>
+                </div>
+                <div class=" form-goup col-12 mb-3">
+                    <label for="">Poids <span class="text-danger ml-2">(*)</span></label>
+                    <input type="text" name="weight" class="form-control" ngModel required>
+                </div>
+    
+            </div>
+           
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-outline-dark" [disabled]="addForm.invalid || loading"  >Enregistrer <app-loading [isVisible]="loading"></app-loading></button>
+        </div>
+    </form>
+      </ng-template>
+    
+      <ng-template #editContent let-c="close" let-d="dismiss">
+        <form #editForm="ngForm" (ngSubmit)="update(editForm.value)">
+        <div class="modal-header bg-secondary">
+          <h6 class="modal-title text-white" id="modal-basic-title">Modifier un personnel</h6>
+          <button type="button" class="btn-close" aria-label="Close" (click)="d('Cross click')"></button>
+        </div>
+        <div class="modal-body" >
+            <div class="row mb-3">
+            
+                <div class="row mb-3" >
+          
+                    <div class=" form-goup col-12 mb-3">
+                        <label for="">Prénom(s) <span class="text-danger ml-2">(*)</span></label>
+                        <input type="text" name="firstname" class="form-control" [(ngModel)]="selected_data.firstname" required>
+                    </div>
+                    <div class=" form-goup col-12 mb-3">
+                        <label for="">Nom <span class="text-danger ml-2">(*)</span></label>
+                        <input type="text" name="lastname" class="form-control"  [(ngModel)]="selected_data.lastname" required>
+                    </div>
+                    <div class=" form-goup col-12 mb-3">
+                        <label for="">Date de naissance <span class="text-danger ml-2">(*)</span></label>
+                        <input type="date" name="birthdate" class="form-control"  [(ngModel)]="selected_data.birthdate" required>
+                    </div>
+                    <div class=" form-goup col-12 mb-3">
+                        <label for="">Lieu de naissance <span class="text-danger ml-2">(*)</span></label>
+                        <input type="text" name="birthplace" class="form-control"  [(ngModel)]="selected_data.birthplace" required>
+                    </div>
+                    <div class=" form-goup col-12 mb-3">
+                        <label for="">Adresse <span class="text-danger ml-2">(*)</span></label>
+                        <input type="text" name="address" class="form-control"  [(ngModel)]="selected_data.address" required>
+                    </div>
+                    <div class=" form-goup col-12 mb-3">
+                        <label for="">Sexe <span class="text-danger ml-2">(*)</span></label>
+                        <select name="sex" class="form-control" [(ngModel)]="selected_data.sex" required>
+                            <option value="Masculin">Masculin</option>
+                            <option value="Féminin">Féminin</option>
+                        </select>
+                    </div>
+                    <div class=" form-goup col-12 mb-3">
+                        <label for="">Taille <span class="text-danger ml-2">(*)</span></label>
+                        <input type="text" name="size" class="form-control" [(ngModel)]="selected_data.size" required>
+                    </div>
+                    <div class=" form-goup col-12 mb-3">
+                        <label for="">Poids <span class="text-danger ml-2">(*)</span></label>
+                        <input type="text" name="weight" class="form-control" [(ngModel)]="selected_data.weight" required>
+                    </div>
+        
+                </div>
+             
+              
+            </div>
+           
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-outline-dark" [disabled]="editForm.invalid || loading" >Sauvegarder <app-loading [isVisible]="loading"></app-loading></button>
+        </div>
+    </form>
+      </ng-template>
+    
+      <ng-template #showContent let-c="close" let-d="dismiss">
+        <div class="modal-header bg-secondary">
+            <h4 class="modal-title text-white" id="modal-basic-title">Détails des informations</h4>
+            <button type="button" class="btn-close" aria-label="Close" (click)="d('Cross click')"></button>
+          </div>
+    
+          <div class="modal-body">
+            <div class="table-responsive table-card">
+                <table class="table table-borderless align-middle mb-0">
+                    <tbody>
+                      
+                   
+                        <tr >
+                            <td class="fw-medium">Prénom</td>
+                            <td >{{selected_data.firstname}} </td>
+                          
+                        </tr>
+                        <tr >
+                            <td class="fw-medium">Nom</td>
+                            <td >{{selected_data.lastname}} </td>
+                          
+                        </tr>
+                        <tr >
+                            <td class="fw-medium">Date de naissance</td>
+                            <td >{{selected_data.birthdate | date:"shortDate"}} </td>
+                          
+                        </tr>
+                        <tr >
+                            <td class="fw-medium">Lieu de naissance</td>
+                            <td >{{selected_data.birthplace}} </td>
+                          
+                        </tr>
+                        <tr >
+                            <td class="fw-medium">Taille</td>
+                            <td >{{selected_data.size}} </td>
+                          
+                        </tr>
+                        <tr >
+                            <td class="fw-medium">Poids</td>
+                            <td >{{selected_data.weight}} </td>
+                          
+                        </tr>                   
+                    </tbody>
+                </table>
+            </div>
+          </div>
+    </ng-template>

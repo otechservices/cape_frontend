@@ -1,0 +1,111 @@
+/* You can add global styles to this file, and also import other style files
+
+blue :: after
+yellow:: #FCCD5D
+*/
+
+.btn-primary{
+background-color: #0A3764;
+border-color: #0A3764;
+}
+.btn-primary:active{
+    background-color: #0A3764;
+    border-color: #0A3764;
+    }
+
+.btn-primary:hover{
+    background-color: #0C574E;
+    border-color: #0C574E;
+}
+
+.btn-outline-primary{
+    border-color: #0A3764;
+}
+.btn-outline-primary:hover{
+    background-color: #0C574E;
+    border-color: #0C574E;
+}
+
+.cape-bg-green{
+    background-color: #0C574E !important;
+}
+.cape-bg-blue{
+    background-color: #0A3764 !important;
+}
+.cape-btn-outline-blue{
+    color: #0A3764;
+    border: 1px solid #0A3764;
+    
+}
+
+.cape-btn-outline-blue:hover{
+    background-color: #0A3764 !important;
+    color: white;
+    
+}
+
+.cape-text-green{
+    color: #0C574E;
+}
+
+.cape-text-blue{
+    color: #0A3764;
+}
+
+.sidebar-wrapper .metismenu>li{
+    color:white !important;
+}
+
+
+div.dataTables_wrapper div.dataTables_length select{
+    width: 100px !important;
+}
+
+
+.selected-list .c-btn{
+    border:  1px solid black !important;
+}
+
+.dropdown-list ul li{
+    background-color: #0A3764 !important;
+    color:white;
+}
+
+.selected-list .c-list .c-token .c-label {
+    background-color: #0A3764 !important;
+    color:white;
+    padding: 1px 2px 1px 2px;
+    border-radius: 2px;
+}
+
+.contact-form .theme-btn {
+    color: white;
+}
+
+.theme-btn .btn-style-three:hover{
+    color: white !important;
+}
+
+
+table.dataTable.dtr-inline.collapsed>tbody>tr>td.dtr-control:before, table.dataTable.dtr-inline.collapsed>tbody>tr>th.dtr-control:before{
+    background-color: #0697B8 !important;
+}
+
+
+.pagination > li > a, .pagination > li > span{
+    background-color:#0A3764;
+    border-color: #0A3764;
+    color: white;
+
+}
+.pagination > li.active > a, .pagination > li.active > span{
+    background-color:#0C574E;
+    border-color: #0C574E;
+}
+
+.td-text{
+    max-width: 300px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: wrap;
+   }

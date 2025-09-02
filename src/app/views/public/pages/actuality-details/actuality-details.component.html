@@ -1,0 +1,32 @@
+<section *ngIf="data!=undefined" class=" contact" #img >
+    <img [src]="getLink(data?.big_photo)" class="img-fluid w-100" alt="">
+    <!-- <div class="welcome_section">
+        <h1 class="welcome_title">
+            {{data?.title}}
+        </h1>
+       
+    </div> -->
+  </section>
+  <div class="body_content">
+    <div class="container">
+      <div class="row clearfix">
+        <div class="content-side col-lg-12 col-md-12 col-sm-12">
+            
+            <div class="row process_agreement p-lg-5 p-md-3 p-3">
+              <div class="col-lg-12 list_step">
+              <h2>{{data?.title}}
+              </h2>
+              <h6 class="mb-3">publié le, {{data?.created_at | date:"dd-MM-yyyy"}}</h6>
+               <p>
+                {{data?.content}}
+               </p>
+                
+              </div>
+              
+            </div>
+            
+        </div>
+      </div>
+    </div>
+  </div>
+  

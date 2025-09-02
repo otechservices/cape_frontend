@@ -1,0 +1,872 @@
+<div class="page-breadcrumb d-none d-sm-flex align-items-center mb-5">
+    <div class="breadcrumb-title pe-3">CAPE </div>
+    <div class="ps-3">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb mb-0 p-0">
+          <li class="breadcrumb-item"><a routerLink="/admin/dashboard"><i class="bx bx-home-alt"></i></a>
+          </li>
+          <li class="breadcrumb-item active" aria-current="page">Détails de la demande </li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+
+
+  <ng-container  *ngIf="!showPreview">
+<div class="d-flex justify-content-end" *ngIf="data != undefined">
+    <div class="mb-3 d-flex justify-content-end">
+        <a routerLink="/admin/requetes/new" class=" btn btn btn-sm btn-dark float-start">Retourner à la liste</a>
+
+        <button [disabled]="loading" (click)="add(backContent)" *ngIf=" (data.status ==5 || data.status ==6)  && role !='cps' " class="btn btn-sm btn-secondary mx-1 ">Retourner pour correction <app-loading [isVisible]="loading"></app-loading></button>
+        <button [disabled]="loading" (click)="add(resp)" *ngIf=" data.status==6" class="btn btn-sm btn-success">Dossier recevable pour inscription <app-loading [isVisible]="loading"></app-loading></button>
+        <button [disabled]="loading" (click)="add(resp)" *ngIf=" data.status==5 || data.affectation.sens==-1" class="btn btn-sm btn-primary mx-1">Transmettre <app-loading [isVisible]="loading"></app-loading></button>
+        <button [disabled]="loading" (click)="add(finishContent1)" *ngIf=" data.status==4  && !data.has_cps_file" class="btn btn-sm btn-outline-primary mx-1">Ajouter le rapport de l'enquête sociale <app-loading [isVisible]="loading"></app-loading></button>
+        <button [disabled]="loading"(click)="add(finishContent2)" *ngIf=" data.status==4 && !data.has_physical_deposit" class="btn btn-sm btn-outline-primary mx-1">Délivrer fiche de dépôt physique <app-loading [isVisible]="loading"></app-loading></button>
+        <button [disabled]="loading" (click)="add(pendingContent)" *ngIf=" data.status==0 || data.status==3" class="btn btn-sm btn-outline-warning mx-1">Mettre en attente <app-loading [isVisible]="loading"></app-loading></button>
+        <button [disabled]="loading" (click)="add(inviteContent)" *ngIf=" data.status==0 || data.status==3" class="btn btn-sm btn-outline-success mx-1">Inviter pour dépôt de dossier physique <app-loading [isVisible]="loading"></app-loading></button>
+    </div>
+    <!--a-- [href]="'/admin/requetes/edit/'+data.code" *ngIf="data.status==0 || data.status==1 || data.status==3" class="btn btn-outline-warning">
+        Traiter la demande {{data.status}}
+    </!--a-->
+</div>
+
+  <div class="container" *ngIf="data != undefined">
+
+    <h2>Dossier soumis le: {{data.created_at | date:"shortDate"}}</h2>
+
+    <div class="mb-3"  *ngIf="data.affectation.sens==-1">
+        <h4> <i class="fa fa-chevron-right fw-bold me-3"></i>  <u>Correction demandée</u>  </h4>
+        <p>
+            {{data.affectation.instruction}}
+        </p>
+    </div>
+
+
+    <div class="mb-3">
+        <h4> <i class="fa fa-chevron-right fw-bold me-3"></i>  <u>Identification</u>  </h4>
+    </div>
+
+    <h6> <strong>Nature promoteur :</strong> {{data?.nature_promotor?.name}}</h6>
+
+    <fieldset *ngIf="data?.nature_promotor?.name.includes('morale')">
+        <legend class="bg-secondary text-white">Information sur la personne morale</legend>
+        <div class="row">
+            <div class="col-6">
+                <dl>
+                    <dt>Dénomination </dt>
+                    <dd>{{data?.social_reason}}</dd>
+                </dl>
+            </div>
+            <div class="col-6">
+                <dl>
+                    <dt>N° enregistrement</dt>
+                    <dd> {{data?.registered_number}}</dd>
+                </dl>
+            </div>
+
+            <div class="col-6">
+                <dl>
+                    <dt>Date d'enregistrement </dt>
+                    <dd>{{data?.registered_date | date:"dd-MM-yyyy"}}</dd>
+                </dl>
+            </div>
+            <div class="col-6">
+                <dl>
+                    <dt>Contact </dt>
+                    <dd>{{data?.registered_phone}}</dd>
+                </dl>
+            </div>
+            <div class="col-6">
+                <dl>
+                    <dt>Siège</dt>
+                    <dd>{{data?.head_office}}</dd>
+                </dl>
+            </div>
+
+            <div class="col-6">
+                <dl>
+                    <dt>Preuve de l'enregistrement</dt>
+                    <dd>  
+                       <button (click)="showFile2(data?.registered_proof)" class="btn btn-sm btn-dark align-self-center">Voir document</button>
+                    </dd>
+                </dl>
+            </div>
+           
+        </div>
+    </fieldset>
+    <fieldset>
+        <legend class="bg-secondary text-white">{{data?.nature_promotor?.name.includes('morale')?'Information sur le représentant légal' :'Information sur le promoteur' }}</legend>
+        <div class="row">
+            <div class="col-6">
+                <dl>
+                    <dt>Nom </dt>
+                    <dd>{{data.name_pomoter}}</dd>
+                </dl>
+            </div>
+            <div class="col-6">
+                <dl>
+                    <dt>Prénom(s) </dt>
+                    <dd> {{data.firstname_pomoter}}</dd>
+                </dl>
+            </div>
+
+            <div class="col-6">
+                <dl>
+                    <dt>Email </dt>
+                    <dd>{{data.email_pomoter}}</dd>
+                </dl>
+            </div>
+            <div class="col-6">
+                <dl>
+                    <dt>Contact</dt>
+                    <dd>{{data.phone_pomoter}}</dd>
+                </dl>
+            </div>
+        </div>
+    </fieldset>
+    <fieldset>
+        <legend class="bg-secondary text-white">Information sur le directeur</legend>
+        <div class="row">
+            <div class="col-6">
+                <dl>
+                    <dt>Nom </dt>
+                    <dd>{{data.name_chief}}</dd>
+                </dl>
+            </div>
+            <div class="col-6">
+                <dl>
+                    <dt>Prénom(s) </dt>
+                    <dd> {{data.firstname_chief}}</dd>
+                </dl>
+            </div>
+
+            <div class="col-6">
+                <dl>
+                    <dt>Email </dt>
+                    <dd>{{data.email_chief}}</dd>
+                </dl>
+            </div>
+            <div class="col-6">
+                <dl>
+                    <dt>Contact</dt>
+                    <dd>{{data.phone_chief}}</dd>
+                </dl>
+            </div>
+        </div>
+    </fieldset>
+    <fieldset>
+        <legend class="bg-secondary text-white">Information sur le centre</legend>
+        <div class="row">
+            <div class="col-6" *ngIf="data.service?.name?.toLowerCase().includes('cape')">
+                <dl>
+                    <dt>Type Centre</dt>
+                    <dd>{{data.type_cape?.name ?? data.type_garderie?.name}}</dd>
+                </dl>
+            </div>
+            <div class="col-6" *ngIf="data.service?.name?.toLowerCase().includes('garderie')">
+                <dl>
+                    <dt>Type Garderie</dt>
+                    <dd>
+                        <ul>
+                            <li *ngFor="let el of data.requete_type_garderies">{{el.type_garderie?.name}}</li>
+                        </ul>
+                    </dd>
+                </dl>
+            </div>
+            <div class="col-6">
+                <dl>
+                    <dt>Type Garderie</dt>
+                    <dd>{{data.type_cape?.name ?? data.type_garderie?.name}}</dd>
+                </dl>
+            </div>
+            <div class="col-6">
+                <dl>
+                    <dt>Nom du centre</dt>
+                    <dd>{{data.name}}</dd>
+                </dl>
+            </div>
+
+            <div class="col-6" *ngIf="data.service?.name?.toLowerCase().includes('cape')">
+                <dl>
+                    <dt>Cible</dt>
+                    <dd>
+                        <ul>
+                            <li *ngFor="let el of getJson(data.target)">{{el}}</li>
+                        </ul>
+                    </dd>
+                </dl>
+            </div>
+            <div class="col-6">
+                <dl>
+                    <dt>Email </dt>
+                    <dd>{{data.email}}</dd>
+                </dl>
+            </div>
+            <div class="col-6">
+                <dl>
+                    <dt>Contact</dt>
+                    <dd>{{data.phone}}</dd>
+                </dl>
+            </div>
+        </div>
+        <hr>
+        <legend class="bg-secondary text-white">Localisation</legend>
+        <div class="row">
+         <div class="col-6">
+             <dl>
+                 <dt>Département</dt>
+                 <dd>{{data.district?.municipality?.department?.name}}</dd>
+             </dl>
+         </div>
+         <div class="col-6">
+             <dl>
+                 <dt>Commune</dt>
+                 <dd>{{data.district?.municipality?.name}}</dd>
+             </dl>
+         </div>
+         <div class="col-6">
+             <dl>
+                 <dt>Arrondissement</dt>
+                 <dd>{{data.district?.name}}</dd>
+             </dl>
+         </div>
+         <div class="col-6">
+             <dl>
+                 <dt>Quartier de ville / Village</dt>
+                 <dd>{{data.town}}</dd>
+             </dl>
+         </div>
+         <div class="col-6">
+             <dl>
+                 <dt>Adresse</dt>
+                 <dd>{{data.address}}</dd>
+             </dl>
+         </div>
+         <div class="col-6">
+
+             <dl>
+                 <dt>Image de la zone</dt>
+                 <dd *ngIf="data.zone_file!=null">
+                   <a [href]="getZoneFile(data.zone_file)" target="_blank"><img [src]="getZoneFile(data.zone_file)" alt="Image de la zone" style="height: 100px; cursor: pointer;"></a> 
+                    <p>Cliquez sur l'image pour agrandir</p>
+                 </dd>
+                 <dd *ngIf="data.zone_file==null">
+                    <p>Aucune image enregistrée</p>
+                 </dd>
+             </dl>
+         </div>
+        </div>
+    </fieldset>
+
+
+    <div class="mb-3">
+        <h4> <i class="fa fa-chevron-right fw-bold me-3"></i>  <u>Documents joints à la soumission</u>  </h4>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead>
+                <th style="width: 5%;"><i class="fa fa-check"></i></th>
+                <th style="width: 5%;">#</th>
+                <th>Référence</th>
+                <th>Observation / Statut</th>
+                <th>Action</th>
+            </thead>
+            <tbody>
+                <tr>
+                    <td colspan="5"><h6 class="bg-secondary text-white">Document du Promoteur  {{data.pomoter_is_director?'/ Directeur':''}}</h6></td>
+                </tr>
+              <ng-container *ngFor="let f of data.files; let i=index">
+
+                <tr *ngIf="f.file.type_file.code =='DP'">
+                    <td>
+                        <div class="form-check">
+                            <input class="form-check-input bg-success" type="checkbox" disabled [checked]="f.is_treated">
+                          </div>
+                    </td>
+                    <td>{{i+1}}</td>
+                    <td>{{f.file.name}}</td>
+                    <td>
+                        <h6><b>Observation</b></h6>
+                        <p>{{f.observation ?? 'En attente'}}</p>
+                        <br>
+                        <h6 class="mb-3"><b>Statut</b></h6>
+                        <span *ngIf="f.is_treated && f.is_valid" class="p-2 bg-success rounded text-white"> Validé</span>
+                        <span *ngIf="f.is_treated && !f.is_valid" class="p-2 bg-danger rounded text-white"> Non Validé</span>
+                    </td>
+                    <td class="">
+                       <div class="d-flex justify-content-center h-100">
+                        <button (click)="showFile(f.filename,f)" class="btn btn-sm btn-dark align-self-center">Voir document</button>
+
+                       </div>
+                    </td>
+                </tr>
+            </ng-container>
+            <tr>
+                <td colspan="5"><h6 class="bg-secondary text-white">Document du Directeur</h6></td>
+            </tr>
+            
+            <ng-container *ngIf="!data.pomoter_is_director">
+                <ng-container *ngFor="let f of data.files; let i=index" >
+                    <tr *ngIf="f.file.type_file.code =='DD'">
+
+                        <td>
+                            <div class="form-check">
+                                <input class="form-check-input bg-success" type="checkbox" disabled [checked]="f.is_treated">
+                              </div>
+                        </td>
+                        <td>{{i+1}}</td>
+                        <td>{{f.file.name}}</td>
+                        <td>
+                            <h6><b>Observation</b></h6>
+                            <p>{{f.observation ?? 'En attente'}}</p>
+                            <br>
+                            <h6 class="mb-3"><b>Statut</b></h6>
+                            <span *ngIf="f.is_treated && f.is_valid" class="p-2 bg-success rounded text-white"> Validé</span>
+                            <span *ngIf="f.is_treated && !f.is_valid" class="p-2 bg-danger rounded text-white"> Non Validé</span>
+                        </td>
+                        <td>
+                            <div class="d-flex justify-content-center h-100">
+
+                            <button (click)="showFile(f.filename,f)" class="btn btn-sm btn-dark">Voir document</button>
+                        </div>
+
+                        </td>
+                    </tr>
+                </ng-container>
+            </ng-container>
+         
+        <tr>
+            <td colspan="5"><h6 class="bg-secondary text-white">Document du Centre</h6></td>
+        </tr>
+      <ng-container *ngFor="let f of data.files; let i=index">
+        <tr *ngIf="f.file.type_file.code =='DC'">
+            <td>
+                <div class="form-check">
+                    <input class="form-check-input bg-success" type="checkbox" disabled [checked]="f.is_treated">
+                  </div>
+            </td>
+            <td>{{i+1}}</td>
+            <td>{{f.file.name}}</td>
+            <td>
+                <h6><b>Observation</b></h6>
+                <p>{{f.observation ?? 'En attente'}}</p>
+                <br>
+                <h6 class="mb-3"><b>Statut</b></h6>
+                <span *ngIf="f.is_treated && f.is_valid" class="p-2 bg-success rounded text-white"> Validé</span>
+                <span *ngIf="f.is_treated && !f.is_valid" class="p-2 bg-danger rounded text-white"> Non Validé</span>
+            </td>
+            <td>
+                <div class="d-flex justify-content-center h-100">
+
+                <button (click)="showFile(f.filename,f)" class="btn btn-sm btn-dark">Voir document</button>
+            </div>
+
+            </td>
+        </tr>
+    </ng-container>
+        <tr>
+            <td colspan="5"><h6 class="bg-secondary text-white">Autre document</h6></td>
+        </tr>
+      <ng-container *ngFor="let f of data.files; let i=index">
+        <tr *ngIf="f.file.type_file.code =='DJ'">
+            <td>
+                <div class="form-check">
+                    <input class="form-check-input bg-success" type="checkbox" disabled [checked]="f.is_treated">
+                  </div>
+            </td>
+            <td>{{i+1}}</td>
+            <td>{{f.file.name}}</td>
+            <td>
+                <h6><b>Observation</b></h6>
+                <p>{{f.observation ?? 'En attente'}}</p>
+                <br>
+                <h6 class="mb-3"><b>Statut</b></h6>
+                <span *ngIf="f.is_treated && f.is_valid" class="p-2 bg-success rounded text-white"> Validé</span>
+                <span *ngIf="f.is_treated && !f.is_valid" class="p-2 bg-danger rounded text-white"> Non Validé</span>
+            </td>
+            <td>
+                <div class="d-flex justify-content-center h-100">
+
+                <button (click)="showFile(f.filename,f)" class="btn btn-sm btn-dark">Voir document</button>
+            </div>
+
+             </td>
+        </tr>
+    </ng-container>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="mb-3">
+        <h4> <i class="fa fa-chevron-right fw-bold me-3"></i>  <u>Documents délivrés par l'administration</u>  </h4>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead>
+                <th style="width: 5%;">#</th>
+                <th>Référence</th>
+                <th>Action</th>
+            </thead>
+            <tbody>
+                <tr *ngFor="let f of data.files2; let i=index">
+                    <td>{{i+1}}</td>
+                    <td>{{f.reference}}</td>
+                    <td>
+                        <button (click)="showFile(f.filename)" class="btn btn-sm btn-dark">Voir document</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="mb-3">
+        <h4 class=" d-flex justify-content-between"> 
+            
+            <div class="">
+                <i class="fa fa-chevron-right fw-bold me-3 "></i>  <u>Rapport social  </u> 
+            </div>
+        
+        <button (click)="add(finishContent1M)"  *ngIf="data.has_cps_file && data.status==4" class="btn btn-sm btn-warning float-right">Modifier</button>
+        </h4>
+    </div>
+    <div class="" *ngIf="data.has_cps_file">
+        <div class="row">
+            <div class="col-6">
+                <dl>
+                    <dt>Nom de l'enquêteur</dt>
+                    <dd>{{data.social_investigator_name}}</dd>
+                </dl>
+            </div>
+            <div class="col-6">
+                <dl>
+                    <dt>Observation sur  l'enquête</dt>
+                    <dd>{{data.social_investigator_observation}}</dd>
+                </dl>
+            </div>
+
+            <div class="col-6">
+                <dl>
+                    <dt>Date de l'enquête</dt>
+                    <dd>{{data.social_investigator_date | date:"shortDate"}}</dd>
+                </dl>
+            </div>
+
+            <div class="col-6">
+                <dl>
+                    <dt>Fiche de l'enquête sociale</dt>
+                    <dd>
+                        <button (click)="showFileCpsFile()" class="btn btn-sm btn-dark">Voir document</button>
+
+                    </dd>
+                </dl>
+            </div>
+          
+ 
+            
+        </div>
+    </div>
+    <div class="" *ngIf="!data.has_cps_file">
+        <p class="text-center">Rapport social   non disponible</p>
+    </div>
+
+
+    <div class="mb-3">
+        <h4 class=" d-flex justify-content-between">
+            <div class="">
+                <i class="fa fa-chevron-right fw-bold me-3"></i>  <u>Dépôt physique</u> 
+            </div>
+    
+         <button (click)="add(finishContent2M)"  *ngIf="data.has_physical_deposit && data.status==4" class="btn btn-sm btn-warning float-right">Modifier</button>
+        </h4>
+       
+
+    </div>
+
+    <div class="" *ngIf="data.has_physical_deposit">
+        <div class="row">
+            <div class="col-6">
+                <dl>
+                    <dt>Nom du déposant</dt>
+                    <dd>{{data.name_depositor}}</dd>
+                </dl>
+            </div>
+            <div class="col-6">
+                <dl>
+                    <dt>Contact du déposant</dt>
+                    <dd>{{data.phone_depositor}}</dd>
+                </dl>
+            </div>
+
+            <div class="col-6">
+                <dl>
+                    <dt>Observation du déposant</dt>
+                    <dd>{{data.observation_depositor}}</dd>
+                </dl>
+            </div>
+
+            <div class="col-6">
+                <dl>
+                    <dt>Date du déposant</dt>
+                    <dd>{{data.date_depositor | date:"shortDate"}}</dd>
+                </dl>
+            </div>
+
+
+            <div class="col-6">
+                <dl>
+                    <dt>Prototype du récépissé de dépôt</dt>
+                    <dd>
+                        <button (click)="showFileRecepisseFile()" class="btn btn-sm btn-dark">Voir document</button>
+
+                    </dd>
+                </dl>
+            </div>
+          
+ 
+            
+        </div>
+    </div>
+    <div class="" *ngIf="!data.has_physical_deposit">
+        <p class="text-center">Dépôt physique non disponible</p>
+    </div>
+    <div class="mb-3">
+        <h4 class=" d-flex justify-content-between">
+            <div class="">
+                <i class="fa fa-chevron-right fw-bold me-3"></i>  <u>Réponses intervenants</u> 
+            </div>
+        </h4>
+    </div>
+    <div class="div mb-5">
+        <ul class="list-unstyled">
+            <li *ngFor="let r of data.reponses"> <p> <i class="fa fa-arrow-right text-warning me-3"></i> {{r.observation}} | <span><strong>{{r.user?.name}}</strong></span></p></li>
+        </ul>
+    </div>
+  </div>
+ 
+  </ng-container>
+
+  <ng-container *ngIf="showPreview"  class="container">
+            <div class="d-flex justify-content-around">
+                <button class="btn btn-dark mb-3 btn-sm" (click)="back()">Fermer le visualiseur</button>
+             
+                <button *ngIf="fileSelected && !fileSelected.is_treated && data.status<4" class="btn btn-primary mb-3 btn-sm" (click)="add(fileTreatmentContent)">Enregistrer les observations</button>
+                <button *ngIf="fileSelected && fileSelected.is_treated && data.status<4" class="btn btn-warning mb-3 btn-sm" (click)="add(fileTreatmentEditContent)">Modifier les observations</button>
+                <!--button  *ngIf="!showResponseFilePreview"  class="btn btn-success mb-3 " [disabled]="!activeobsPanel"  (click)="openWindow(contentTemplateAmendement)">Faire des observations</!--button-->
+        
+            </div>
+
+
+         
+            <object [data]="url" type="application/pdf" width="100%" height="600px"></object>
+    </ng-container>
+  
+    
+    <ng-template #finishContent1 let-c="close" let-d="dismiss">
+        <form #addSusp="ngForm" (ngSubmit)="finishStore1(addSusp.value)">
+    
+        <div class="modal-header cape-bg-blue">
+          <h6 class="modal-title text-white" id="modal-basic-title">Rapport social  </h6>
+          <button type="button" class="btn btn-dark"  (click)="d('Cross click')"> <i class="fa fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group mb-3">
+                <label for="">Nom de l'enquêteur</label>
+                <input type="text" class="form-control" name="social_investigator_name" [(ngModel)]="data.social_investigator_name">
+            </div>
+
+            <div class="form-group mb-3">
+                <label for="">Date de l'enquête</label>
+                <input type="datetime-local" class="form-control" name="social_investigator_date" ngModel>
+            </div>
+            <div class="form-group mb-3">
+                <label for="">Observation</label>
+                <textarea class="form-control" name="social_investigator_observation" ngModel></textarea>
+            </div>
+            <div class="form-group mb-3">
+                <label for="">Charger la fiche de contrôle</label>
+                <input type="file" class="form-control" (change)="upload($event)">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-primary" [disabled]="addSusp.invalid || loading">Sauvegarder </button>
+        </div>
+    </form>
+    
+      </ng-template>
+
+      <ng-template #resp let-c="close" let-d="dismiss">
+        <form #addSusp="ngForm" (ngSubmit)="transUp(addSusp.value)">
+    
+        <div class="modal-header cape-bg-blue">
+          <h6 class="modal-title text-white" id="modal-basic-title">Rapport final</h6>
+          <button type="button" class="btn btn-dark"  (click)="d('Cross click')"> <i class="fa fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+     
+            <div class="form-group mb-3">
+                <label for="">Note de rapport final</label>
+                <textarea class="form-control" name="observation" ngModel></textarea>
+            </div>
+           
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-primary" [disabled]="addSusp.invalid || loading">Sauvegarder </button>
+        </div>
+    </form>
+    
+      </ng-template>
+
+
+      <ng-template #finishContent1M let-c="close" let-d="dismiss">
+        <form #addSusp="ngForm" (ngSubmit)="finishStore1(addSusp.value)">
+    
+        <div class="modal-header cape-bg-blue">
+          <h6 class="modal-title text-white" id="modal-basic-title">Rapport social  </h6>
+          <button type="button" class="btn btn-dark"  (click)="d('Cross click')"> <i class="fa fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group mb-3">
+                <label for="">Nom de l'enquêteur</label>
+                <input type="text" class="form-control" name="social_investigator_name" [(ngModel)]="data.social_investigator_name">
+            </div>
+
+            <div class="form-group mb-3">
+                <label for="">Date de l'enquête</label>
+                <input type="datetime-local" class="form-control" name="social_investigator_date" [(ngModel)]="data.social_investigator_date">
+            </div>
+            <div class="form-group mb-3">
+                <label for="">Observation</label>
+                <textarea  class="form-control" name="social_investigator_observation" [(ngModel)]="data.social_investigator_observation"></textarea>
+            </div>
+            <div class="form-group mb-3">
+                <label for="">Charger la fiche de contrôle</label>
+                <input type="file" class="form-control" (change)="upload($event)">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-primary" [disabled]="addSusp.invalid || loading">Sauvegarder </button>
+        </div>
+    </form>
+    
+      </ng-template>
+    <ng-template #finishContent2 let-c="close" let-d="dismiss">
+        <form #addDep="ngForm" (ngSubmit)="finishStore2(addDep.value)">
+    
+        <div class="modal-header cape-bg-blue">
+          <h6 class="modal-title text-white" id="modal-basic-title">Dépôt physique</h6>
+          <button type="button" class="btn btn-dark"  (click)="d('Cross click')"> <i class="fa fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group mb-3">
+                <label for="">Nom déposant</label>
+                <input type="text" class="form-control" name="name_depositor" ngModel>
+            </div>
+
+            <div class="form-group mb-3">
+                <label for="">Contact déposant</label>
+                <input type="text" class="form-control" name="phone_depositor" ngModel>
+            </div>
+          
+            <div class="form-group mb-3">
+                <label for="">Date de dépôt</label>
+                <input type="date" class="form-control" name="date_depositor" ngModel>
+            </div>
+            <div class="form-group mb-3">
+                <label for="">Observation</label>
+                <textarea class="form-control" name="observation_depositor" ngModel></textarea>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-primary" [disabled]="addDep.invalid || loading">Sauvegarder </button>
+        </div>
+    </form>
+    
+      </ng-template>
+    <ng-template #finishContent2M let-c="close" let-d="dismiss">
+        <form #addDep="ngForm" (ngSubmit)="finishStore2(addDep.value)">
+    
+        <div class="modal-header cape-bg-blue">
+          <h6 class="modal-title text-white" id="modal-basic-title">Dépôt physique</h6>
+          <button type="button" class="btn btn-dark"  (click)="d('Cross click')"> <i class="fa fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group mb-3">
+                <label for="">Nom déposant</label>
+                <input type="text" class="form-control" name="name_depositor" [(ngModel)]="data.name_depositor">
+            </div>
+
+            <div class="form-group mb-3">
+                <label for="">Contact déposant</label>
+                <input type="text" class="form-control" name="phone_depositor" [(ngModel)]="data.phone_depositor">
+            </div>
+          
+            <div class="form-group mb-3">
+                <label for="">Date de dépôt</label>
+                <input type="date" class="form-control" name="date_depositor" [(ngModel)]="data.date_depositor">
+            </div>
+            <div class="form-group mb-3">
+                <label for="">Observation</label>
+                <textarea class="form-control" name="observation_depositor" [(ngModel)]="data.observation_depositor"></textarea>
+            </div>
+            <div class="form-group mb-3 d-flex justify-content-between">
+                <label for="">Je dispose déjà du récépissé signé</label>
+                <ng-toggle
+                
+                [values]="{
+                    unchecked: false,
+                    checked:true
+                }"
+                    name="is_signed" [(ngModel)]="is_signed"
+                    [color]="{
+                        unchecked: '#939da2',
+                        checked: '#0f0'
+                    }"
+                    ></ng-toggle>
+            </div>
+
+            <div class="form-group mb-3" *ngIf="is_signed">
+                <label for="">Charger le récépissé délivrée et signé</label>
+                <input type="file" class="form-control" (change)="upload2($event)">
+            </div>
+
+
+            
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-primary" [disabled]="addDep.invalid || loading">Sauvegarder </button>
+        </div>
+    </form>
+    
+      </ng-template>
+    <ng-template #pendingContent let-c="close" let-d="dismiss">
+        <form #addSusp="ngForm" (ngSubmit)="storePending(addSusp.value)">
+    
+        <div class="modal-header cape-bg-blue">
+          <h6 class="modal-title text-white " id="modal-basic-title">Motif de mise en attente</h6>
+          <button type="button" class="btn btn-dark"  (click)="d('Cross click')"> <i class="fa fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group mb-3 mb-5">
+                <label for="">Motif</label>
+                <textarea name="observation" ngModel class="form-control"></textarea>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-primary" [disabled]="addSusp.invalid || loading">Sauvegarder </button>
+        </div>
+    </form>
+    
+      </ng-template>
+    <ng-template #inviteContent let-c="close" let-d="dismiss">
+        <form #addInvite="ngForm" (ngSubmit)="inviteStore(addInvite.value)">
+    
+        <div class="modal-header cape-bg-blue">
+          <h6 class="modal-title text-white " id="modal-basic-title">Invitation au dépôt physique</h6>
+          <button type="button" class="btn btn-dark"  (click)="d('Cross click')"> <i class="fa fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group mb-3 mb-5">
+                <label for="">Date de passage</label>
+                <input type="date" name="date_meeting"  required ngModel class="form-control">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-primary" [disabled]="addInvite.invalid || loading">Envoyer le mail </button>
+        </div>
+    </form>
+    
+      </ng-template>
+    
+    <ng-template #backContent let-c="close" let-d="dismiss">
+        <form #addSusp="ngForm" (ngSubmit)="transDown(addSusp.value)">
+    
+        <div class="modal-header cape-bg-blue">
+          <h6 class="modal-title text-white " id="modal-basic-title">Retourner le dossier</h6>
+          <button type="button" class="btn btn-dark"  (click)="d('Cross click')"> <i class="fa fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group mb-3 mb-5">
+                <label for="">Correction à apporter</label>
+                <textarea name="motif" ngModel class="form-control"></textarea>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-primary" [disabled]="addSusp.invalid || loading">Sauvegarder </button>
+        </div>
+    </form>
+    
+      </ng-template>
+    
+    <ng-template #fileTreatmentContent let-c="close" let-d="dismiss">
+        <form #fileT="ngForm" (ngSubmit)="setFileTreatment(fileT.value)">
+    
+        <div class="modal-header cape-bg-blue">
+          <h6 class="modal-title text-white " id="modal-basic-title">Enregistrer l'analyse du fichier</h6>
+          <button type="button" class="btn btn-dark"  (click)="d('Cross click')"> <i class="fa fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group mb-3 mb-5">
+                <label for="">Observation</label>
+                <textarea name="observation" ngModel class="form-control"></textarea>
+            </div>
+            <div class="d-flex justify-content-between">
+            <span>Document valide</span>
+            <ng-toggle
+            ngModel
+            [values]="{
+                unchecked: false,
+                checked:true
+            }"
+                name="is_valid"
+                
+                [color]="{
+                    unchecked: '#939da2',
+                    checked: '#0f0'
+                }"
+                ></ng-toggle>
+            </div>
+          
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-primary" [disabled]="fileT.invalid || loading">Sauvegarder </button>
+        </div>
+    </form>
+    
+      </ng-template>
+    <ng-template #fileTreatmentEditContent let-c="close" let-d="dismiss">
+        <form #fileT="ngForm" (ngSubmit)="setFileTreatment(fileT.value)">
+    
+        <div class="modal-header cape-bg-blue">
+          <h6 class="modal-title text-white " id="modal-basic-title">Enregistrer l'analyse du fichier</h6>
+          <button type="button" class="btn btn-dark"  (click)="d('Cross click')"> <i class="fa fa-times"></i></button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group mb-3 mb-5">
+                <label for="">Observation</label>
+                <textarea name="observation" [(ngModel)]="fileSelected.observation" class="form-control"></textarea>
+            </div>
+            <div class="d-flex justify-content-between">
+            <span>Document valide</span>
+            <ng-toggle
+            [(ngModel)]="fileSelected.is_valid"
+            [values]="{
+                unchecked: false,
+                checked:true
+            }"
+                name="is_valid"
+
+                [color]="{
+                    unchecked: '#939da2',
+                    checked: '#0f0'
+                }"
+                ></ng-toggle>
+            </div>
+          
+        </div>
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-primary" [disabled]="fileT.invalid || loading">Sauvegarder </button>
+        </div>
+    </form>
+    
+      </ng-template>
+    

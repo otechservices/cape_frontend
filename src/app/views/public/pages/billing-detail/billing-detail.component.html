@@ -1,0 +1,62 @@
+<section class="main-slider contact">
+    <div class="welcome_section">
+        <h1 class="welcome_title">
+           {{data?.object}}
+        </h1>
+       
+    </div>
+  </section>
+
+<div class="container py-5" *ngIf="data!=undefined">
+    <div class="row">
+        <div class="col-12 col-md-9">
+            <div class="card card-body mb-3">
+              <div class="row">
+                <dl class="col-12 col-md-6">
+                    <dt>Type</dt>
+                    <dd>{{data?.type.name}}</dd>
+                </dl>
+                <dl class="col-12 col-md-6">
+                    <dt>Objet</dt>
+                    <dd>{{data?.object}}</dd>
+                </dl>
+                <dl class="col-12 col-md-6">
+                    <dt>Identité</dt>
+                    <dd>{{data?.name}}</dd>
+                </dl>
+                <dl class="col-12 col-md-6">
+                    <dt>Email</dt>
+                    <dd>{{data?.email}}</dd>
+                </dl>
+                <dl class="col-12 col-md-6">
+                    <dt>Message</dt>
+                    <dd>{{data?.content}}</dd>
+                </dl>
+              </div>
+            </div>
+            <h2>Réponses</h2>
+
+            <div *ngFor="let r of data.responses" class="card card-body mb-1">
+                <p>{{r.content}}</p>
+                <span class="float-end">{{r.created_at | date:"dd-mm-yyyy"}}</span>
+              </div>
+
+              <div class="card card-body mt-5">
+                <form  #contactForm="ngForm" (ngSubmit)="sendContact(contactForm)">
+                    <div class="row">
+                    <div class="form-group col-lg-12 col-md-12 col-sm-12">
+                        <textarea name="content" placeholder="Expliquez nous en détail votre demande*" class="form-control" required ngModel></textarea>
+                    </div>
+                    <div class="form-group col-lg-12 col-md-12 col-sm-12">
+                        <button type="submit" class="cape-bg-green text-white rounded-2" 
+                        [disabled]="contactForm.invalid">
+                        
+                        <span class="txt">Envoyer ma réponse</span> <i class="fa fa fa-send text-yellow ml-3"></i></button>
+                    </div>
+                    
+                </div>
+                </form>
+              </div>
+        </div>
+      </div>
+</div>

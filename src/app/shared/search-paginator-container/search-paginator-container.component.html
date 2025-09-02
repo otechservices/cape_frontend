@@ -1,0 +1,34 @@
+<app-button-action (addEvent)="add($event)" (editEvent)="edit($event)" (deleteEvent)="delete($event)" (showEvent)="show($event)"></app-button-action>
+
+
+<div class="responsive">
+    <div class="d-flex justify-content-start">
+        <input type="text" id="searchTextId" [(ngModel)]="searchText" name="searchText" placeholder="Rechercher" class="form-control-sm">
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col" *ngFor="let h of dataHeaders">{{h}}</th>
+
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let d of data | sampleSearch:searchText | paginate: { 
+                itemsPerPage: paginator.pageSize,
+                currentPage: paginator.p,
+                totalItems: paginator.total
+             }; let i=index">
+              <td scope="row">
+                <div class="form-check mb-2">
+                    <input (click)="checked(d)" class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                
+                </div>
+              </td>
+              <td *ngFor="let hl of dataLabels;">{{d[hl]}}</td>
+            </tr>
+          </tbody>
+      </table>
+      <pagination-controls  (pageChange)="pageChanged($event)"></pagination-controls>
+</div>
+

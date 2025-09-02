@@ -1,0 +1,129 @@
+    <!--breadcrumb-->
+    <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-5">
+        <div class="breadcrumb-title pe-3">Statistiques </div>
+        <div class="ps-3">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 p-0">
+              <li class="breadcrumb-item"><a routerLink="/admin/dashboard"><i class="bx bx-home-alt"></i></a>
+              </li>
+              <li class="breadcrumb-item active" aria-current="page"></li>
+            </ol>
+          </nav>
+        </div>
+   
+      </div>
+  
+      <div class="container">
+        <form #formR="ngForm" (ngSubmit)="reset(formR)" *ngIf="role!='cps'">
+          <div class="d-flex">
+              <div class="input-group mb-3">
+                  <label class="input-group-text" for="inputGroupSelect01">Département</label>
+                  <select class="form-select" id="inputGroupSelect01" [(ngModel)]="departId" name="departId" [disabled]="readonlyDepart" (change)="loadMunicipalities($event)" ngModel>
+                      <option disabled selected>Choisir un département</option>
+                      <option *ngFor="let d of departments" [value]="d.id">{{d.name}}</option>
+                  </select>
+                  <select class="form-select" id="inputGroupSelect01" (change)="loadDistricts($event)"  name="municipality_id" ngModel>
+                      <option disabled selected>Choisir une commune</option>
+
+                      <option *ngFor="let m of municipalities" [value]="m.id">{{m.name}}</option>
+
+                  </select>
+                  <select class="form-select" id="inputGroupSelect01"  (change)="filter($event)"  name="district_id" ngModel>
+                      <option disabled selected>Choisir un arrondissement</option>
+
+                      <option *ngFor="let ds of districts" [value]="ds.id">{{ds.name}}</option>
+
+                  </select>
+                  <button class="btn btn-outline-secondary" type="submit">Réinitialiser</button>
+
+                </div>
+          </div>
+      </form>
+      </div>
+    <ng-container *ngIf="type == 'cape-inscrits' || type == 'cape-autorises'">
+      <div class="container mb-3">
+        <h6 class="bg-secondary p-1 text-white">Graphe</h6>
+        <div class="" *ngIf="data!=undefined">
+          <canvas baseChart
+          [type]="'bar'"
+          [datasets]="chartData"
+          [labels]="chartLabels"
+          [options]="chartOptions"
+          ></canvas>
+        </div>
+      </div>
+
+      <div class="container mb-5" *ngIf="data!=undefined">
+        <h6 class="bg-secondary p-1 text-white">Table de valeur</h6>
+        <table class="table table-bordered">
+            <thead>
+              <th>Arrondissement</th>
+              <th *ngFor="let y of chartLabels">{{y}}</th>
+            </thead>
+
+            <tbody>
+              <tr *ngFor="let d of chartData">
+                <td>{{d.label}}</td>
+                <td *ngFor="let dt of d.data">{{dt}}</td>
+              </tr>
+            </tbody>
+        </table>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="type == 'controls'">
+
+      <div class="container mb-5" *ngIf="data!=undefined">
+        <h6 class="bg-secondary p-1 text-white">Table de valeur</h6>
+        <table class="table table-bordered">
+            <thead>
+              <th>Cape</th>
+              <th >Nombre de contrôles effectués</th>
+            </thead>
+
+            <tbody>
+              <tr *ngFor="let d of data">
+                <td>{{d.name}}</td>
+                <td>{{d.count}}</td>
+              </tr>
+            </tbody>
+        </table>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="type == 'cps'">
+     <div class="container">
+      <div class="form-group mb-3">
+        <label for="">Liste des CPS</label>
+        <select class="form-control" (change)="loadData($event)">
+          <option *ngFor="let c of cps" [value]="c.id">{{c.name}}</option>
+        </select>
+      </div>
+     </div>
+      <div class="container mb-3">
+        <h6 class="bg-secondary p-1 text-white">Graphe</h6>
+        <div class="" *ngIf="data!=undefined">
+          <canvas baseChart
+          [type]="'bar'"
+          [datasets]="chartData"
+          [labels]="chartLabels"
+          [options]="chartOptions"
+          ></canvas>
+        </div>
+      </div>
+
+      <div class="container mb-5" *ngIf="data!=undefined">
+        <h6 class="bg-secondary p-1 text-white">Table de valeur</h6>
+        <table class="table table-bordered">
+            <thead>
+              <th>Année</th>
+              <th *ngFor="let y of chartLabels">{{y}}</th>
+            </thead>
+
+            <tbody>
+              <tr *ngFor="let d of chartData">
+                <td>{{d.label}}</td>
+                <td *ngFor="let dt of d.data">{{dt}}</td>
+              </tr>
+            </tbody>
+        </table>
+      </div>
+    </ng-container>

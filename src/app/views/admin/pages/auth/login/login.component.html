@@ -1,0 +1,50 @@
+
+<div class="" >
+    <div class="logo text-start mb-5">
+        <div class="logo"><a href="#"><img src="assets/template2/images/masm.png" style="min-height: 80px;" alt="" title=""></a></div>
+    </div>
+    <div class=" auto-container px-5">
+      
+        <h5 class="text-center fw-bold mb-5" >Plateforme de gestion des centres d'accueil et de protection de l'enfant en République du Bénin</h5>
+
+        <!-- Contact Form -->
+        <div class="contact-form">
+            <!-- Title Box -->
+            <div class="title-box">
+                <h2>Authentification</h2>
+                <div class="text">Veuillez vous connecter à votre espace de traitement *</div>
+            </div>
+            <form class="" #loginForm="ngForm" (ngSubmit)="login(loginForm.value)">
+                <div class="row clearfix">
+                
+                    <!-- Form Group -->
+                    <div class="form-group col-12">
+                        <span class="icon flaticon-user-3"></span>
+                        <input type="email" name="email" placeholder="Entrez votre email*" required ngModel>
+                    </div>
+                    
+                    <!-- Form Group -->
+                    <div class="form-group col-12">
+                        <span class="icon flaticon-email-3"></span>
+                        <input type="password" name="password" placeholder="Entrez votre mot de passe*" required ngModel>
+                    </div>
+                    
+               
+                    <div class="form-group col-lg-12 col-md-12 col-sm-12">
+                        <button type="submit" class="btn btn-sm text-white cape-bg-blue"  [disabled]="loginForm.invalid || loading"><span class="txt">Connexion </span> <app-loading [isVisible]="loading"></app-loading></button>
+                    </div>
+                    
+                    <div class="d-flex justify-content-end">
+                        <a routerLink="/admin/auth/forget-password" class="cape-text-blue"><u>Mot de passe oublié</u></a>
+                    </div>
+                </div>
+            </form>
+                
+        </div>
+        <!-- eND Contact Form -->
+        
+    </div>
+</div>
+  
+
+

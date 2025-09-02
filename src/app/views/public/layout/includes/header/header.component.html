@@ -1,0 +1,107 @@
+<header class="main-header">
+    <!-- Sticky Header  -->
+    <div class="start"></div>
+    <nav id="main_nav" class="navbar navbar-expand-md static-top">
+        <div class="container">
+            <div class="my_mobile_header">
+                <a routerLink="/" class="mobile_logo">
+                    <img src="assets/template2/images/logo-masm-footer.png" width="" height="" alt="Logo MASM">
+                </a>
+                <button class="navbar-toggler" type="button" (click)="manageNavbar()">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                
+            </div>
+            <div class="navbar-collapse mobile" id="collapsibleNavbar" *ngIf="visible">
+                <a routerLink="/" class="logo">
+                    <img src="assets/template2/images/logo-masm.png" width="" height="" alt="Logo MASM">
+                </a>
+                <ul class="navbar-nav">
+                            <li><a routerLink="/" routerLinkActive="active">Accueil</a></li>
+                            <li ngbDropdown>
+                                <a routerLinkActive="active"  id="dropdownConfig1" ngbDropdownToggle>e-services</a>
+                                <div ngbDropdownMenu aria-labelledby="dropdownConfig1">
+                                    <a routerLink="/details/cape" ngbDropdownItem style="text-transform:none">Inscrire mon CAPE</a>
+                                    <a routerLink="/details/garderie" ngbDropdownItem style="text-transform:none">Inscrire ma garderie</a>
+                                </div>
+                            </li>
+
+                            <li ngbDropdown>
+                                <a  routerLinkActive="active" id="dropdownConfig2" ngbDropdownToggle>Délibérations</a>
+                            	<div ngbDropdownMenu aria-labelledby="dropdownConfig2">
+                                    <a routerLink="/results" ngbDropdownItem style="text-transform:none">Commission CAPE</a>
+                                    <a routerLink="/results" ngbDropdownItem style="text-transform:none">Commission Garderie</a>
+                                </div>
+                            </li>   
+
+                            <li ngbDropdown>
+                                <a  routerLinkActive="active" id="dropdownConfig3" ngbDropdownToggle>Structures autorisées</a>
+                            	<div ngbDropdownMenu aria-labelledby="dropdownConfig3">
+                                    <a routerLink="/list-capes/authorized/cape" ngbDropdownItem style="text-transform:none">CAPE autorisés</a>
+                                    <a routerLink="/list-capes/authorized/garderie" ngbDropdownItem style="text-transform:none">Garderies autorisées</a>
+                                </div>
+                            </li>    
+                            <li ngbDropdown>
+                                <a  routerLinkActive="active" id="dropdownConfig4" ngbDropdownToggle>Support</a>
+                            	<div ngbDropdownMenu aria-labelledby="dropdownConfig4">
+                                    <a routerLink="/contact" ngbDropdownItem style="text-transform:none">Contactez nous
+                                    </a>
+                                    <a routerLink="/requested-infos" ngbDropdownItem style="text-transform:none">Demande d'information </a>
+                                    <a routerLink="/requested-support" ngbDropdownItem style="text-transform:none">Demande d'assistance </a>
+                                </div>
+                            </li>               
+                            <!-- <li><a href="https://acteursprotection.social.gouv.bj/" target="_blank">CARTOGRAPHIE</a></li>
+                            <li><a routerLink="/contact" routerLinkActive="active">Contact</a></li> -->
+
+                </ul>
+            </div>
+
+            <div class="navbar-collapse desktop" id="collapsibleNavbar">
+                <a routerLink="/" class="logo">
+                    <img src="assets/template2/images/logo-masm.png" width="" height="" alt="LOGO MASM">
+                </a>
+                <ul class="navbar-nav">
+                    <li><a routerLink="/accueil" routerLinkActive="active"
+                        [routerLinkActiveOptions]="{ exact: true }">Accueil</a></li>
+                            <li ngbDropdown>
+                                <a routerLinkActive="active"  id="dropdownConfig1" ngbDropdownToggle>e-services</a>
+                                <div ngbDropdownMenu aria-labelledby="dropdownConfig1">
+                                    <a routerLink="/details/cape" ngbDropdownItem style="text-transform:none">Inscrire mon CAPE</a>
+                                    <a routerLink="/details/garderie" ngbDropdownItem style="text-transform:none">Inscrire ma garderie</a>
+                                </div>
+                            </li>
+                            <li ngbDropdown>
+                                <a  routerLinkActive="active" id="dropdownConfig2" ngbDropdownToggle>Délibérations</a>
+                            	<div ngbDropdownMenu aria-labelledby="dropdownConfig2">
+                                    <a routerLink="/results" ngbDropdownItem style="text-transform:none">Commission CAPE</a>
+                                    <a routerLink="/results" ngbDropdownItem style="text-transform:none">Commission Garderie</a>
+                                </div>
+                            </li>   
+                            <li ngbDropdown>
+                                <a  routerLinkActive="active" id="dropdownConfig3" ngbDropdownToggle>Structures autorisées</a>
+                            	<div ngbDropdownMenu aria-labelledby="dropdownConfig3">
+                                    <a routerLink="/list-capes/authorized/cape" ngbDropdownItem style="text-transform:none">CAPE autorisés</a>
+                                    <a routerLink="/list-capes/authorized/garderie" ngbDropdownItem style="text-transform:none">Garderies autorisées</a>
+                                </div>
+                            </li>
+                            <li ngbDropdown>
+                                <a  routerLinkActive="active" id="dropdownConfig4" ngbDropdownToggle>Support</a>
+                            	<div ngbDropdownMenu aria-labelledby="dropdownConfig4">
+                                    <a routerLink="/contact" ngbDropdownItem style="text-transform:none">Contactez nous
+                                    </a>
+                                    <a routerLink="/requested-infos" ngbDropdownItem style="text-transform:none">Demande d'information </a>
+                                    <a routerLink="/requested-support" ngbDropdownItem style="text-transform:none">Demande d'assistance </a>
+                                </div>
+                            </li>    
+<!-- 
+                            <li><a href="https://acteursprotection.social.gouv.bj/" target="_blank">CARTOGRAPHIE</a></li>
+                            <li><a routerLink="/contact" routerLinkActive="active">Contact</a></li> -->
+
+                </ul>
+            </div>
+
+            
+        </div>
+    </nav>
+
+</header>

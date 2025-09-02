@@ -1,0 +1,387 @@
+    <!--breadcrumb-->
+    <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-5">
+        <div class="breadcrumb-title pe-3">CAPE </div>
+        <div class="ps-3">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 p-0">
+              <li class="breadcrumb-item"><a routerLink="/admin/dashboard"><i class="bx bx-home-alt"></i></a>
+              </li>
+              <li class="breadcrumb-item active" aria-current="page">Liste des recommandations</li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+      <ng-container *ngIf="role =='cape'">
+        <div class="row">
+          <div class="col-lg-12">
+              <div class="card">
+                
+                  <div class="card-body">
+                      <div class="d-flex mb-5 " *ngIf="buttonsPermission">
+                          <button *ngIf="buttonsPermission.show"  (click)="show(showContent)" type="button" class="btn btn-outline-primary btn-sm  me-3">
+                               <span>Consulter</span></button>
+      
+                      </div>
+      
+                              <p>{{data.length}} élément(s)</p>
+                              <div class="table-responsive">
+                              <table class="table" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+                                  <thead class="">
+                                      <tr>
+                                          <th style="width: 10px;">#</th>
+                                          <th>Recommandations</th>
+                                          <th>Contrôles effectués</th>
+                              
+                                      </tr>
+                                  </thead>
+                                  <tbody>
+                                      <tr *ngFor="let d of data ">
+                                          <td>
+                                              <div class="form-check mb-2">
+                                                  <input (click)="checked(d)" class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                                              
+                                              </div>
+                                          </td>
+                                          <td>{{d.libelle}}</td>
+                                          <td>{{d.controls.length}}</td>
+                                 
+                                     
+                                      </tr>
+                                  
+                                  </tbody>
+                              </table>
+                              </div>
+      
+                  </div><!-- end card -->
+              </div>
+              <!-- end col -->
+          </div>
+          <!-- end col -->
+      </div>
+      </ng-container>
+
+      <ng-container *ngIf="role !='cape'">
+        
+        <div class="row mb-5">
+          <div class="col-12">
+            <div class="card">
+                <div class="card-header cape-bg-blue">
+                  <h6 class="text-white">Liste des CAPE avec recommandations</h6>
+                </div>
+              <div class="card-body">
+                <!--div class="d-flex mb-5 " *ngIf="buttonsPermission">
+                  <button *ngIf="buttonsPermission.show"  (click)="show(showContent)" type="button" class="btn btn-outline-primary btn-sm  me-3">
+                       <span>Consulter</span></button>
+              </!--div-->
+              <p>{{data.length}} élément(s)</p>
+              <div class="table-responsive">
+              <table class="table" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+                  <thead class="">
+                      <tr>
+                          <th style="width: 10px;">#</th>
+                          <th>Type cape</th>
+                          <th>Nom du centre</th>
+              
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr *ngFor="let d of data ">
+                          <td>
+                              <div class="form-check mb-2">
+                                  <input (click)="checked(d)" class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                              
+                              </div>
+                          </td>
+                          <td>{{d.requete.type_cape?.name}}</td>
+                          <td>{{d.requete.name}}</td>
+                 
+                     
+                      </tr>
+                  
+                  </tbody>
+              </table>
+              </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+        <div class="row mb-5">
+          <div class="col-lg-12">
+              <div class="card">
+                <div class="card-header cape-bg-blue">
+                  <h6 class="text-white">Liste des recommandations</h6>
+                </div>
+                  <div class="card-body">
+                    <div class="d-flex mb-5 " *ngIf="buttonsPermission">
+                      <button   (click)="show(showContent)" type="button" class="btn btn-outline-primary btn-sm  me-3">
+                           <span>Consulter</span></button>
+                  </div>
+      
+                              <p>{{referals.length}} élément(s)</p>
+                              <div class="table-responsive">
+                              <table class="table" >
+                                  <thead class="">
+                                      <tr>
+                                          <th style="width: 10px;">#</th>
+                                          <th>Recommandations</th>
+                                          <th>Contrôles effectués</th>
+                              
+                                      </tr>
+                                  </thead>
+                                  <tbody>
+                                      <tr *ngFor="let d of referals ">
+                                          <td>
+                                              <div class="form-check mb-2">
+                                                  <input (click)="checked2(d)" class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                                              
+                                              </div>
+                                          </td>
+                                          <td>{{d.libelle}}</td>
+                                          <td>{{d.controls.length}}</td>
+                                 
+                                     
+                                      </tr>
+                                  
+                                  </tbody>
+                              </table>
+                              </div>
+      
+                  </div><!-- end card -->
+              </div>
+              <!-- end col -->
+          </div>
+          <!-- end col -->
+      </div>
+      <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header cape-bg-blue">
+                  <h6 class="text-white">Liste des contrôles</h6>
+                </div>
+                <div class="card-body">
+                <ng-container *ngIf="data != undefined">
+                    <ul ngbNav #nav="ngbNav" class="nav-tabs">
+                      <li ngbNavItem>
+                        <a ngbNavLink>Contrôles effectués</a>
+                        <ng-template ngbNavContent>
+                          <div class="table-responsive">
+                            <table class="table">
+                                <thead class="">
+                                    <tr>
+                                        <th>Avis</th>
+                                        <th>Constat</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let d of controls; let i= index ">
+                                      
+                                        <td>{{d.libelle}}</td>
+                                        <td>{{d.observation}}</td>
+                                      
+                                    </tr>
+                                
+                                </tbody>
+                            </table>
+                            </div>
+                        </ng-template>
+                      </li>
+                      <li ngbNavItem>
+                        <a ngbNavLink>Mes enregistrements</a>
+                        <ng-template ngbNavContent>
+                          <div class="d-flex">
+
+                            <button   (click)="add(addContent)" type="button" class="btn btn-outline-primary btn-sm  me-3">
+                              <span>Enregistrer un contrôle effectué</span></button>
+                                    
+                            <button *ngIf="buttonsPermission.edit" (click)="edit(editContent)" type="button"  class="btn btn-outline-warning btn-sm  me-3">
+                               Editer</button>
+                            <button *ngIf="buttonsPermission.delete" (click)="delete()" type="button" class="btn btn-outline-danger btn-sm  me-3">
+                                 Supprimer</button>
+                                 <button *ngIf="is_active!=null && !is_active" (click)="setStatus(1)" type="button" class="btn btn-outline-success btn-sm  me-3">
+                                    Activer</button>
+                                   <button  *ngIf="is_active!=null &&  is_active" (click)="setStatus(0)" type="button" class="btn btn-outline-danger btn-sm  me-3">
+                                    Désactiver</button>
+      
+                                    <button type="button" class="btn btn-primary btn-sm me-3" (click)="transUp()">Transmettre</button>
+      
+                          </div>
+                                  <p>{{myControls.length}} élément(s)</p>
+                                  <div class="table-responsive">
+                                  <table class="table">
+                                      <thead class="">
+                                          <tr>
+                                              <th style="width: 10px;">#</th>
+                                              <th>Avis</th>
+                                        <th>Constat</th>
+                                        <th>Etat</th>
+
+                                          </tr>
+                                      </thead>
+                                      <tbody>
+                                          <tr *ngFor="let d of myControls; let i= index ">
+                                            <td>
+                                              <div class="form-check mb-2">
+                                                  <input (click)="checked3(d)" class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                                              
+                                              </div>
+                                          </td>       
+                                              <td>{{d.libelle}}</td>
+                                              <td>{{d.observation}}</td>
+                                              <td>
+                                                <span class="bg-secondary py-1 px-2 rounded text-white" *ngIf="d.transmissions_count <= 1">Non transmis</span>
+                                                <span class="bg-success py-1 px-2 rounded text-white" *ngIf="d.transmissions_count > 1">Transmis</span>
+                                              </td>
+                                          </tr>
+                                      
+                                      </tbody>
+                                  </table>
+                                  </div>
+                        </ng-template>
+                      </li>
+                       <li ngbNavItem *ngIf="role !='cps'">
+                        <a ngbNavLink>A transmettre</a>
+                        <ng-template ngbNavContent>
+                          <div class="d-flex">
+                
+      
+                                    <button type="button" class="btn btn-primary btn-sm me-3" (click)="transUp()">Transmettre</button>
+      
+                          </div>
+                                  <p>{{transmittedControls.length}} élément(s)</p>
+                                  <div class="table-responsive">
+                                  <table class="table">
+                                      <thead class="">
+                                          <tr>
+                                              <th style="width: 10px;">#</th>
+                                              <th>Avis</th>
+                                              <th>Constat</th>
+      
+                                          </tr>
+                                      </thead>
+                                      <tbody>
+                                          <tr *ngFor="let d of transmittedControls; let i= index ">
+                                            <td>
+                                              <div class="form-check mb-2">
+                                                  <input (click)="checked3(d)" class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                                              
+                                              </div>
+                                          </td>       
+                                            <td>{{d.libelle}}</td>
+                                              <td>{{d.observation}}</td>
+                                        
+                                          </tr>
+                                      
+                                      </tbody>
+                                  </table>
+                                  </div>
+                        </ng-template>
+                      </li>
+                  </ul>
+                  <div [ngbNavOutlet]="nav" class="mt-2"></div>
+
+                </ng-container>
+                  
+    
+                </div><!-- end card -->
+            </div>
+            <!-- end col -->
+        </div>
+        <!-- end col -->
+    </div>
+      </ng-container>
+
+  
+
+      <ng-template #showContent let-c="close" let-d="dismiss">
+        <div class="modal-header bg-secondary">
+            <h6 class="modal-title text-white" id="modal-basic-title">Contrôle</h6>
+            <button type="button" class="btn-close" aria-label="Close" (click)="d('Cross click')"></button>
+          </div>
+    
+          <div class="modal-body">
+            <dl>
+              <dt><b>Libellé de la recommandation</b></dt>
+              <dd>{{selected_data2.libelle}}</dd>
+            </dl>
+            <hr>
+          
+            <dl>
+              <dt>Contrôles</dt>
+              <dd>
+                <table class="table table-sm table-bordered">
+                  <thead>
+                    <th>#</th>
+                    <th>Libellé</th>
+                    <th>Action</th>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let c of selected_data2.controls; let i=index">
+                      <td>{{i+1}}</td>
+                      <td>{{c.libelle}}</td>
+                      <td>
+                        <button   (click)="add2(editContent,c)" type="button" class="btn btn-outline-warning">
+                          <span>Modifier</span></button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </dd>
+            </dl>
+           
+          </div>
+    </ng-template>
+
+
+    <ng-template #addContent let-c="close" let-d="dismiss">
+      <form #addForm="ngForm" (ngSubmit)="store(addForm.value)">
+      <div class="modal-header bg-secondary">
+          <h6 class="modal-title text-white" id="modal-basic-title">Contrôle</h6>
+          <button type="button" class="btn-close" aria-label="Close" (click)="d('Cross click')"></button>
+        </div>
+  
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="">Avis</label>
+            <input type="text" class="form-control" name="libelle" ngModel>
+          </div>
+          <div class="form-group">
+            <label for="">Constat</label>
+            <textarea class="form-control" name="observation" ngModel></textarea>
+          </div>
+
+        </div>
+        <div class="modal-footer">
+              <div class="d-flex justify-content-end">
+                <button class="btn btn-sm btn-success">Sauvegarder <app-loading [isVisible]="loading"></app-loading></button>
+              </div>
+        </div>  
+      </form>
+  </ng-template>
+
+  <ng-template #editContent let-c="close" let-d="dismiss">
+    <form #addForm="ngForm" (ngSubmit)="update(addForm.value)">
+    <div class="modal-header bg-secondary">
+        <h6 class="modal-title text-white" id="modal-basic-title">Contrôle</h6>
+        <button type="button" class="btn-close" aria-label="Close" (click)="d('Cross click')"></button>
+      </div>
+
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="">Libellé</label>
+          <input type="text" class="form-control" name="libelle" [(ngModel)]="selected_data3.libelle">
+        </div>
+        <div class="form-group">
+          <label for="">Libellé</label>
+          <textarea class="form-control" name="observation" [(ngModel)]="selected_data3.observation"></textarea>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+            <div class="d-flex justify-content-end">
+              <button class="btn btn-sm btn-success">Sauvegarder <app-loading [isVisible]="loading"></app-loading></button>
+            </div>
+      </div>  
+    </form>
+</ng-template>

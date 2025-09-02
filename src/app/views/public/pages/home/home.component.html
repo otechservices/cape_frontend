@@ -1,0 +1,262 @@
+<section class="main-slider home">
+  <div class="welcome_section">
+      <h1 class="welcome_title">
+        Plateforme de gestion des Structures  de Protection de l’Enfant
+        <br>
+        (CAPE et GARDERIES)
+      </h1>
+     
+  </div>
+</section>
+<div class="body_content home_page">
+  <div class="container">
+
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12">
+        <div class="home_main_button">
+            <!-- <a (click)="scroll(pj)" class="btn_view_pieces">
+              <i class="fa fa-list-check"></i>
+              Pièces à fournir
+            </a> -->
+            <a routerLink="/details/cape" class="btn_home_register">
+              <i class="fa fa-building round-2"></i>
+              Inscrire mon CAPE
+            </a>
+            <a routerLink="/details/garderie" class="btn_home_register2">
+              <i class="fa fa-child round-3"></i>
+              Inscrire ma garderie
+            </a>
+          </div>
+      </div>
+    </div>
+    
+    
+
+    <div class="row clearfix">
+      <div class="content-side col-lg-12 col-md-12 col-sm-12">
+        <div class="row ministre-mot">
+          <!--div class="col-lg-3 col-md-5 image">
+            <img src="assets/template2/images/veronique-tognifode-masm.jpg" width="" height="" alt="Véronique Tognifode">
+            <h3>Professeur V. T.</h3>
+            <h4>Ministre des Affaires Sociales <br>et de la Microfinance</h4>
+          </!--div-->
+          <div class="col-12 texte">
+            <h2>
+              <i class="fa fa-pen-nib"></i>
+              Actualités sur les CAPE et Garderies
+            </h2>
+            <div class="row">
+              <div class="col-12 col-md-4" *ngFor="let d of data">
+                <div class="card mb-3 shadow-none p-3 bg-body-tertiary rounded">
+                  <img [src]="getLink(d.short_photo)" class="card-img-top" alt="...">
+                  <div class="card-body">
+                    <h5 class="card-title"><a href="/actuality-details/{{d.id}}">{{d.title}}</a></h5>
+                    <p class="card-text">{{d.resume}}</p>
+                    <p class="card-text"><small class="text-body-secondary">{{d.created_at | date:"dd-mm-yyyy"}}</small></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!--p>
+              « Depuis 2012 des normes et standards sont fixés sur la protection des enfants. 
+              En dépit des sensibilisations et renforcement de capacités, certains CAPE ne sont 
+              pas aux normes et plusieurs enfants vivent dans des conditions qui ne favorisent pas 
+              leur développement harmonieux. Face à ce constat, il est de bon ton 
+              que vous mettez de l’ordre dans ce secteur d’activité pour le bien-être de ses innocents.
+              »
+            </!--p-->
+          </div>
+        </div>
+    
+        
+          <div class="row separator"></div>
+          <div class=" util-links">
+            <h2 class="util-links-title">
+              <i class="fa fa-pen-nib"></i>
+              Documentation</h2>
+            <div class="row">
+              <div class="col-12 col-sm-6 col-md-6">
+                <div class="inner-column decret_upload mb-3">
+                  <div class="opening">
+                    <div class="file_upload_header">
+                      <i class="fa fa-file-pdf"></i>
+                      <h3>
+                        Décret fixant les modalités de création des CAPE
+                      </h3>
+                    </div>
+                    <div class="button_upload">
+                      <button class="btn btn-red-outline" (click)="download(1)">
+                      <i class="fa fa-download"></i>
+                      Télécharger le décret</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-sm-6 col-md-6">
+                <div class="inner-column decret_upload mb-3">
+                  <div class="opening">
+                    <div class="file_upload_header">
+                      <i class="fa fa-file-pdf"></i>
+                      <h3>
+                        Décret fixant les modalités de création des GARDERIES
+                      </h3>
+                    </div>
+                    <div class="button_upload">
+                      <button class="btn btn-red-outline" (click)="download(2)">
+                      <i class="fa fa-download"></i>
+                      Télécharger le décret</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-sm-6 col-md-6">
+                <div class="inner-column decret_upload mb-3">
+                  <div class="opening">
+                    <div class="file_upload_header2">
+                      <i class="fa fa-file-word"></i>
+                      <h3>
+                        Le modèle consentement pour la collecte de vos données personnelles
+                      </h3>
+                    </div>
+                    <div class="button_upload">
+                      <button class="btn btn-red-outline" (click)="download(3)">
+                      <i class="fa fa-download"></i>
+                      Télécharger le modèle</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-sm-6 col-md-6">
+                <div class="inner-column decret_upload mb-3">
+                  <div class="opening">
+                    <div class="file_upload_header">
+                      <i class="fa fa-file-pdf"></i>
+                      <h3>
+                        Cahier de charge de la GARDERIE
+                      </h3>
+                    </div>
+                    <div class="button_upload">
+                      <button class="btn btn-red-outline" (click)="download(4)">
+                      <i class="fa fa-download"></i>
+                      Télécharger le cahier des charges des promoteurs</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-sm-6 col-md-6">
+                <div class="inner-column decret_upload mb-3">
+                  <div class="opening">
+                    <div class="file_upload_header">
+                      <i class="fa fa-file-pdf"></i>
+                      <h3>
+                        Le guide d'inscription
+                      </h3>
+                    </div>
+                    <div class="button_upload">
+                      <button class="btn btn-red-outline" (click)="download(5)">
+                      <i class="fa fa-download"></i>
+                      Télécharger le guide</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            
+              <div class="col-12 col-sm-6 col-md-6">
+                <div class="inner-column decret_upload mb-3">
+                  <div class="opening">
+                    <div class="file_upload_header">
+                      <i class="fa fa-file-pdf"></i>
+                      <h3>
+                        Le code de l'enfant
+                      </h3>
+                    </div>
+                    <div class="button_upload">
+                      <button class="btn btn-red-outline" (click)="download(6)">
+                      <i class="fa fa-download"></i>
+                      Télécharger le code de l'enfant</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+             
+              
+            </div>
+        </div>
+        
+          <div class="row separator"></div>
+
+
+          <div class="row util-links">
+            <div class="col-md-10 col-sm-12 offset-md-1 offset-sm-0 rounded-lg bg-info p-lg-5">
+              <h2 class="util-links-title">Liens utiles</h2>
+              <div class="row mt-2">
+
+                <div class="col-md-6">
+                  <div class="util-link rounded-lg p-3">
+                    <a href="https://acteursprotection.social.gouv.bj/" target="_blank">
+                      <div class="row">
+                        <div class="col-md-12 col-sm-12 text-center">
+                        <img src="assets/template2/images/logo-masm-2.png" 
+                        alt="Logo MASM Bénin">
+                        </div>
+                        <div class="col-md-12 col-sm-12 mt-3 text-center">
+                        <strong>Cartographie des structures de protection</strong>
+                        </div>
+                      </div>
+                  </a>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="util-link rounded-lg p-3">
+                    <a href="https://social.gouv.bj/" target="_blank">
+                      <div class="row">
+                        <div class="col-md-12 col-sm-12 text-center">
+                        <img src="assets/template2/images/logo-masm-2.png" 
+                        alt="Logo MASM Bénin">
+                        </div>
+                        <div class="col-md-12 col-sm-12 mt-3 text-center">
+                        <strong>Site web du Ministère des Affaires Sociales et de la Microfinance (MASM)</strong>
+                        </div>
+                      </div>
+                  </a>
+                  </div>
+                </div>
+              
+                <div class="col-md-6">
+                  <div class="util-link rounded-lg p-3">
+                    <a href="https://sgg.gouv.bj/" target="_blank">
+                      <div class="row">
+                        <div class="col-md-12 col-sm-12 text-center">
+                        <img src="assets/template2/images/sgg-gouv-bj.png" alt="Logo Gouvernement de la République du Bénin" style="width: 75%">
+                        </div>
+                        <div class="col-md-12 col-sm-12 mt-3 text-center">
+                        <strong>Secrétariat Général du <br>Gouvernement</strong>
+                        </div>
+                      </div>
+                  </a>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="util-link rounded-lg p-3">
+                    <a href="https://bibliotheque.social.gouv.bj/pe" target="_blank">
+                      <div class="row">
+                        <div class="col-md-12 col-sm-12 text-center">
+                        <img src="assets/template2/images/sgg-gouv-bj.png" alt="Logo Gouvernement de la République du Bénin" style="width: 75%">
+                        </div>
+                        <div class="col-md-12 col-sm-12 mt-3 text-center">
+                        <strong>Bibliothèque numérique du<br>MASM</strong>
+                        </div>
+                      </div>
+                  </a>
+                  </div>
+                </div>
+             
+              </div>
+            </div>
+          </div>
+           
+          
+      </div>
+    </div>
+  </div>
+</div>

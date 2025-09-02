@@ -1,0 +1,248 @@
+    <!--breadcrumb-->
+    <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-5">
+        <div class="breadcrumb-title pe-3">CAPE </div>
+        <div class="ps-3">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 p-0">
+              <li class="breadcrumb-item"><a routerLink="/admin/dashboard"><i class="bx bx-home-alt"></i></a>
+              </li>
+              <li class="breadcrumb-item active" aria-current="page">Liste des sanctions</li>
+            </ol>
+          </nav>
+        </div>
+        <div class="ms-auto">
+        </div>
+      </div>
+  
+      <div class="row" *ngIf="!showPreview">
+        <div class="col-lg-12">
+            <div class="card">
+              
+                <div class="card-body" >
+                    <div class="d-flex mb-5 " *ngIf="buttonsPermission">
+                      <button type="button" class="btn btn-primary btn-sm me-3" (click)="add(addContent)">Ajouter une sanction</button>
+
+                        <button *ngIf="buttonsPermission.show"  (click)="show(showContent)" type="button" class="btn btn-outline-primary btn-sm  me-3">
+                             <span>Consulter</span></button>
+                        <button *ngIf="buttonsPermission.edit" (click)="edit(editContent)" type="button"  class="btn btn-outline-warning btn-sm  me-3">
+                           Editer</button>
+                        <button *ngIf="buttonsPermission.delete" (click)="delete()" type="button" class="btn btn-outline-danger btn-sm  me-3">
+                             Supprimer</button>
+                             <button *ngIf="is_active!=null && !is_active" (click)="setStatus(1)" type="button" class="btn btn-outline-success btn-sm  me-3">
+                              Clôtuer</button>
+                             <!--button  *ngIf="is_active!=null &&  is_active" (click)="setStatus(0)" type="button" class="btn btn-outline-danger btn-sm  me-3">
+                              Désactiver</!--button-->
+                    </div>
+    
+                            <p>{{data.length}} élément(s)</p>
+                            <div class="table-responsive">
+                            <table class="table" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+                                <thead class="">
+                                    <tr>
+                                        <th style="width: 10px;">#</th>
+                                        <th>Type de sanction</th>
+                                        <th>Instruction</th>
+                                        <th>Décision de fermeture</th>
+                                        <th>Délai de clôture</th>
+                                        <th>Statut de la sanction</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let d of data ">
+                                        <td>
+                                            <div class="form-check mb-2">
+                                                <input (click)="checked(d)" class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                                            
+                                            </div>
+                                        </td>
+                                        <td>{{d.type_sanction.name}}</td>
+                                        <td>{{d.description}}</td>
+                                        <td>
+                                          <span *ngIf="d.decret_filename != undefined">
+                                            <button  (click)="showFile(d.decret_filename,d.cape.requete.code)" class="btn btn-sm btn-outline-success">Ouvrir</button></span>
+                                          <span *ngIf="d.decret_filename == undefined">Non défini</span>
+                                        </td>
+                                        <td>
+                                          <span *ngIf="d.closed_date != undefined">{{d.closed_date | date:"shortDate"}}</span>
+                                          <span *ngIf="d.closed_date == undefined">Non défini</span>
+                                        </td>
+                                        <td>
+                                          <span *ngIf="d.status" class="bg-success p-1 rounded text-white">Clôturée</span>
+                                          <span *ngIf="!d.status" class="bg-danger p-1 rounded text-white">En cours</span>
+                                 
+                                        </td>
+                               
+                                   
+                                    </tr>
+                                
+                                </tbody>
+                            </table>
+                            </div>
+    
+                </div><!-- end card -->
+
+                <div class="card-body">
+
+                </div>
+            </div>
+            <!-- end col -->
+        </div>
+        <!-- end col -->
+    </div>
+      <ng-container *ngIf="showPreview"  class="container">
+            <div class="d-flex justify-content-around">
+                <button class="btn btn-dark mb-3 " (click)="back()">Fermer le visualiseur</button>
+                <!--button  *ngIf="!showResponseFilePreview"  class="btn btn-success mb-3 " [disabled]="!activeobsPanel"  (click)="openWindow(contentTemplateAmendement)">Faire des observations</!--button-->
+        
+            </div>
+
+
+         
+            <object [data]="url" type="application/pdf" width="100%" height="600px"></object>
+    </ng-container>
+  
+    <ng-template #addContent let-c="close" let-d="dismiss">
+        <form #addForm="ngForm" (ngSubmit)="store(addForm.value)">
+        <div class="modal-header bg-secondary">
+          <h6 class="modal-title text-white" id="modal-basic-title">Enregistrer une sanction</h6>
+          <button type="button" class="btn-close" aria-label="Close" (click)="d('Cross click')"></button>
+        </div>
+        <div class="modal-body" >
+            <div class="row mb-3" >
+              <div class=" form-goup col-12 mb-3">
+                <label for="">Type de sanction <span class="text-danger ml-2">(*)</span></label>
+                <select name="type_sanction_id" class="form-control" ngModel required>
+                    <option *ngFor="let t of ts" [value]="t.id">{{t.name}}</option>
+                </select>
+              </div>
+                <div class=" form-goup col-12 mb-3">
+                    <label for="">Instruction <span class="text-danger ml-2">(*)</span></label>
+                      <textarea name="description" class="form-control" ngModel required></textarea>
+                </div>
+
+                <hr>
+                <div class=" form-goup col-12 mb-3">
+                  <label for="">Décision de fermeture </label>
+                  <input type="file" class="form-control" (change)="upload($event)" >
+              </div>
+                <div class=" form-goup col-12 mb-3">
+                  <label for="">Délai de fermeture</label>
+                  <input type="date" name="closed_date" class="form-control" ngModel >
+              </div>
+
+              <hr>
+           
+              <div class=" form-goup col-12 mb-3">
+                <label for="">Cape <span class="text-danger ml-2">(*)</span></label>
+                <select name="cape_id" class="form-control" ngModel required>
+                    <option *ngFor="let cape of capes" [value]="cape.cape.id">{{cape.name}}</option>
+                </select>
+              </div>
+    
+            </div>
+           
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-outline-dark" [disabled]="addForm.invalid"  >Enregistrer <app-loading [isVisible]="loading"></app-loading></button>
+        </div>
+    </form>
+      </ng-template>
+    
+      <ng-template #editContent let-c="close" let-d="dismiss">
+        <form #editForm="ngForm" (ngSubmit)="update(editForm.value)">
+        <div class="modal-header bg-secondary">
+          <h6 class="modal-title text-white" id="modal-basic-title">Modifier une sanction</h6>
+          <button type="button" class="btn-close" aria-label="Close" (click)="d('Cross click')"></button>
+        </div>
+        <div class="modal-body" >
+          <div class="row mb-3" >
+            <div class=" form-goup col-12 mb-3">
+              <label for="">Type de sanction <span class="text-danger ml-2">(*)</span></label>
+              <select name="type_sanction_id" class="form-control" [(ngModel)]="selected_data.type_sanction_id" required>
+                  <option *ngFor="let t of ts" [value]="t.id">{{t.name}}</option>
+              </select>
+            </div>
+              <div class=" form-goup col-12 mb-3">
+                  <label for="">Instruction <span class="text-danger ml-2">(*)</span></label>
+                    <textarea name="description" class="form-control" [(ngModel)]="selected_data.description" required></textarea>
+              </div>
+
+              <hr>
+              <div class=" form-goup col-12 mb-3">
+                <label for="">Décision de fermeture </label>
+                <input type="file" class="form-control" (change)="upload($event)" >
+            </div>
+              <div class=" form-goup col-12 mb-3">
+                <label for="">Délai de fermeture</label>
+                <input type="date" name="closed_date" class="form-control" [(ngModel)]="selected_data.closed_date" >
+            </div>
+
+            <hr>
+         
+            <div class=" form-goup col-12 mb-3">
+              <label for="">Cape <span class="text-danger ml-2">(*)</span></label>
+              <select name="cape_id" class="form-control" [(ngModel)]="selected_data.cape_id" required>
+                  <option *ngFor="let cape of capes" [value]="cape.cape.id">{{cape.name}}</option>
+              </select>
+            </div>
+  
+          </div>
+         
+      </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-outline-dark" [disabled]="editForm.invalid" >Sauvegarder <app-loading [isVisible]="loading"></app-loading></button>
+        </div>
+    </form>
+      </ng-template>
+    
+      <ng-template #showContent let-c="close" let-d="dismiss">
+        <div class="modal-header bg-secondary">
+            <h6 class="modal-title text-white" id="modal-basic-title">Détails des informations</h6>
+            <button type="button" class="btn-close" aria-label="Close" (click)="d('Cross click')"></button>
+          </div>
+    
+          <div class="modal-body">
+            <div class="table-responsive table-card">
+                <table class="table table-borderless align-middle mb-0">
+                    <tbody>
+                      
+                   
+                        <tr >
+                            <td class="fw-medium">Type sanction</td>
+                            <td >{{selected_data.type_sanction.name}} </td>
+                          
+                        </tr>
+                        <tr >
+                            <td class="fw-medium">Description</td>
+                            <td >{{selected_data.description}} </td>
+                          
+                        </tr>
+                        <tr *ngIf="selected_data.decret_filename">
+                            <td class="fw-medium">Decret de fermeture</td>
+                            <td > <button  (click)="showFile(selected_data.decret_filename,selected_data.cape.requete.code)" class="btn btn-sm btn-outline-success">Ouvrir</button></td>
+                          
+                        </tr>
+                        <tr *ngIf="selected_data.closed_date">
+                            <td class="fw-medium">Date de fermutre</td>
+                            <td >{{selected_data.closed_date | date:"shortDate"}} </td>
+                          
+                        </tr>
+                        <tr >
+                            <td class="fw-medium">Statut</td>
+                            <td >
+                              <span *ngIf="d.is_active" class="bg-success p-1 rounded text-white">Clôturée</span>
+                              <span *ngIf="!d.is_active" class="bg-danger p-1 rounded text-white">En cours</span>
+                     
+                            </td>
+                          
+                        </tr>
+                   
+                   
+                
+                   
+                    </tbody>
+                </table>
+            </div>
+          </div>
+    </ng-template>

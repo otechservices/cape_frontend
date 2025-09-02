@@ -1,0 +1,20 @@
+.green{
+    background-color:green;
+    width: 33%;
+}
+.yellow{
+    background-color:yellow;
+    width: 34%;
+}
+.red{
+    background-color:red;
+    width: 33%;
+}
+
+.drag-content{
+    width: 100%;
+}
+.drag-content .drag{
+    height: 10px;
+    display:inline-block;
+}

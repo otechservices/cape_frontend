@@ -1,0 +1,381 @@
+<igx-stepper #stepper [linear]="false" [orientation]="'horizontal'" (activeStepChanging)="handleActiveStepChanging($event)">
+    <igx-step> 
+       
+
+        <p igxStepTitle>Information sur le promoteur</p>
+        <div igxStepContent>
+         <div class="">
+             <div class="row clearfix">
+                 <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                     <label for="">Nom du promoteur <span class="mx-1 text-danger">*</span></label>
+                     <input type="text" maxlength="100" name="name_pomoter" class="form-control"  required [(ngModel)]="myRequestForm.name_pomoter">
+                 </div>
+                 <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                     <label for="">Prénom(s) du promoteur <span class="mx-1 text-danger">*</span></label>
+                     <input type="text" maxlength="100" name="firstname_pomoter" class="form-control"  required  [(ngModel)]="myRequestForm.firstname_pomoter">
+                 </div>
+ 
+                 <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                     <label for="">Téléphone du promoteur <span class="mx-1 text-danger">*</span></label>
+                     <input type="text" maxlength="30" name="phone_pomoter" class="form-control"  required  [(ngModel)]="myRequestForm.phone_pomoter">
+                 </div>
+                 <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12 d-flex justify-content-between">
+                    <div class="align-self-center">
+                        <label for="">Etes vous le directeur du centre ? <span class="mx-1 text-danger">*</span></label>
+                        <ng-toggle
+                   
+                        [values]="{
+                            unchecked: false,
+                            checked:true
+                        }"
+                            name="chief_is_directeor" [(ngModel)]="myRequestForm.chief_is_directeor"
+                            [color]="{
+                                unchecked: '#939da2',
+                                checked: '#21804C'
+                            }"
+
+                            (change)="changed($event)"
+                            ></ng-toggle>     
+                    </div>
+                      
+                        
+                        
+                </div>
+   
+                 <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                     <label for="">Email du centre/ du promoteur <span class="mx-1 text-danger">*</span></label>
+                     <input type="email" name="email" class="form-control"  required  [(ngModel)]="myRequestForm.email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$">
+                 </div>
+                 <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                     <label for="">Téléphone du centre <span class="mx-1 text-danger">*</span></label>
+                     <input type="text" name="phone" maxlength="30" class="form-control"  required  [(ngModel)]="myRequestForm.phone">
+                 </div>
+             </div>
+         </div>
+         <div class="sample-step-actions mt-5">
+            
+             <button igxButton="raised" class="cape-bg-blue text-white  btn btn-sm" (click)="next()">Suivant</button>
+         </div>
+        </div>
+     </igx-step>
+
+    <igx-step> 
+       
+
+       <p igxStepTitle>Information du centre</p>
+       <div igxStepContent>
+        <div class="">
+            <div class="row clearfix">
+                <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                    <label for="">Type de centre <span class="mx-1 text-danger">*</span></label>
+                    <select class="form-control" name="type_cape_id" [(ngModel)]="myRequestForm.type_cape_id">
+                        <option *ngFor="let d of tds" [value]="d.id">{{d.name}}</option>
+                    </select>                                    </div>
+                <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                    <label for="">Dénomination du centre <span class="mx-1 text-danger">*</span></label>
+                    <input type="text" name="name" maxlength="255"  class="form-control" required [(ngModel)]="myRequestForm.name">
+                </div>
+                <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+
+                    <label for="">Capacité du centre <span class="mx-1 text-danger">*</span></label>
+                    <input type="number" min="0"  name="capacity" class="form-control"   [(ngModel)]="myRequestForm.capacity">
+                </div>
+
+            <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                <label for="">But du centre <span class="mx-1 text-danger">*</span></label>
+                <input type="text" name="coords" maxlength="255" class="form-control"   [(ngModel)]="myRequestForm.coords">
+
+            </div>
+                  <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                    <label for="">Nom du Directeur</label>
+                    <input type="text" maxlength="100" name="name_chief" class="form-control"   [(ngModel)]="myRequestForm.name_chief">
+                </div>
+
+                <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                    <label for="">Prénom(s) du Directeur <span class="mx-1 text-danger">*</span></label>
+                    <input type="text" maxlength="100" name="firstname_chief" class="form-control"  required  [(ngModel)]="myRequestForm.firstname_chief">
+                </div>
+                <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                    <label for="">Téléphone du Directeur <span class="mx-1 text-danger">*</span></label>
+                    <input type="text" maxlength="100" name="phone_chief" class="form-control"  required  [(ngModel)]="myRequestForm.phone_chief">
+                </div>
+
+                <div class="col-lg-12 col-md-12 col-sm-12 mb-3">
+                    <label for="">Cibles accueillies <span class="mx-1 text-danger">*</span></label>
+                    <angular2-multiselect
+                    [data]="dropdownList"
+                   [(ngModel)]="selectedItems" 
+                   [settings]="dropdownSettings"
+                   name="selectedItems"
+                 
+                   >
+                   </angular2-multiselect>
+                </div>
+            </div>
+       
+       
+        </div>
+        <div class="sample-step-actions mt-5">
+            <button igxButton="raised" class="cape-btn-outline-blue btn btn-sm me-2" (click)="prev()">Précédent</button>
+            <button igxButton="raised" class="cape-bg-blue text-white  btn btn-sm" (click)="next()">Suivant</button>
+        </div>
+       </div>
+  
+    </igx-step>
+    <igx-step> 
+       <p igxStepTitle>Localisation du centre</p>
+       <div igxStepContent>
+
+        <div class="">
+            <div class="row clearfix">
+        
+                <!-- Form Group -->
+                <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                    <label for="">Sélectionnez un département <span class="mx-1 text-danger">*</span></label>
+                    <select class="form-control" (change)="loadMunicipalities($event)" name="department_id" [(ngModel)]="myRequestForm.department_id">
+                        <option selected disabled>Choisir</option>
+                        <option *ngFor="let d of data" [value]="d.id">{{d.name}}</option>
+                    </select>
+                </div>
+                <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                    <label for="">Sélectionnez une commune <span class="mx-1 text-danger">*</span></label>
+                    <select class="form-control" (change)="loadDistricts($event)" name="municipality_id" [(ngModel)]="myRequestForm.municipality_id">
+                        <option selected disabled>Choisir</option>
+                        <option *ngFor="let d of municipalities" [value]="d.id">{{d.name}}</option>
+                    </select>
+                </div>
+                <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                    <label for="">Sélectionnez un arrondissement <span class="mx-1 text-danger">*</span></label>
+                    <select class="form-control" [(ngModel)]="myRequestForm.district_id" name="district_id" [(ngModel)]="myRequestForm.district_id">
+                        <option selected disabled>Choisir</option>
+                        <option *ngFor="let d of districts" [value]="d.id">{{d.name}}</option>
+                    </select>
+                </div>
+                
+                <!-- Form Group -->
+                <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                    <label for="">Adresse du centre (Quartier / Village)</label>
+                    <input type="text" maxlength="255"  name="address" class="form-control"  required [(ngModel)]="myRequestForm.address">
+                </div>
+            </div>
+       
+        <div class="sample-step-actions mt-5">
+            <button igxButton="raised" class="cape-btn-outline-blue  btn btn-sm me-2" (click)="prev()">Précédent</button>
+            <button igxButton="raised" class="cape-bg-blue text-white  btn btn-sm" (click)="next()" >Suivant</button>
+        </div>
+    </div>
+
+       </div>
+
+    </igx-step>
+      <igx-step> 
+       <p igxStepTitle>Document à joindre</p>
+       <div igxStepContent>
+        <div class="">
+        <form #form1="ngForm">
+           <div class="row">
+            <div class="col-12 col-md-6" *ngFor="let f of requiredFiles; let i=index;">
+                <div class=" p-2 bg-light mb-2 " >
+                    <div class="d-flex justify-content-between" >
+                        <div>
+                            <h5 class="m-1">{{f.name}}</h5>
+                            <h6 class="m-1">{{f.description}}</h6>
+                            <ng-container *ngIf="!f.isSetted">
+                                <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
+                                    <label for="">Fichier</label>
+                                    <input type="file" #fileInp (change)="upload($event,i,form1)">
+    
+                                </div>
+                            </ng-container>
+                           
+                        </div>
+                        <div class="align-self-center">
+                            <ng-container *ngIf="f.isSetted">
+                                <div >
+                                    <div class="">
+                                          <div class="d-flex justify-content-around">
+                                        <i class="fa fa-eye text-info mx-1" (click)="open(content,i)" style="cursor: pointer;"></i>
+                                        <i class="fa fa-trash text-danger  mx-1" (click)="removeFile(i)"  style="cursor: pointer;"></i> 
+                                    </div>
+                                    </div>
+                                  
+                                  
+                                </div>
+                            </ng-container>
+                    
+                        </div>
+                    </div>
+                </div>
+            </div>
+          
+           </div>
+        </form>
+    </div>
+        <div class="sample-step-actions mt-5">
+            <button igxButton="raised" class="cape-btn-outline-blue  btn btn-sm me-2" (click)="prev()">Précédent</button>
+            <button igxButton="raised" class="cape-bg-blue text-white  btn btn-sm" (click)="next()">Suivant</button>
+        </div>
+       </div>
+
+    </igx-step>
+
+    <igx-step> 
+        <p igxStepTitle>Récapitulatif de votre demande</p>
+        <div igxStepContent>
+            <fieldset>
+                <legend><h5><b>Information sur le promoteur</b></h5></legend>
+                <div class="row">
+                    <div class="col-4 col-sm-6 col-md-4">
+                        <dl>
+                            <dt> <strong>Nom</strong></dt>
+                            <dd>{{myRequestForm.name_pomoter}}</dd>
+                        </dl>
+                    </div>
+                    <div class="col-4 col-sm-6 col-md-4">
+                        <dl>
+                            <dt> <strong>Prénom(s)</strong></dt>
+                            <dd>{{myRequestForm.firstname_pomoter}}</dd>
+                        </dl>
+                    </div>
+                    <div class="col-4 col-sm-6 col-md-4">
+                        <dl>
+                            <dt> <strong>Contact</strong></dt>
+                            <dd>{{myRequestForm.phone_pomoter}}</dd>
+                        </dl>
+                    </div>
+                    <div class="col-4 col-sm-6 col-md-4">
+                        <dl>
+                            <dt> <strong>Email</strong></dt>
+                            <dd>{{myRequestForm.email}}</dd>
+                        </dl>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend><h5><b>Information du centre</b></h5></legend>
+                <div class="row">
+                    <div class="col-4 col-sm-6 col-md-4">
+                        <dl>
+                            <dt> <strong>Nom</strong></dt>
+                            <dd>{{myRequestForm.name}}</dd>
+                        </dl>
+                    </div>
+                    <div class="col-4 col-sm-6 col-md-4">
+                        <dl>
+                            <dt> <strong>Type</strong></dt>
+                            <dd>{{getTCName(myRequestForm.type_cape_id)}}</dd>
+                        </dl>
+                    </div>
+                    <div class="col-4 col-sm-6 col-md-4">
+                        <dl>
+                            <dt> <strong>Capacité</strong></dt>
+                            <dd>{{myRequestForm.capacity}}</dd>
+                        </dl>
+                    </div>
+                    <div class="col-4 col-sm-6 col-md-4">
+                        <dl>
+                            <dt> <strong>But</strong></dt>
+                            <dd>{{myRequestForm.coords}}</dd>
+                        </dl>
+                    </div>
+                    <div class="col-4 col-sm-6 col-md-4">
+                        <dl>
+                            <dt> <strong>Nom directeur</strong></dt>
+                            <dd>{{myRequestForm.name_chief}}</dd>
+                        </dl>
+                    </div>
+                    <div class="col-4 col-sm-6 col-md-4">
+                        <dl>
+                            <dt> <strong>Prénom(s)</strong></dt>
+                            <dd>{{myRequestForm.firstname_chief}}</dd>
+                        </dl>
+                    </div>
+                    <div class="col-4 col-sm-6 col-md-4">
+                        <dl>
+                            <dt> <strong>Contact</strong></dt>
+                            <dd>{{myRequestForm.phone_chief}}</dd>
+                        </dl>
+                    </div>
+                    <div class="col-4 col-sm-6 col-md-4">
+                        <dl>
+                            <dt> <strong>Cibles</strong></dt>
+                            <dd>
+                                <ul>
+                                    <li *ngFor="let s of selectedItems">{{s.itemName}}</li>
+                                </ul>
+                            </dd>
+                        </dl>
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend><h5><b>Localisation du centre</b></h5></legend>
+                <div class="row">
+                    <div class="col-4 col-sm-6 col-md-4">
+                        <dl>
+                            <dt> <strong>Département</strong></dt>
+                            <dd>{{getDepartName(myRequestForm.department_id)}}</dd>
+                        </dl>
+                    </div>
+                    <div class="col-4 col-sm-6 col-md-4">
+                        <dl>
+                            <dt> <strong>Commune</strong></dt>
+                            <dd>{{getMunicipName(myRequestForm.municipality_id)}}</dd>
+                        </dl>
+                    </div>
+                    <div class="col-4 col-sm-6 col-md-4">
+                        <dl>
+                            <dt> <strong>Arrondissement</strong></dt>
+                            <dd>{{getDistrictName(myRequestForm.district_id)}}</dd>
+                        </dl>
+                    </div>
+                    <div class="col-4 col-sm-6 col-md-4">
+                        <dl>
+                            <dt> <strong>Adresse</strong></dt>
+                            <dd>{{myRequestForm.address}}</dd>
+                        </dl>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend><h5><b>Documents joints</b></h5></legend>
+                <table class="table table-sm">
+                    <thead>
+                        <th>#</th>
+                        <th>Libellé</th>
+                        <th>Fichier</th>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let f of requiredFiles;let i=index">
+                            <td>{{i+1}}</td>
+                            <td>{{f.name}}</td>
+                            <td class=""> 
+                                <div class="d-flex justify-content-around">
+                                <i class="fa fa-eye text-info" (click)="open(content,i)" style="cursor: pointer;"></i>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </fieldset>
+           
+        <div class="sample-step-actions mt-5">
+            <button  class="cape-bg-blue text-white  btn btn-sm" (click)="store()"
+                [disabled]="loading">Sauvegarder les modifications <app-loading [isVisible]="loading"></app-loading></button>
+        </div>    
+        </div>
+    </igx-step>
+</igx-stepper>
+
+
+<ng-template #content let-offcanvas id="myCanvas">
+	<div class="offcanvas-header">
+		<h4 class="offcanvas-title">Visualisation du document</h4>
+		<button type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss('Cross click')"></button>
+	</div>
+	<div class="offcanvas-body">
+        <object [data]="imageSrc" type="application/pdf" width="100%" height="600px"></object>
+
+	</div>
+</ng-template>

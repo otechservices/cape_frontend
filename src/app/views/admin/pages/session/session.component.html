@@ -1,0 +1,351 @@
+    <!--breadcrumb-->
+    <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-5">
+        <div class="breadcrumb-title pe-3">CAPE </div>
+        <div class="ps-3">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 p-0">
+              <li class="breadcrumb-item"><a routerLink="/admin/dashboard"><i class="bx bx-home-alt"></i></a>
+              </li>
+              <li class="breadcrumb-item active" aria-current="page">Liste des sessions</li>
+            </ol>
+          </nav>
+        </div>
+        <div class="ms-auto">
+        </div>
+      </div>
+      <ng-container *ngIf="!showPreview"  class="container">
+
+      <div class="row mb-3">
+        <div class="col-lg-12">
+            <div class="card">
+              <div class="card-header cape-bg-green">
+                <h6 class="text-white">Sessions</h6>
+              </div>
+                <div class="card-body">
+                    <div class="d-flex mb-5 " *ngIf="buttonsPermission">
+                        <button type="button" class="btn btn-primary btn-sm me-3" (click)="add(addContent)">Ajouter une session</button>
+
+                        <button *ngIf="buttonsPermission.show"  (click)="show(showContent)" type="button" class="btn btn-outline-primary btn-sm  me-3">
+                             <span>Consulter</span></button>
+                        <button *ngIf="buttonsPermission.edit" (click)="edit(editContent)" type="button"  class="btn btn-outline-warning btn-sm  me-3">
+                           Editer</button>
+                        <button *ngIf="buttonsPermission.delete" (click)="delete()" type="button" class="btn btn-outline-danger btn-sm  me-3">
+                             Supprimer</button>
+                             <button *ngIf="is_active==null" (click)="setStatus(1)" type="button" class="btn btn-outline-success btn-sm  me-3">
+                                Ouvrir</button>
+                               <button  *ngIf="is_active" (click)="setStatus(0)" type="button" class="btn btn-outline-danger btn-sm  me-3">
+                                Clôturer</button>
+
+                                <button  (click)="show(arrContent)" type="button" class="btn btn-outline-info btn-sm  me-3">
+                                    Affecter des membres à la session</button>
+                                <button  (click)="show(sessContent)" type="button" class="btn btn-outline-info btn-sm  me-3">
+                                    Inscrire les dossiers à la session</button>
+                    </div>
+    
+                            <p>{{data.length}} élément(s)</p>
+                            <div class="table-responsive">
+                            <table class="table" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+                                <thead class="">
+                                    <tr>
+                                        <th style="width: 10px;">#</th>
+                                        <th style="width: 10px;"> <i class="fa fa-check"></i> </th>
+                                        <th>Libellé</th>
+                                        <th>Date début</th>
+                                        <th>Date Fin</th>
+                                        <th>Statut</th>
+                            
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let d of data ">
+                                        <td></td>
+                                        <td>
+                                            <div class="form-check mb-2">
+                                                <input (click)="checked(d)" class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                                            
+                                            </div>
+                                        </td>
+                                        <td class="">
+                                            {{d.name}}</td>
+                                        <td>{{d.date_start | date:"shortDate"}}</td>
+                                        <td>{{d.date_end | date:"shortDate"}}</td>
+                                        <td>
+                                            <span *ngIf="d.is_active == undefined" class="bg-secondary text-white p-1 rounded">En attente</span>
+                                            <span *ngIf="d.is_active==true" class="bg-success p-1 rounded text-white">Ouvert</span>
+                                            <span *ngIf="d.is_active==false" class="bg-danger p-1 rounded text-white">Fermé</span>
+                                        </td>
+                                   
+                                    </tr>
+                                
+                                </tbody>
+                            </table>
+                            </div>
+    
+                </div><!-- end card -->
+            </div>
+            <!-- end col -->
+        </div>
+        <!-- end col -->
+    </div>
+    <div class="row mb-3">
+        <div class="col-lg-12">
+            <div class="card">
+              <div class="card-header cape-bg-green">
+                <h6 class="text-white">Membres</h6>
+              </div>
+                <div class="card-body">
+                    <table class="table table-sm table-bordered">
+                        <thead>
+                            <th>#</th>
+                            <th>Identité</th>
+                            <th>Action</th>
+
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let m of members; let i=index">
+                                <td>{{i+1}}</td>
+                                <td>{{m.member?.lastname}}  {{m.member?.firstname}}</td>
+                                <td >
+                                    <div class="d-flex justify-content-around" style="cursor: pointer">
+                                        <i *ngIf="  selected_data.is_active && !m.is_active" (click)="setStatutMember(m.id,1)" class="fa fa-check text-success"></i>
+                                        <i *ngIf="  selected_data.is_active && m.is_active" (click)="setStatutMember(m.id,0)" class="fa fa-lock text-secondary"></i>
+                                        <i  (click)="removeMember(m.id,i)" class="fa fa-trash text-danger"></i>
+                                        <!-- <i *ngIf=" ! selected_data.is_active" (click)="removeMember(m.id,i)" class="fa fa-trash text-danger"></i> -->
+                                    </div>
+                                
+                                </td>
+
+                            </tr>
+                        </tbody>
+                    </table>
+                </div><!-- end card -->
+            </div>
+            <!-- end col -->
+        </div>
+        <!-- end col -->
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-lg-12">
+            <div class="card">
+              <div class="card-header cape-bg-green">
+                <h6 class="text-white">Dossiers inscrits</h6>
+              </div>
+                <div class="card-body">
+                    <table class="table table-sm table-bordered">
+                        <thead>
+                            <th>#</th>
+                            <th>cape</th>
+                            <th >Actions</th>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let m of requetes; let i=index">
+                                <td>{{i+1}}</td>
+                                <td>{{m.name}}  {{m.name}}</td>
+                                <td >
+                                    <div class="d-flex justify-content-around" style="cursor: pointer">
+
+                                    <i (click)="removeRequete(m.id,i)" *ngIf=" ! selected_data.is_active" class="fa fa-trash text-danger"></i>
+                                    <a  class="btn btn-sm btn-primary text-white" [routerLink]="'/admin/session-request-show/'+ m.code">Ouvrir le dossier </a>
+                                </div>
+
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div><!-- end card -->
+            </div>
+            <!-- end col -->
+        </div>
+        <!-- end col -->
+    </div>
+</ng-container>
+
+    <ng-container *ngIf="showPreview"  class="container">
+        <div class="d-flex justify-content-around">
+            <button class="btn btn-dark mb-3 " (click)="back()">Fermer le visualiseur</button>
+            <!--button  *ngIf="!showResponseFilePreview"  class="btn btn-success mb-3 " [disabled]="!activeobsPanel"  (click)="openWindow(contentTemplateAmendement)">Faire des observations</!--button-->
+    
+        </div>
+
+
+     
+        <object [data]="url" type="application/pdf" width="100%" height="600px"></object>
+</ng-container>
+
+
+    <ng-template #addContent let-c="close" let-d="dismiss">
+        <form #addForm="ngForm" (ngSubmit)="store(addForm.value)">
+        <div class="modal-header bg-secondary">
+          <h6 class="modal-title text-white" id="modal-basic-title">Créer une session</h6>
+          <button type="button" class="btn-close" aria-label="Close" (click)="d('Cross click')"></button>
+        </div>
+        <div class="modal-body" >
+            <div class="row mb-3" >
+          
+                <div class=" form-goup col-12 mb-3">
+                    <label for="">Libellé <span class="text-danger ml-2">(*)</span></label>
+                    <input type="text" name="name" class="form-control" ngModel required>
+                </div>
+    
+                <div class=" form-goup col-12 mb-3">
+                    <label for="">Date début <span class="text-danger ml-2">(*)</span></label>
+                    <input type="date" name="date_start" class="form-control" ngModel required>
+                </div>
+    
+                <div class=" form-goup col-12 mb-3">
+                    <label for="">Date fin <span class="text-danger ml-2">(*)</span></label>
+                    <input type="date" name="date_end" class="form-control" ngModel required>
+                </div>
+                <div class=" form-goup col-12 mb-3">
+                    <label for="">Note d'accord à la session <span class="text-danger ml-2">(*)</span></label>
+                    <input type="file" class="form-control" (change)="upload($event)" required>
+                </div>
+                
+            </div>
+           
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-outline-dark" [disabled]="addForm.invalid"  >Créer <app-loading [isVisible]="loading"></app-loading></button>
+        </div>
+    </form>
+      </ng-template>
+    
+      <ng-template #editContent let-c="close" let-d="dismiss">
+        <form #editForm="ngForm" (ngSubmit)="update(editForm.value)">
+        <div class="modal-header bg-secondary">
+          <h6 class="modal-title text-white" id="modal-basic-title">Modifier une session</h6>
+          <button type="button" class="btn-close" aria-label="Close" (click)="d('Cross click')"></button>
+        </div>
+        <div class="modal-body" >
+            <div class="row mb-3">
+            
+                <div class=" form-goup col-12 mb-3">
+                    <label for="">Libellé <span class="text-danger ml-2">(*)</span></label>
+                    <input type="text" name="name" class="form-control" [(ngModel)]="selected_data.name" required>
+                </div> 
+             
+                <div class=" form-goup col-12 mb-3">
+                    <label for="">Date début <span class="text-danger ml-2">(*)</span></label>
+                    <input type="date" name="date_start" class="form-control" [(ngModel)]="selected_data.date_start" required>
+                </div>
+    
+                <div class=" form-goup col-12 mb-3">
+                    <label for="">Date fin <span class="text-danger ml-2">(*)</span></label>
+                    <input type="date" name="date_end" class="form-control" [(ngModel)]="selected_data.date_end" required>
+                </div>
+                <div class=" form-goup col-12 mb-3">
+                    <label for="">Acte d'ouverture de la session <span class="text-danger ml-2">(*)</span></label>
+                    <input type="file" class="form-control" (change)="upload($event)">
+                </div>
+            </div>
+           
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-outline-dark" [disabled]="editForm.invalid" >Sauvegarder <app-loading [isVisible]="loading"></app-loading></button>
+        </div>
+    </form>
+      </ng-template>
+
+      <ng-template #arrContent let-c="close" let-d="dismiss">
+        <form #editForm="ngForm" (ngSubmit)="storeDistricts(editForm.value)">
+        <div class="modal-header bg-secondary">
+          <h6 class="modal-title text-white" id="modal-basic-title">Affeter des membres à la session</h6>
+          <button type="button" class="btn-close" aria-label="Close" (click)="d('Cross click')"></button>
+        </div>
+        <div class="modal-body" >
+            <div class="form-goup">
+                <label for="">Choix des membres</label>
+                <angular2-multiselect
+                 [data]="dropdownList"
+                [(ngModel)]="selectedItems" 
+                [settings]="dropdownSettings"
+                name="selectedItems"
+                (onSelect)="onItemSelect($event)"
+                (onDeSelect)="OnItemDeSelect($event)" 
+                (onSelectAll)="onSelectAll($event)" 
+                (onDeSelectAll)="onDeSelectAll($event)"
+                >
+                </angular2-multiselect>
+              
+            </div>
+           
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-outline-dark" [disabled]="editForm.invalid" >Affecter <app-loading [isVisible]="loading"></app-loading></button>
+        </div>
+    </form>
+      </ng-template>
+      <ng-template #sessContent let-c="close" let-d="dismiss">
+        <form #editForm="ngForm" (ngSubmit)="storeRequetes(editForm.value)">
+        <div class="modal-header bg-secondary">
+          <h6 class="modal-title text-white" id="modal-basic-title">Inscrire des dossiers à la session</h6>
+          <button type="button" class="btn-close" aria-label="Close" (click)="d('Cross click')"></button>
+        </div>
+        <div class="modal-body" >
+            <div class="form-goup">
+                <label for="">Choix des dossiers</label>
+                <angular2-multiselect
+                 [data]="dropdownList2"
+                [(ngModel)]="selectedItems2" 
+                [settings]="dropdownSettings2"
+                name="selectedItems"
+                (onSelect)="onItemSelect($event)"
+                (onDeSelect)="OnItemDeSelect($event)" 
+                (onSelectAll)="onSelectAll($event)" 
+                (onDeSelectAll)="onDeSelectAll($event)"
+                >
+                </angular2-multiselect>
+              
+            </div>
+           
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-outline-dark" [disabled]="editForm.invalid" >Affecter <app-loading [isVisible]="loading"></app-loading></button>
+        </div>
+    </form>
+      </ng-template>
+    
+      <ng-template #showContent let-c="close" let-d="dismiss">
+        <div class="modal-header">
+            <h6 class="modal-title text-white" id="modal-basic-title">Détails des informations</h6>
+            <button type="button" class="btn-close" aria-label="Close" (click)="d('Cross click')"></button>
+          </div>
+    
+          <div class="modal-body">
+            <div class="table-responsive table-card">
+                <table class="table table-borderless align-middle mb-0">
+                    <tbody>
+                      
+                   
+                        <tr >
+                            <td class="fw-medium">Libellé</td>
+                            <td >{{selected_data.name}} </td>
+                          
+                        </tr>
+                        <tr >
+                            <td class="fw-medium">Date début </td>
+                            <td >{{selected_data.date_start | date:"shortDate"}} </td>
+                          
+                        </tr>
+                        <tr >
+                            <td class="fw-medium">Date fin</td>
+                            <td >{{selected_data.date_end | date:"shortDate"}} </td>
+                          
+                        </tr>
+                        <tr >
+                            <td class="fw-medium">Ouvrir l'acte d'ouverture</td>
+                            <td >
+                                <button class="btn btn-outline-primary btn-sm" (click)="showFile(selected_data.filename)">Ouvrir</button>
+                            </td>
+                          
+                        </tr>
+                   
+                   
+                
+                   
+                    </tbody>
+                </table>
+            </div>
+          </div>
+    </ng-template>

@@ -1,0 +1,193 @@
+    <!--breadcrumb-->
+    <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-5">
+        <div class="breadcrumb-title pe-3">Suivi CAPE </div>
+        <div class="ps-3">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 p-0">
+              <li class="breadcrumb-item"><a routerLink="/admin/dashboard"><i class="bx bx-home-alt"></i></a>
+              </li>
+              <li class="breadcrumb-item active" aria-current="page">Détails du centre</li>
+            </ol>
+          </nav>
+        </div>
+      </div> 
+ 
+ <ng-container *ngIf="!showPreview">
+    <div class="" *ngIf="data != undefined">
+        <ul ngbNav #nav="ngbNav" class="nav-tabs" >
+            <li ngbNavItem>
+                <a ngbNavLink>Information sur le Cape</a>
+                <ng-template ngbNavContent>
+                 
+                    <div class="mb-3">
+                        <h4> <i class="fa fa-chevron-right fw-bold me-3"></i>  <u>Informations native de la demande</u>  </h4>
+                    </div>
+                
+                    <div class="row">
+                        <div class="col-6">
+                            <dl>
+                                <dt>Type Cape</dt>
+                                <dd>{{data.requete?.type_cape?.name}}</dd>
+                            </dl>
+                        </div>
+                        <div class="col-6">
+                            <dl>
+                                <dt>Nom du centre</dt>
+                                <dd>{{data.requete?.name}}</dd>
+                            </dl>
+                        </div>
+                        <div class="col-6">
+                            <dl>
+                                <dt>Nom du promoteur</dt>
+                                <dd>{{data.requete?.name_pomoter}}</dd>
+                            </dl>
+                        </div>
+                        <div class="col-6">
+                            <dl>
+                                <dt>Nom du directeur</dt>
+                                <dd>{{data.requete?.name_chief}}</dd>
+                            </dl>
+                        </div>
+                        <div class="col-6">
+                            <dl>
+                                <dt>Contact du directeur</dt>
+                                <dd>{{data.requete?.phone_chief}}</dd>
+                            </dl>
+                        </div>
+                        <div class="col-6">
+                            <dl>
+                                <dt>Cible</dt>
+                                <dd>
+                                    <ul>
+                                        <li *ngFor="let el of getJson(data.requete?.target)">{{el.itemName}}</li>
+                                    </ul>
+                                </dd>
+                            </dl>
+                        </div>
+                        <div class="col-6">
+                            <dl>
+                                <dt>Email</dt>
+                                <dd>{{data.requete?.email}}</dd>
+                            </dl>
+                        </div>
+                        <div class="col-6">
+                            <dl>
+                                <dt>Contact</dt>
+                                <dd>{{data.requete?.phone}}</dd>
+                            </dl>
+                        </div>
+                        <div class="col-6">
+                            <dl>
+                                <dt>Adresse</dt>
+                                <dd>{{data.requete?.address}}</dd>
+                            </dl>
+                        </div>
+                        
+                    </div>
+                    <div class="mb-3">
+                        <h4> <i class="fa fa-chevron-right fw-bold me-3"></i>  <u>Documents joints à la soumission</u>  </h4>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                                <th>#</th>
+                                <th>Référence</th>
+                                <th>Action</th>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let f of data.requete?.files; let i=index">
+                                    <td>{{i+1}}</td>
+                                    <td>{{f.file.name}}</td>
+                                    <td>
+                                        <button (click)="showFile(f.filename)" class="btn-sm btn-dark">Voir document</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </ng-template>
+            </li>
+            <li ngbNavItem>
+                <a ngbNavLink>Personnel</a>
+                <ng-template ngbNavContent>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead class="">
+                                <tr>
+                                    <th style="width: 10px;">#</th>
+                                    <th>Identité</th>
+                                    <th>Email</th>
+                                    <th>Contact</th>
+                                    <th>Profession</th>
+                        
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let d of data.staffs; let i=index ">
+                                    <td>
+                                        {{i+1}}
+        
+                                    </td>
+                                    <td>{{d.firstname}} {{d.lastname}}</td>
+                                    <td>{{d.email}}</td>
+                                    <td>{{d.phone}}</td>
+                                    <td>{{d.job}}</td>
+                           
+                               
+                                </tr>
+                            
+                            </tbody>
+                        </table>
+                        </div>
+                </ng-template>
+            </li>
+            <li ngbNavItem>
+                <a ngbNavLink>Pensionnaires</a>
+                <ng-template ngbNavContent>
+                    <div class="table-responsive">
+                        <table class="table" >
+                            <thead class="">
+                                <tr>
+                                    <th style="width: 10px;">#</th>
+                                    <th>Identité</th>
+                                    <th>Date de naissance</th>
+                                    <th>Lien de naissance</th>
+                                    <th>Taille / poids</th>
+                        
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let d of data.residents; let i=index ">
+                                    <td>
+                                      {{i+1}}
+                                    </td>
+                                    <td>{{d.firstname}} {{d.lastname}}</td>
+                                    <td>{{d.birthdate | date:"shortDate"}}</td>
+                                    <td>{{d.birthplace}}</td>
+                                    <td>{{d.size}}  /  {{d.weight}}</td>
+                           
+                               
+                                </tr>
+                            
+                            </tbody>
+                        </table>
+                        </div>		
+                    
+                </ng-template>
+            </li>
+        </ul>
+        <div [ngbNavOutlet]="nav" class="mt-2" ></div>
+    </div>
+   
+</ng-container>
+
+
+<ng-container *ngIf="showPreview"  class="container">
+    <div class="d-flex justify-content-around">
+        <button class="btn btn-dark mb-3 btn-sm" (click)="back()">Fermer le visualiseur</button>
+    </div>
+
+
+ 
+    <object [data]="url" type="application/pdf" width="100%" height="1000px"></object>
+</ng-container>

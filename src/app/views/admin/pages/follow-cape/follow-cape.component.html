@@ -1,0 +1,322 @@
+    <!--breadcrumb-->
+    <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-5">
+        <div class="breadcrumb-title pe-3">CAPE </div>
+        <div class="ps-3">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 p-0">
+              <li class="breadcrumb-item"><a routerLink="/admin/dashboard"><i class="bx bx-home-alt"></i></a>
+              </li>
+              <li class="breadcrumb-item active" aria-current="page">Contrôle des capes autorisés</li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+        <div class="row mb-5">
+          <div class="col-lg-12">
+              <div class="card">
+                <div class="card-header cape-bg-blue">
+                  <h6 class="text-white">Liste des CAPE autorisés</h6>
+                </div>
+                  <div class="card-body">
+      
+                              <p>{{data.length}} élément(s)</p>
+                              <div class="table-responsive">
+                              <table class="table" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+                                  <thead class="">
+                                      <tr>
+                                          <th style="width: 10px;">#</th>
+                                          <th>Type Cape</th>
+                                          <th>Libellé</th>
+                                          <th>Action</th>
+                              
+                                      </tr>
+                                  </thead>
+                                  <tbody>
+                                      <tr *ngFor="let d of data; let i= index ">
+                                        <td>
+                                          <div class="form-check mb-2">
+                                              <input (click)="checked(d)" class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                                          
+                                          </div>
+                                      </td>                   
+                                       <td>{{d.requete.type_cape?.name}}</td>
+                                          <td>{{d.requete.name}}</td>
+                                          <td>
+                                            <a [routerLink]="'/admin/follow-cape-show/'+d.id" type="button" class="btn btn-outline-primary btn-sm">
+                                                <span>Consulter le centre</span>
+                                            </a>
+                                          </td>
+                                 
+                                     
+                                      </tr>
+                                  
+                                  </tbody>
+                              </table>
+                              </div>
+      
+                  </div><!-- end card -->
+              </div>
+              <!-- end col -->
+          </div>
+          <!-- end col -->
+      </div>
+
+
+
+      <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header cape-bg-blue">
+                  <h6 class="text-white">Liste des visites de terrain</h6>
+                </div>
+                <div class="card-body">
+                <ng-container *ngIf="data != undefined">
+                    <ul ngbNav #nav="ngbNav" class="nav-tabs">
+                      <li ngbNavItem>
+                        <a ngbNavLink>Contrôles effectués</a>
+                        <ng-template ngbNavContent>
+                          <div class="table-responsive">
+                            <table class="table">
+                                <thead class="">
+                                    <tr>
+                                        <th>Type Contrôle</th>
+                                        <th>Chef de file</th>
+                                        <th>Observation</th>
+                                        <th>Date de contrôle</th>
+                                        <th>Membre de la visite</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let d of controls; let i= index ">
+                                    
+                                      <td>{{d.type_control?.name}}</td>
+                                        <td>{{d.chief_name}}</td>
+                                        <td>{{d.observation}}</td>
+                                        <td>{{d.date_control | date :"dd-MM-yyyy"}}</td>
+                                        <td>
+                                          <ol>
+                                            <li *ngFor="let m of getMembers(d.members)">{{m.name}}</li>
+                                          </ol>
+                                        </td>
+                                    </tr>
+                                
+                                </tbody>
+                            </table>
+                            </div>
+                        </ng-template>
+                      </li>
+                      <li ngbNavItem>
+                        <a ngbNavLink>Mes enregistrements</a>
+                        <ng-template ngbNavContent>
+                          <div class="d-flex">
+                            <button type="button" class="btn btn-primary btn-sm me-3" (click)="add(addContent)">Enregistrer une visite de terrain</button>
+      
+                            <button *ngIf="buttonsPermission.edit" (click)="edit(editContent)" type="button"  class="btn btn-outline-warning btn-sm  me-3">
+                               Editer</button>
+                            <button *ngIf="buttonsPermission.delete" (click)="delete()" type="button" class="btn btn-outline-danger btn-sm  me-3">
+                                 Supprimer</button>
+                                 <button *ngIf="is_active!=null && !is_active" (click)="setStatus(1)" type="button" class="btn btn-outline-success btn-sm  me-3">
+                                    Activer</button>
+                                   <button  *ngIf="is_active!=null &&  is_active" (click)="setStatus(0)" type="button" class="btn btn-outline-danger btn-sm  me-3">
+                                    Désactiver</button>
+      
+                                    <button type="button" class="btn btn-primary btn-sm me-3" (click)="transUp()">Transmettre</button>
+      
+                          </div>
+                                  <p>{{myControls.length}} élément(s)</p>
+                                  <div class="table-responsive">
+                                  <table class="table">
+                                      <thead class="">
+                                          <tr>
+                                              <th style="width: 10px;">#</th>
+                                              <th>Type Contrôle</th>
+                                              <th>Chef de file</th>
+                                              <th>Observation</th>
+                                              <th>Date de contrôle</th>
+                                              <th>Membre de la visite</th>
+                                              <th>Etat</th>
+                                          </tr>
+                                      </thead>
+                                      <tbody>
+                                          <tr *ngFor="let d of myControls; let i= index ">
+                                            <td>
+                                              <div class="form-check mb-2">
+                                                  <input (click)="checked2(d)" class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                                              
+                                              </div>
+                                          </td>       
+                                            <td>{{d.type_control?.name}}</td>
+                                              <td>{{d.chief_name}}</td>
+                                              <td>{{d.observation}}</td>
+                                              <td>{{d.date_control | date :"dd-MM-yyyy"}}</td>
+                                              <td>
+                                                <ol>
+                                                  <li *ngFor="let m of getMembers(d.members)">{{m.name}}</li>
+                                                </ol>
+                                              </td>
+                                              <td>
+                                                <span class="bg-secondary py-1 px-2 rounded text-white" *ngIf="d.transmissions_count <= 1">Non transmis</span>
+                                                <span class="bg-success py-1 px-2 rounded text-white" *ngIf="d.transmissions_count >1">Transmis</span>
+                                              </td>
+                                          </tr>
+                                      
+                                      </tbody>
+                                  </table>
+                                  </div>
+                        </ng-template>
+                      </li>
+                       <li ngbNavItem *ngIf="role != 'cps'">
+                        <a ngbNavLink>A transmettre</a>
+                        <ng-template ngbNavContent>
+                          <div class="d-flex">
+                
+      
+                                    <button type="button" class="btn btn-primary btn-sm me-3" (click)="transUp()">Transmettre</button>
+      
+                          </div>
+                                  <p>{{transmittedControls.length}} élément(s)</p>
+                                  <div class="table-responsive">
+                                  <table class="table">
+                                      <thead class="">
+                                          <tr>
+                                              <th style="width: 10px;">#</th>
+                                              <th>Type Contrôle</th>
+                                              <th>Chef de file</th>
+                                              <th>Observation</th>
+                                              <th>Date de contrôle</th>
+                                              <th>Membre de la visite</th>
+      
+                                          </tr>
+                                      </thead>
+                                      <tbody>
+                                          <tr *ngFor="let d of transmittedControls; let i= index ">
+                                            <td>
+                                              <div class="form-check mb-2">
+                                                  <input (click)="checked2(d)" class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                                              
+                                              </div>
+                                          </td>       
+                                            <td>{{d.type_control?.name}}</td>
+                                              <td>{{d.chief_name}}</td>
+                                              <td>{{d.observation}}</td>
+                                              <td>{{d.date_control | date :"dd-MM-yyyy"}}</td>
+                                              <td>
+                                                <ol>
+                                                  <li *ngFor="let m of getMembers(d.members)">{{m.name}}</li>
+                                                </ol>
+                                              </td>
+                                          </tr>
+                                      
+                                      </tbody>
+                                  </table>
+                                  </div>
+                        </ng-template>
+                      </li>
+                  </ul>
+                  <div [ngbNavOutlet]="nav" class="mt-2"></div>
+
+                </ng-container>
+                  
+    
+                </div><!-- end card -->
+            </div>
+            <!-- end col -->
+        </div>
+        <!-- end col -->
+    </div>
+
+    <ng-template #addContent let-c="close" let-d="dismiss">
+      <form #addForm="ngForm" (ngSubmit)="store(addForm.value)">
+      <div class="modal-header bg-secondary">
+        <h6 class="modal-title text-white" id="modal-basic-title">Enregistrer une visite de terrain</h6>
+        <button type="button" class="btn-close" aria-label="Close" (click)="d('Cross click')"></button>
+      </div>
+      <div class="modal-body" >
+          <div class="row mb-3" >
+        
+              <div class=" form-goup col-12 mb-3">
+                  <label for="">Type de contrôle <span class="text-danger ml-2">(*)</span></label>
+                  <select name="type_control_id" class="form-control" ngModel required>
+                    <option *ngFor="let tf of tcs" [value]="tf.id">{{tf.name}}</option>
+                  </select>
+              </div>
+           
+              <div class=" form-goup col-12 mb-3">
+                <label for="">Date de contrôle <span class="text-danger ml-2">(*)</span></label>
+                <input type="date" name="date_control" class="form-control" ngModel required>
+            </div>
+              
+            <div class=" form-goup col-12 mb-3">
+              <label for="">observation <span class="text-danger ml-2">(*)</span></label>
+              <textarea name="observation" class="form-control" ngModel></textarea>
+          </div>
+          <hr>
+          <div class=" form-goup col-12 mb-3">
+            <label for="">Chef de file <span class="text-danger ml-2">(*)</span></label>
+            <input type="text" name="chief_name" class="form-control" ngModel required>
+        </div>
+        <h6>Liste des membres</h6>
+          <ol>
+            <li *ngFor="let m of members">{{m.name}}</li>
+          </ol>
+        <form #refForm="ngForm" (ngSubmit)="onAdd(refForm.value,refForm)">
+        <div class="input-group mb-3">
+         <input type="text" class="form-control" name="member_name" required ngModel>
+         <button [disabled]="refForm.invalid" class="btn btn-sm btn-outline-secondary" type="submit" id="button-addon2">Ajouter un membre de la délégation</button>
+       </div>
+     </form>
+          </div>
+         
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-outline-dark" [disabled]="addForm.invalid"  >Enregistrer <app-loading [isVisible]="loading"></app-loading></button>
+      </div>
+  </form>
+    </ng-template>
+  
+    <ng-template #editContent let-c="close" let-d="dismiss">
+      <form #editForm="ngForm" (ngSubmit)="update(editForm.value)">
+      <div class="modal-header">
+        <h6 class="modal-title text-white" id="modal-basic-title">Modifier une visite de terrain</h6>
+        <button type="button" class="btn-close" aria-label="Close" (click)="d('Cross click')"></button>
+      </div>
+      <div class="modal-body" >
+          <div class="row mb-3">
+            <div class=" form-goup col-12 mb-3">
+              <label for="">Type de contrôle <span class="text-danger ml-2">(*)</span></label>
+              <select name="type_control_id" class="form-control" [(ngModel)]="selected_data2.type_control_id" required>
+                <option *ngFor="let tf of tcs" [value]="tf.id">{{tf.name}}</option>
+              </select>
+          </div>
+          <div class=" form-goup col-12 mb-3">
+            <label for="">observation <span class="text-danger ml-2">(*)</span></label>
+            <input type="text" name="observation" class="form-control" [(ngModel)]="selected_data2.observation" >
+        </div>
+        <div class=" form-goup col-12 mb-3">
+          <label for="">Date de contrôle <span class="text-danger ml-2">(*)</span></label>
+          <input type="date" name="date_control" class="form-control" [(ngModel)]="selected_data2.date_control" required>
+      </div>
+      <hr>
+      <div class=" form-goup col-12 mb-3">
+        <label for="">Chef de file <span class="text-danger ml-2">(*)</span></label>
+        <input type="text" name="chief_name" class="form-control" ngModel required>
+    </div>
+    <h6>Liste des membres</h6>
+      <ol>
+        <li *ngFor="let m of members;let i=index">{{m.name}} <span class="ms-3" (click)="removeMember(i)"> <i class="fa fa-times"></i> </span></li>
+      </ol>
+    <form #refForm="ngForm" (ngSubmit)="onAdd(refForm.value,refForm)">
+    <div class="input-group mb-3">
+     <input type="text" class="form-control" name="member_name" required ngModel>
+     <button [disabled]="refForm.invalid" class="btn btn-sm btn-outline-secondary" type="submit" id="button-addon2">Ajouter un membre de la délégation</button>
+   </div>
+ </form>
+          </div>
+         
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-outline-dark" [disabled]="editForm.invalid" >Sauvegarder <app-loading [isVisible]="loading"></app-loading></button>
+      </div>
+  </form>
+    </ng-template>
