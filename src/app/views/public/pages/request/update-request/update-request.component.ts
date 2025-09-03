@@ -3,7 +3,7 @@ import { NgForm } from '@angular/forms';
 import { SafeResourceUrl, DomSanitizer } from '@angular/platform-browser';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgbOffcanvasConfig, NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
-import { IgxStepper, IStepChangingEventArgs } from 'igniteui-angular';
+import {  IStepChangingEventArgs } from 'igniteui-angular';
 import * as JSZip from 'jszip';
 import { ToastrService } from 'ngx-toastr';
 import { RequestForm } from 'src/app/core/Interfaces/request-form.interface';
@@ -77,7 +77,7 @@ export class UpdateRequestComponent implements OnInit {
   requiredFiles:any[]=[];
   formData= new FormData()
   
-@ViewChild('stepper')stepper!:IgxStepper
+@ViewChild('stepper')stepper!:any
 @ViewChild('fileInp')fileInp!:ElementRef
 
 

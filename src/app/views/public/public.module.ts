@@ -9,19 +9,14 @@ import { MenuComponent } from './layout/includes/menu/menu.component';
 import { RequestComponent } from './pages/request/request.component';
 import { IgxStepperModule } from 'igniteui-angular';
 import { FormsModule } from '@angular/forms';
-import { AngularMultiSelectModule } from 'angular2-multiselect-dropdown';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { SanitizerUrlPipe } from 'src/app/core/pipes/sanitizer-url-pipe';
 import { NewRequestComponent } from './pages/request/new-request/new-request.component';
-import { NgToggleModule } from 'ng-toggle-button';
 import { UpdateRequestComponent } from './pages/request/update-request/update-request.component';
 import { ContactComponent } from './pages/contact/contact.component';
 import { ListCapeComponent } from './pages/list-cape/list-cape.component';
-import { DataTablesModule } from 'angular-datatables';
+
 import { ResultComponent } from './pages/result/result.component';
-import { NgSelect2Module } from 'ng-select2';
-import { NgYasYearPickerModule } from 'ngy-year-picker';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NewRequestGarderieComponent } from './pages/request/new-request-garderie/new-request-garderie.component';
 import { UpdateRequestGarderieComponent } from './pages/request/update-request-garderie/update-request-garderie.component';
 import { DetailComponent } from './pages/detail/detail.component';
@@ -61,13 +56,7 @@ import { GoogleMapsModule } from '@angular/google-maps'
     PublicRoutingModule,
     IgxStepperModule,
     FormsModule,
-    AngularMultiSelectModule,
     SharedModule,
-    NgToggleModule.forRoot(),
-    DataTablesModule,
-    NgSelect2Module,
-    NgYasYearPickerModule,
-    NgbModule,
     GoogleMapsModule
   ]
 })

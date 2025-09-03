@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { DatatableContainerComponent } from './datatable-container/datatable-container.component';
-import { DataTablesModule } from 'angular-datatables';
+
+
 import { SearchPaginatorContainerComponent } from './search-paginator-container/search-paginator-container.component';
 import { FormsModule } from '@angular/forms';
 import { SampleSearchPipe } from '../core/pipes/sample-search.pipe';
@@ -17,7 +17,6 @@ import { LoadingComponent } from '../core/shared/loading/loading.component';
 
 @NgModule({
   declarations: [
-    DatatableContainerComponent,
     SearchPaginatorContainerComponent,
     SampleSearchPipe,
     ButtonActionComponent,
@@ -26,7 +25,6 @@ import { LoadingComponent } from '../core/shared/loading/loading.component';
   ],
   imports: [
     CommonModule,
-    DataTablesModule,
     FormsModule,
     NgxPaginationModule,
     NgbModule,

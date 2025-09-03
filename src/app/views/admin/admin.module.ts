@@ -23,8 +23,7 @@ import { RecoveryPasswordComponent } from './pages/auth/recovery-password/recove
 import { RoleComponent } from './pages/auth/role/role.component';
 import { UserProfilComponent } from './pages/auth/user-profil/user-profil.component';
 import { AuthLayoutComponent } from './layout/auth-layout/auth-layout.component';
-import { DataTablesModule } from 'angular-datatables';
-import { AngularMultiSelectModule } from 'angular2-multiselect-dropdown';
+
 import { TargetsComponent } from './pages/targets/targets.component';
 import { TypeCapeComponent } from './pages/type-cape/type-cape.component';
 import { EspaceEserviceEditComponent } from './pages/espace-eservice/espace-eservice-edit/espace-eservice-edit.component';
@@ -34,7 +33,6 @@ import { MemberComponent } from './pages/member/member.component';
 import { SessionComponent } from './pages/session/session.component';
 import { AvisComponent } from './pages/avis/avis.component';
 import { FileComponent } from './pages/file/file.component';
-import { NgToggleModule } from 'ng-toggle-button';
 import { SessionRequestComponent } from './pages/session-request/session-request.component';
 import { SessionRequestShowComponent } from './pages/session-request-show/session-request-show.component';
 import { RequestHasAgreementComponent } from './pages/request-has-agreement/request-has-agreement.component';
@@ -58,10 +56,8 @@ import { JournalComponent } from './pages/journal/journal.component';
 import { ActivityReportComponent } from './pages/activity-report/activity-report.component';
 import { UniteAdminComponent } from './pages/unite-admin/unite-admin.component';
 import { ControlComponent } from './pages/control/control.component';
-import { NgChartsModule } from 'ng2-charts';
 import { SearchComponent } from './pages/search/search.component';
 import { ValidationAggrementComponent } from './pages/validation-aggrement/validation-aggrement.component';
-import { NgSelect2Module } from 'ng-select2';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NaturePromotorComponent } from './pages/nature-promotor/nature-promotor.component';
@@ -75,7 +71,6 @@ import { TypeGarderieComponent } from './pages/type-garderie/type-garderie.compo
 import { TypeSousGarderieComponent } from './pages/type-sous-garderie/type-sous-garderie.component';
 import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
 import { ControlFileElementComponent } from './pages/control-file-element/control-file-element.component';
-import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 
 
 
@@ -151,16 +146,10 @@ import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
     AdminRoutingModule,
     SharedModule,
     FormsModule,
-    DataTablesModule,
-    AngularMultiSelectModule,
-    NgToggleModule.forRoot(),
     ReactiveFormsModule,
     NgbModule,
-    NgChartsModule,
-    NgSelect2Module,
     NgxSpinnerModule,
     NgIdleKeepaliveModule.forRoot(),
-    NgxExtendedPdfViewerModule,
 
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]

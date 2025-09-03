@@ -2,7 +2,7 @@ import { Component, ElementRef, Input, OnInit, SimpleChanges, ViewChild } from '
 import { SafeResourceUrl, DomSanitizer } from '@angular/platform-browser';
 import { Router, ActivatedRoute, NavigationStart } from '@angular/router';
 import { NgbOffcanvasConfig, NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
-import { IgxStepper, IStepChangingEventArgs } from 'igniteui-angular';
+import {  IStepChangingEventArgs } from 'igniteui-angular';
 import * as JSZip from 'jszip';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription, filter } from 'rxjs';
@@ -93,7 +93,7 @@ export class NewRequestGarderieComponent implements OnInit {
   is_stored=false;
 
 @ViewChild("reqTop") reqTop!: ElementRef<HTMLElement>;
-@ViewChild('stepper')stepper!:IgxStepper
+@ViewChild('stepper')stepper!:any
 @ViewChild('fileInp')fileInp!:ElementRef
  initCode:any;
 

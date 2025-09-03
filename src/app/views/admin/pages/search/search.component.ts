@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { DataTableDirective } from 'angular-datatables';
+
 import { ToastrService } from 'ngx-toastr';
 import { Subject } from 'rxjs';
 import { DepartmentService } from 'src/app/core/services/department.service';
@@ -20,35 +20,10 @@ export class SearchComponent implements OnInit {
   departments:any[]=[]
   municipalities:any[]=[]
   districts:any[]=[]
-  @ViewChild(DataTableDirective , {static: false})
-  dtElement!: DataTableDirective;
-  dtOptions: DataTables.Settings = {
-    language: {
-      processing:     "Traitement en cours...",
-      search:         "Rechercher&nbsp;:",
-      lengthMenu:    "Afficher _MENU_ &eacute;l&eacute;ments",
-      info:           "Affichage de l'&eacute;lement _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
-      infoEmpty:      "Affichage de l'&eacute;lement 0 &agrave; 0 sur 0 &eacute;l&eacute;ments",
-      infoFiltered:   "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
-      infoPostFix:    "",
-      loadingRecords: "Chargement en cours...",
-      zeroRecords:    "Aucun &eacute;l&eacute;ment &agrave; afficher",
-      emptyTable:     "Aucune donnée disponible dans le tableau",
-      paginate: {
-          first:      "Premier",
-          previous:   "Pr&eacute;c&eacute;dent",
-          next:       "Suivant",
-          last:       "Dernier"
-      },
-      aria: {
-          sortAscending:  ": activer pour trier la colonne par ordre croissant",
-          sortDescending: ": activer pour trier la colonne par ordre décroissant"
-      }
-      
-  
-    }
-  };
-  dtTrigger: Subject<any> = new Subject<any>();
+
+ 
+
+
   isDtInitialized:boolean = false
   service_id:any;
   service:any;
@@ -124,24 +99,13 @@ export class SearchComponent implements OnInit {
   this.districts=  this.municipalities.find((el:any)=>el.id == event.target.value).districts
   }
 
-  reInitData(){
-    if (this.isDtInitialized) {
-      this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-      
-        dtInstance.destroy();
-        this.dtTrigger.next(false);
-      });
-    } else {
-      this.isDtInitialized = true
-      this.dtTrigger.next(false);
-    }
-   }
+
   
   getForCape(){
     this.searchService.getAll(this.type,undefined, this.service_id).subscribe((res:any)=>{
       this.data=res
       this.filteredData=this.data
-    this.reInitData()  
+      
 
     },
     (err:any)=>{
@@ -153,7 +117,7 @@ export class SearchComponent implements OnInit {
       this.data=res
       this.filteredData=this.data
 
-      this.reInitData()  
+        
 
     },
     (err:any)=>{

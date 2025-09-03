@@ -30,10 +30,6 @@
             "styles": [
               "node_modules/minireset.css/minireset.css",
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
-              "node_modules/datatables.net-dt/css/jquery.dataTables.css",
-              "node_modules/datatables.net-bs5/css/dataTables.bootstrap5.min.css",
-              "node_modules/datatables.net-responsive-dt/css/responsive.dataTables.css",
-              "node_modules/datatables.net-responsive-bs5/css/responsive.bootstrap5.min.css",
               "src/assets/template/css/style.css",
               "src/assets/template/css/icons.css",
               "src/assets/template2/css/style.css",
@@ -47,15 +43,6 @@
             "scripts": [
               "node_modules/jquery/dist/jquery.min.js",
               "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
-              "node_modules/datatables.net/js/jquery.dataTables.min.js",
-              "node_modules/datatables.net-bs5/js/dataTables.bootstrap5.min.js",
-              "node_modules/datatables.net-responsive/js/dataTables.responsive.js",
-              "node_modules/datatables.net-responsive-bs5/js/responsive.bootstrap5.min.js",
-              "node_modules/datatables.net-buttons/js/dataTables.buttons.js",
-              "node_modules/datatables.net-buttons/js/buttons.colVis.js",
-              "node_modules/datatables.net-buttons/js/buttons.flash.js",
-              "node_modules/datatables.net-buttons/js/buttons.html5.js",
-              "node_modules/datatables.net-buttons/js/buttons.print.js",
               "src/assets/template2/js/script.js",
               "node_modules/select2/dist/js/select2.min.js"
             ]

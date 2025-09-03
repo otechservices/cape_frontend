@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { Observable } from 'rxjs';
 import { GlobalName } from '../utils/global-name';
 import { JWTTokenService } from '../utils/jwt-token-service';
@@ -8,7 +8,7 @@ import { LocalStorageService } from '../utils/local-stoarge-service';
 @Injectable({
   providedIn: 'root'
 })
-export class IsAuthedGuard implements CanActivate {
+export class IsAuthedGuard  {
   constructor(
     private jwtService:JWTTokenService,
     private lsService:LocalStorageService,

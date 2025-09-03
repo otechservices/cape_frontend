@@ -36,7 +36,7 @@
     
                             <p>{{data.length}} élément(s)</p>
                             <div class="table-responsive">
-                            <table class="table" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+                            <table class="table" >
                                 <thead class="">
                                     <tr>
                                         <th style="width: 10px;">#</th>
@@ -122,14 +122,14 @@
                 </div>
                 <div class="d-flex justify-content-between">
                   <span>Document obligatoire ?</span>
-                  <ng-toggle
+                  <!-- <ng-toggle
                 ngModel
                 name="is_required"
                 [color]="{
                   unchecked: '#939da2',
                   checked: '#f62d51'
                 }"
-              ></ng-toggle>
+              ></ng-toggle> -->
                 </div>
             </div>
            
@@ -174,14 +174,14 @@
                 </div>
                 <div class="d-flex justify-content-between">
                   <span>Document obligatoire ?</span>
-                  <ng-toggle
+                  <!-- <ng-toggle
                   name="is_required"
                 [(ngModel)]="selected_data.is_required"
                  [color]="{
                   unchecked: '#939da2',
                   checked: '#f62d51'
                 }"
-              ></ng-toggle>
+              ></ng-toggle> -->
                 </div>
               
             </div>

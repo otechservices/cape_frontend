@@ -2,7 +2,7 @@ import { formatDate } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { NgbModalConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { DataTableDirective } from 'angular-datatables';
+
 import { ToastrService } from 'ngx-toastr';
 import { Subject } from 'rxjs';
 import { CpsService } from 'src/app/core/services/cps.service';
@@ -22,36 +22,6 @@ import { LocalStorageService } from 'src/app/core/utils/local-stoarge-service';
 })
 export class SessionComponent implements OnInit {
 
-  @ViewChild(DataTableDirective , {static: false})
-  dtElement!: DataTableDirective;
-  dtOptions: DataTables.Settings = {
-    language: {
-      processing:     "Traitement en cours...",
-      search:         "Rechercher&nbsp;:",
-      lengthMenu:    "Afficher _MENU_ &eacute;l&eacute;ments",
-      info:           "Affichage de l'&eacute;lement _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
-      infoEmpty:      "Affichage de l'&eacute;lement 0 &agrave; 0 sur 0 &eacute;l&eacute;ments",
-      infoFiltered:   "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
-      infoPostFix:    "",
-      loadingRecords: "Chargement en cours...",
-      zeroRecords:    "Aucun &eacute;l&eacute;ment &agrave; afficher",
-      emptyTable:     "Aucune donnée disponible dans le tableau",
-      paginate: {
-          first:      "Premier",
-          previous:   "Pr&eacute;c&eacute;dent",
-          next:       "Suivant",
-          last:       "Dernier"
-      },
-      aria: {
-          sortAscending:  ": activer pour trier la colonne par ordre croissant",
-          sortDescending: ": activer pour trier la colonne par ordre décroissant"
-      }
-      
-  
-    },
-    responsive:true
-  };
-  dtTrigger: Subject<any> = new Subject<any>();
   buttonsPermission :any|undefined;
   structures:any[] =[]
   data:any[] =[]
@@ -133,7 +103,7 @@ export class SessionComponent implements OnInit {
       this.dropdownList=[]
       this.dropdownList2=[]
       this.modalService.dismissAll()
-      this.reInitData()
+      
     },
     (err:any)=>{
 
@@ -301,19 +271,6 @@ export class SessionComponent implements OnInit {
   }
 
 
-  reInitData(){
-    this.selected_data=null
-    if (this.isDtInitialized) {
-      this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-      
-        this.dtTrigger.subscribe()
-       // this.dtTrigger.next(false);
-      });
-    } else {
-      this.isDtInitialized = true
-      this.dtTrigger.next(false);
-    }
-   }
   
   dismiss(){
     this.modalService.dismissAll()
@@ -449,7 +406,6 @@ removeRequete(id:any, index:any){
 }
 back(){
   this.showPreview=false
-  this.dtTrigger.subscribe()
 
 }
 showFile(filename:any){

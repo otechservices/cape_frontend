@@ -21,7 +21,7 @@
                         <p >{{data.length}} élément(s)</p>
                         <p >0 élément(s)</p>
                         <div class="table-responsive">
-                        <table *ngIf="type == 'cape'" class="table" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+                        <table *ngIf="type == 'cape'" class="table" >
                             <thead class="">
                                 <tr>
                                     <th>#</th>
@@ -61,7 +61,7 @@
                             
                             </tbody>
                         </table>
-                        <table *ngIf="type == 'garderie'" class="table" datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+                        <table *ngIf="type == 'garderie'" class="table" >
                             <thead class="">
                                 <tr>
                                     <th>#</th>

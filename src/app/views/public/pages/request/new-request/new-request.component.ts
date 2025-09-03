@@ -3,7 +3,7 @@ import { NgForm } from '@angular/forms';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { ActivatedRoute, NavigationEnd, NavigationStart, Router } from '@angular/router';
 import { NgbOffcanvasConfig, NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
-import { IgxStep, IgxStepper, IStepChangingEventArgs } from 'igniteui-angular';
+import {  IStepChangingEventArgs } from 'igniteui-angular';
 import * as JSZip from 'jszip';
 import { ToastrService } from 'ngx-toastr';
 import { RequestForm } from 'src/app/core/Interfaces/request-form.interface';
@@ -89,7 +89,7 @@ export class NewRequestComponent implements OnInit,OnDestroy,OnChanges {
   is_stored=false;
 
 @ViewChild("reqTop") reqTop!: ElementRef<HTMLElement>;
-@ViewChild('stepper')stepper!:IgxStepper
+@ViewChild('stepper')stepper!:any
 @ViewChild('fileInp')fileInp!:ElementRef
 
 subscription: Subscription | undefined;

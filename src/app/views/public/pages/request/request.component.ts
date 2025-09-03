@@ -15,7 +15,7 @@ import { SafeResourceUrl, DomSanitizer } from '@angular/platform-browser';
 import { ConfigService } from 'src/app/core/utils/config-service';
 import * as $ from "jquery"
 import { FileService } from 'src/app/core/services/file.service';
-import { IgxStep, IgxStepper, IStepChangingEventArgs } from 'igniteui-angular';
+import {  IStepChangingEventArgs } from 'igniteui-angular';
 import { IgxStepperService } from 'igniteui-angular/lib/stepper/stepper.service';
 import { RequestForm } from 'src/app/core/Interfaces/request-form.interface';
 import { NaturePromotorService } from 'src/app/core/services/nature-promotor.service';
