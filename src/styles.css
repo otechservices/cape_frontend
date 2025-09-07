@@ -4,6 +4,20 @@ blue :: after
 yellow:: #FCCD5D
 */
 
+/* You can add global styles to this file, and also import other style files */
+/* Bootstrap */
+@import "bootstrap/dist/css/bootstrap.min.css";
+
+@import 'primeflex/primeflex.css';
+
+/* Tailwind CSS */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+
 .btn-primary{
 background-color: #0A3764;
 border-color: #0A3764;
