@@ -1,50 +1,92 @@
-
-<div class="" >
-    <div class="logo text-start mb-5">
-        <div class="logo"><a href="#"><img src="assets/template2/images/masm.png" style="min-height: 80px;" alt="" title=""></a></div>
-    </div>
-    <div class=" auto-container px-5">
-      
-        <h5 class="text-center fw-bold mb-5" >Plateforme de gestion des centres d'accueil et de protection de l'enfant en République du Bénin</h5>
-
-        <!-- Contact Form -->
-        <div class="contact-form">
-            <!-- Title Box -->
-            <div class="title-box">
-                <h2>Authentification</h2>
-                <div class="text">Veuillez vous connecter à votre espace de traitement *</div>
+     <div class="w-full max-w-md space-y-8">
+          <div class="text-center">
+            <div class="flex justify-center mb-6">
+              <img 
+                src="assets/template2/images/masm.png"
+                alt="logo-masm"
+                class="h-16"
+              />
             </div>
-            <form class="" #loginForm="ngForm" (ngSubmit)="login(loginForm.value)">
-                <div class="row clearfix">
-                
-                    <!-- Form Group -->
-                    <div class="form-group col-12">
-                        <span class="icon flaticon-user-3"></span>
-                        <input type="email" name="email" placeholder="Entrez votre email*" required ngModel>
-                    </div>
-                    
-                    <!-- Form Group -->
-                    <div class="form-group col-12">
-                        <span class="icon flaticon-email-3"></span>
-                        <input type="password" name="password" placeholder="Entrez votre mot de passe*" required ngModel>
-                    </div>
-                    
-               
-                    <div class="form-group col-lg-12 col-md-12 col-sm-12">
-                        <button type="submit" class="btn btn-sm text-white cape-bg-blue"  [disabled]="loginForm.invalid || loading"><span class="txt">Connexion </span> <app-loading [isVisible]="loading"></app-loading></button>
-                    </div>
-                    
-                    <div class="d-flex justify-content-end">
-                        <a routerLink="/admin/auth/forget-password" class="cape-text-blue"><u>Mot de passe oublié</u></a>
-                    </div>
+          </div>
+
+          <div class="text-center">
+            <h1 class="text-lg font-medium text-teal-700 leading-tight">
+              Plateforme de gestion des centres d'accueil et de protection de l'enfant en République du Bénin
+            </h1>
+          </div>
+
+        <div class="bg-white p-8 rounded-lg shadow-sm border">
+
+           <form [formGroup]="authForm" (ngSubmit)="login()" class="space-y-4">
+
+              <!-- Champ email -->
+              <div>
+                <label class="block text-sm text-gray-600 mb-2">
+                  Veuillez vous connecter à votre espace de traitement *
+                </label>
+                <div class="relative">
+                  <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <i class="fas fa-envelope text-gray-400 text-sm"></i>
+                  </div>
+                  <input
+                    type="email"
+                    formControlName="email"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm pl-10"
+                    placeholder="Adresse email"
+                  />
                 </div>
-            </form>
-                
+                <div *ngIf="authForm.get('email')?.invalid && authForm.get('email')?.touched" class="text-red-500 text-sm">
+                  Email invalide
+                </div>
+              </div>
+
+              <!-- Champ mot de passe -->
+              <div>
+                <div class="relative">
+                  <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <i class="fas fa-lock text-gray-400 text-sm"></i>
+                  </div>
+                  <input
+                    type="password"
+                    formControlName="password"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm pl-10"
+                    placeholder="Mot de passe"
+                  />
+                </div>
+                <div *ngIf="authForm.get('password')?.invalid && authForm.get('password')?.touched" class="text-red-500 text-sm">
+                  Mot de passe requis
+                </div>
+              </div>
+
+              <!-- Bouton -->
+              <button
+                type="submit"
+                [disabled]="isLoading || authForm.invalid"
+                class="w-full bg-blue-800 hover:bg-blue-900 text-white rounded px-4 py-2"
+              >
+                <ng-container *ngIf="isLoading; else normalBtn">
+                  <div class="flex items-center justify-center">
+                    <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                    Connexion...
+                  </div>
+                </ng-container>
+                <ng-template #normalBtn>
+                  Connexion
+                </ng-template>
+              </button>
+
+      <!-- Mot de passe oublié -->
+            <div class="text-center">
+              <a href="#" class="text-sm text-blue-600 hover:text-blue-800 underline">
+                Mot de passe oublié
+              </a>
+            </div>
+      </form>
+
         </div>
-        <!-- eND Contact Form -->
-        
-    </div>
-</div>
-  
 
 
+          <div class="text-center text-xs text-gray-500">
+            <p>© 2024 République du Bénin - Tous droits réservés</p>
+          </div>
+        </div>

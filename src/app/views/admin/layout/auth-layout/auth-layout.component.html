@@ -1,14 +1,22 @@
+<div class="min-h-screen bg-gray-50 flex">
+  <!-- Colonne gauche = col-6 -->
+  <div class="hidden lg:flex lg:w-1/2 h-screen relative">
+    <img 
+      src="assets/template/images/login2.jpg"
+      alt="background"
+      class="w-full h-full object-contain"
+    />
+    <div class="absolute inset-0 bg-blue-900/20 flex items-center justify-center">
+      <img 
+        src="assets/template2/images/masm.png"
+        alt="logo-masm"
+        class="h-20"
+      />
+    </div>
+  </div>
 
-
-        <div class="row">
-            <div class="col-md-4 d-none d-md-block" style=" background-color:#09111A; min-height:100vh; background-image: url('assets/template/images/login2.jpg'); background-size: cover; background-repeat:no-repeat ;">
-               
-                 
-            </div>
-         
-            <div class="col-12 col-md-8">
-                  <!-- Contact Form Box -->
-                <router-outlet></router-outlet>
-            </div>
-                 
-        </div>
+  <!-- Colonne droite = col-6 -->
+  <div class="w-full lg:w-1/2 flex items-center justify-center p-8">
+    <router-outlet></router-outlet>
+  </div>
+</div>
