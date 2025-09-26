@@ -1,79 +1,163 @@
-<section class="main-slider contact">
-    <div class="welcome_section">
-        <h1 class="welcome_title">
-            Contactez-nous
-        </h1>
-       
+<section 
+  class="tw-relative tw-min-h-screen tw-flex tw-items-center tw-justify-center tw-bg-cover tw-bg-center tw-py-16"
+  [ngStyle]="{'background-image': 'url(https://readdy.ai/api/search-image?query=Professional%20African%20woman%20smiling%20while%20waving%20hello%20on%20laptop%20screen%2C%20warm%20welcoming%20atmosphere%2C%20modern%20office%20environment%20with%20soft%20lighting%2C%20customer%20service%20and%20communication%20theme%2C%20friendly%20and%20approachable%20feeling&width=1920&height=1080&seq=contact-bg&orientation=landscape)'}"
+>
+  <div class="tw-absolute tw-inset-0 tw-bg-black/40"></div>
+
+  <div class="tw-relative tw-z-10 tw-w-full tw-max-w-7xl tw-px-6">
+    <div class="tw-text-center tw-mb-12">
+      <h1 class="tw-text-4xl md:tw-text-5xl tw-font-bold tw-text-white tw-mb-4">
+        Contactez-nous
+      </h1>
+      <p class="tw-text-xl tw-text-white/90 tw-mb-8">
+        Nous sommes là pour vous accompagner dans vos démarches
+      </p>
     </div>
-  </section>
-  <div class="body_content">
-    <div class="container">
-      <div class="row clearfix">
-        <div class="content-side col-lg-12 col-md-12 col-sm-12">
-            
-            <div class="row process_agreement p-lg-5 p-md-3 p-3">
-              <div class="col-lg-12 list_step">
-              <h2>Contactez nous également par les canaux ci-dessous:
-              </h2>
 
-         
-                <div class=" contact-form">
-                    <p class="h2 text-center">Vous pouvez contacter le Département en charge de l'Enfant et de l'Adolescent:</p>
+    <!-- Onglets -->
+    <div class="tw-flex tw-justify-center tw-mb-8">
+      <div class="tw-bg-white/10 tw-backdrop-blur-sm tw-rounded-full tw-p-1 tw-flex">
+        <button
+          (click)="setActiveTab('contact')"
+          [ngClass]="{'tw-bg-white tw-text-gray-900 tw-shadow-lg': activeTab === 'contact', 'tw-text-white hover:tw-bg-white/20': activeTab !== 'contact'}"
+          class="tw-px-6 tw-py-3 tw-rounded-full tw-font-medium tw-transition-all tw-duration-200 tw-whitespace-nowrap"
+        >
+          Contact Direct
+        </button>
+        <button
+          (click)="setActiveTab('information')"
+          [ngClass]="{'tw-bg-white tw-text-gray-900 tw-shadow-lg': activeTab === 'information', 'tw-text-white hover:tw-bg-white/20': activeTab !== 'information'}"
+          class="tw-px-6 tw-py-3 tw-rounded-full tw-font-medium tw-transition-all tw-duration-200 tw-whitespace-nowrap"
+        >
+          Demande d'Information
+        </button>
+      </div>
+    </div>
 
-                    <div class="row mb-5">
-                        <div class="col-12 col-md-4">
-                                <div class="card card-body rounded shadow mb-5 border-0 text-center" style="height: 8rem;">
-                                    <h6>En envoyant un mail à l'adresse</h6>
-
-                                    <p class="text-center">masm.dfea&#64;gouv.bj</p>
-                                </div>    
-                        </div>
-                        <div class="col-12 col-md-4">
-                            <div class="card card-body rounded shadow mb-5 border-0   text-center" style="height: 8rem;">
-                                                <h6>En appelant le numéro de téléphone</h6>
-
-                                                <p class="text-center">229 60 42 02 02</p>
-                            </div>    
-                        </div>
-                        <div class="col-12 col-md-4">
-                            <div class="card card-body rounded shadow  mb-5 border-0  text-center" style="height: 8rem;">
-                                    <h6 class="mb-3"> En remplissant le formulaire de demande d'information</h6>
-
-                                    <a routerLink="/requested-infos" class="btn btn-sm btn-primary">Accéder</a>
-                            </div> 
-                        </div>
-                 
-               
-                    
-                    </div>
-                   
-
-                    <google-map
-                    height="500px"
-                    width="100%"
-                    [zoom]="zoom"
-                    [center]="center"
-                    [options]="options"
-
-                    >
-                    <map-marker
-                    *ngFor="let marker of markers"
-                    [position]="marker.position"
-                    [label]="marker.label"
-                    [title]="marker.title"
-                    [options]="marker.options"
-                  >
-                </map-marker>
-                
-                </google-map>
-                </div>
-                
-              </div>
-              
+    <div class="tw-grid tw-grid-cols-1 lg:tw-grid-cols-2 tw-gap-12">
+      <!-- Section gauche - Informations -->
+      <div class="tw-bg-white/10 tw-backdrop-blur-sm tw-rounded-2xl tw-p-8 tw-text-white">
+        <ng-container *ngIf="activeTab === 'contact'; else infoTab">
+          <h2 class="tw-text-2xl tw-font-bold tw-mb-8 tw-text-center">
+            CONTACTEZ NOUS DIRECTEMENT
+          </h2>
+          <p class="tw-text-center tw-mb-8 tw-text-white/90">
+            Vous pouvez contacter le Département en charge de l'Enfant et de l'Adolescent.
+          </p>
+          <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-3 tw-gap-6 tw-mb-8">
+            <div class="tw-text-center tw-bg-white/10 tw-rounded-lg tw-p-6">
+              <i class="ri-mail-line tw-text-3xl tw-mb-4"></i>
+              <h3 class="tw-font-semibold tw-mb-2">En envoyant un mail à l'adresse</h3>
+              <p class="tw-text-sm">masm.dea&#64;gouv.bj</p>
             </div>
-            
+            <div class="tw-text-center tw-bg-white/10 tw-rounded-lg tw-p-6">
+              <i class="ri-phone-line tw-text-3xl tw-mb-4"></i>
+              <h3 class="tw-font-semibold tw-mb-2">En appelant le numéro de téléphone</h3>
+              <p class="tw-text-sm">229 60 42 20 09</p>
+            </div>
+            <div class="tw-text-center tw-bg-white/10 tw-rounded-lg tw-p-6">
+              <i class="ri-map-pin-line tw-text-3xl tw-mb-4"></i>
+              <h3 class="tw-font-semibold tw-mb-2">En vous rendant à nos bureaux</h3>
+              <p class="tw-text-sm">Ministère des Affaires Sociales</p>
+            </div>
+          </div>
+        </ng-container>
+
+        <ng-template #infoTab>
+          <h2 class="tw-text-2xl tw-font-bold tw-mb-8 tw-text-center">
+            COMMENT POUVONS-NOUS VOUS AIDER ?
+          </h2>
+          <div class="tw-space-y-6">
+            <div class="tw-bg-white/20 tw-rounded-lg tw-p-6">
+              <h3 class="tw-font-semibold tw-mb-3 tw-flex tw-items-center">
+                <i class="ri-information-line tw-mr-2"></i>
+                Informations générales
+              </h3>
+              <p class="tw-text-white/90">
+                Renseignements sur les procédures d'inscription, les documents requis, et les délais de traitement.
+              </p>
+            </div>
+            <div class="tw-bg-white/20 tw-rounded-lg tw-p-6">
+              <h3 class="tw-font-semibold tw-mb-3 tw-flex tw-items-center">
+                <i class="ri-file-text-line tw-mr-2"></i>
+                Accompagnement personnalisé
+              </h3>
+              <p class="tw-text-white/90">
+                Assistance pour constituer votre dossier et comprendre les exigences spécifiques à votre projet.
+              </p>
+            </div>
+            <div class="tw-bg-white/20 tw-rounded-lg tw-p-6">
+              <h3 class="tw-font-semibold tw-mb-3 tw-flex tw-items-center">
+                <i class="ri-phone-line tw-mr-2"></i>
+                Contact direct
+              </h3>
+              <p class="tw-text-white/90">
+                Possibilité d'être recontacté par un conseiller pour un accompagnement sur mesure.
+              </p>
+            </div>
+          </div>
+        </ng-template>
+
+        <!-- Carte Google Maps -->
+        <div class="tw-rounded-lg tw-overflow-hidden tw-mt-8">
+          <google-map
+            height="500px"
+            width="100%"
+            [zoom]="zoom"
+            [center]="center"
+            [options]="options"
+          >
+            <map-marker
+              *ngFor="let marker of markers"
+              [position]="marker.position"
+              [label]="marker.label"
+              [title]="marker.title"
+              [options]="marker.options"
+            ></map-marker>
+          </google-map>
         </div>
+      </div>
+
+      <!-- Section droite - Formulaires -->
+      <div class="tw-bg-white tw-rounded-2xl tw-shadow-2xl tw-p-8">
+        <ng-container *ngIf="activeTab === 'contact'; else infoForm">
+          <div class="tw-flex tw-items-center tw-mb-8">
+            <i class="ri-message-3-line tw-text-3xl tw-text-green-600 tw-mr-4"></i>
+            <h2 class="tw-text-2xl tw-font-bold tw-text-gray-900">NOUS CONTACTER</h2>
+          </div>
+
+          <form [formGroup]="contactForm" (ngSubmit)="handleContactSubmit()" class="tw-space-y-6">
+            <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-gap-6">
+              <div>
+                <label for="nom" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 tw-mb-2">Nom complet*</label>
+                <input formControlName="nom" type="text" id="nom" placeholder="Votre nom complet"
+                  class="tw-w-full tw-px-4 tw-py-3 tw-border tw-border-gray-300 tw-rounded-lg tw-focus:tw-ring-2 tw-focus:tw-ring-green-500 tw-focus:tw-border-transparent tw-text-sm"/>
+              </div>
+              <div>
+                <label for="email" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 tw-mb-2">Adresse email*</label>
+                <input formControlName="email" type="email" id="email" placeholder="votre.email&#64;exemple.com"
+                  class="tw-w-full tw-px-4 tw-py-3 tw-border tw-border-gray-300 tw-rounded-lg tw-focus:tw-ring-2 tw-focus:tw-ring-green-500 tw-focus:tw-border-transparent tw-text-sm"/>
+              </div>
+            </div>
+
+            <button type="submit" [disabled]="isSubmitting"
+              class="tw-bg-green-600 hover:tw-bg-green-700 disabled:tw-bg-gray-400 disabled:tw-cursor-not-allowed tw-text-white tw-px-8 tw-py-4 tw-rounded-lg tw-font-medium tw-transition-colors tw-duration-200 tw-flex tw-items-center tw-justify-center tw-space-x-2 tw-w-full tw-whitespace-nowrap">
+              <ng-container *ngIf="isSubmitting">
+                <i class="ri-loader-4-line tw-animate-spin tw-text-xl"></i>
+                <span>Envoi en cours...</span>
+              </ng-container>
+              <ng-container *ngIf="!isSubmitting">
+                <i class="ri-send-plane-line tw-text-xl"></i>
+                <span>Envoyer le message</span>
+              </ng-container>
+            </button>
+          </form>
+        </ng-container>
+
+        <ng-template #infoForm>
+          <!-- Formulaire Demande d'Information avec classes tw- similaires -->
+        </ng-template>
       </div>
     </div>
   </div>
-  
+</section>

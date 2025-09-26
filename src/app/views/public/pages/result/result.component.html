@@ -1,117 +1,525 @@
-<section class="main-slider result">
-    <div class="welcome_section">
-        <h1 class="welcome_title">
-            Résultats des sessions
-        </h1>
-       
+<ng-container *ngIf="type=='cape'">
+<!-- Hero Section -->
+<section
+  class="tw-relative tw-min-h-[400px] tw-flex tw-items-center tw-justify-center tw-bg-cover tw-bg-center tw-pt-20"
+  [ngStyle]="{
+    'background-image':
+      'url(https://readdy.ai/api/search-image?query=Professional%20meeting%20room%20with%20African%20officials%20reviewing%20documents%20and%20making%20decisions%2C%20official%20government%20setting%20with%20formal%20atmosphere%2C%20legal%20documentation%20and%20administrative%20processes%2C%20modern%20office%20environment%20with%20conference%20table&width=1920&height=600&seq=deliberations-cape-bg&orientation=landscape)'
+  }"
+>
+  <div class="tw-absolute tw-inset-0 tw-bg-black/50"></div>
+
+  <div class="tw-relative tw-z-10 tw-w-full tw-max-w-7xl tw-px-6">
+    <div class="tw-text-center">
+      <h1 class="tw-text-4xl md:tw-text-5xl tw-font-bold tw-text-white tw-mb-6">
+        Délibérations CAPE
+      </h1>
+      <p class="tw-text-xl tw-text-white/90 tw-max-w-3xl tw-mx-auto">
+        Consultez les décisions et délibérations concernant les demandes
+        d'autorisation des Centres d'Accueil et de Protection de l'Enfant
+      </p>
+    </div>
+  </div>
+</section>
+
+  <!-- Section statistiques -->
+  <section class="tw-bg-white tw-py-16">
+    <div class="tw-max-w-7xl tw-mx-auto tw-px-6">
+      <div class="tw-text-center tw-mb-12">
+        <h3 class="tw-text-2xl tw-font-bold tw-text-gray-900 tw-mb-4">
+          Statistiques des délibérations garderies 2024
+        </h3>
+      </div>
+
+      <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-4 tw-gap-8">
+        <div class="tw-text-center">
+          <div
+            class="tw-w-16 tw-h-16 tw-bg-green-100 tw-rounded-lg tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-4"
+          >
+            <i class="ri-check-circle-line tw-text-2xl tw-text-green-600"></i>
+          </div>
+          <div class="tw-text-3xl tw-font-bold tw-text-gray-900 tw-mb-2">
+            12
+          </div>
+          <p class="tw-text-gray-600">Autorisations accordées</p>
+        </div>
+
+        <div class="tw-text-center">
+          <div
+            class="tw-w-16 tw-h-16 tw-bg-yellow-100 tw-rounded-lg tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-4"
+          >
+            <i class="ri-time-line tw-text-2xl tw-text-yellow-600"></i>
+          </div>
+          <div class="tw-text-3xl tw-font-bold tw-text-gray-900 tw-mb-2">4</div>
+          <p class="tw-text-gray-600">Dossiers en étude</p>
+        </div>
+
+        <div class="tw-text-center">
+          <div
+            class="tw-w-16 tw-h-16 tw-bg-red-100 tw-rounded-lg tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-4"
+          >
+            <i class="ri-close-circle-line tw-text-2xl tw-text-red-600"></i>
+          </div>
+          <div class="tw-text-3xl tw-font-bold tw-text-gray-900 tw-mb-2">3</div>
+          <p class="tw-text-gray-600">Demandes refusées</p>
+        </div>
+
+        <div class="tw-text-center">
+          <div
+            class="tw-w-16 tw-h-16 tw-bg-blue-100 tw-rounded-lg tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-4"
+          >
+            <i class="ri-refresh-line tw-text-2xl tw-text-blue-600"></i>
+          </div>
+          <div class="tw-text-3xl tw-font-bold tw-text-gray-900 tw-mb-2">8</div>
+          <p class="tw-text-gray-600">Renouvellements</p>
+        </div>
+      </div>
     </div>
   </section>
-  <div class="body_content">
-    <div class="container">
-      <div class="row clearfix">
-        <div class="content-side col-lg-12 col-md-12 col-sm-12">
-            
-            <div class="row process_agreement p-5">
-              <div class="col-lg-12 list_step">
-                <div class="project-detail">
-                    <div class="inner-box">
-                        <p>{{data.length}} élément(s)</p>
-                        <div class="table-responsive">
-                        <table class="table" >
-                            <thead class="">
-                                <tr>
-                                    <th style="width: 10px;">#</th>
-                                    <th>Année </th>
-                                    <th>Session </th>
-                                    <th>Période </th>
-                                    <th>Dossiers Inscrits</th>
-                                    <th>Dossiers Validés</th>
-                                    <th>Dossiers rejetés </th>                        
-                                    <th>Voir mon résultat</th>                        
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let d of data; let i=index ">
-                                    <td>
-                                        <div class="form-check mb-2">
-                                                    {{i+1}}                                        
-                                        </div>
-                                    </td>
-                                    <td>{{d.year}}</td>
-                                    <td>{{d.name}}</td>
-                                    <td>Du {{d.date_start | date:"shortDate"}} au {{d.date_end | date:"shortDate"}}</td>
-                                    <td>{{d.requetes_count}}</td>
-                                    <td>{{d.requetes_ok_count}}</td>
-                                    <td>{{d.requetes_nok_count}}</td>
-                                    <td>
-                                        <button class="btn btn-sm btn-outline-primary" (click)="add(addContent)">Consulter le résultat</button>
-                                    </td>
-                                </tr>
-                            
-                            </tbody>
-                        </table>
-                        </div>
+  
+<!-- Section des délibérations -->
+<section class="tw-py-16 tw-bg-gray-50">
+  <div class="tw-max-w-7xl tw-mx-auto tw-px-6">
+    <div class="tw-mb-12">
+      <div class="tw-flex tw-items-center tw-justify-between tw-mb-8">
+        <div>
+          <h2 class="tw-text-3xl tw-font-bold tw-text-gray-900 tw-mb-4">
+            Dernières délibérations
+          </h2>
+          <p class="tw-text-gray-600">
+            Retrouvez ici toutes les décisions prises concernant les demandes
+            d'autorisation CAPE
+          </p>
         </div>
-                  </div>
-                
+
+        <div class="tw-bg-white tw-rounded-lg tw-p-4 tw-shadow-sm">
+          <div class="tw-flex tw-items-center tw-space-x-4 tw-text-sm">
+            <div class="tw-flex tw-items-center tw-space-x-2">
+              <div class="tw-w-3 tw-h-3 tw-bg-green-500 tw-rounded-full"></div>
+              <span>Accordée</span>
+            </div>
+            <div class="tw-flex tw-items-center tw-space-x-2">
+              <div class="tw-w-3 tw-h-3 tw-bg-yellow-500 tw-rounded-full"></div>
+              <span>En étude</span>
+            </div>
+            <div class="tw-flex tw-items-center tw-space-x-2">
+              <div class="tw-w-3 tw-h-3 tw-bg-red-500 tw-rounded-full"></div>
+              <span>Refusée</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Liste des délibérations -->
+    <div class="tw-space-y-6">
+      <div
+        *ngFor="let deliberation of data"
+        class="tw-bg-white tw-rounded-2xl tw-shadow-sm tw-border tw-border-gray-200 tw-p-8 hover:tw-shadow-md tw-transition-shadow"
+      >
+        <div
+          class="tw-flex tw-flex-col lg:tw-flex-row lg:tw-items-start lg:tw-justify-between tw-mb-6"
+        >
+          <div class="tw-flex-1 tw-mb-4 lg:tw-mb-0">
+            <div class="tw-flex tw-items-start tw-space-x-4">
+              <div class="tw-flex-shrink-0">
+                <div
+                  class="tw-w-12 tw-h-12 tw-bg-blue-100 tw-rounded-lg tw-flex tw-items-center tw-justify-center"
+                >
+                  <i class="ri-file-text-line tw-text-blue-600 tw-text-xl"></i>
+                </div>
               </div>
-              
+              <div class="tw-flex-1">
+                <h3 class="tw-text-xl tw-font-bold tw-text-gray-900 tw-mb-2">
+                  {{ deliberation.title }}
+                </h3>
+                <p class="tw-text-gray-600 tw-mb-3">
+                  {{ deliberation.description }}
+                </p>
+                <p class="tw-text-sm tw-text-gray-500">
+                  {{ deliberation.details }}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="tw-flex tw-items-center tw-space-x-4">
+            <div class="tw-text-right">
+              <p class="tw-text-sm tw-text-gray-500 tw-mb-2">
+                Date de délibération
+              </p>
+              <p class="tw-font-medium tw-text-gray-900">
+                {{ deliberation.date }}
+              </p>
             </div>
 
+            <div
+              class="tw-flex tw-items-center tw-space-x-2 tw-px-4 tw-py-2 tw-rounded-full tw-text-sm tw-font-medium"
+              [ngClass]="getStatusColor(deliberation.status)"
+            >
+              <i
+                [class]="getStatusIcon(deliberation.status) + ' tw-text-base'"
+              ></i>
+              <span>{{ deliberation.status }}</span>
+            </div>
+          </div>
+        </div>
 
-            
+        <div
+          class="tw-flex tw-items-center tw-justify-between tw-pt-6 tw-border-t tw-border-gray-100"
+        >
+          <div
+            class="tw-flex tw-items-center tw-space-x-4 tw-text-sm tw-text-gray-500"
+          >
+            <span
+              >Délibération #{{ deliberation.id.toString().padStart(3, '0')
+              }}</span
+            >
+            <span>•</span>
+            <span>MASM - Département Enfant et Adolescent</span>
+          </div>
+
+          <button
+            class="tw-flex tw-items-center tw-space-x-2 tw-text-blue-600 hover:tw-text-blue-700 tw-font-medium tw-text-sm"
+          >
+            <span>Télécharger</span>
+            <i class="ri-download-line"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pagination -->
+    <div class="tw-flex tw-items-center tw-justify-center tw-mt-12">
+      <div class="tw-flex tw-items-center tw-space-x-2">
+        <button
+          class="tw-px-4 tw-py-2 tw-text-gray-500 hover:tw-text-gray-700 tw-cursor-pointer"
+        >
+          <i class="ri-arrow-left-line"></i>
+        </button>
+        <button class="tw-px-4 tw-py-2 tw-bg-blue-600 tw-text-white tw-rounded-lg">
+          1
+        </button>
+        <button
+          class="tw-px-4 tw-py-2 tw-text-gray-700 hover:tw-bg-gray-100 tw-rounded-lg tw-cursor-pointer"
+        >
+          2
+        </button>
+        <button
+          class="tw-px-4 tw-py-2 tw-text-gray-700 hover:tw-bg-gray-100 tw-rounded-lg tw-cursor-pointer"
+        >
+          3
+        </button>
+        <button
+          class="tw-px-4 tw-py-2 tw-text-gray-500 hover:tw-text-gray-700 tw-cursor-pointer"
+        >
+          <i class="ri-arrow-right-line"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Section informative -->
+<section class="tw-bg-blue-600 tw-py-16">
+  <div class="tw-max-w-4xl tw-mx-auto tw-px-6 tw-text-center">
+    <div
+      class="tw-bg-white/10 tw-backdrop-blur-sm tw-rounded-2xl tw-p-8"
+    >
+      <h3 class="tw-text-2xl tw-font-bold tw-text-white tw-mb-6">
+        Information sur les délibérations
+      </h3>
+
+      <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-3 tw-gap-6 tw-text-white">
+        <div class="tw-text-center">
+          <i class="ri-calendar-line tw-text-3xl tw-mb-4"></i>
+          <h4 class="tw-font-semibold tw-mb-2">Périodicité</h4>
+          <p class="tw-text-sm tw-text-white/90">
+            Les délibérations ont lieu chaque semaine
+          </p>
+        </div>
+
+        <div class="tw-text-center">
+          <i class="ri-time-line tw-text-3xl tw-mb-4"></i>
+          <h4 class="tw-font-semibold tw-mb-2">Délai de traitement</h4>
+          <p class="tw-text-sm tw-text-white/90">
+            15 jours ouvrables en moyenne
+          </p>
+        </div>
+
+        <div class="tw-text-center">
+          <i class="ri-notification-line tw-text-3xl tw-mb-4"></i>
+          <h4 class="tw-font-semibold tw-mb-2">Notification</h4>
+          <p class="tw-text-sm tw-text-white/90">
+            Résultats communiqués par email
+          </p>
         </div>
       </div>
     </div>
   </div>
+</section>
 
+</ng-container>
 
-  <ng-template #addContent let-c="close" let-d="dismiss">
-    <form #addForm="ngForm" (ngSubmit)="verify(addForm.value,content)">
-        <div class="modal-header bg-secondary">
-            <button type="button" class="btn-close" aria-label="Close" (click)="d('Cross click')"></button>
+<ng-container *ngIf="type=='garderie'">
+
+  <!-- Hero Section -->
+  <section
+    class="tw-relative tw-min-h-[400px] tw-flex tw-items-center tw-justify-center tw-bg-cover tw-bg-center tw-pt-20"
+    [ngStyle]="{
+      'background-image':
+        'url(https://readdy.ai/api/search-image?query=Professional%20African%20woman%20in%20business%20attire%20reviewing%20documents%20at%20modern%20desk%2C%20official%20administrative%20setting%20with%20paperwork%20and%20legal%20documents%2C%20government%20office%20environment%20focused%20on%20childcare%20regulations%20and%20approvals&width=1920&height=600&seq=deliberations-garderie-bg&orientation=landscape)'
+    }"
+  >
+    <div class="tw-absolute tw-inset-0 tw-bg-black/50"></div>
+
+    <div class="tw-relative tw-z-10 tw-w-full tw-max-w-7xl tw-px-6">
+      <div class="tw-text-center">
+        <h1 class="tw-text-4xl md:tw-text-5xl tw-font-bold tw-text-white tw-mb-6">
+          Délibérations Garderie
+        </h1>
+        <p class="tw-text-xl tw-text-white/90 tw-max-w-3xl tw-mx-auto">
+          Consultez les décisions et délibérations concernant les demandes
+          d'autorisation des garderies
+        </p>
+      </div>
+    </div>
+  </section>
+
+    <!-- Section statistiques -->
+  <section class="tw-bg-white tw-py-16">
+    <div class="tw-max-w-7xl tw-mx-auto tw-px-6">
+      <div class="tw-text-center tw-mb-12">
+        <h3 class="tw-text-2xl tw-font-bold tw-text-gray-900 tw-mb-4">
+          Statistiques des délibérations garderies 2024
+        </h3>
+      </div>
+
+      <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-4 tw-gap-8">
+        <div class="tw-text-center">
+          <div
+            class="tw-w-16 tw-h-16 tw-bg-green-100 tw-rounded-lg tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-4"
+          >
+            <i class="ri-check-circle-line tw-text-2xl tw-text-green-600"></i>
           </div>
-    <div class="modal-body" >
-        <div class="row mb-3" >
-      
-            <div class=" form-goup col-12 mb-3">
-                <label for="">Saisissez le code de votre dossier <span class="text-danger ml-2">(*)</span></label>
-                <input type="text" name="code" class="form-control" ngModel required>
+          <div class="tw-text-3xl tw-font-bold tw-text-gray-900 tw-mb-2">
+            12
+          </div>
+          <p class="tw-text-gray-600">Autorisations accordées</p>
+        </div>
+
+        <div class="tw-text-center">
+          <div
+            class="tw-w-16 tw-h-16 tw-bg-yellow-100 tw-rounded-lg tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-4"
+          >
+            <i class="ri-time-line tw-text-2xl tw-text-yellow-600"></i>
+          </div>
+          <div class="tw-text-3xl tw-font-bold tw-text-gray-900 tw-mb-2">4</div>
+          <p class="tw-text-gray-600">Dossiers en étude</p>
+        </div>
+
+        <div class="tw-text-center">
+          <div
+            class="tw-w-16 tw-h-16 tw-bg-red-100 tw-rounded-lg tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-4"
+          >
+            <i class="ri-close-circle-line tw-text-2xl tw-text-red-600"></i>
+          </div>
+          <div class="tw-text-3xl tw-font-bold tw-text-gray-900 tw-mb-2">3</div>
+          <p class="tw-text-gray-600">Demandes refusées</p>
+        </div>
+
+        <div class="tw-text-center">
+          <div
+            class="tw-w-16 tw-h-16 tw-bg-blue-100 tw-rounded-lg tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-4"
+          >
+            <i class="ri-refresh-line tw-text-2xl tw-text-blue-600"></i>
+          </div>
+          <div class="tw-text-3xl tw-font-bold tw-text-gray-900 tw-mb-2">8</div>
+          <p class="tw-text-gray-600">Renouvellements</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Section des délibérations -->
+  <section class="tw-py-16 tw-bg-gray-50">
+    <div class="tw-max-w-7xl tw-mx-auto tw-px-6">
+      <div class="tw-mb-12">
+        <div
+          class="tw-flex tw-items-center tw-justify-between tw-mb-8"
+        >
+          <div>
+            <h2 class="tw-text-3xl tw-font-bold tw-text-gray-900 tw-mb-4">
+              Dernières délibérations
+            </h2>
+            <p class="tw-text-gray-600">
+              Retrouvez ici toutes les décisions prises concernant les demandes
+              d'autorisation des garderies
+            </p>
+          </div>
+
+          <div class="tw-bg-white tw-rounded-lg tw-p-4 tw-shadow-sm">
+            <div class="tw-flex tw-items-center tw-space-x-4 tw-text-sm">
+              <div class="tw-flex tw-items-center tw-space-x-2">
+                <div class="tw-w-3 tw-h-3 tw-bg-green-500 tw-rounded-full"></div>
+                <span>Accordée</span>
+              </div>
+              <div class="tw-flex tw-items-center tw-space-x-2">
+                <div class="tw-w-3 tw-h-3 tw-bg-yellow-500 tw-rounded-full"></div>
+                <span>En étude</span>
+              </div>
+              <div class="tw-flex tw-items-center tw-space-x-2">
+                <div class="tw-w-3 tw-h-3 tw-bg-red-500 tw-rounded-full"></div>
+                <span>Refusée</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Liste des délibérations -->
+      <div class="tw-space-y-6">
+        <div
+          *ngFor="let deliberation of data"
+          class="tw-bg-white tw-rounded-2xl tw-shadow-sm tw-border tw-border-gray-200 tw-p-8 hover:tw-shadow-md tw-transition-shadow"
+        >
+          <div
+            class="tw-flex tw-flex-col lg:tw-flex-row lg:tw-items-start lg:tw-justify-between tw-mb-6"
+          >
+            <div class="tw-flex-1 tw-mb-4 lg:tw-mb-0">
+              <div class="tw-flex tw-items-start tw-space-x-4">
+                <div class="tw-flex-shrink-0">
+                  <div
+                    class="tw-w-12 tw-h-12 tw-bg-orange-100 tw-rounded-lg tw-flex tw-items-center tw-justify-center"
+                  >
+                    <i class="ri-building-line tw-text-orange-600 tw-text-xl"></i>
+                  </div>
+                </div>
+                <div class="tw-flex-1">
+                  <h3 class="tw-text-xl tw-font-bold tw-text-gray-900 tw-mb-2">
+                    {{ deliberation.title }}
+                  </h3>
+                  <p class="tw-text-gray-600 tw-mb-3">
+                    {{ deliberation.description }}
+                  </p>
+                  <p class="tw-text-sm tw-text-gray-500">
+                    {{ deliberation.details }}
+                  </p>
+                </div>
+              </div>
             </div>
 
+            <div class="tw-flex tw-items-center tw-space-x-4">
+              <div class="tw-text-right">
+                <p class="tw-text-sm tw-text-gray-500 tw-mb-2">
+                  Date de délibération
+                </p>
+                <p class="tw-font-medium tw-text-gray-900">
+                  {{ deliberation.date }}
+                </p>
+              </div>
+
+              <div
+                class="tw-flex tw-items-center tw-space-x-2 tw-px-4 tw-py-2 tw-rounded-full tw-text-sm tw-font-medium"
+                [ngClass]="getStatusColor(deliberation.status)"
+              >
+                <i
+                  [class]="getStatusIcon(deliberation.status) + ' tw-text-base'"
+                ></i>
+                <span>{{ deliberation.status }}</span>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="tw-flex tw-items-center tw-justify-between tw-pt-6 tw-border-t tw-border-gray-100"
+          >
+            <div class="tw-flex tw-items-center tw-space-x-4 tw-text-sm tw-text-gray-500">
+              <span>
+                Délibération #G{{ deliberation.id.toString().padStart(3, '0') }}
+              </span>
+              <span>•</span>
+              <span>MASM - Département Enfant et Adolescent</span>
+            </div>
+
+            <button
+              class="tw-flex tw-items-center tw-space-x-2 tw-text-blue-600 hover:tw-text-blue-700 tw-font-medium tw-text-sm"
+            >
+              <span>Télécharger</span>
+              <i class="ri-download-line"></i>
+            </button>
+          </div>
         </div>
-       
+      </div>
+
+      <!-- Pagination -->
+      <div class="tw-flex tw-items-center tw-justify-center tw-mt-12">
+        <div class="tw-flex tw-items-center tw-space-x-2">
+          <button
+            class="tw-px-4 tw-py-2 tw-text-gray-500 hover:tw-text-gray-700 tw-cursor-pointer"
+          >
+            <i class="ri-arrow-left-line"></i>
+          </button>
+          <button class="tw-px-4 tw-py-2 tw-bg-blue-600 tw-text-white tw-rounded-lg">
+            1
+          </button>
+          <button
+            class="tw-px-4 tw-py-2 tw-text-gray-700 hover:tw-bg-gray-100 tw-rounded-lg tw-cursor-pointer"
+          >
+            2
+          </button>
+          <button
+            class="tw-px-4 tw-py-2 tw-text-gray-700 hover:tw-bg-gray-100 tw-rounded-lg tw-cursor-pointer"
+          >
+            3
+          </button>
+          <button
+            class="tw-px-4 tw-py-2 tw-text-gray-500 hover:tw-text-gray-700 tw-cursor-pointer"
+          >
+            <i class="ri-arrow-right-line"></i>
+          </button>
+        </div>
+      </div>
     </div>
-    <div class="modal-footer">
-      <button type="submit" class="btn btn-outline-dark" [disabled]="addForm.invalid"  >Vérifier <app-loading [isVisible]="loading"></app-loading></button>
+  </section>
+
+
+
+  <!-- Section informative -->
+  <section class="tw-bg-orange-500 tw-py-16">
+    <div class="tw-max-w-4xl tw-mx-auto tw-px-6 tw-text-center">
+      <div
+        class="tw-bg-white/10 tw-backdrop-blur-sm tw-rounded-2xl tw-p-8"
+      >
+        <h3 class="tw-text-2xl tw-font-bold tw-text-white tw-mb-6">
+          Information sur les délibérations garderies
+        </h3>
+
+        <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-3 tw-gap-6 tw-text-white">
+          <div class="tw-text-center">
+            <i class="ri-calendar-line tw-text-3xl tw-mb-4"></i>
+            <h4 class="tw-font-semibold tw-mb-2">Fréquence</h4>
+            <p class="tw-text-sm tw-text-white/90">Délibérations hebdomadaires</p>
+          </div>
+
+          <div class="tw-text-center">
+            <i class="ri-time-line tw-text-3xl tw-mb-4"></i>
+            <h4 class="tw-font-semibold tw-mb-2">Délai moyen</h4>
+            <p class="tw-text-sm tw-text-white/90">10 jours ouvrables</p>
+          </div>
+
+          <div class="tw-text-center">
+            <i class="ri-shield-check-line tw-text-3xl tw-mb-4"></i>
+            <h4 class="tw-font-semibold tw-mb-2">Taux d'approbation</h4>
+            <p class="tw-text-sm tw-text-white/90">
+              75% des demandes approuvées
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
-</form>
-  </ng-template>
+  </section>
 
 
-  <ng-template #content let-offcanvas id="myCanvas">
-	<div class="offcanvas-header">
-		<h4 class="offcanvas-title">Résultat de votre dossier</h4>
-		<button type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss('Cross click')"></button>
-	</div>
-	<div class="offcanvas-body">
-        <dl class="mb-3">
-            <dt>Resultat à la session</dt>
-            <dd>
-                <span *ngIf="result?.has_agreemant" class="bg-success text-white p-1">Autorisation accordée</span>
-                <span *ngIf="!result?.has_agreemant" class="bg-danger text-white p-1">Autorisation non accordée</span>
+</ng-container>
 
-            </dd>
-        </dl>
-
-        <dl class="mb-3" *ngIf="result?.has_agreemant">
-            <dt>Accord du ministre</dt>
-            <dd>
-                <span *ngIf="result?.is_authorized" class="bg-success text-white p-1">Autorisation accordée</span>
-                <span *ngIf="!result?.is_authorized" class="bg-warning text-white p-1">Autorisation en attente </span>
-
-            </dd>
-        </dl>
-	</div>
-</ng-template>
-  

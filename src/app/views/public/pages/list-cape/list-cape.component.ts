@@ -19,6 +19,7 @@ import { LocalStorageService } from 'src/app/core/utils/local-stoarge-service';
 })
 export class ListCapeComponent implements OnInit {
 
+  Math = Math; // 👈 rend accessible `Math` dans le template
 
   buttonsPermission :any|undefined;
   structures:any[] =[]
@@ -34,6 +35,17 @@ export class ListCapeComponent implements OnInit {
   title:any
   type:string  | null  ="cape"
   service_id:any
+
+
+
+    searchTerm = '';
+  itemsPerPage = 10;
+  currentPage = 1;
+totalElements=0
+    filteredData: any[] = [];
+  totalPages = 1;
+  startIndex = 0;
+  currentItems: any[] = [];
 
   constructor(
     private reqService:RequeteService,
@@ -83,12 +95,32 @@ export class ListCapeComponent implements OnInit {
   getAll(){
     this.reqService.getListForPublic(this.service_id).subscribe((res:any)=>{
       this.data=res
+      this.applyFilters()
       
     },
     (err:any)=>{
 
     })
   }
+
+
+  generatePageNumbers(): number[] {
+  const pages: number[] = [];
+  const maxVisiblePages = 5;
+
+  let startPage = Math.max(1, this.currentPage - Math.floor(maxVisiblePages / 2));
+  let endPage = Math.min(this.totalPages, startPage + maxVisiblePages - 1);
+
+  if (endPage - startPage + 1 < maxVisiblePages) {
+    startPage = Math.max(1, endPage - maxVisiblePages + 1);
+  }
+
+  for (let i = startPage; i <= endPage; i++) {
+    pages.push(i);
+  }
+
+  return pages;
+}
 
 
 
@@ -103,6 +135,33 @@ export class ListCapeComponent implements OnInit {
   }
 
 
+
+  applyFilters() {
+    // filtrage
+    this.filteredData = this.data.filter(garderie =>
+      garderie.name.toLowerCase().includes(this.searchTerm.toLowerCase()) 
+      // ||
+      // garderie.responsable.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+      // garderie.localisation.toLowerCase().includes(this.searchTerm.toLowerCase())
+    );
+
+    this.totalElements=this.filteredData.length
+    // pagination
+    this.totalPages = Math.ceil(this.filteredData.length / this.itemsPerPage);
+    this.startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    this.currentItems = this.filteredData.slice(this.startIndex, this.startIndex + this.itemsPerPage);
+  }
+
+  handlePageChange(page: number) {
+    this.currentPage = page;
+    this.applyFilters();
+  }
+
+  handleItemsPerPageChange(items: number) {
+    this.itemsPerPage = items;
+    this.currentPage = 1;
+    this.applyFilters();
+  }
 
 
 

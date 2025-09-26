@@ -1,15 +1,12 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LayoutComponent } from './layout/layout.component';
-import { HeaderComponent } from './layout/includes/header/header.component';
-import { FooterComponent } from './layout/includes/footer/footer.component';
 import { HomeComponent } from './pages/home/home.component';
 import { PublicRoutingModule } from './public-routing.module';
 import { MenuComponent } from './layout/includes/menu/menu.component';
 import { RequestComponent } from './pages/request/request.component';
 import { IgxStepperModule } from 'igniteui-angular';
-import { FormsModule } from '@angular/forms';
-import { SharedModule } from 'src/app/shared/shared.module';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SanitizerUrlPipe } from 'src/app/core/pipes/sanitizer-url-pipe';
 import { NewRequestComponent } from './pages/request/new-request/new-request.component';
 import { UpdateRequestComponent } from './pages/request/update-request/update-request.component';
@@ -26,13 +23,12 @@ import { BillingComponent } from './pages/billing/billing.component';
 import { BillingDetailComponent } from './pages/billing-detail/billing-detail.component';
 import { ActualityDetailsComponent } from './pages/actuality-details/actuality-details.component';
 import { GoogleMapsModule } from '@angular/google-maps'
+import { SharedModule } from '../shared/shared.module';
 
 
 @NgModule({
   declarations: [
     LayoutComponent,
-    HeaderComponent,
-    FooterComponent,
     HomeComponent,
     MenuComponent,
     RequestComponent,
@@ -56,8 +52,9 @@ import { GoogleMapsModule } from '@angular/google-maps'
     PublicRoutingModule,
     IgxStepperModule,
     FormsModule,
-    SharedModule,
-    GoogleMapsModule
+    GoogleMapsModule,
+    ReactiveFormsModule,
+    SharedModule
   ]
 })
 export class PublicModule { }

@@ -1,122 +1,321 @@
-<section class="main-slider list">
-    <div class="welcome_section">
-        <h1 class="welcome_title" *ngIf="type == 'cape'">
-            Liste des CAPE autorisés
-                </h1>
-        <h1 class="welcome_title" *ngIf="type == 'garderie'">
-            Liste des GARDERIES autorisées
-                </h1>
-       
-    </div>
-  </section>
-  <div class="body_content">
-    <div class="container">
-      <div class="row clearfix">
-        <div class="content-side col-lg-12 col-md-12 col-sm-12">
-            
-            <div class="row process_agreement p-lg-5 p-md-3 p-3">
-              <div class="col-lg-12 list_step">
-                <div class="project-detail">
-                    <div class="inner-box">
-                        <p >{{data.length}} élément(s)</p>
-                        <p >0 élément(s)</p>
-                        <div class="table-responsive">
-                        <table *ngIf="type == 'cape'" class="table" >
-                            <thead class="">
-                                <tr>
-                                    <th>#</th>
-                                    <th >Dénomination  </th>
-                                    <th >Type CAPE  </th>
-                                    <th >Couverture</th>
-                                    <th >Localisation  </th>
-                                    <th >Adresse  </th>
-                        
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let d of data; let i=index ">
-                                    <td>
-                                        <div class="form-check mb-2">
-                                                    {{i+1}}                                        
-                                        </div>
-                                    </td>
-                                    <td>{{d.name}}</td>
-                                    <td>{{d.type_cape?.name}}</td>
-                                    <td><p>{{d.district?.cps?.name}}</p></td>
-                                    <td>
-                                        <small>
-                                            <ul>
-                                                <li><strong>Département  : </strong> {{d.district?.municipality?.department?.name}}</li>
-                                                <li><strong>Commune  : </strong> {{d.district?.municipality?.name}}</li>
-                                                <li><strong>Arrondissement  : </strong> {{d.district?.name}}</li>
-                                                <li><strong>Quartier de ville / Village  : </strong> {{d.district?.name}}</li>
-                                            </ul>
-                                        </small>
-                                    
-                                    </td>
-                                    <td>{{d.address}}</td>
-                           
-                               
-                                </tr>
-                            
-                            </tbody>
-                        </table>
-                        <table *ngIf="type == 'garderie'" class="table" >
-                            <thead class="">
-                                <tr>
-                                    <th>#</th>
-                                    <th >Dénomination  </th>
-                                    <th >Couverture</th>
-                                    <th >Localisation  </th>
-                                    <th >Adresse  </th>
-                        
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let d of data; let i=index ">
-                                    <td>
-                                        <div class="form-check mb-2">
-                                                    {{i+1}}                                        
-                                        </div>
-                                    </td>
-                                    <td>{{d.name}}</td>
-                                    <td><p>{{d.district?.cps?.name}}</p></td>
-                                    <td>
-                                        <small>
-                                            <ul>
-                                                <li><strong>Département  : </strong> {{d.district?.municipality?.department?.name}}</li>
-                                                <li><strong>Commune  : </strong> {{d.district?.municipality?.name}}</li>
-                                                <li><strong>Arrondissement  : </strong> {{d.district?.name}}</li>
-                                                <li><strong>Quartier de ville / Village  : </strong> {{d.district?.name}}</li>
-                                            </ul>
-                                        </small>
-                                    
-                                    </td>
-                                    <td>{{d.address}}</td>
-                           
-                               
-                                </tr>
-                            
-                            </tbody>
-                        </table>
-                        
-                        </div>
-                        <p>
-                            <b class="underline">NB:</b> Pour contacter un CAPE, veuillez vous référer au Ministère des Affaires Sociales et de 
-                            la Microfinance (MASM): 
-                            <a routerLink="/contact" routerLinkActive="active" class="link_blue">Contactez le MASM
-                                <i class="fa fa-arrow-right ml-2"></i>
-                            </a>
-                        </p>
+<ng-container *ngIf="type == 'cape'">
+<!-- Hero -->
+<section
+  class="tw-relative tw-min-h-96 tw-flex tw-items-center tw-justify-center tw-bg-cover tw-bg-center tw-pt-20"
+  style="background-image: url('https://readdy.ai/api/search-image?query=Happy%20African%20children%20playing%20together%20in%20a%20safe%20childcare%20environment%2C%20bright%20and%20welcoming%20orphanage%20setting%2C%20professional%20care%20and%20protection%20atmosphere%2C%20warm%20natural%20lighting%2C%20hope%20and%20safety%20theme&width=1920&height=600&seq=cape-hero&orientation=landscape')"
+>
+  <div class="tw-absolute tw-inset-0 tw-bg-black/40"></div>
+  <div class="tw-relative tw-z-10 tw-text-center tw-text-white">
+    <h1 class="tw-text-5xl tw-font-bold tw-mb-4">Liste des CAPE autorisés</h1>
+  </div>
+</section>
+
+<!-- Main -->
+<div class="tw-max-w-6xl tw-mx-auto tw-px-6 tw-py-12">
+  <div class="tw-bg-white tw-rounded-lg tw-shadow-lg tw-p-8">
+    <!-- Stats + Search -->
+    <div class="tw-flex tw-justify-between tw-items-center tw-mb-8">
+      <div class="tw-text-sm tw-text-gray-600">
+        <p>{{ data.length }} élément(s)</p>
+      </div>
+
+      <div class="tw-flex tw-items-center tw-space-x-4">
+        <div class="tw-flex tw-items-center tw-space-x-2">
+          <label class="tw-text-sm tw-text-gray-600">Afficher</label>
+          <select
+            [ngModel]="itemsPerPage"
+            (ngModelChange)="handleItemsPerPageChange($event)"
+            class="tw-border tw-border-gray-300 tw-rounded tw-px-3 tw-py-1 tw-text-sm tw-pr-8"
+          >
+            <option [ngValue]="10">10</option>
+            <option [ngValue]="25">25</option>
+            <option [ngValue]="50">50</option>
+            <option [ngValue]="100">100</option>
+          </select>
+          <span class="tw-text-sm tw-text-gray-600">éléments</span>
         </div>
-                  </div>
-                
-              </div>
-              
-            </div>
-            
+
+        <div class="tw-flex tw-items-center tw-space-x-2">
+          <label class="tw-text-sm tw-text-gray-600">Rechercher :</label>
+          <input
+            type="text"
+            [(ngModel)]="searchTerm"
+            (ngModelChange)="handlePageChange(1)"
+            class="tw-border tw-border-gray-300 tw-rounded tw-px-3 tw-py-1 tw-text-sm tw-w-48"
+            placeholder="Rechercher..."
+          />
         </div>
       </div>
     </div>
+
+    <!-- Table -->
+    <div class="tw-overflow-x-auto">
+      <table class="tw-w-full tw-border-collapse">
+        <thead>
+          <tr class="tw-bg-gray-50">
+            <th class="tw-border tw-border-gray-300 tw-px-4 tw-py-3 tw-text-left tw-text-sm tw-font-medium tw-text-gray-700 tw-w-16">#</th>
+            <th class="tw-border tw-border-gray-300 tw-px-4 tw-py-3 tw-text-left tw-text-sm tw-font-medium tw-text-gray-700">Dénomination</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let cape of currentItems; let i = index" class="tw-hover:bg-gray-50">
+            <td class="tw-border tw-border-gray-300 tw-px-4 tw-py-3 tw-text-sm tw-text-center">
+              <div class="tw-w-4 tw-h-4 tw-rounded-full tw-bg-blue-500 tw-flex tw-items-center tw-justify-center tw-text-white tw-text-xs tw-mx-auto">
+                {{ startIndex + i + 1 }}
+              </div>
+            </td>
+            <td class="tw-border tw-border-gray-300 tw-px-4 tw-py-3 tw-text-sm tw-text-gray-900">
+              {{ cape.name }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination -->
+    <div class="tw-flex tw-justify-between tw-items-center tw-mt-8">
+      <div class="tw-text-sm tw-text-gray-600">
+        Affichage de l'élément 1 à {{ Math.min(itemsPerPage, totalElements) }} sur {{ totalElements }}
+      </div>
+
+      <div class="tw-flex tw-items-center tw-space-x-2">
+        <button
+          (click)="handlePageChange(Math.max(1, currentPage - 1))"
+          [disabled]="currentPage === 1"
+          class="tw-px-3 tw-py-2 tw-text-sm tw-border tw-border-gray-300 tw-rounded tw-hover:bg-gray-50 tw-disabled:opacity-50"
+        >
+          « précédent
+        </button>
+
+        <button
+          *ngFor="let pageNum of generatePageNumbers()"
+          (click)="handlePageChange(pageNum)"
+          [ngClass]="currentPage === pageNum ? 'tw-bg-blue-600 tw-text-white tw-border-blue-600' : 'tw-border-gray-300 tw-hover:bg-gray-50'"
+          class="tw-px-3 tw-py-2 tw-text-sm tw-border tw-rounded"
+        >
+          {{ pageNum }}
+        </button>
+
+        <button
+          (click)="handlePageChange(Math.min(totalPages, currentPage + 1))"
+          [disabled]="currentPage === totalPages"
+          class="tw-px-3 tw-py-2 tw-text-sm tw-border tw-border-gray-300 tw-rounded tw-hover:bg-gray-50 tw-disabled:opacity-50"
+        >
+          Suivant »
+        </button>
+      </div>
+    </div>
+
+    <!-- Contact -->
+    <div class="tw-mt-12 tw-p-6 tw-bg-blue-50 tw-rounded-lg">
+      <p class="tw-text-sm tw-text-gray-700 tw-mb-2">
+        <strong>NB:</strong> Pour contacter un CAPE, veuillez vous référer au MASM :
+      </p>
+      <a routerLink="/information" class="tw-text-blue-600 tw-hover:underline tw-text-sm tw-font-medium">
+        Contactez le MASM →
+      </a>
+    </div>
   </div>
-  
+</div>
+
+</ng-container>
+<ng-container *ngIf="type == 'garderie'">
+
+  <!-- Hero Section -->
+  <section
+    class="tw-relative tw-h-96 tw-bg-cover tw-bg-center tw-bg-no-repeat tw-flex tw-items-center tw-justify-center"
+    [ngStyle]="{
+      'background-image':
+        'linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(https://readdy.ai/api/search-image?query=Happy%20children%20playing%20in%20a%20safe%20nursery%20environment%20with%20toys%20and%20caring%20teachers%2C%20bright%20and%20welcoming%20childcare%20center%20interior%20with%20colorful%20educational%20materials%20and%20secure%20playground%20area%2C%20professional%20daycare%20facility%20with%20modern%20safety%20standards%20and%20child-friendly%20design%20elements&width=1200&height=400&seq=garderies-hero&orientation=landscape)'
+    }"
+  >
+    <div class="tw-text-center tw-text-white tw-z-10">
+      <h1 class="tw-text-4xl md:tw-text-5xl tw-font-bold tw-mb-4">
+        Liste des Garderies autorisées
+      </h1>
+      <p class="tw-text-xl md:tw-text-2xl tw-opacity-90">
+        Structures agréées pour l'accueil des enfants
+      </p>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <section class="tw-py-16 tw-px-6">
+    <div class="tw-max-w-7xl tw-mx-auto">
+      <!-- Search and Filter Section -->
+      <div class="tw-bg-gray-50 tw-rounded-lg tw-p-6 tw-mb-8">
+        <div
+          class="tw-flex tw-flex-col md:tw-flex-row md:tw-items-center md:tw-justify-between tw-gap-4"
+        >
+          <div class="tw-flex tw-items-center tw-space-x-4">
+            <span class="tw-text-gray-700 tw-font-medium"
+              >{{ filteredData.length }} élément(s)</span
+            >
+
+            <div class="tw-flex tw-items-center tw-space-x-2">
+              <label class="tw-text-gray-600">Afficher</label>
+              <select
+                [(ngModel)]="itemsPerPage"
+                (change)="handleItemsPerPageChange(itemsPerPage)"
+                class="tw-border tw-border-gray-300 tw-rounded tw-px-3 tw-py-1 tw-text-sm"
+              >
+                <option [value]="10">10</option>
+                <option [value]="25">25</option>
+                <option [value]="50">50</option>
+                <option [value]="100">100</option>
+              </select>
+              <span class="tw-text-gray-600">éléments</span>
+            </div>
+          </div>
+
+          <div class="tw-flex tw-items-center tw-space-x-2">
+            <label class="tw-text-gray-600">Rechercher :</label>
+            <input
+              type="text"
+              [(ngModel)]="searchTerm"
+              (input)="applyFilters()"
+              class="tw-border tw-border-gray-300 tw-rounded tw-px-3 tw-py-2 tw-text-sm tw-w-64"
+              placeholder="Nom de la garderie..."
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div
+        class="tw-bg-white tw-rounded-lg tw-shadow-sm tw-border tw-border-gray-200 tw-overflow-hidden"
+      >
+        <div class="tw-overflow-x-auto">
+          <table class="tw-w-full">
+            <thead class="tw-bg-gray-50">
+              <tr>
+                <th class="tw-px-6 tw-py-4 tw-text-left tw-text-xs tw-font-medium tw-text-gray-500 tw-uppercase tw-tracking-wider tw-w-16">
+                  #
+                </th>
+                <th class="tw-px-6 tw-py-4 tw-text-left tw-text-xs tw-font-medium tw-text-gray-500 tw-uppercase tw-tracking-wider">
+                  Dénomination
+                </th>
+                <th class="tw-px-6 tw-py-4 tw-text-left tw-text-xs tw-font-medium tw-text-gray-500 tw-uppercase tw-tracking-wider">
+                  Responsable
+                </th>
+                <th class="tw-px-6 tw-py-4 tw-text-left tw-text-xs tw-font-medium tw-text-gray-500 tw-uppercase tw-tracking-wider">
+                  Localisation
+                </th>
+                <th class="tw-px-6 tw-py-4 tw-text-left tw-text-xs tw-font-medium tw-text-gray-500 tw-uppercase tw-tracking-wider">
+                  Contact
+                </th>
+              </tr>
+            </thead>
+            <tbody class="tw-bg-white tw-divide-y tw-divide-gray-200">
+              <tr
+                *ngFor="let garderie of currentItems; let i = index"
+                class="hover:tw-bg-gray-50"
+              >
+                <td
+                  class="tw-px-6 tw-py-4 tw-whitespace-nowrap tw-text-sm tw-text-gray-900"
+                >
+                  {{ startIndex + i + 1 }}
+                </td>
+                <td
+                  class="tw-px-6 tw-py-4 tw-whitespace-nowrap tw-text-sm tw-font-medium tw-text-gray-900"
+                >
+                  {{ garderie.name }}
+                </td>
+                <td
+                  class="tw-px-6 tw-py-4 tw-whitespace-nowrap tw-text-sm tw-text-gray-600"
+                >
+                  {{ garderie.name_pomoter }}
+                </td>
+                <td
+                  class="tw-px-6 tw-py-4 tw-whitespace-nowrap tw-text-sm tw-text-gray-600"
+                >
+                  {{ garderie.district?.name }};  {{ garderie.district?.municipality?.name }};  {{ garderie.district?.municipality?.departement?.name }}
+                </td>
+                <td
+                  class="tw-px-6 tw-py-4 tw-whitespace-nowrap tw-text-sm tw-text-gray-600"
+                >
+                  {{ garderie.phone_pomoter }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Pagination -->
+      <div class="tw-flex tw-items-center tw-justify-between tw-mt-8">
+        <div class="tw-text-sm tw-text-gray-600">
+          Affichage de l'élément {{ startIndex + 1 }} à
+          {{ Math.min(startIndex + itemsPerPage, filteredData.length) }} sur
+          {{ filteredData.length }}
+        </div>
+
+        <div class="tw-flex tw-items-center tw-space-x-2">
+          <button
+            (click)="handlePageChange(Math.max(1, currentPage - 1))"
+            [disabled]="currentPage === 1"
+            class="tw-px-4 tw-py-2 tw-text-sm tw-border tw-border-gray-300 tw-rounded tw-bg-white hover:tw-bg-gray-50 disabled:tw-opacity-50 disabled:tw-cursor-not-allowed"
+          >
+            Précédent
+          </button>
+
+          <button
+            *ngFor="let page of generatePageNumbers()"
+            (click)="handlePageChange(page)"
+            [ngClass]="
+              currentPage === page
+                ? 'tw-bg-blue-600 tw-text-white tw-border-blue-600'
+                : 'tw-bg-white tw-text-gray-700 tw-border-gray-300 hover:tw-bg-gray-50'
+            "
+            class="tw-px-3 tw-py-2 tw-text-sm tw-border tw-rounded"
+          >
+            {{ page }}
+          </button>
+
+          <span *ngIf="totalPages > 5" class="tw-text-gray-500">...</span>
+
+          <button
+            *ngIf="totalPages > 5"
+            (click)="handlePageChange(totalPages)"
+            [ngClass]="
+              currentPage === totalPages
+                ? 'tw-bg-blue-600 tw-text-white tw-border-blue-600'
+                : 'tw-bg-white tw-text-gray-700 tw-border-gray-300 hover:tw-bg-gray-50'
+            "
+            class="tw-px-3 tw-py-2 tw-text-sm tw-border tw-rounded"
+          >
+            {{ totalPages }}
+          </button>
+
+          <button
+            (click)="handlePageChange(Math.min(totalPages, currentPage + 1))"
+            [disabled]="currentPage === totalPages"
+            class="tw-px-4 tw-py-2 tw-text-sm tw-border tw-border-gray-300 tw-rounded tw-bg-white hover:tw-bg-gray-50 disabled:tw-opacity-50 disabled:tw-cursor-not-allowed"
+          >
+            Suivant
+          </button>
+        </div>
+      </div>
+
+      <!-- Contact Information -->
+      <div
+        class="tw-mt-16 tw-bg-blue-50 tw-rounded-lg tw-p-8 tw-text-center"
+      >
+        <h3 class="tw-text-xl tw-font-semibold tw-text-gray-800 tw-mb-4">
+          Besoin d'informations ?
+        </h3>
+        <p class="tw-text-gray-600 tw-mb-4">
+          <strong>NB:</strong> Pour contacter une garderie, veuillez vous référer
+          au Ministère des Affaires Sociales et de la Microfinance (MASM):
+        </p>
+        <a
+          href="mailto:masm.dea@gouv.bj"
+          class="tw-inline-flex tw-items-center tw-px-6 tw-py-3 tw-bg-blue-600 tw-text-white tw-rounded-lg hover:tw-bg-blue-700 tw-transition-colors tw-cursor-pointer"
+        >
+          <i class="ri-mail-line tw-mr-2"></i>
+          Contactez le MASM
+        </a>
+      </div>
+    </div>
+  </section>
+</ng-container>

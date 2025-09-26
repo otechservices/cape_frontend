@@ -1,10 +1,17 @@
-/** @type {import('tailwindcss').Config} */
-module.exports = {
+import type { Config } from 'tailwindcss'
+
+const config: Config = {
+   prefix: 'tw-',
   content: [
-    "./src/**/*.{html,ts}"
+    "./src/**/*.{html,ts}",
+    "./node_modules/primeng/**/*.js"
   ],
+  darkMode: 'class',
   theme: {
-    extend: {},
+    extend: {
+    },
   },
   plugins: [],
 }
+
+export default config

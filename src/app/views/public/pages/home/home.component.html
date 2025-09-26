@@ -1,262 +1,241 @@
-<section class="main-slider home">
-  <div class="welcome_section">
-      <h1 class="welcome_title">
-        Plateforme de gestion des Structures  de Protection de l’Enfant
-        <br>
-        (CAPE et GARDERIES)
-      </h1>
-     
+<section 
+  class="tw-relative tw-min-h-screen tw-flex tw-py-20 tw-items-center tw-justify-center tw-bg-cover tw-bg-center"
+  [ngStyle]="{
+    'background-image': 'url(https://readdy.ai/api/search-image?query=Professional%20African%20government%20office%20building%20with%20modern%20architecture%2C%20official%20ministry%20environment%2C%20bright%20daylight%2C%20clean%20professional%20atmosphere%2C%20welcoming%20entrance%20for%20public%20services%20and%20administration&width=1920&height=1080&seq=hero-government-bg&orientation=landscape)'
+  }"
+>
+  <div class="tw-absolute tw-inset-0 tw-bg-black/40"></div>
+
+  <div class="tw-relative tw-z-10 tw-text-center tw-px-6  tw-max-w-6xl tw-mx-auto">
+    <h1 class="tw-text-4xl md:tw-text-6xl tw-font-bold tw-text-white tw-mb-8 tw-leading-tight">
+      Plateforme d'autorisation d'ouverture des structures d'accueil de la petite enfance
+    </h1>
+
+    <p class="tw-text-xl md:tw-text-2xl tw-text-white/90 tw-mb-12 tw-max-w-4xl tw-mx-auto">
+      Bienvenue sur la plateforme officielle pour les demandes d'autorisation d'ouverture des garderies et CAPE au Bénin
+    </p>
+
+    <!-- Cartes -->
+    <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 lg:tw-grid-cols-4 tw-gap-6 tw-max-w-5xl tw-mx-auto">
+      
+      <!-- Inscription Garderie -->
+      <div class="tw-bg-white/95 tw-backdrop-blur-sm tw-rounded-2xl tw-p-6 tw-shadow-xl hover:tw-shadow-2xl tw-transition-all tw-duration-300 group">
+        <div class="tw-w-16 tw-h-16 tw-bg-blue-100 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-4 group-hover:tw-bg-blue-200 tw-transition-colors">
+          <i class="ri-building-line tw-text-2xl tw-text-blue-600"></i>
+        </div>
+        <h3 class="tw-text-lg tw-font-bold tw-text-gray-900 tw-mb-3">Inscription Garderie</h3>
+        <p class="tw-text-sm tw-text-gray-600 tw-mb-4">Demandez l'autorisation d'ouverture de votre garderie</p>
+        <button
+          (click)="goTo('/inscription-garderie')"
+          class="tw-w-full tw-bg-blue-600 hover:tw-bg-blue-700 tw-text-white tw-py-3 tw-rounded-lg tw-font-medium tw-transition-colors tw-cursor-pointer tw-whitespace-nowrap"
+        >
+          Commencer
+        </button>
+      </div>
+
+      <!-- Inscription CAPE -->
+      <div class="tw-bg-white/95 tw-backdrop-blur-sm tw-rounded-2xl tw-p-6 tw-shadow-xl hover:tw-shadow-2xl tw-transition-all tw-duration-300 group">
+        <div class="tw-w-16 tw-h-16 tw-bg-green-100 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-4 group-hover:tw-bg-green-200 tw-transition-colors">
+          <i class="ri-shield-user-line tw-text-2xl tw-text-green-600"></i>
+        </div>
+        <h3 class="tw-text-lg tw-font-bold tw-text-gray-900 tw-mb-3">Inscription CAPE</h3>
+        <p class="tw-text-sm tw-text-gray-600 tw-mb-4">Obtenez votre autorisation CAPE facilement</p>
+        <button
+          (click)="goTo('/inscription-cape')"
+          class="tw-w-full tw-bg-green-600 hover:tw-bg-green-700 tw-text-white tw-py-3 tw-rounded-lg tw-font-medium tw-transition-colors tw-cursor-pointer tw-whitespace-nowrap"
+        >
+          Commencer
+        </button>
+      </div>
+
+      <!-- Suivi de dossier -->
+      <div class="tw-bg-white/95 tw-backdrop-blur-sm tw-rounded-2xl tw-p-6 tw-shadow-xl hover:tw-shadow-2xl tw-transition-all tw-duration-300 group">
+        <div class="tw-w-16 tw-h-16 tw-bg-orange-100 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-4 group-hover:tw-bg-orange-200 tw-transition-colors">
+          <i class="ri-file-search-line tw-text-2xl tw-text-orange-600"></i>
+        </div>
+        <h3 class="tw-text-lg tw-font-bold tw-text-gray-900 tw-mb-3">Suivi de dossier</h3>
+        <p class="tw-text-sm tw-text-gray-600 tw-mb-4">Consultez l'état d'avancement de votre dossier</p>
+        <button
+          (click)="scrollTo('ticket-support')"
+          class="tw-w-full tw-bg-orange-600 hover:tw-bg-orange-700 tw-text-white tw-py-3 tw-rounded-lg tw-font-medium tw-transition-colors tw-cursor-pointer tw-whitespace-nowrap"
+        >
+          Suivre
+        </button>
+      </div>
+
+      <!-- Assistance -->
+      <div class="tw-bg-white/95 tw-backdrop-blur-sm tw-rounded-2xl tw-p-6 tw-shadow-xl hover:tw-shadow-2xl tw-transition-all tw-duration-300 group">
+        <div class="tw-w-16 tw-h-16 tw-bg-purple-100 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-4 group-hover:tw-bg-purple-200 tw-transition-colors">
+          <i class="ri-customer-service-2-line tw-text-2xl tw-text-purple-600"></i>
+        </div>
+        <h3 class="tw-text-lg tw-font-bold tw-text-gray-900 tw-mb-3">Assistance</h3>
+        <p class="tw-text-sm tw-text-gray-600 tw-mb-4">Obtenez de l'aide pour vos démarches</p>
+        <button
+          (click)="scrollTo('ticket-support')"
+          class="tw-w-full tw-bg-purple-600 hover:tw-bg-purple-700 tw-text-white tw-py-3 tw-rounded-lg tw-font-medium tw-transition-colors tw-cursor-pointer tw-whitespace-nowrap"
+        >
+          Contacter
+        </button>
+      </div>
+    </div>
+
+    <!-- Section informative -->
+    <div class="tw-mt-12 tw-bg-white/10 tw-backdrop-blur-sm tw-rounded-xl tw-p-6 tw-max-w-4xl tw-mx-auto">
+      <div class="tw-flex tw-items-center tw-justify-center tw-mb-4">
+        <i class="ri-information-line tw-text-3xl tw-text-white tw-mr-3"></i>
+        <h2 class="tw-text-xl tw-font-semibold tw-text-white">Informations importantes</h2>
+      </div>
+      <p class="tw-text-white/90 tw-text-center">
+        Toutes les demandes sont traitées selon les réglementations en vigueur. 
+        Pour toute question, n'hésitez pas à nous contacter via notre service d'assistance.
+      </p>
+    </div>
   </div>
 </section>
-<div class="body_content home_page">
-  <div class="container">
-
-    <div class="row">
-      <div class="col-lg-12 col-md-12 col-sm-12">
-        <div class="home_main_button">
-            <!-- <a (click)="scroll(pj)" class="btn_view_pieces">
-              <i class="fa fa-list-check"></i>
-              Pièces à fournir
-            </a> -->
-            <a routerLink="/details/cape" class="btn_home_register">
-              <i class="fa fa-building round-2"></i>
-              Inscrire mon CAPE
-            </a>
-            <a routerLink="/details/garderie" class="btn_home_register2">
-              <i class="fa fa-child round-3"></i>
-              Inscrire ma garderie
-            </a>
-          </div>
-      </div>
+<section class="tw-py-16 tw-px-6 tw-bg-gray-50">
+  <div class="tw-max-w-6xl tw-mx-auto">
+    
+    <!-- Titre -->
+    <div class="tw-flex tw-items-center tw-mb-8">
+      <i class="ri-news-line tw-text-2xl tw-text-orange-500 tw-mr-3"></i>
+      <h2 class="tw-text-2xl tw-font-bold tw-text-gray-900">
+        ACTUALITÉS SUR LES CAPE ET GARDERIES
+      </h2>
     </div>
-    
-    
 
-    <div class="row clearfix">
-      <div class="content-side col-lg-12 col-md-12 col-sm-12">
-        <div class="row ministre-mot">
-          <!--div class="col-lg-3 col-md-5 image">
-            <img src="assets/template2/images/veronique-tognifode-masm.jpg" width="" height="" alt="Véronique Tognifode">
-            <h3>Professeur V. T.</h3>
-            <h4>Ministre des Affaires Sociales <br>et de la Microfinance</h4>
-          </!--div-->
-          <div class="col-12 texte">
-            <h2>
-              <i class="fa fa-pen-nib"></i>
-              Actualités sur les CAPE et Garderies
-            </h2>
-            <div class="row">
-              <div class="col-12 col-md-4" *ngFor="let d of data">
-                <div class="card mb-3 shadow-none p-3 bg-body-tertiary rounded">
-                  <img [src]="getLink(d.short_photo)" class="card-img-top" alt="...">
-                  <div class="card-body">
-                    <h5 class="card-title"><a href="/actuality-details/{{d.id}}">{{d.title}}</a></h5>
-                    <p class="card-text">{{d.resume}}</p>
-                    <p class="card-text"><small class="text-body-secondary">{{d.created_at | date:"dd-mm-yyyy"}}</small></p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!--p>
-              « Depuis 2012 des normes et standards sont fixés sur la protection des enfants. 
-              En dépit des sensibilisations et renforcement de capacités, certains CAPE ne sont 
-              pas aux normes et plusieurs enfants vivent dans des conditions qui ne favorisent pas 
-              leur développement harmonieux. Face à ce constat, il est de bon ton 
-              que vous mettez de l’ordre dans ce secteur d’activité pour le bien-être de ses innocents.
-              »
-            </!--p-->
+    <!-- Liste des actualités -->
+    <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 lg:tw-grid-cols-3 tw-gap-6">
+      <article 
+        *ngFor="let item of newsItems"
+        class="tw-bg-white tw-rounded-lg tw-shadow-sm tw-overflow-hidden hover:tw-shadow-md tw-transition-shadow"
+      >
+        <!-- Image + Catégorie -->
+        <div class="tw-relative">
+          <img 
+            [src]="item.image" 
+            [alt]="item.title"
+            class="tw-w-full tw-h-48 tw-object-cover tw-object-top"
+          />
+          <div class="tw-absolute tw-top-4 tw-left-4">
+            <span 
+              class="tw-px-3 tw-py-1 tw-rounded-full tw-text-xs tw-font-medium"
+              [ngClass]="getCategoryColor(item.category)"
+            >
+              {{ item.category }}
+            </span>
           </div>
         </div>
-    
-        
-          <div class="row separator"></div>
-          <div class=" util-links">
-            <h2 class="util-links-title">
-              <i class="fa fa-pen-nib"></i>
-              Documentation</h2>
-            <div class="row">
-              <div class="col-12 col-sm-6 col-md-6">
-                <div class="inner-column decret_upload mb-3">
-                  <div class="opening">
-                    <div class="file_upload_header">
-                      <i class="fa fa-file-pdf"></i>
-                      <h3>
-                        Décret fixant les modalités de création des CAPE
-                      </h3>
-                    </div>
-                    <div class="button_upload">
-                      <button class="btn btn-red-outline" (click)="download(1)">
-                      <i class="fa fa-download"></i>
-                      Télécharger le décret</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-12 col-sm-6 col-md-6">
-                <div class="inner-column decret_upload mb-3">
-                  <div class="opening">
-                    <div class="file_upload_header">
-                      <i class="fa fa-file-pdf"></i>
-                      <h3>
-                        Décret fixant les modalités de création des GARDERIES
-                      </h3>
-                    </div>
-                    <div class="button_upload">
-                      <button class="btn btn-red-outline" (click)="download(2)">
-                      <i class="fa fa-download"></i>
-                      Télécharger le décret</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-12 col-sm-6 col-md-6">
-                <div class="inner-column decret_upload mb-3">
-                  <div class="opening">
-                    <div class="file_upload_header2">
-                      <i class="fa fa-file-word"></i>
-                      <h3>
-                        Le modèle consentement pour la collecte de vos données personnelles
-                      </h3>
-                    </div>
-                    <div class="button_upload">
-                      <button class="btn btn-red-outline" (click)="download(3)">
-                      <i class="fa fa-download"></i>
-                      Télécharger le modèle</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-12 col-sm-6 col-md-6">
-                <div class="inner-column decret_upload mb-3">
-                  <div class="opening">
-                    <div class="file_upload_header">
-                      <i class="fa fa-file-pdf"></i>
-                      <h3>
-                        Cahier de charge de la GARDERIE
-                      </h3>
-                    </div>
-                    <div class="button_upload">
-                      <button class="btn btn-red-outline" (click)="download(4)">
-                      <i class="fa fa-download"></i>
-                      Télécharger le cahier des charges des promoteurs</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-12 col-sm-6 col-md-6">
-                <div class="inner-column decret_upload mb-3">
-                  <div class="opening">
-                    <div class="file_upload_header">
-                      <i class="fa fa-file-pdf"></i>
-                      <h3>
-                        Le guide d'inscription
-                      </h3>
-                    </div>
-                    <div class="button_upload">
-                      <button class="btn btn-red-outline" (click)="download(5)">
-                      <i class="fa fa-download"></i>
-                      Télécharger le guide</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            
-              <div class="col-12 col-sm-6 col-md-6">
-                <div class="inner-column decret_upload mb-3">
-                  <div class="opening">
-                    <div class="file_upload_header">
-                      <i class="fa fa-file-pdf"></i>
-                      <h3>
-                        Le code de l'enfant
-                      </h3>
-                    </div>
-                    <div class="button_upload">
-                      <button class="btn btn-red-outline" (click)="download(6)">
-                      <i class="fa fa-download"></i>
-                      Télécharger le code de l'enfant</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-             
-              
-            </div>
-        </div>
-        
-          <div class="row separator"></div>
 
-
-          <div class="row util-links">
-            <div class="col-md-10 col-sm-12 offset-md-1 offset-sm-0 rounded-lg bg-info p-lg-5">
-              <h2 class="util-links-title">Liens utiles</h2>
-              <div class="row mt-2">
-
-                <div class="col-md-6">
-                  <div class="util-link rounded-lg p-3">
-                    <a href="https://acteursprotection.social.gouv.bj/" target="_blank">
-                      <div class="row">
-                        <div class="col-md-12 col-sm-12 text-center">
-                        <img src="assets/template2/images/logo-masm-2.png" 
-                        alt="Logo MASM Bénin">
-                        </div>
-                        <div class="col-md-12 col-sm-12 mt-3 text-center">
-                        <strong>Cartographie des structures de protection</strong>
-                        </div>
-                      </div>
-                  </a>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="util-link rounded-lg p-3">
-                    <a href="https://social.gouv.bj/" target="_blank">
-                      <div class="row">
-                        <div class="col-md-12 col-sm-12 text-center">
-                        <img src="assets/template2/images/logo-masm-2.png" 
-                        alt="Logo MASM Bénin">
-                        </div>
-                        <div class="col-md-12 col-sm-12 mt-3 text-center">
-                        <strong>Site web du Ministère des Affaires Sociales et de la Microfinance (MASM)</strong>
-                        </div>
-                      </div>
-                  </a>
-                  </div>
-                </div>
-              
-                <div class="col-md-6">
-                  <div class="util-link rounded-lg p-3">
-                    <a href="https://sgg.gouv.bj/" target="_blank">
-                      <div class="row">
-                        <div class="col-md-12 col-sm-12 text-center">
-                        <img src="assets/template2/images/sgg-gouv-bj.png" alt="Logo Gouvernement de la République du Bénin" style="width: 75%">
-                        </div>
-                        <div class="col-md-12 col-sm-12 mt-3 text-center">
-                        <strong>Secrétariat Général du <br>Gouvernement</strong>
-                        </div>
-                      </div>
-                  </a>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="util-link rounded-lg p-3">
-                    <a href="https://bibliotheque.social.gouv.bj/pe" target="_blank">
-                      <div class="row">
-                        <div class="col-md-12 col-sm-12 text-center">
-                        <img src="assets/template2/images/sgg-gouv-bj.png" alt="Logo Gouvernement de la République du Bénin" style="width: 75%">
-                        </div>
-                        <div class="col-md-12 col-sm-12 mt-3 text-center">
-                        <strong>Bibliothèque numérique du<br>MASM</strong>
-                        </div>
-                      </div>
-                  </a>
-                  </div>
-                </div>
-             
-              </div>
-            </div>
+        <!-- Contenu -->
+        <div class="tw-p-6">
+          <div class="tw-flex tw-items-center tw-text-sm tw-text-gray-500 tw-mb-3">
+            <i class="ri-calendar-line tw-mr-2"></i>
+            {{ item.date }}
           </div>
-           
-          
-      </div>
+
+          <h3 class="tw-text-lg tw-font-semibold tw-text-gray-900 tw-mb-3 tw-line-clamp-2">
+            {{ item.title }}
+          </h3>
+
+          <p class="tw-text-gray-600 tw-text-sm tw-line-clamp-3 tw-mb-4">
+            {{ item.excerpt }}
+          </p>
+
+          <a 
+            [routerLink]="['/actualites', item.id]"
+            class="tw-flex tw-items-center tw-text-green-600 hover:tw-text-green-700 tw-font-medium tw-text-sm tw-whitespace-nowrap"
+          >
+            Lire la suite
+            <i class="ri-arrow-right-line tw-ml-2"></i>
+          </a>
+        </div>
+      </article>
+    </div>
+
+    <!-- Bouton voir toutes -->
+    <div class="tw-text-center tw-mt-12">
+      <a 
+        routerLink="/actualites"
+        class="tw-bg-green-600 tw-text-white tw-px-8 tw-py-3 tw-rounded-lg hover:tw-bg-green-700 tw-transition-colors tw-font-medium tw-whitespace-nowrap"
+      >
+        Voir toutes les actualités
+      </a>
     </div>
   </div>
-</div>
+</section>
+<section class="tw-py-16 tw-px-6 tw-bg-white">
+  <div class="tw-max-w-6xl tw-mx-auto">
+    
+    <!-- Titre -->
+    <div class="tw-flex tw-items-center tw-mb-8">
+      <i class="ri-folder-line tw-text-2xl tw-text-orange-500 tw-mr-3"></i>
+      <h2 class="tw-text-2xl tw-font-bold tw-text-gray-900">DOCUMENTATION</h2>
+    </div>
+    
+    <!-- Liste des documents -->
+    <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-gap-6">
+      <div 
+        *ngFor="let doc of documents; let i = index" 
+        class="tw-bg-gray-50 tw-rounded-lg tw-p-6 hover:tw-shadow-md tw-transition-shadow tw-duration-200"
+      >
+        <div class="tw-flex tw-items-start tw-space-x-4">
+          
+          <!-- Icône colorée -->
+          <div 
+            class="tw-w-8 tw-h-8 tw-rounded tw-flex tw-items-center tw-justify-center tw-flex-shrink-0"
+            [ngClass]="doc.color"
+          >
+            <i class="{{ doc.icon }} tw-text-white tw-text-sm"></i>
+          </div>
+          
+          <!-- Détails du document -->
+          <div class="tw-flex-1">
+            <h3 class="tw-font-medium tw-text-gray-900 tw-mb-2">{{ doc.title }}</h3>
+            <button 
+              class="tw-text-red-600 hover:tw-text-red-700 tw-text-sm tw-font-medium tw-flex tw-items-center tw-space-x-1 tw-cursor-pointer tw-whitespace-nowrap"
+            >
+              <i class="ri-download-line"></i>
+              <span>{{ doc.type }}</span>
+            </button>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+    
+  </div>
+</section>
+
+<section class="tw-py-16 tw-px-6 tw-bg-indigo-50">
+  <div class="tw-max-w-6xl tw-mx-auto">
+    
+    <!-- Titre -->
+    <h2 class="tw-text-2xl tw-font-bold tw-text-gray-900 tw-text-center tw-mb-12">
+      LIENS UTILES
+    </h2>
+    
+    <!-- Grille des liens -->
+    <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-gap-8">
+      <a
+        *ngFor="let link of links; let i = index"
+        [href]="link.url"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="tw-bg-white tw-rounded-lg tw-p-6 tw-shadow-sm hover:tw-shadow-md tw-transition-shadow tw-duration-200 tw-text-center tw-cursor-pointer"
+      >
+        <!-- Logo -->
+        <div class="tw-w-20 tw-h-20 tw-mx-auto tw-mb-4 tw-bg-gray-100 tw-rounded-lg tw-flex tw-items-center tw-justify-center">
+          <img [src]="link.logo" alt="" class="tw-w-16 tw-h-16 tw-object-contain" />
+        </div>
+        
+        <!-- Titre -->
+        <h3 class="tw-font-medium tw-text-gray-900 tw-text-sm tw-leading-relaxed">
+          {{ link.title }}
+        </h3>
+      </a>
+    </div>
+    
+  </div>
+</section>
+
+

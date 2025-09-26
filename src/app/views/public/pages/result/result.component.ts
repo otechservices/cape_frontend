@@ -33,6 +33,7 @@ export class ResultComponent implements OnInit {
   user:any
   title:any
   result:any
+  type:any
 
   constructor(
     private sessionService:SessionServiceService,
@@ -50,6 +51,11 @@ export class ResultComponent implements OnInit {
 
 
   ngOnInit(): void {
+
+      this.route.paramMap.subscribe(params => {
+      this.type=this.route.snapshot.paramMap.get('type')
+
+    })
 
     this.user=this.lsService.get(GlobalName.userName)
     this.init()
@@ -109,6 +115,33 @@ export class ResultComponent implements OnInit {
     (err:any)=>{
 
     })
+  }
+
+
+   getStatusColor(status: string): string {
+    switch (status) {
+      case 'Accordée':
+        return 'bg-green-100 text-green-800';
+      case 'En étude':
+        return 'bg-yellow-100 text-yellow-800';
+      case 'Refusée':
+        return 'bg-red-100 text-red-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
+    }
+  }
+
+  getStatusIcon(status: string): string {
+    switch (status) {
+      case 'Accordée':
+        return 'ri-check-circle-line';
+      case 'En étude':
+        return 'ri-time-line';
+      case 'Refusée':
+        return 'ri-close-circle-line';
+      default:
+        return 'ri-information-line';
+    }
   }
 
 }

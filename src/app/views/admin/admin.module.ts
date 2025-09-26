@@ -12,7 +12,6 @@ import { DepartmentComponent } from './pages/department/department.component';
 import { DistrictComponent } from './pages/district/district.component';
 import { CpsComponent } from './pages/cps/cps.component';
 import { EvaluatorComponent } from './pages/evaluator/evaluator.component';
-import { SharedModule } from 'src/app/shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AccountActivationComponent } from './pages/auth/account-activation/account-activation.component';
 import { ForgetPasswordComponent } from './pages/auth/forget-password/forget-password.component';
@@ -71,6 +70,7 @@ import { TypeGarderieComponent } from './pages/type-garderie/type-garderie.compo
 import { TypeSousGarderieComponent } from './pages/type-sous-garderie/type-sous-garderie.component';
 import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
 import { ControlFileElementComponent } from './pages/control-file-element/control-file-element.component';
+import { SharedModule } from '../shared/shared.module';
 
 
 

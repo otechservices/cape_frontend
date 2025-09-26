@@ -9,6 +9,7 @@ const routes: Routes = [
   {path: '', redirectTo: `/${ConfigService.home_uri}`,pathMatch:'full'},
   { path: '', loadChildren: () => import('./views/public/public.module').then(m => m.PublicModule)},
   { path: 'admin', loadChildren: () => import('./views/admin/admin.module').then(m => m.AdminModule)},
+  { path: 'public', loadChildren: () => import('./views/public-auth/public-auth.module').then(m => m.PublicAuthModule)},
   {path: '404', component: NotFoundComponent},
   {path: '**', redirectTo: '/404'}
 ];

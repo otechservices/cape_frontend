@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { MessageService } from 'src/app/core/services/message.service';
@@ -26,13 +27,41 @@ export class ContactComponent implements OnInit {
     maxZoom: 30,
     minZoom: 8,
   };
+
+
+    activeTab: 'contact' | 'information' = 'contact';
+  
+  contactForm: FormGroup;
+  informationForm: FormGroup;
+
+  isSubmitting = false;
+  submitStatus: 'success' | 'error' | null = null;
  
 
   constructor(
+    private fb: FormBuilder,
     private messageService:MessageService,
     private toastrService:ToastrService,
     private router:Router
-  ) { }
+  ) {
+
+     this.contactForm = this.fb.group({
+      nom: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      telephone: [''],
+      sujet: ['', Validators.required],
+      message: ['', [Validators.required, Validators.maxLength(500)]]
+    });
+
+    this.informationForm = this.fb.group({
+      nom: ['', Validators.required],
+      prenom: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      telephone: ['', Validators.required],
+      sujet: ['', Validators.required],
+      message: ['', [Validators.required, Validators.maxLength(500)]]
+    });
+   }
 
   ngOnInit(): void {
     navigator.geolocation.getCurrentPosition((position) => {
@@ -64,6 +93,11 @@ export class ContactComponent implements OnInit {
     });
   }
 
+    setActiveTab(tab: 'contact' | 'information') {
+    this.activeTab = tab;
+    this.submitStatus = null;
+  }
+
 
   sendContact(value:any){
     this.messageService.store(value).subscribe((res:any)=>{
@@ -77,6 +111,40 @@ export class ContactComponent implements OnInit {
 
         AppSweetAlert.simpleAlert("error","Contact",err.error.message)
     })
+  }
+
+  async handleContactSubmit() {
+    if (this.contactForm.invalid) return;
+    this.isSubmitting = true;
+    this.submitStatus = null;
+
+    try {
+      // Ici, ajoute ton appel API
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      this.submitStatus = 'success';
+      this.contactForm.reset();
+    } catch (error) {
+      this.submitStatus = 'error';
+    } finally {
+      this.isSubmitting = false;
+    }
+  }
+
+  async handleInformationSubmit() {
+    if (this.informationForm.invalid) return;
+    this.isSubmitting = true;
+    this.submitStatus = null;
+
+    try {
+      // Ici, ajoute ton appel API
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      this.submitStatus = 'success';
+      this.informationForm.reset();
+    } catch (error) {
+      this.submitStatus = 'error';
+    } finally {
+      this.isSubmitting = false;
+    }
   }
 
 }

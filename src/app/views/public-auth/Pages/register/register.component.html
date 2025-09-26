@@ -1,0 +1,136 @@
+
+  <div
+    class="tw-min-h-screen tw-flex tw-items-center tw-justify-center tw-py-20 tw-bg-cover tw-bg-center tw-relative"
+    [ngStyle]="{'background-image': 'url(https://readdy.ai/api/search-image?query=Professional%20African%20woman%20smiling%20while%20holding%20documents%20in%20bright%20modern%20government%20office%2C%20registration%20and%20signup%20process%2C%20welcoming%20atmosphere%2C%20clean%20workspace%20with%20natural%20lighting%2C%20government%20building%20exterior%20visible&width=1920&height=1080&seq=register-bg&orientation=landscape)'}"
+  >
+    <div class="tw-absolute tw-inset-0 tw-bg-white/80"></div>
+
+    <div class="tw-relative tw-z-10 tw-w-full tw-max-w-2xl tw-px-6">
+      <div class="tw-bg-white tw-rounded-2xl tw-shadow-2xl tw-p-8">
+        <div class="tw-text-center tw-mb-8">
+          <div class="tw-w-16 tw-h-16 tw-bg-green-100 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-4">
+            <i class="ri-user-add-line tw-text-2xl tw-text-green-600"></i>
+          </div>
+          <h1 class="tw-text-2xl tw-font-bold tw-text-gray-900 tw-mb-2">Créer un compte</h1>
+          <p class="tw-text-gray-600">Rejoignez notre plateforme d'autorisation</p>
+        </div>
+
+        <form [formGroup]="registerForm" (ngSubmit)="handleSubmit()" class="tw-space-y-6">
+          <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-gap-6">
+            <div>
+              <label for="nom" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 tw-mb-2">Nom*</label>
+              <input
+                id="nom"
+                type="text"
+                formControlName="nom"
+                placeholder="Votre nom"
+                class="tw-w-full tw-px-4 tw-py-3 tw-border tw-border-gray-300 tw-rounded-lg tw-focus:ring-2 tw-focus:ring-green-500 tw-focus:border-transparent tw-text-sm"
+              />
+            </div>
+
+            <div>
+              <label for="prenom" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 tw-mb-2">Prénom*</label>
+              <input
+                id="prenom"
+                type="text"
+                formControlName="prenom"
+                placeholder="Votre prénom"
+                class="tw-w-full tw-px-4 tw-py-3 tw-border tw-border-gray-300 tw-rounded-lg tw-focus:ring-2 tw-focus:ring-green-500 tw-focus:border-transparent tw-text-sm"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label for="email" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 tw-mb-2">Adresse email*</label>
+            <input
+              id="email"
+              type="email"
+              formControlName="email"
+              placeholder="votre.email@exemple.com"
+              class="tw-w-full tw-px-4 tw-py-3 tw-border tw-border-gray-300 tw-rounded-lg tw-focus:ring-2 tw-focus:ring-green-500 tw-focus:border-transparent tw-text-sm"
+            />
+          </div>
+
+          <div>
+            <label for="telephone" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 tw-mb-2">Numéro de téléphone*</label>
+            <input
+              id="telephone"
+              type="tel"
+              formControlName="telephone"
+              placeholder="+229 XX XX XX XX"
+              class="tw-w-full tw-px-4 tw-py-3 tw-border tw-border-gray-300 tw-rounded-lg tw-focus:ring-2 tw-focus:ring-green-500 tw-focus:border-transparent tw-text-sm"
+            />
+          </div>
+
+          <div>
+            <label for="typeCompte" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 tw-mb-2">Type de compte*</label>
+            <select
+              id="typeCompte"
+              formControlName="typeCompte"
+              class="tw-w-full tw-px-4 tw-py-3 tw-border tw-border-gray-300 tw-rounded-lg tw-focus:ring-2 tw-focus:ring-green-500 tw-focus:border-transparent tw-text-sm tw-pr-8"
+            >
+              <option value="particulier">Particulier</option>
+              <option value="professionnel">Professionnel</option>
+              <option value="structure">Structure/Organisation</option>
+            </select>
+          </div>
+
+          <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-gap-6">
+            <div>
+              <label for="password" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 tw-mb-2">Mot de passe*</label>
+              <input
+                id="password"
+                type="password"
+                formControlName="password"
+                placeholder="Minimum 6 caractères"
+                class="tw-w-full tw-px-4 tw-py-3 tw-border tw-border-gray-300 tw-rounded-lg tw-focus:ring-2 tw-focus:ring-green-500 tw-focus:border-transparent tw-text-sm"
+              />
+            </div>
+
+            <div>
+              <label for="confirmPassword" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 tw-mb-2">Confirmer le mot de passe*</label>
+              <input
+                id="confirmPassword"
+                type="password"
+                formControlName="confirmPassword"
+                placeholder="Répétez le mot de passe"
+                class="tw-w-full tw-px-4 tw-py-3 tw-border tw-border-gray-300 tw-rounded-lg tw-focus:ring-2 tw-focus:ring-green-500 tw-focus:border-transparent tw-text-sm"
+              />
+            </div>
+          </div>
+
+          <div *ngIf="submitStatus === 'success'" class="tw-bg-green-50 tw-border tw-border-green-200 tw-rounded-lg tw-p-4 tw-flex tw-items-center">
+            <i class="ri-check-circle-line tw-text-green-600 tw-text-xl tw-mr-3"></i>
+            <p class="tw-text-green-800">Inscription réussie ! Redirection vers la page de connexion...</p>
+          </div>
+
+          <div *ngIf="submitStatus === 'error'" class="tw-bg-red-50 tw-border tw-border-red-200 tw-rounded-lg tw-p-4 tw-flex tw-items-center">
+            <i class="ri-error-warning-line tw-text-red-600 tw-text-xl tw-mr-3"></i>
+            <p class="tw-text-red-800">Une erreur s'est produite lors de l'inscription. Veuillez réessayer.</p>
+          </div>
+
+          <button
+            type="submit"
+            [disabled]="isSubmitting"
+            class="tw-w-full tw-bg-green-600 hover:tw-bg-green-700 disabled:tw-bg-gray-400 disabled:tw-cursor-not-allowed tw-text-white tw-py-3 tw-rounded-lg tw-font-medium tw-transition-colors tw-duration-200 tw-flex tw-items-center tw-justify-center tw-space-x-2 tw-whitespace-nowrap"
+          >
+            <ng-container *ngIf="isSubmitting">
+              <i class="ri-loader-4-line tw-animate-spin tw-text-xl"></i>
+              <span>Inscription...</span>
+            </ng-container>
+            <ng-container *ngIf="!isSubmitting">
+              <span>Créer mon compte</span>
+              <i class="ri-user-add-line tw-text-xl"></i>
+            </ng-container>
+          </button>
+        </form>
+
+        <div class="tw-mt-6 tw-text-center">    
+          <p class="tw-text-gray-600">
+            Déjà un compte ?
+            <a routerLink="/public/auth/login" class="tw-text-green-600 hover:tw-text-green-700 tw-font-medium">Se connecter</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>

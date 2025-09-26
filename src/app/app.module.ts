@@ -1,7 +1,6 @@
 import { LOCALE_ID,NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
-import { SharedModule } from './shared/shared.module';
 import { NotFoundComponent } from './views/not-found-component/not-found-component.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AppRoutingModule } from './app-routing.module';
@@ -13,6 +12,8 @@ import { registerLocaleData } from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
 import { VerifyDocumentComponent } from './views/public/pages/verify-document/verify-document.component';
 import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
+import { SharedModule } from './views/shared/shared.module';
+import { provideToastr } from 'ngx-toastr';
 registerLocaleData(localeFr);
 
 @NgModule({
@@ -24,11 +25,11 @@ registerLocaleData(localeFr);
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    SharedModule,
     AppRoutingModule,
     HttpClientModule,
     NgbModule,
-    NgIdleKeepaliveModule.forRoot()
+    NgIdleKeepaliveModule.forRoot(),
+    SharedModule
     
 
   ],
@@ -36,6 +37,7 @@ registerLocaleData(localeFr);
     { provide: LOCALE_ID, useValue: 'fr' },
     AuthGuard,
     { provide: HTTP_INTERCEPTORS, useClass: AppHttpInterceptor, multi: true },
+     provideToastr(),
   ],
   bootstrap: [AppComponent]
 })

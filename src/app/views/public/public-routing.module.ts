@@ -13,6 +13,7 @@ import { SupportComponent } from './pages/support/support.component';
 import { BillingComponent } from './pages/billing/billing.component';
 import { BillingDetailComponent } from './pages/billing-detail/billing-detail.component';
 import { ActualityDetailsComponent } from './pages/actuality-details/actuality-details.component';
+import { ActualityComponent } from './pages/actuality/actuality.component';
 
 
 
@@ -42,6 +43,10 @@ const routes: Routes = [
         path:"contact",
         component:ContactComponent
       },
+       {
+        path:"actualities",
+        component:ActualityComponent
+      },
       {
         path:"actuality-details/:id",
         component:ActualityDetailsComponent
@@ -59,7 +64,7 @@ const routes: Routes = [
         component:ListCapeComponent
       },
       {
-        path:"list-capes/authorized/:type",
+        path:"structures/authorized/:type",
         component:ListCapeComponent
       },
       {
@@ -71,7 +76,7 @@ const routes: Routes = [
         component:SupportComponent
       },
       {
-        path:"results",
+        path:"results/:type",
         component:ResultComponent
       },
       {
