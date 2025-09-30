@@ -85,7 +85,7 @@
 
     <fieldset>
         <legend class="bg-secondary text-white">Information sur le promoteur</legend>
-        <div class="row">
+        <div class="tw-grid tw-grid-cols-12 tw-gap-4">
             <div class="col-6">
                 <dl>
                     <dt>Nom </dt>
@@ -115,7 +115,7 @@
     </fieldset>
     <fieldset>
         <legend class="bg-secondary text-white">Information sur le centre</legend>
-        <div class="row">
+        <div class="tw-grid tw-grid-cols-12 tw-gap-4">
             <div class="col-6">
                 <dl>
                     <dt>Type Cape</dt>
@@ -155,7 +155,7 @@
     </fieldset>
     <fieldset>
         <legend class="bg-secondary text-white">Localisation</legend>
-       <div class="row">
+       <div class="tw-grid tw-grid-cols-12 tw-gap-4">
         <div class="col-6">
             <dl>
                 <dt>Département</dt>
@@ -186,19 +186,19 @@
     <div class="mb-5">
         <h4> <i class="fa fa-chevron-right fw-bold me-3"></i>  <u>Documents joints à la soumission</u>  </h4>
     </div>
-    <div class="table-responsive">
+    <div class="tw-overflow-x-auto">
         <table class="table table-bordered">
             <thead>
-                <th>#</th>
-                <th>Référence</th>
-                <!-- <th>Avis</th> -->
-                <th>Action</th>
+                <th class="tw-px-3 tw-py-2">#</th>
+                <th class="tw-px-3 tw-py-2">Référence</th>
+                <!-- <th class="tw-px-3 tw-py-2">Avis</th> -->
+                <th class="tw-px-3 tw-py-2">Action</th>
             </thead>
             <tbody>
                 <tr *ngFor="let f of data.files; let i=index">
-                    <td>{{i+1}}</td>
-                    <td>{{f.file?.name}}</td>
-                    <!-- <td>
+                     <td class="tw-px-3 tw-py-2">{{i+1}}</td>
+                     <td class="tw-px-3 tw-py-2">{{f.file?.name}}</td>
+                    <!--  <td class="tw-px-3 tw-py-2">
                        <div  *ngIf="role!='dfea' && role!='service'" class="">
                         <p> {{f.my_avis?.observation ?? "En attente de votre avis "}}</p>
                         <span><b>Note:</b>  {{f.my_avis?.note}}</span>
@@ -210,7 +210,7 @@
                        </div>
 
                     </td> -->
-                    <td>
+                     <td class="tw-px-3 tw-py-2">
                         <button (click)="showFile(f.filename,f,f.my_avis)" class="btn-sm btn-dark">Voir document</button>
                     </td>
                 </tr>
@@ -221,7 +221,7 @@
 
   </div>
   <div class="" *ngIf="data?.has_cps_file">
-    <div class="row">
+    <div class="tw-grid tw-grid-cols-12 tw-gap-4">
         <div class="col-6">
             <dl>
                 <dt>Nom de l'enquêteur</dt>
@@ -425,23 +425,23 @@
         <table class="table table-sm">
             <thead class="bg-dark text-white">
                 <tr>
-                    <th>#</th>
-                    <th>Critère d'évaluation</th>
-                    <th>Notes sur</th>
-                    <th>Commentaire</th>
+                    <th class="tw-px-3 tw-py-2">#</th>
+                    <th class="tw-px-3 tw-py-2">Critère d'évaluation</th>
+                    <th class="tw-px-3 tw-py-2">Notes sur</th>
+                    <th class="tw-px-3 tw-py-2">Commentaire</th>
                 </tr>
                
             </thead>
             <tbody>
                 <tr *ngFor="let e of elements; let i=index">
-                    <td>{{i+1}}</td>
-                    <td>{{e.name}}</td>
-                    <td>
+                     <td class="tw-px-3 tw-py-2">{{i+1}}</td>
+                     <td class="tw-px-3 tw-py-2">{{e.name}}</td>
+                     <td class="tw-px-3 tw-py-2">
                         <input class="form-control-sm {{ e.alert? 'border border-danger border-start-0':'border  border-dark'}}" type="number" min="0" [max]="e.note_max" name="note" [(ngModel)]="e.note"  (change)="changeAlert($event,e.note_max,i)">
                         <br>
                         <span class="helper-text text-info"><b>max: {{e.note_max}}</b></span>
                     </td>
-                    <td>
+                     <td class="tw-px-3 tw-py-2">
                         <input type="text" class="form-control" name="observation" [(ngModel)]="e.observation">
                     </td>
                 </tr>
@@ -467,17 +467,17 @@
 	<div class="offcanvas-body">
        <table class="table table-sm">
         <thead>
-            <th>#</th>
-            <th>Elément</th>
-            <th>Note sur</th>
-            <th>Commentaire</th>
+            <th class="tw-px-3 tw-py-2">#</th>
+            <th class="tw-px-3 tw-py-2">Elément</th>
+            <th class="tw-px-3 tw-py-2">Note sur</th>
+            <th class="tw-px-3 tw-py-2">Commentaire</th>
         </thead>
         <tbody>
             <tr *ngFor="let d of detail; let i=index">
                 <td >{{i+1}}</td>
-                <td>{{d.name}}</td>
-                <td>{{d.note}} /{{d.note_max}}</td>
-                <td>{{d.observation}}</td>
+                 <td class="tw-px-3 tw-py-2">{{d.name}}</td>
+                 <td class="tw-px-3 tw-py-2">{{d.note}} /{{d.note_max}}</td>
+                 <td class="tw-px-3 tw-py-2">{{d.observation}}</td>
             </tr>
         </tbody>
        </table>

@@ -1,0 +1,37 @@
+<header class="tw-bg-white tw-shadow-sm tw-border-b tw-border-gray-200 tw-fixed tw-w-full tw-top-0 tw-z-50">
+  <div class="tw-px-6 tw-py-4">
+    <div class="tw-flex tw-items-center tw-justify-between">
+      
+      <!-- Logo et titre -->
+      <div class="tw-flex tw-items-center tw-space-x-4">
+        <img 
+          src="https://cape.social.gouv.bj/assets/template2/images/logo-masm.png" 
+          alt="LOGO MASM" 
+          class="tw-h-10 tw-object-contain"
+        />
+        <div class="tw-border-l tw-border-gray-300 tw-pl-4">
+          <h1 class="tw-text-lg tw-font-semibold tw-text-gray-900">Espace Client</h1>
+          <p class="tw-text-sm tw-text-gray-600">Tableau de bord personnel</p>
+        </div>
+      </div>
+
+      <!-- Profil + Déconnexion -->
+      <div class="tw-flex tw-items-center tw-space-x-4">
+        <div class="tw-flex tw-items-center tw-space-x-3">
+          <div class="tw-w-8 tw-h-8 tw-bg-blue-100 tw-rounded-full tw-flex tw-items-center tw-justify-center">
+            <i class="ri-user-line tw-text-blue-600"></i>
+          </div>
+          <span class="tw-text-sm tw-font-medium tw-text-gray-700">{{ userEmail }}</span>
+        </div>
+
+        <button
+          (click)="handleLogout()"
+          class="tw-flex tw-items-center tw-space-x-2 tw-px-4 tw-py-2 tw-text-sm tw-text-red-600 hover:tw-bg-red-50 tw-rounded-lg tw-transition-colors tw-duration-200 tw-cursor-pointer tw-whitespace-nowrap"
+        >
+          <i class="ri-logout-box-line"></i>
+          <span>Déconnexion</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</header>

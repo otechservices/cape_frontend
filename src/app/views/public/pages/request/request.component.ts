@@ -56,12 +56,12 @@ export class RequestComponent implements OnInit {
     private eService:EServiceService,
     private tdService:TypeDataService,
     private targetService:TargetService,
+    private npService:NaturePromotorService,
     private toastrService:ToastrService,
     private router:Router,
     private fileService:FileService,
     private activatedRoute:ActivatedRoute,
     private _sanitizationService: DomSanitizer,
-    private npService:NaturePromotorService,
     configOffCanvas: NgbOffcanvasConfig, private offcanvasService: NgbOffcanvas
   ) {
     configOffCanvas.position = 'end';

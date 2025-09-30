@@ -14,35 +14,35 @@
 
 </div>
 
-<div class="row">
-  <div class="col-lg-12">
-      <div class="card">
+<div class="tw-grid tw-grid-cols-12 tw-gap-4">
+   <div class="tw-col-span-12">
+     <div class="tw-bg-white tw-rounded-lg tw-shadow">
         
-          <div class="card-body">
-              <div class="d-flex mb-5 " *ngIf="buttonsPermission">
-                  <button *ngIf="buttonsPermission.show"  (click)="show(showContent)" type="button" class="btn btn-outline-primary btn-sm  me-3">
+            <div class="tw-p-6">
+               <div class="tw-flex tw-mb-5" *ngIf="buttonsPermission">
+                  <button *ngIf="buttonsPermission.show"  (click)="show(showContent)" type="button" class="tw-border tw-border-blue-500 tw-text-blue-500 tw-text-sm tw-px-3 tw-py-1 tw-rounded hover:tw-bg-blue-50 tw-me-3">
                        <span>Consulter</span></button>
          
               </div>
 
                       <p>{{data.length}} élément(s)</p>
-                      <div class="table-responsive">
-                      <table class="table" >
-                          <thead class="">
+                      <div class="tw-overflow-x-auto">
+                      <table class="tw-min-w-full tw-border tw-border-gray-200 tw-text-sm">
+                          <thead class="tw-bg-gray-100">
                               <tr>
-                                  <th style="width: 10px;">#</th>
-                                  <th>Type Cape</th>
-                                  <th>Nom</th>
+                                  <th class="tw-w-[40px] tw-px-3 tw-py-2">#</th>
+                                  <th class="tw-px-3 tw-py-2">Type Cape</th>
+                                  <th class="tw-px-3 tw-py-2">Nom</th>
                       
                               </tr>
                           </thead>
                           <tbody>
                               <tr *ngFor="let d of data;let i=index ">
-                                  <td>
+                                   <td class="tw-px-3 tw-py-2">
                                      {{i+1}}
                                   </td>
-                                  <td>{{d.requete.type_cape?.name}}</td>
-                                  <td>{{d.requete?.name}}</td>
+                                   <td class="tw-px-3 tw-py-2">{{d.requete.type_cape?.name}}</td>
+                                   <td class="tw-px-3 tw-py-2">{{d.requete?.name}}</td>
                          
                              
                               </tr>
@@ -76,35 +76,35 @@
 
 </div>
 
-<div class="row">
-  <div class="col-lg-12">
-      <div class="card">
+<div class="tw-grid tw-grid-cols-12 tw-gap-4">
+   <div class="tw-col-span-12">
+     <div class="tw-bg-white tw-rounded-lg tw-shadow">
         
-          <div class="card-body">
-              <div class="d-flex mb-5 " *ngIf="buttonsPermission">
-                  <button *ngIf="buttonsPermission.show"  (click)="show(showContent)" type="button" class="btn btn-outline-primary btn-sm  me-3">
+            <div class="tw-p-6">
+               <div class="tw-flex tw-mb-5" *ngIf="buttonsPermission">
+                  <button *ngIf="buttonsPermission.show"  (click)="show(showContent)" type="button" class="tw-border tw-border-blue-500 tw-text-blue-500 tw-text-sm tw-px-3 tw-py-1 tw-rounded hover:tw-bg-blue-50 tw-me-3">
                        <span>Consulter</span></button>
          
               </div>
 
                       <p>{{data.length}} élément(s)</p>
-                      <div class="table-responsive">
-                      <table class="table" >
-                          <thead class="">
+                      <div class="tw-overflow-x-auto">
+                      <table class="tw-min-w-full tw-border tw-border-gray-200 tw-text-sm">
+                          <thead class="tw-bg-gray-100">
                               <tr>
-                                  <th style="width: 10px;">#</th>
-                                  <th>Type Cape</th>
-                                  <th>Nom</th>
+                                  <th class="tw-w-[40px] tw-px-3 tw-py-2">#</th>
+                                  <th class="tw-px-3 tw-py-2">Type Cape</th>
+                                  <th class="tw-px-3 tw-py-2">Nom</th>
                       
                               </tr>
                           </thead>
                           <tbody>
                               <tr *ngFor="let d of data;let i=index ">
-                                  <td>
+                                   <td class="tw-px-3 tw-py-2">
                                      {{i+1}}
                                   </td>
-                                  <td>{{d.requete.type_cape?.name}}</td>
-                                  <td>{{d.requete?.name}}</td>
+                                   <td class="tw-px-3 tw-py-2">{{d.requete.type_cape?.name}}</td>
+                                   <td class="tw-px-3 tw-py-2">{{d.requete?.name}}</td>
                          
                              
                               </tr>
@@ -177,7 +177,7 @@
           </div>
     
           <div class="modal-body">
-            <div class="table-responsive table-card">
+            <div class="tw-overflow-x-auto table-card">
                 <table class="table table-borderless align-middle mb-0">
                     <tbody>
                       

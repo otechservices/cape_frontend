@@ -1,5 +1,5 @@
     <!--breadcrumb-->
-    <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-5">
+    <!-- <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-5">
         <div class="breadcrumb-title pe-3">CAPE </div>
         <div class="ps-3">
           <nav aria-label="breadcrumb">
@@ -11,42 +11,54 @@
           </nav>
         </div>
         <div class="ms-auto">
-            <button type="button" [disabled]="loading" class="btn btn-primary btn-sm me-3" (click)="store()">Créer une sauvegarde</button>
+            <button type="button" [disabled]="loading" class="tw-bg-blue-600 tw-text-white tw-text-sm tw-px-3 tw-py-1 tw-rounded hover:tw-bg-blue-700 tw-me-3" (click)="store()">Créer une sauvegarde</button>
           </div>
-      </div>
+      </div> -->
   
-      <div class="row">
-        <div class="col-lg-12">
-            <div class="card">
-              
-                <div class="card-body">
-             
-                            <p>{{data.length}} élément(s)</p>
-                            <div class="table-responsive">
-                            <table class="table" >
-                                <thead class="">
-                                    <tr>
-                                        <th style="width: 10px;">#</th>
-                                        <th>Libellé  </th>
-                                        <th>Date  </th>
-                            
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr *ngFor="let d of data; let i=index ">
-                                        <td>{{i+1}} </td>
-                                        <td>{{d.name}}</td>
-                                        <td>{{d.created_at | date:"shortDate"}}</td>
-                                    </tr>
-                                
-                                </tbody>
-                            </table>
-                            </div>
-    
-                </div><!-- end card -->
-            </div>
-            <!-- end col -->
+  <div class="tw-grid tw-grid-cols-12 tw-gap-4">
+  <div class="tw-col-span-12">
+    <div class="tw-bg-white tw-rounded-lg tw-shadow">
+      <!-- Card Header -->
+      <div class="tw-p-4 tw-border-b tw-border-gray-200">
+        <button
+          type="button"
+          [disabled]="loading"
+          (click)="store()"
+          class="tw-bg-blue-600 tw-text-white tw-text-sm tw-px-3 tw-py-1 tw-rounded hover:tw-bg-blue-700 tw-me-3 disabled:tw-bg-gray-300 disabled:tw-cursor-not-allowed"
+        >
+          Créer une sauvegarde
+        </button>
+      </div>
+
+      <!-- Card Body -->
+      <div class="tw-p-6">
+        <p>{{ data.length }} élément(s)</p>
+
+        <!-- Table -->
+        <div class="tw-overflow-x-auto">
+          <table class="tw-min-w-full tw-border tw-border-gray-200 tw-text-sm">
+            <thead class="tw-bg-gray-100">
+              <tr>
+                <th class="tw-w-[40px] tw-px-3 tw-py-2">#</th>
+                <th class="tw-px-3 tw-py-2">Libellé</th>
+                <th class="tw-px-3 tw-py-2">Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let d of data; let i = index" class="tw-border-t">
+                <td class="tw-px-3 tw-py-2">{{ i + 1 }}</td>
+                <td class="tw-px-3 tw-py-2">{{ d.name }}</td>
+                <td class="tw-px-3 tw-py-2">{{ d.created_at | date: 'shortDate' }}</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-        <!-- end col -->
+      </div>
+      <!-- end card-body -->
     </div>
+    <!-- end card -->
+  </div>
+  <!-- end col -->
+</div>
+
     

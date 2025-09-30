@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
+import { AuthService } from 'src/app/core/services/auth.service';
+import { AppSweetAlert } from 'src/app/core/utils/app-sweet-alert';
 
 @Component({
   selector: 'app-register',
@@ -12,33 +15,30 @@ export class RegisterComponent {
   isSubmitting = false;
   submitStatus: 'idle' | 'success' | 'error' = 'idle';
 
-  constructor(private fb: FormBuilder, private router: Router) {
+  constructor(
+    private fb: FormBuilder, 
+    private router: Router,
+    private toastrService:ToastrService,
+    private authService:AuthService
+  
+  ) {
      this.registerForm = this.fb.group({
-      nom: ['', Validators.required],
-      prenom: ['', Validators.required],
+      lastname: ['', Validators.required],
+      firstname: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      telephone: ['', Validators.required],
-      typeCompte: ['particulier', Validators.required],
+      phone: ['', Validators.required],
+     // typeCompte: ['particulier', Validators.required],
       password: ['', [Validators.required, Validators.minLength(6)]],
-      confirmPassword: ['', Validators.required]
+      password_confirmation: ['', Validators.required]
     }, { validator: this.passwordMatchValidator });
   }
 
   ngOnInit(): void {
-    this.registerForm = this.fb.group({
-      nom: ['', Validators.required],
-      prenom: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      telephone: ['', Validators.required],
-      typeCompte: ['particulier', Validators.required],
-      password: ['', [Validators.required, Validators.minLength(6)]],
-      confirmPassword: ['', Validators.required]
-    }, { validator: this.passwordMatchValidator });
   }
 
     passwordMatchValidator(group: FormGroup) {
     const password = group.get('password')?.value;
-    const confirm = group.get('confirmPassword')?.value;
+    const confirm = group.get('password_confirmation')?.value;
     return password === confirm ? null : { mismatch: true };
   }
 
@@ -54,30 +54,20 @@ export class RegisterComponent {
 
     const formData = this.registerForm.value;
 
-    try {
-      const response = await fetch('https://readdy.ai/api/forms/2088b13d-c4e5-45c7-8bdb-4ad14cbfb123', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams({
-          nom: formData.nom,
-          prenom: formData.prenom,
-          email: formData.email,
-          telephone: formData.telephone,
-          typeCompte: formData.typeCompte,
-          password: formData.password
+        this.authService.register(formData).subscribe((res:any)=>{
+          this.isSubmitting=false
+    
+            this.toastrService.success(res.message)
+
+            this.router.navigate(['/public/auth/login'])
+    
+        },
+        (err:any)=>{
+          this.isSubmitting=false
+    
+          console.log(err)
+            AppSweetAlert.simpleAlert("error","Inscription",err.error.message)
         })
-      });
-      if (response.ok) {
-              this.submitStatus = 'success';
-              this.registerForm.reset({ typeCompte: 'particulier' });
-              setTimeout(() => this.router.navigate(['/connexion']), 1500);
-            } else {
-              this.submitStatus = 'error';
-            }
-          } catch (error) {
-            this.submitStatus = 'error';
-          } finally {
-            this.isSubmitting = false;
-          }
-        }
+      
+      }
 }

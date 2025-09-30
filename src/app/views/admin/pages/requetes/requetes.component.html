@@ -11,43 +11,43 @@
           </nav>
         </div>
       </div>
-        <div class="row">
-          <div class="col-lg-12">
-              <div class="card">
+        <div class="tw-grid tw-grid-cols-12 tw-gap-4">
+           <div class="tw-col-span-12">
+             <div class="tw-bg-white tw-rounded-lg tw-shadow">
                 
-                  <div class="card-body">
+                    <div class="tw-p-6">
                               <p>{{data.length}} élément(s)</p>
-                              <div class="table-responsive">
-                                <table class="table" >
-                                    <thead class="">
+                              <div class="tw-overflow-x-auto">
+                                <table class="tw-min-w-full tw-border tw-border-gray-200 tw-text-sm">
+                                    <thead class="tw-bg-gray-100">
                                         <tr>
-                                            <th style="width: 10px;">#</th>
-                                            <th>Type Cape</th>
-                                            <th>Libellé Centre</th>
-                                            <th>Nom promoteur</th>
-                                            <th>Cible</th>
-                                            <th>Adresse</th>
-                                            <th>email</th>
-                                            <th>phone</th>
+                                            <th class="tw-w-[40px] tw-px-3 tw-py-2">#</th>
+                                            <th class="tw-px-3 tw-py-2">Type Cape</th>
+                                            <th class="tw-px-3 tw-py-2">Libellé Centre</th>
+                                            <th class="tw-px-3 tw-py-2">Nom promoteur</th>
+                                            <th class="tw-px-3 tw-py-2">Cible</th>
+                                            <th class="tw-px-3 tw-py-2">Adresse</th>
+                                            <th class="tw-px-3 tw-py-2">email</th>
+                                            <th class="tw-px-3 tw-py-2">phone</th>
                                 
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr *ngFor="let d of data;let i=index ">
-                                            <td>
+                                             <td class="tw-px-3 tw-py-2">
                                                 {{i+1}}
                                             </td>
-                                            <td>{{d.type_cape?.name}}</td>
-                                            <td>{{d.name}}</td>
-                                            <td>{{d.name_pomoter}} {{d.firstname_pomoter}}</td>
-                                            <td>
+                                             <td class="tw-px-3 tw-py-2">{{d.type_cape?.name}}</td>
+                                             <td class="tw-px-3 tw-py-2">{{d.name}}</td>
+                                             <td class="tw-px-3 tw-py-2">{{d.name_pomoter}} {{d.firstname_pomoter}}</td>
+                                             <td class="tw-px-3 tw-py-2">
                                                 <ul>
                                                     <li *ngFor="let el of getJson(d.target)">{{el.itemName}}</li>
                                                 </ul>
                                             </td>
-                                            <td>{{d.address}}</td>
-                                            <td>{{d.email}}</td>
-                                            <td>{{d.phone}}</td>
+                                             <td class="tw-px-3 tw-py-2">{{d.address}}</td>
+                                             <td class="tw-px-3 tw-py-2">{{d.email}}</td>
+                                             <td class="tw-px-3 tw-py-2">{{d.phone}}</td>
                                          
                                         </tr>
                                     

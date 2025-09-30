@@ -1,0 +1,40 @@
+<aside class="sidebar-wrapper" data-simplebar="true">
+    <div class="sidebar-header">
+      <div>
+        <img src="assets/template/images/logo-icon.png" class="logo-icon" alt="logo icon">
+      </div>
+      <div>
+        <h4 class="logo-text">CAPE</h4>
+      </div>
+      <div class="toggle-icon ms-auto"> <i class="fa fa-list"></i>
+      </div>
+    </div>
+    <!--navigation-->
+    <ul class="metismenu cape-bg-blue" id="menu" style="height: 95vh; overflow: scroll;">
+        <ng-container *ngFor="let m of menu; let i= index">
+            <li class="menu-label" *ngIf="m.isTitle">{{m.title}}</li>
+            <li *ngIf="!m.isTitle && !m.hasChildren">
+                <a [routerLink]="m.route" routerLinkActive="active">
+                  <div class="parent-icon"><i class="bi bi-file-code-fill"></i>
+                  </div>
+                  <div class="menu-title text-info">{{m.name}}</div>
+                </a>
+              </li>
+              <li *ngIf="!m.isTitle && m.hasChildren">
+                <a class="text-info" data-bs-toggle="collapse" href="#collapseExample{{i}}"  aria-expanded="false" aria-controls="collapseExample">
+                 
+                  <div class="menu-title">{{m.name}}</div>
+                  <div class="parent-icon float-end"><i class="fa fa-chevron-right"></i>
+                  </div>
+                </a>
+                <ul class="collapse" id="collapseExample{{i}}">
+                  <li  *ngFor="let sm of m.children"> <a class="text-white" routerLink="{{sm?.route}}" routerLinkActive="active"><i class="bi bi-circle"></i>{{sm?.name}}</a>
+                  </li>
+                
+                </ul>
+              </li>
+        </ng-container>
+    
+    </ul>
+    <!--end navigation-->
+ </aside>

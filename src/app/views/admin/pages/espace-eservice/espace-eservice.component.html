@@ -12,67 +12,73 @@
         </div>
       </div>
   
-      <div class="row">
-        <div class="col-lg-12">
-            <div class="card">
+      <div class="tw-grid tw-grid-cols-12 tw-gap-4">
+         <div class="tw-col-span-12">
+           <div class="tw-bg-white tw-rounded-lg tw-shadow">
               
                 <div class="mb-3">
                     <button *ngIf="state!=undefined" (click)="goToShow()" class="btn btn-sm btn-primary mx-1">Consulter</button>
                     <button  *ngIf="role == 'dfea' "   (click)="delete()" class="btn btn-sm btn-danger mx-1">Retirer l'enregistrement</button>
                     <button *ngIf="state==undefined" (click)="add(parcoursContent)" class="btn btn-sm btn-primary mx-1">Voir Parcours</button>
                 </div>
-                <div class="card-body">
+                  <div class="tw-p-6">
     
                             <p>{{data.length}} élément(s) </p>
                          <ng-container *ngIf="type=='cape'">
-                            <div class="table-responsive">
-                                <table class="table" >
-                                    <thead class="">
+                            <div class="tw-overflow-x-auto">
+                                <table class="tw-min-w-full tw-border tw-border-gray-200 tw-text-sm">
+                                    <thead class="tw-bg-gray-100">
                                         <tr>
                                             <th style="width: 10px;"> # </th>
                                             <th style="width: 10px;"><i class="fa fa-check"></i></th>
-                                            <th>Date d'inscription</th>
+                                            <th class="tw-px-3 tw-py-2">Date d'inscription</th>
                                             <th *ngIf="role != 'cps'">Cps</th>
-                                            <th>Type Centre</th>
-                                            <th>Libellé Centre</th>
+                                            <th class="tw-px-3 tw-py-2">Type Centre</th>
+                                            <th class="tw-px-3 tw-py-2">Libellé Centre</th>
                                             <th *ngIf="state != undefined">Statut</th>
                                             <th *ngIf="state == undefined">Dernière étape</th>
-                                            <th>Nom promoteur</th>
-                                            <th>Cible</th>
-                                            <th>Adresse</th>
-                                            <th>email</th>
-                                            <th>phone</th>
+                                            <th class="tw-px-3 tw-py-2">Nom promoteur</th>
+                                            <th class="tw-px-3 tw-py-2">Cible</th>
+                                            <th class="tw-px-3 tw-py-2">Adresse</th>
+                                            <th class="tw-px-3 tw-py-2">email</th>
+                                            <th class="tw-px-3 tw-py-2">phone</th>
                                 
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr *ngFor="let d of data ">
-                                            <td></td>
-                                            <td>
-                                                <div class="form-check mb-2">
-                                                    <input (click)="checked(d)" class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                                        <tr *ngFor="let d of data" class="tw-border-t">
+                                             <td class="tw-px-3 tw-py-2"></td>
+                                             <td class="tw-px-3 tw-py-2">
+                                                <div class="tw-form-check tw-mb-2">
+                                                    <input
+                      type="radio"
+                      name="flexRadioDefault"
+                      id="flexRadioDefault{{d.id}}"
+                      class="tw-form-radio tw-text-blue-600"
+                      (click)="checked(d)"
+                    />
                                                 
                                                 </div>
                                             </td>
-                                            <td>{{d.created_at | date:"shortDate"}}</td>
+                                             <td class="tw-px-3 tw-py-2">{{d.created_at | date:"shortDate"}}</td>
                                             <td *ngIf="role != 'cps'">{{d.district?.cps?.name}}</td>
-                                            <td>{{d.type_cape?.name ?? d.type_garderie?.name }}</td>
-                                            <td>{{d.name}}</td>
+                                             <td class="tw-px-3 tw-py-2">{{d.type_cape?.name ?? d.type_garderie?.name }}</td>
+                                             <td class="tw-px-3 tw-py-2">{{d.name}}</td>
                                             <td  *ngIf="state !=undefined">
                                                 <span class="p-1 rounded bg-{{getColor(d.status)}} text-white">{{getText(d.status)}} </span>
                                             </td>
                                             <td *ngIf="state ==undefined">
                                                 {{d.last_parcours?.libelle}}
                                             </td>
-                                            <td>{{d.name_pomoter}} {{d.firstname_pomoter}}</td>
-                                            <td>
+                                             <td class="tw-px-3 tw-py-2">{{d.name_pomoter}} {{d.firstname_pomoter}}</td>
+                                             <td class="tw-px-3 tw-py-2">
                                                 <ul>
                                                     <li *ngFor="let el of getJson(d.target)">{{el}}</li>
                                                 </ul>
                                             </td>
-                                            <td>{{d.address}}</td>
-                                            <td>{{d.email}}</td>
-                                            <td>{{d.phone}}</td>
+                                             <td class="tw-px-3 tw-py-2">{{d.address}}</td>
+                                             <td class="tw-px-3 tw-py-2">{{d.email}}</td>
+                                             <td class="tw-px-3 tw-py-2">{{d.phone}}</td>
                                         
                                             
                                         </tr>
@@ -82,53 +88,59 @@
                                 </div>
                          </ng-container>
                          <ng-container *ngIf="type=='garderie'">
-                            <div class="table-responsive">
-                                <table class="table" >
-                                    <thead class="">
+                            <div class="tw-overflow-x-auto">
+                                <table class="tw-min-w-full tw-border tw-border-gray-200 tw-text-sm">
+                                    <thead class="tw-bg-gray-100">
                                         <tr>
                                             <th style="width: 10px;"> # </th>
                                             <th style="width: 10px;"><i class="fa fa-check"></i></th>
-                                            <th>Date d'inscription</th>
+                                            <th class="tw-px-3 tw-py-2">Date d'inscription</th>
                                             <th *ngIf="role != 'cps'">Cps</th>
-                                            <th>Type Garderie</th>
-                                            <th>Libellé Centre</th>
+                                            <th class="tw-px-3 tw-py-2">Type Garderie</th>
+                                            <th class="tw-px-3 tw-py-2">Libellé Centre</th>
                                             <th *ngIf="state != undefined">Statut</th>
                                             <th *ngIf="state == undefined">Dernière étape</th>
-                                            <th>Nom promoteur</th>
-                                            <th>Adresse</th>
-                                            <th>email</th>
-                                            <th>phone</th>
+                                            <th class="tw-px-3 tw-py-2">Nom promoteur</th>
+                                            <th class="tw-px-3 tw-py-2">Adresse</th>
+                                            <th class="tw-px-3 tw-py-2">email</th>
+                                            <th class="tw-px-3 tw-py-2">phone</th>
                                 
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr *ngFor="let d of data ">
-                                            <td></td>
-                                            <td>
-                                                <div class="form-check mb-2">
-                                                    <input (click)="checked(d)" class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                                        <tr *ngFor="let d of data" class="tw-border-t">
+                                             <td class="tw-px-3 tw-py-2"></td>
+                                             <td class="tw-px-3 tw-py-2">
+                                                <div class="tw-form-check tw-mb-2">
+                                                    <input
+                      type="radio"
+                      name="flexRadioDefault"
+                      id="flexRadioDefault{{d.id}}"
+                      class="tw-form-radio tw-text-blue-600"
+                      (click)="checked(d)"
+                    />
                                                 
                                                 </div>
                                             </td>
-                                            <td>{{d.created_at | date:"shortDate"}}</td>
+                                             <td class="tw-px-3 tw-py-2">{{d.created_at | date:"shortDate"}}</td>
                                             <td *ngIf="role != 'cps'">{{d.district?.cps?.name}}</td>
-                                            <td>
+                                             <td class="tw-px-3 tw-py-2">
                                                 <ul>
                                                     <li *ngFor="let el of d.requete_type_garderies">{{el.type_garderie?.name}}</li>
                                                 </ul>
                                             </td>
-                                            <td>{{d.name}}</td>
+                                             <td class="tw-px-3 tw-py-2">{{d.name}}</td>
                                             <td  *ngIf="state !=undefined">
                                                 <span class="p-1 rounded bg-{{getColor(d.status)}} text-white">{{getText(d.status)}} </span>
                                             </td>
                                             <td *ngIf="state ==undefined">
                                                 {{d.last_parcours?.libelle}}
                                             </td>
-                                            <td>{{d.name_pomoter}} {{d.firstname_pomoter}}</td>
+                                             <td class="tw-px-3 tw-py-2">{{d.name_pomoter}} {{d.firstname_pomoter}}</td>
                                             
-                                            <td>{{d.address}}</td>
-                                            <td>{{d.email}}</td>
-                                            <td>{{d.phone}}</td>
+                                             <td class="tw-px-3 tw-py-2">{{d.address}}</td>
+                                             <td class="tw-px-3 tw-py-2">{{d.email}}</td>
+                                             <td class="tw-px-3 tw-py-2">{{d.phone}}</td>
                                         
                                             
                                         </tr>
@@ -155,19 +167,19 @@
         <div class="modal-body">
            <table class="table">
             <thead> 
-                <th>#</th>
-                <th>Libellé</th>
-                <th>Date et heure</th>
-                <th>Séjour (jrs)</th>
-                <th>Auteur</th>
+                <th class="tw-px-3 tw-py-2">#</th>
+                <th class="tw-px-3 tw-py-2">Libellé</th>
+                <th class="tw-px-3 tw-py-2">Date et heure</th>
+                <th class="tw-px-3 tw-py-2">Séjour (jrs)</th>
+                <th class="tw-px-3 tw-py-2">Auteur</th>
             </thead>
             <tbody>
                 <tr *ngFor="let p of parcours; let i=index">
-                    <td>{{i+1}}</td>
-                    <td>{{p.libelle}}</td>
-                    <td>{{p.created_at | date:"dd-MM-yyyy hh:mm:ss"}}</td>
-                    <td>{{p.delay}}</td>
-                    <td>{{p.user == null ?"CAPE": p.user?.firstname??"Prénom(s)" +" "+ p.user?.lastname?? "Nom"}}</td>
+                     <td class="tw-px-3 tw-py-2">{{i+1}}</td>
+                     <td class="tw-px-3 tw-py-2">{{p.libelle}}</td>
+                     <td class="tw-px-3 tw-py-2">{{p.created_at | date:"dd-MM-yyyy hh:mm:ss"}}</td>
+                     <td class="tw-px-3 tw-py-2">{{p.delay}}</td>
+                     <td class="tw-px-3 tw-py-2">{{p.user == null ?"CAPE": p.user?.firstname??"Prénom(s)" +" "+ p.user?.lastname?? "Nom"}}</td>
                 </tr>
             </tbody>
            </table>

@@ -14,6 +14,17 @@ import * as $ from 'jquery'
 export class HeaderComponent implements OnInit {
   user:any
   role:any
+  searchQuery: string = '';
+showUserMenu: boolean = false;
+
+toggleUserMenu() {
+  this.showUserMenu = !this.showUserMenu;
+}
+
+handleLogout() {
+  // logique de déconnexion
+}
+
   constructor(
     
     private authService:AuthService,

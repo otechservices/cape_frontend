@@ -1,386 +1,78 @@
-    <!--breadcrumb-->
-    <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-      <div class="breadcrumb-title pe-3">CAPE </div>
-      <div class="ps-3">
-        <nav aria-label="breadcrumb">
-          <ol class="breadcrumb mb-0 p-0">
-            <li class="breadcrumb-item"><a href="javascript:;"><i class="bx bx-home-alt"></i></a>
-            </li>
-            <li class="breadcrumb-item active" aria-current="page">Tableau de bord</li>
-          </ol>
-        </nav>
+<div class="tw-bg-gray-50">
+  <!-- Fil d'Ariane -->
+  <div class="tw-bg-white tw-border-b tw-px-6 tw-py-3">
+    <div class="tw-flex tw-items-center tw-gap-2 tw-text-sm">
+      <span class="tw-text-blue-600 tw-cursor-pointer" (click)="navigate('/cape')">CAPE</span>
+      <i class="ri-arrow-right-s-line tw-text-gray-400"></i>
+      <span class="tw-text-gray-600">Tableau de bord</span>
+    </div>
+  </div>
+
+  <div class="tw-p-6 tw-space-y-6">
+    <!-- Cartes statistiques -->
+    <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-5 tw-gap-4">
+      <div
+        *ngFor="let card of statsCards"
+        class="tw-rounded-lg tw-p-6 tw-cursor-pointer hover:tw-opacity-90 tw-transition-opacity"
+        [ngClass]="[card.bgColor, card.textColor]"
+        (click)="navigate(card.path)"
+      >
+        <div class="tw-text-2xl tw-font-bold tw-mb-2">{{ card.value }}</div>
+        <div class="tw-text-sm tw-opacity-90">{{ card.title }}</div>
+        <div class="tw-mt-3 tw-text-right">
+          <span class="tw-text-xs tw-underline">Voir plus</span>
+        </div>
       </div>
-      <!--div class="ms-auto">
-        <div class="btn-group">
-          <button type="button" class="btn cape-bg-green text-white">Paramètre</button>
-          <button type="button" class="btn cape-bg-green text-white split-bg-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown">	<span class="visually-hidden">Toggle Dropdown</span>
+    </div>
+
+    <div class="tw-grid tw-grid-cols-1 lg:tw-grid-cols-2 tw-gap-6">
+      <!-- Activités récentes -->
+      <div class="tw-bg-white tw-rounded-lg tw-shadow tw-p-4">
+        <h2 class="tw-font-semibold tw-text-gray-800 tw-mb-4">Activités récentes</h2>
+        <div class="tw-space-y-4">
+          <div
+            *ngFor="let activite of activitesRecentes"
+            class="tw-flex tw-items-start tw-gap-3 tw-p-3 hover:tw-bg-gray-50 tw-rounded-lg tw-transition-colors"
+          >
+            <div class="tw-w-8 tw-h-8 tw-flex tw-items-center tw-justify-center tw-rounded-full tw-bg-gray-100"
+                 [ngClass]="activite.iconColor">
+              <i [class]="activite.icon"></i>
+            </div>
+            <div class="tw-flex-1">
+              <div class="tw-font-medium tw-text-gray-900">{{ activite.type }}</div>
+              <div class="tw-text-sm tw-text-gray-600">{{ activite.description }}</div>
+              <div class="tw-text-xs tw-text-gray-400 tw-mt-1">{{ activite.heure }}</div>
+            </div>
+          </div>
+        </div>
+        <div class="tw-mt-4 tw-pt-4 tw-border-t">
+          <button class="tw-w-full tw-border tw-rounded tw-px-3 tw-py-2 tw-text-sm tw-text-gray-700 hover:tw-bg-gray-100">
+            Voir toutes les activités
           </button>
-          <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-end">	<a class="dropdown-item" href="javascript:;">Action</a>
-            <a class="dropdown-item" href="javascript:;">Another action</a>
-            <a class="dropdown-item" href="javascript:;">Something else here</a>
-            <div class="dropdown-divider"></div>	<a class="dropdown-item" href="javascript:;">Separated link</a>
-          </div>
         </div>
-      </!--div-->
+      </div>
+
+      <!-- Actions rapides -->
+      <div class="tw-bg-white tw-rounded-lg tw-shadow tw-p-4">
+        <h2 class="tw-font-semibold tw-text-gray-800 tw-mb-4">Actions rapides</h2>
+        <div class="tw-grid tw-grid-cols-2 tw-gap-4">
+          <button
+            *ngFor="let action of actionsRapides"
+            (click)="navigate(action.path)"
+            class="tw-p-4 tw-border tw-border-gray-200 tw-rounded-lg hover:tw-bg-blue-50 hover:tw-border-blue-300 tw-transition-colors tw-text-center"
+          >
+            <div class="tw-w-8 tw-h-8 tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-2 tw-text-blue-600">
+              <i [class]="action.icon"></i>
+            </div>
+            <div class="tw-text-sm tw-font-medium tw-text-gray-700">{{ action.title }}</div>
+          </button>
+        </div>
+      </div>
     </div>
-    <!--end breadcrumb-->
 
-<ng-container *ngIf="role == 'ddasm'">
-  <div class="row ">
-    <div class="col-12 col-md-6 mb-3">
-      <div class="shadow p-3 mb-5 bg-body-tertiary rounded" style="background-color: orange;">
-
-        <div class="d-flex justify-content-between mb-3">
-          <div class="align-self-center">
-              <h6 class="text-white">Dossiers à valider</h6>
-          </div>
-          <div class="align-self-center">
-              <h4 class="text-white">{{data?.pending_validation ?? "0"}}</h4>
-          </div>
-        </div>
-        <div class="d-flex justify-content-center">
-          <a class="text-white h6" routerLink="/admin/requetes/new"><u>Voir plus <i class=" ms-1 fa fa-arrow-right"></i></u></a>
-        </div>
-      </div>
-     </div>
-     <div class="col-12 col-md-6 col-md-4 mb-3">
-      <div class="shadow p-3 mb-5 bg-body-tertiary rounded  bg-danger">
-
-        <div class="d-flex justify-content-between mb-3">
-          <div class="align-self-center">
-              <h6 class="text-white">Contrôles effectuées</h6>
-          </div>
-          <div class="align-self-center">
-              <h4 class="text-white">{{data?.controls ?? "0"}}</h4>
-          </div>
-        </div>
-        <div class="d-flex justify-content-center">
-          <a class="text-white h6" routerLink="/admin/referals"><u>Voir plus <i class=" ms-1 fa fa-arrow-right"></i></u></a>
-        </div>
-      </div>
-
-     </div>
-     <div class="col-12 col-md-6 mb-3">
-      <div class="shadow p-3 mb-5 bg-body-tertiary bg-primary rounded" >
-
-        <div class="d-flex justify-content-between mb-3">
-          <div class="align-self-center">
-              <h6 class="text-white">Cape visité</h6>
-          </div>
-          <div class="align-self-center">
-              <h4 class="text-white">{{data?.total ?? "0"}}</h4>
-          </div>
-        </div>
-        <div class="d-flex justify-content-center">
-          <a class="text-white h6" routerLink="/admin/requetes/new"><u>Voir plus <i class=" ms-1 fa fa-arrow-right"></i></u></a>
-        </div>
-      </div>
-     </div>
+    <!-- Footer -->
+    <div class="tw-text-center tw-text-sm tw-text-gray-500 tw-pt-8">
+      Copyright 2020
     </div>
-   
-</ng-container>
-<ng-container *ngIf="role == 'dfea' || role == 'ministre' || role=='service'">
-  <div class="row ">
-    <div class="col-12 col-md-6 mb-3">
-      <div class="shadow p-3 mb-5 bg-body-tertiary rounded  bg-info">
-
-        <div class="d-flex justify-content-between mb-3">
-          <div class="align-self-center">
-              <h6 class="text-white">Recommandations en cours</h6>
-          </div>
-          <div class="align-self-center">
-              <h4 class="text-white">{{data?.referals}}</h4>
-          </div>
-        </div>
-        <div class="d-flex justify-content-center">
-          <a class="text-white h6" routerLink="/admin/referals"><u>Voir plus <i class=" ms-1 fa fa-arrow-right"></i></u></a>
-        </div>
-      </div>
-
-     </div>
-     <div class="col-12 col-md-6 mb-3">
-      <div class="shadow p-3 mb-5 bg-body-tertiary rounded  bg-danger">
-
-        <div class="d-flex justify-content-between mb-3">
-          <div class="align-self-center">
-              <h6 class="text-white">Contrôles effectuées</h6>
-          </div>
-          <div class="align-self-center">
-              <h4 class="text-white">{{data?.controls ?? "0"}}</h4>
-          </div>
-        </div>
-        <div class="d-flex justify-content-center">
-          <a class="text-white h6" routerLink="/admin/referals"><u>Voir plus <i class=" ms-1 fa fa-arrow-right"></i></u></a>
-        </div>
-      </div>
-
-     </div>
-     <div class="col-12 col-md-6 mb-3">
-      <div class="shadow p-3 mb-5 bg-body-tertiary rounded  bg-success">
-
-        <div class="d-flex justify-content-between mb-3">
-          <div class="align-self-center">
-              <h6 class="text-white">CAPE autorisés</h6>
-          </div>
-          <div class="align-self-center">
-              <h4 class="text-white">{{data?.authorized ?? "0"}}</h4>
-          </div>
-        </div>
-        <div class="d-flex justify-content-center">
-          <a class="text-white h6" routerLink="/admin/capes"><u>Voir plus <i class=" ms-1 fa fa-arrow-right"></i></u></a>
-        </div>
-      </div>
-
-     </div>
-     <div class="col-12 col-md-6 mb-3">
-      <div class="shadow p-3 mb-5 bg-body-tertiary rounded  bg-secondary">
-
-        <div class="d-flex justify-content-between mb-3">
-          <div class="align-self-center">
-              <h6 class="text-white">CAPE inscrits</h6>
-          </div>
-          <div class="align-self-center">
-              <h4 class="text-white">{{data?.registered ?? "0"}}</h4>
-          </div>
-        </div>
-        <div class="d-flex justify-content-center">
-          <a class="text-white h6" routerLink="/admin/requetes"><u>Voir plus <i class=" ms-1 fa fa-arrow-right"></i></u></a>
-        </div>
-      </div>
-     </div>
-     <div class="col-12 col-md-6 mb-3">
-      <div class="shadow p-3 mb-5 bg-body-tertiary rounded" style="background-color: orange;">
-
-        <div class="d-flex justify-content-between mb-3">
-          <div class="align-self-center">
-              <h6 class="text-white">Dossiers à valider</h6>
-          </div>
-          <div class="align-self-center">
-              <h4 class="text-white">{{data?.pending_validation ?? "0"}}</h4>
-          </div>
-        </div>
-        <div class="d-flex justify-content-center">
-          <a class="text-white h6" routerLink="/admin/requetes/new"><u>Voir plus <i class=" ms-1 fa fa-arrow-right"></i></u></a>
-        </div>
-      </div>
-     </div>
-   
-    </div>
-   
-</ng-container>
-
-
-<ng-container *ngIf="role == 'cape'">
-  <div class="row ">
-    <div class="col-12 col-md-6 mb-3">
-      <div class="shadow p-3 mb-5 bg-body-tertiary rounded" style="background-color: orange;">
-
-        <div class="d-flex justify-content-between mb-3">
-          <div class="align-self-center">
-              <h6 class="text-white">Nombre d'enfants</h6>
-          </div>
-          <div class="align-self-center">
-              <h4 class="text-white">{{data?.residents ?? "0"}}</h4>
-          </div>
-        </div>
-        <div class="d-flex justify-content-center">
-          <a class="text-white h6" routerLink="/admin/requetes/new"><u>Voir plus <i class=" ms-1 fa fa-arrow-right"></i></u></a>
-        </div>
-      </div>
-     </div>
-   
-     <div class="col-12 col-md-6 mb-3">
-      <div class="shadow p-3 mb-5 bg-body-tertiary rounded  bg-info">
-
-        <div class="d-flex justify-content-between mb-3">
-          <div class="align-self-center">
-              <h6 class="text-white">Recommandations en attente</h6>
-          </div>
-          <div class="align-self-center">
-              <h4 class="text-white">{{data?.referals ?? "0"}}</h4>
-          </div>
-        </div>
-        <div class="d-flex justify-content-center">
-          <a class="text-white h6" routerLink="/admin/referals"><u>Voir plus <i class=" ms-1 fa fa-arrow-right"></i></u></a>
-        </div>
-      </div>
-
-     </div>
-    </div>
-   
-</ng-container>
-
-<ng-container *ngIf="role == 'admin'">
-  <div class="row ">
-    
-     <div class="col-12 col-md-4 mb-3">
-      <div class="shadow p-3 mb-5 bg-body-tertiary rounded  bg-primary">
-
-        <div class="d-flex justify-content-between mb-3">
-          <div class="align-self-center">
-              <h6 class="text-white">Nb utilisateurs</h6>
-          </div>
-          <div class="align-self-center">
-              <h4 class="text-white">{{data?.users ?? "0"}}</h4>
-          </div>
-        </div>
-        <div class="d-flex justify-content-center">
-          <a class="text-white h6" routerLink="/admin/users"><u>Voir plus <i class=" ms-1 fa fa-arrow-right"></i></u></a>
-        </div>
-      </div>
-
-     </div>
-     <div class="col-12 col-md-4 mb-3">
-      <div class="shadow p-3 mb-5 bg-body-tertiary rounded  bg-success">
-
-        <div class="d-flex justify-content-between mb-3">
-          <div class="align-self-center">
-              <h6 class="text-white">CAPE autorisés</h6>
-          </div>
-          <div class="align-self-center">
-              <h4 class="text-white">{{data?.authorized ?? "0"}}</h4>
-          </div>
-        </div>
-        <div class="d-flex justify-content-center">
-          <a class="text-white h6" routerLink="/admin/capes"><u>Voir plus <i class=" ms-1 fa fa-arrow-right"></i></u></a>
-        </div>
-      </div>
-
-     </div>
- 
-     <div class="col-12 col-md-4 mb-3">
-      <div class="shadow p-3 mb-5 bg-body-tertiary rounded  bg-secondary">
-
-        <div class="d-flex justify-content-between mb-3">
-          <div class="align-self-center">
-              <h6 class="text-white">CAPE inscrits</h6>
-          </div>
-          <div class="align-self-center">
-              <h4 class="text-white">{{data?.registered ?? "0"}}</h4>
-          </div>
-        </div>
-        <div class="d-flex justify-content-center">
-          <a class="text-white h6" routerLink="/admin/requetes"><u>Voir plus <i class=" ms-1 fa fa-arrow-right"></i></u></a>
-        </div>
-      </div>
-     </div>
-    </div>
-   
-</ng-container>
-
-<ng-container *ngIf="role == 'cps'">
-  <div class="row ">
-    <div class="col-12 col-md-6 mb-3">
-      <div class="shadow p-3 mb-5 bg-body-tertiary rounded  bg-info">
-
-        <div class="d-flex justify-content-between mb-3">
-          <div class="align-self-center">
-              <h6 class="text-white">Recommandations en cours</h6>
-          </div>
-          <div class="align-self-center">
-              <h4 class="text-white">{{data?.referals}}</h4>
-          </div>
-        </div>
-        <div class="d-flex justify-content-center">
-          <a class="text-white h6" routerLink="/admin/referals"><u>Voir plus <i class=" ms-1 fa fa-arrow-right"></i></u></a>
-        </div>
-      </div>
-
-     </div>
-     <div class="col-12 col-md-6 mb-3">
-      <div class="shadow p-3 mb-5 bg-body-tertiary rounded  bg-danger">
-
-        <div class="d-flex justify-content-between mb-3">
-          <div class="align-self-center">
-              <h6 class="text-white">Contrôles effectuées</h6>
-          </div>
-          <div class="align-self-center">
-              <h4 class="text-white">{{data?.controls ?? "0"}}</h4>
-          </div>
-        </div>
-        <div class="d-flex justify-content-center">
-          <a class="text-white h6" routerLink="/admin/referals"><u>Voir plus <i class=" ms-1 fa fa-arrow-right"></i></u></a>
-        </div>
-      </div>
-
-     </div>
-  
-     <div class="col-12 col-md-6 mb-3">
-      <div class="shadow p-3 mb-5 bg-body-tertiary rounded  bg-success">
-
-        <div class="d-flex justify-content-between mb-3">
-          <div class="align-self-center">
-              <h6 class="text-white">CAPE autorisés</h6>
-          </div>
-          <div class="align-self-center">
-              <h4 class="text-white">{{data?.authorized ?? "0"}}</h4>
-          </div>
-        </div>
-        <div class="d-flex justify-content-center">
-          <a class="text-white h6" routerLink="/admin/capes"><u>Voir plus <i class=" ms-1 fa fa-arrow-right"></i></u></a>
-        </div>
-      </div>
-
-     </div>
-     <div class="col-12 col-md-6 mb-3">
-      <div class="shadow p-3 mb-5 bg-body-tertiary rounded  bg-secondary">
-
-        <div class="d-flex justify-content-between mb-3">
-          <div class="align-self-center">
-              <h6 class="text-white">CAPE inscrits</h6>
-          </div>
-          <div class="align-self-center">
-              <h4 class="text-white">{{data?.registered ?? "0"}}</h4>
-          </div>
-        </div>
-        <div class="d-flex justify-content-center">
-          <a class="text-white h6" routerLink="/admin/requetes"><u>Voir plus <i class=" ms-1 fa fa-arrow-right"></i></u></a>
-        </div>
-      </div>
-     </div>
-    </div>
-   
-</ng-container>
-
-<ng-container *ngIf="role == 'member'">
-  <div class="row ">
-    <div class="col-12 col-md-6 mb-3">
-      <div class="shadow p-3 mb-5 bg-body-tertiary bg-primary rounded" >
-
-        <div class="d-flex justify-content-between mb-3">
-          <div class="align-self-center">
-              <h6 class="text-white">Dossiers inscrits</h6>
-          </div>
-          <div class="align-self-center">
-              <h4 class="text-white">{{data?.all ?? "0"}}</h4>
-          </div>
-        </div>
-        <div class="d-flex justify-content-center">
-          <a class="text-white h6" routerLink="/admin/session-requests"><u>Voir plus <i class=" ms-1 fa fa-arrow-right"></i></u></a>
-        </div>
-      </div>
-     </div>
-     <div class="col-12 col-md-6 mb-3">
-      <div class="shadow p-3 mb-5 bg-body-tertiary bg-success rounded" >
-
-        <div class="d-flex justify-content-between mb-3">
-          <div class="align-self-center">
-              <h6 class="text-white">Dossiers à valider</h6>
-          </div>
-          <div class="align-self-center">
-              <h4 class="text-white">{{data?.treated ?? "0"}}</h4>
-          </div>
-        </div>
-        <div class="d-flex justify-content-center">
-          <a class="text-white h6" routerLink="/admin/session-requests"><u>Voir plus <i class=" ms-1 fa fa-arrow-right"></i></u></a>
-        </div>
-      </div>
-     </div>
-  
-    
-    </div>
-   
-</ng-container>
-  
-
-
+  </div>
+</div>

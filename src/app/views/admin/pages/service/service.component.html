@@ -14,42 +14,48 @@
     </div>
   </div>
 
-  <div class="row">
-    <div class="col-lg-12">
-        <div class="card">
+  <div class="tw-grid tw-grid-cols-12 tw-gap-4">
+     <div class="tw-col-span-12">
+       <div class="tw-bg-white tw-rounded-lg tw-shadow">
           
-            <div class="card-body">
-                <div class="d-flex mb-5 " *ngIf="buttonsPermission">
-                    <button type="button" class="btn btn-primary btn-sm me-3" (click)="add(addContent)">Ajouter un service</button>
+              <div class="tw-p-6">
+                 <div class="tw-flex tw-mb-5" *ngIf="buttonsPermission">
+                    <button type="button" class="tw-bg-blue-600 tw-text-white tw-text-sm tw-px-3 tw-py-1 tw-rounded hover:tw-bg-blue-700 tw-me-3" (click)="add(addContent)">Ajouter un service</button>
 
-                    <button *ngIf="buttonsPermission.show"  (click)="show(showContent)" type="button" class="btn btn-outline-primary btn-sm  me-3">
+                    <button *ngIf="buttonsPermission.show"  (click)="show(showContent)" type="button" class="tw-border tw-border-blue-500 tw-text-blue-500 tw-text-sm tw-px-3 tw-py-1 tw-rounded hover:tw-bg-blue-50 tw-me-3">
                          <span>Consulter</span></button>
-                    <button *ngIf="buttonsPermission.edit" (click)="edit(editContent)" type="button"  class="btn btn-outline-warning btn-sm  me-3">
+                    <button *ngIf="buttonsPermission.edit" (click)="edit(editContent)" type="button"  class="tw-border tw-border-yellow-500 tw-text-yellow-500 tw-text-sm tw-px-3 tw-py-1 tw-rounded hover:tw-bg-yellow-50 tw-me-3">
                        Editer</button>
-                    <button *ngIf="buttonsPermission.delete" (click)="delete()" type="button" class="btn btn-outline-danger btn-sm  me-3">
+                    <button *ngIf="buttonsPermission.delete" (click)="delete()" type="button" class="tw-border tw-border-red-500 tw-text-red-500 tw-text-sm tw-px-3 tw-py-1 tw-rounded hover:tw-bg-red-50 tw-me-3">
                          Supprimer</button>
                         
                 </div>
 
                         <p>{{data.length}} élément(s)</p>
-                        <div class="table-responsive">
-                        <table class="table" >
-                            <thead class="">
+                        <div class="tw-overflow-x-auto">
+                        <table class="tw-min-w-full tw-border tw-border-gray-200 tw-text-sm">
+                            <thead class="tw-bg-gray-100">
                                 <tr>
-                                    <th style="width: 10px;">#</th>
-                                    <th>Libellé</th>
+                                    <th class="tw-w-[40px] tw-px-3 tw-py-2">#</th>
+                                    <th class="tw-px-3 tw-py-2">Libellé</th>
 
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let d of data ">
-                                    <td>
-                                        <div class="form-check mb-2">
-                                            <input (click)="checked(d)" class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                                <tr *ngFor="let d of data" class="tw-border-t">
+                                     <td class="tw-px-3 tw-py-2">
+                                        <div class="tw-form-check tw-mb-2">
+                                            <input
+                      type="radio"
+                      name="flexRadioDefault"
+                      id="flexRadioDefault{{d.id}}"
+                      class="tw-form-radio tw-text-blue-600"
+                      (click)="checked(d)"
+                    />
                                         
                                         </div>
                                     </td>
-                                    <td>{{d.name}}</td>
+                                     <td class="tw-px-3 tw-py-2">{{d.name}}</td>
                            
                                 </tr>
                             
@@ -118,7 +124,7 @@
       </div>
 
       <div class="modal-body">
-        <div class="table-responsive table-card">
+        <div class="tw-overflow-x-auto table-card">
             <table class="table table-borderless align-middle mb-0">
                 <tbody>
                   

@@ -16,24 +16,24 @@
       <ng-container *ngIf="!showPreview"  class="container">
 
       <div class="row mb-3">
-        <div class="col-lg-12">
-            <div class="card">
+         <div class="tw-col-span-12">
+           <div class="tw-bg-white tw-rounded-lg tw-shadow">
               <div class="card-header cape-bg-green">
                 <h6 class="text-white">Sessions</h6>
               </div>
-                <div class="card-body">
-                    <div class="d-flex mb-5 " *ngIf="buttonsPermission">
-                        <button type="button" class="btn btn-primary btn-sm me-3" (click)="add(addContent)">Ajouter une session</button>
+                  <div class="tw-p-6">
+                     <div class="tw-flex tw-mb-5" *ngIf="buttonsPermission">
+                        <button type="button" class="tw-bg-blue-600 tw-text-white tw-text-sm tw-px-3 tw-py-1 tw-rounded hover:tw-bg-blue-700 tw-me-3" (click)="add(addContent)">Ajouter une session</button>
 
-                        <button *ngIf="buttonsPermission.show"  (click)="show(showContent)" type="button" class="btn btn-outline-primary btn-sm  me-3">
+                        <button *ngIf="buttonsPermission.show"  (click)="show(showContent)" type="button" class="tw-border tw-border-blue-500 tw-text-blue-500 tw-text-sm tw-px-3 tw-py-1 tw-rounded hover:tw-bg-blue-50 tw-me-3">
                              <span>Consulter</span></button>
-                        <button *ngIf="buttonsPermission.edit" (click)="edit(editContent)" type="button"  class="btn btn-outline-warning btn-sm  me-3">
+                        <button *ngIf="buttonsPermission.edit" (click)="edit(editContent)" type="button"  class="tw-border tw-border-yellow-500 tw-text-yellow-500 tw-text-sm tw-px-3 tw-py-1 tw-rounded hover:tw-bg-yellow-50 tw-me-3">
                            Editer</button>
-                        <button *ngIf="buttonsPermission.delete" (click)="delete()" type="button" class="btn btn-outline-danger btn-sm  me-3">
+                        <button *ngIf="buttonsPermission.delete" (click)="delete()" type="button" class="tw-border tw-border-red-500 tw-text-red-500 tw-text-sm tw-px-3 tw-py-1 tw-rounded hover:tw-bg-red-50 tw-me-3">
                              Supprimer</button>
                              <button *ngIf="is_active==null" (click)="setStatus(1)" type="button" class="btn btn-outline-success btn-sm  me-3">
                                 Ouvrir</button>
-                               <button  *ngIf="is_active" (click)="setStatus(0)" type="button" class="btn btn-outline-danger btn-sm  me-3">
+                               <button  *ngIf="is_active" (click)="setStatus(0)" type="button" class="tw-border tw-border-red-500 tw-text-red-500 tw-text-sm tw-px-3 tw-py-1 tw-rounded hover:tw-bg-red-50 tw-me-3">
                                 Clôturer</button>
 
                                 <button  (click)="show(arrContent)" type="button" class="btn btn-outline-info btn-sm  me-3">
@@ -43,33 +43,39 @@
                     </div>
     
                             <p>{{data.length}} élément(s)</p>
-                            <div class="table-responsive">
-                            <table class="table" >
-                                <thead class="">
+                            <div class="tw-overflow-x-auto">
+                            <table class="tw-min-w-full tw-border tw-border-gray-200 tw-text-sm">
+                                <thead class="tw-bg-gray-100">
                                     <tr>
-                                        <th style="width: 10px;">#</th>
+                                        <th class="tw-w-[40px] tw-px-3 tw-py-2">#</th>
                                         <th style="width: 10px;"> <i class="fa fa-check"></i> </th>
-                                        <th>Libellé</th>
-                                        <th>Date début</th>
-                                        <th>Date Fin</th>
-                                        <th>Statut</th>
+                                        <th class="tw-px-3 tw-py-2">Libellé</th>
+                                        <th class="tw-px-3 tw-py-2">Date début</th>
+                                        <th class="tw-px-3 tw-py-2">Date Fin</th>
+                                        <th class="tw-px-3 tw-py-2">Statut</th>
                             
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr *ngFor="let d of data ">
-                                        <td></td>
-                                        <td>
-                                            <div class="form-check mb-2">
-                                                <input (click)="checked(d)" class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                                    <tr *ngFor="let d of data" class="tw-border-t">
+                                         <td class="tw-px-3 tw-py-2"></td>
+                                         <td class="tw-px-3 tw-py-2">
+                                            <div class="tw-form-check tw-mb-2">
+                                                <input
+                      type="radio"
+                      name="flexRadioDefault"
+                      id="flexRadioDefault{{d.id}}"
+                      class="tw-form-radio tw-text-blue-600"
+                      (click)="checked(d)"
+                    />
                                             
                                             </div>
                                         </td>
                                         <td class="">
                                             {{d.name}}</td>
-                                        <td>{{d.date_start | date:"shortDate"}}</td>
-                                        <td>{{d.date_end | date:"shortDate"}}</td>
-                                        <td>
+                                         <td class="tw-px-3 tw-py-2">{{d.date_start | date:"shortDate"}}</td>
+                                         <td class="tw-px-3 tw-py-2">{{d.date_end | date:"shortDate"}}</td>
+                                         <td class="tw-px-3 tw-py-2">
                                             <span *ngIf="d.is_active == undefined" class="bg-secondary text-white p-1 rounded">En attente</span>
                                             <span *ngIf="d.is_active==true" class="bg-success p-1 rounded text-white">Ouvert</span>
                                             <span *ngIf="d.is_active==false" class="bg-danger p-1 rounded text-white">Fermé</span>
@@ -88,23 +94,23 @@
         <!-- end col -->
     </div>
     <div class="row mb-3">
-        <div class="col-lg-12">
-            <div class="card">
+         <div class="tw-col-span-12">
+           <div class="tw-bg-white tw-rounded-lg tw-shadow">
               <div class="card-header cape-bg-green">
                 <h6 class="text-white">Membres</h6>
               </div>
-                <div class="card-body">
+                  <div class="tw-p-6">
                     <table class="table table-sm table-bordered">
                         <thead>
-                            <th>#</th>
-                            <th>Identité</th>
-                            <th>Action</th>
+                            <th class="tw-px-3 tw-py-2">#</th>
+                            <th class="tw-px-3 tw-py-2">Identité</th>
+                            <th class="tw-px-3 tw-py-2">Action</th>
 
                         </thead>
                         <tbody>
                             <tr *ngFor="let m of members; let i=index">
-                                <td>{{i+1}}</td>
-                                <td>{{m.member?.lastname}}  {{m.member?.firstname}}</td>
+                                 <td class="tw-px-3 tw-py-2">{{i+1}}</td>
+                                 <td class="tw-px-3 tw-py-2">{{m.member?.lastname}}  {{m.member?.firstname}}</td>
                                 <td >
                                     <div class="d-flex justify-content-around" style="cursor: pointer">
                                         <i *ngIf="  selected_data.is_active && !m.is_active" (click)="setStatutMember(m.id,1)" class="fa fa-check text-success"></i>
@@ -126,22 +132,22 @@
     </div>
 
     <div class="row mb-3">
-        <div class="col-lg-12">
-            <div class="card">
+         <div class="tw-col-span-12">
+           <div class="tw-bg-white tw-rounded-lg tw-shadow">
               <div class="card-header cape-bg-green">
                 <h6 class="text-white">Dossiers inscrits</h6>
               </div>
-                <div class="card-body">
+                  <div class="tw-p-6">
                     <table class="table table-sm table-bordered">
                         <thead>
-                            <th>#</th>
-                            <th>cape</th>
+                            <th class="tw-px-3 tw-py-2">#</th>
+                            <th class="tw-px-3 tw-py-2">cape</th>
                             <th >Actions</th>
                         </thead>
                         <tbody>
                             <tr *ngFor="let m of requetes; let i=index">
-                                <td>{{i+1}}</td>
-                                <td>{{m.name}}  {{m.name}}</td>
+                                 <td class="tw-px-3 tw-py-2">{{i+1}}</td>
+                                 <td class="tw-px-3 tw-py-2">{{m.name}}  {{m.name}}</td>
                                 <td >
                                     <div class="d-flex justify-content-around" style="cursor: pointer">
 
@@ -313,7 +319,7 @@
           </div>
     
           <div class="modal-body">
-            <div class="table-responsive table-card">
+            <div class="tw-overflow-x-auto table-card">
                 <table class="table table-borderless align-middle mb-0">
                     <tbody>
                       

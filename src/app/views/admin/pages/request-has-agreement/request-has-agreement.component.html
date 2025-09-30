@@ -11,53 +11,59 @@
     </div>
   </div>
 
-   <div class="row">
-    <div class="col-lg-12">
-        <div class="card">
+   <div class="tw-grid tw-grid-cols-12 tw-gap-4">
+     <div class="tw-col-span-12">
+       <div class="tw-bg-white tw-rounded-lg tw-shadow">
           
-            <div class="card-body">
+              <div class="tw-p-6">
              <div class="d-flex">
                 <button  (click)="add(addContent)" type="button" class="btn btn-outline-success btn-sm  me-3">
                     Décider</button>
-                <button  (click)="authorized()" *ngIf="canClosed" type="button" class="btn btn-outline-danger btn-sm  me-3">
+                <button  (click)="authorized()" *ngIf="canClosed" type="button" class="tw-border tw-border-red-500 tw-text-red-500 tw-text-sm tw-px-3 tw-py-1 tw-rounded hover:tw-bg-red-50 tw-me-3">
                     Clôturer</button>
              </div>
                         <p>{{data.length}} élément(s)</p>
-                        <div class="table-responsive">
-                        <table class="table" >
-                            <thead class="">
+                        <div class="tw-overflow-x-auto">
+                        <table class="tw-min-w-full tw-border tw-border-gray-200 tw-text-sm">
+                            <thead class="tw-bg-gray-100">
                                 <tr>
-                                    <th style="width: 10px;">#</th>
-                                    <th>Cape</th>
-                                    <th>Décision du comité</th>
-                                    <th>Décision du ministre</th>
-                                    <th>Action</th>
+                                    <th class="tw-w-[40px] tw-px-3 tw-py-2">#</th>
+                                    <th class="tw-px-3 tw-py-2">Cape</th>
+                                    <th class="tw-px-3 tw-py-2">Décision du comité</th>
+                                    <th class="tw-px-3 tw-py-2">Décision du ministre</th>
+                                    <th class="tw-px-3 tw-py-2">Action</th>
                         
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let d of data ">
-                                    <td>
+                                <tr *ngFor="let d of data" class="tw-border-t">
+                                     <td class="tw-px-3 tw-py-2">
 
                                         <div class="form-check">
                                             <input class="form-check-input" type="checkbox" [checked]="d.is_authorized" >
 
                                           </div>
                                         <!--div class="form-check mb-2">
-                                            <input (click)="checked(d)" class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                                            <input
+                      type="radio"
+                      name="flexRadioDefault"
+                      id="flexRadioDefault{{d.id}}"
+                      class="tw-form-radio tw-text-blue-600"
+                      (click)="checked(d)"
+                    />
                                         
                                         </!--div-->
                                     </td>
-                                    <td>{{d.name}}</td>
-                                    <td>
+                                     <td class="tw-px-3 tw-py-2">{{d.name}}</td>
+                                     <td class="tw-px-3 tw-py-2">
                                         <span *ngIf="d.has_agreemant==1" class="p-1 bg-warning text-white"> Accord donné sous réserve</span>
                                         <span *ngIf="d.has_agreemant==2" class="p-1 bg-success text-white"> Accord donné</span>
                                     </td>
-                                    <td>
+                                     <td class="tw-px-3 tw-py-2">
                                         <span *ngIf="d.is_authorized==0" class="p-1 bg-warning text-white"> Autorisation mise en attente</span>
                                         <span *ngIf="d.is_authorized==1" class="p-1 bg-success text-white"> Autorisation accordée</span>
                                     </td>
-                                    <td>
+                                     <td class="tw-px-3 tw-py-2">
                                         <a  class="btn btn-sm btn-primary" [routerLink]="'/admin/session-request-show/'+ d.code">Ouvrir le dossier </a>
 
                                     </td>

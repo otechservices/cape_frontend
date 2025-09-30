@@ -15,20 +15,20 @@
     <ng-container *ngIf="!showPreview"  class="container">
         <ng-container *ngIf="role =='cape'">
             <div class="row mb-3">
-                <div class="col-lg-12">
-                    <div class="card">
+                 <div class="tw-col-span-12">
+                   <div class="tw-bg-white tw-rounded-lg tw-shadow">
                         <div class="card-header cape-bg-blue text-white">
                             <h6 class="text-white">Liste des rapports d'activité</h6>
                           </div>
-                        <div class="card-body">
-                            <div class="d-flex mb-5 " *ngIf="buttonsPermission">
-                                <button *ngIf="role=='cape'" type="button" class="btn btn-primary btn-sm me-3" (click)="add(addContent)">Ajouter un rapport d'activité</button>
+                          <div class="tw-p-6">
+                             <div class="tw-flex tw-mb-5" *ngIf="buttonsPermission">
+                                <button *ngIf="role=='cape'" type="button" class="tw-bg-blue-600 tw-text-white tw-text-sm tw-px-3 tw-py-1 tw-rounded hover:tw-bg-blue-700 tw-me-3" (click)="add(addContent)">Ajouter un rapport d'activité</button>
         
-                                <button *ngIf="buttonsPermission.show"  (click)="show(showContent)" type="button" class="btn btn-outline-primary btn-sm  me-3">
+                                <button *ngIf="buttonsPermission.show"  (click)="show(showContent)" type="button" class="tw-border tw-border-blue-500 tw-text-blue-500 tw-text-sm tw-px-3 tw-py-1 tw-rounded hover:tw-bg-blue-50 tw-me-3">
                                      <span>Consulter</span></button>
-                                     <button *ngIf="buttonsPermission.edit && role=='cape'" (click)="edit(editContent)" type="button"  class="btn btn-outline-warning btn-sm  me-3">
+                                     <button *ngIf="buttonsPermission.edit && role=='cape'" (click)="edit(editContent)" type="button"  class="tw-border tw-border-yellow-500 tw-text-yellow-500 tw-text-sm tw-px-3 tw-py-1 tw-rounded hover:tw-bg-yellow-50 tw-me-3">
                                         Editer</button>
-                                        <button *ngIf="buttonsPermission.delete && role=='cape'" (click)="delete()" type="button" class="btn btn-outline-danger btn-sm  me-3">
+                                        <button *ngIf="buttonsPermission.delete && role=='cape'" (click)="delete()" type="button" class="tw-border tw-border-red-500 tw-text-red-500 tw-text-sm tw-px-3 tw-py-1 tw-rounded hover:tw-bg-red-50 tw-me-3">
                                             Supprimer</button>
                                         <button *ngIf="buttonsPermission.transission && role=='cape'" (click)="send()" type="button" class="btn btn-outline-success btn-sm  me-3">
                                             Transmettre</button>
@@ -37,28 +37,34 @@
                             </div>
             
                                     <p>{{data.length}} élément(s)</p>
-                                    <div class="table-responsive">
-                                    <table class="table" >
-                                        <thead class="">
+                                    <div class="tw-overflow-x-auto">
+                                    <table class="tw-min-w-full tw-border tw-border-gray-200 tw-text-sm">
+                                        <thead class="tw-bg-gray-100">
                                             <tr>
-                                                <th style="width: 10px;">#</th>
-                                                <th>Description</th>
-                                                <th>Statut</th>
-                                                <th>Transmis</th>
-                                                <th>Fichier</th>
+                                                <th class="tw-w-[40px] tw-px-3 tw-py-2">#</th>
+                                                <th class="tw-px-3 tw-py-2">Description</th>
+                                                <th class="tw-px-3 tw-py-2">Statut</th>
+                                                <th class="tw-px-3 tw-py-2">Transmis</th>
+                                                <th class="tw-px-3 tw-py-2">Fichier</th>
                                     
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr *ngFor="let d of data ">
-                                                <td>
-                                                    <div class="form-check mb-2">
-                                                        <input (click)="checked(d)" class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                                            <tr *ngFor="let d of data" class="tw-border-t">
+                                                 <td class="tw-px-3 tw-py-2">
+                                                    <div class="tw-form-check tw-mb-2">
+                                                        <input
+                      type="radio"
+                      name="flexRadioDefault"
+                      id="flexRadioDefault{{d.id}}"
+                      class="tw-form-radio tw-text-blue-600"
+                      (click)="checked(d)"
+                    />
                                                     
                                                     </div>
                                                 </td>
-                                                <td>{{d.description}}</td>
-                                                <td>
+                                                 <td class="tw-px-3 tw-py-2">{{d.description}}</td>
+                                                 <td class="tw-px-3 tw-py-2">
                                                     <span [ngClass]="{
                                                         'p-1 bg-secondary  text-white rounded':d.status==0,
                                                         'p-1 bg-success  text-white rounded':d.status==1,
@@ -68,7 +74,7 @@
                                                     {{getStatus(d.status)}}
                                                 </span>
                                                 </td>
-                                                <td>
+                                                 <td class="tw-px-3 tw-py-2">
                                                     <span [ngClass]="{
                                                         'p-1 bg-secondary  text-white rounded':d.is_transmitted==0,
                                                         'p-1 bg-success  text-white rounded':d.is_transmitted==1
@@ -76,7 +82,7 @@
                                                     {{d.is_transmitted?"Oui":"Non"}}
                                                 </span>
                                                 </td>
-                                                <td>
+                                                 <td class="tw-px-3 tw-py-2">
                                                     <div class="d-flex justify-content-between">
                                                         <button class="btn btn-outline-primary btn-sm" (click)="showFile(d.activity_report_filename,d)">Ouvrir le rapport d'activité</button>
                                                         <button class="btn btn-outline-primary btn-sm" (click)="showFile(d.financial_report_filename,d)">Ouvrir le rapport financier</button>
@@ -96,33 +102,33 @@
             </div>
 
             <div class="row mb-5">
-                <div class="col-lg-12">
-                    <div class="card">
+                 <div class="tw-col-span-12">
+                   <div class="tw-bg-white tw-rounded-lg tw-shadow">
                       <div class="card-header cape-bg-blue text-white">
                         <h6 class="text-white">Instructions sur le rapport d'activité</h6>
                       </div>
-                        <div class="card-body">
+                          <div class="tw-p-6">
 
                          
                                     <p>{{activity_report_responses.length}} élément(s)</p>
-                                    <div class="table-responsive">
+                                    <div class="tw-overflow-x-auto">
                                     <table class="table">
-                                        <thead class="">
+                                        <thead class="tw-bg-gray-100">
                                             <tr>
-                                                <th style="width: 10px;">#</th>
-                                                <th>Instruction</th>
+                                                <th class="tw-w-[40px] tw-px-3 tw-py-2">#</th>
+                                                <th class="tw-px-3 tw-py-2">Instruction</th>
                                     
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr *ngFor="let d of activity_report_responses ">
-                                                <td>
-                                                    <div class="form-check mb-2">
+                                                 <td class="tw-px-3 tw-py-2">
+                                                    <div class="tw-form-check tw-mb-2">
                                                         <input (click)="checked3(d)" class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
                                                     
                                                     </div>
                                                 </td>
-                                                <td>{{d.instruction}}</td>
+                                                 <td class="tw-px-3 tw-py-2">{{d.instruction}}</td>
                                                
                                             </tr>
                                         
@@ -139,37 +145,43 @@
         </ng-container>
         <ng-container *ngIf="role !='cape'">
             <div class="row mb-3">
-                <div class="col-lg-12">
-                    <div class="card">
+                 <div class="tw-col-span-12">
+                   <div class="tw-bg-white tw-rounded-lg tw-shadow">
                       <div class="card-header cape-bg-blue text-white">
                         <h6 class="text-white">Liste des capes ayant déposé des rapports d'activité</h6>
                       </div>
-                        <div class="card-body">
+                          <div class="tw-p-6">
                                     <p>{{data.length}} élément(s)</p>
-                                    <div class="table-responsive">
-                                    <table class="table" >
-                                        <thead class="">
+                                    <div class="tw-overflow-x-auto">
+                                    <table class="tw-min-w-full tw-border tw-border-gray-200 tw-text-sm">
+                                        <thead class="tw-bg-gray-100">
                                             <tr>
-                                                <th style="width: 10px;">#</th>
-                                                <th>Type CAPE</th>
-                                                <th>Dénomination</th>
-                                                <th>Nombres d'enfants</th>
-                                                <th>Effectif du personnel</th>
+                                                <th class="tw-w-[40px] tw-px-3 tw-py-2">#</th>
+                                                <th class="tw-px-3 tw-py-2">Type CAPE</th>
+                                                <th class="tw-px-3 tw-py-2">Dénomination</th>
+                                                <th class="tw-px-3 tw-py-2">Nombres d'enfants</th>
+                                                <th class="tw-px-3 tw-py-2">Effectif du personnel</th>
                                     
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr *ngFor="let d of data ">
-                                                <td>
-                                                    <div class="form-check mb-2">
-                                                        <input (click)="checked(d)" class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                                            <tr *ngFor="let d of data" class="tw-border-t">
+                                                 <td class="tw-px-3 tw-py-2">
+                                                    <div class="tw-form-check tw-mb-2">
+                                                        <input
+                      type="radio"
+                      name="flexRadioDefault"
+                      id="flexRadioDefault{{d.id}}"
+                      class="tw-form-radio tw-text-blue-600"
+                      (click)="checked(d)"
+                    />
                                                     
                                                     </div>
                                                 </td>
-                                                <td>{{d.requete?.type_cape?.name}}</td>
-                                                <td>{{d.requete?.name}} </td>
-                                                <td>{{d.residents_count}} </td>
-                                                <td>{{d.staffs_count}} </td>
+                                                 <td class="tw-px-3 tw-py-2">{{d.requete?.type_cape?.name}}</td>
+                                                 <td class="tw-px-3 tw-py-2">{{d.requete?.name}} </td>
+                                                 <td class="tw-px-3 tw-py-2">{{d.residents_count}} </td>
+                                                 <td class="tw-px-3 tw-py-2">{{d.staffs_count}} </td>
                                             </tr>
                                         
                                         </tbody>
@@ -183,42 +195,42 @@
                 <!-- end col -->
             </div>
             <div class="row mb-3">
-                <div class="col-lg-12">
-                    <div class="card">
+                 <div class="tw-col-span-12">
+                   <div class="tw-bg-white tw-rounded-lg tw-shadow">
                       <div class="card-header cape-bg-blue ">
                         <h6 class="text-white">Rapports d'activité</h6>
                       </div>
-                        <div class="card-body">
+                          <div class="tw-p-6">
 
                             <div *ngIf="role == 'ministre'" class="d-flex">
                                 <button *ngIf="buttonsPermission2.ok"   (click)="setStatus(1)" type="button"  class="btn btn-outline-success btn-sm  me-3">
                                     Valider</button>
-                                <button  *ngIf="buttonsPermission2.ok" (click)="setStatus(2)" type="button"  class="btn btn-outline-danger btn-sm  me-3">
+                                <button  *ngIf="buttonsPermission2.ok" (click)="setStatus(2)" type="button"  class="tw-border tw-border-red-500 tw-text-red-500 tw-text-sm tw-px-3 tw-py-1 tw-rounded hover:tw-bg-red-50 tw-me-3">
                                     Rejeter</button>
                             </div>
                                     <p>{{activity_reports.length}} élément(s)</p>
-                                    <div class="table-responsive">
-                                    <table class="table" >
-                                        <thead class="">
+                                    <div class="tw-overflow-x-auto">
+                                    <table class="tw-min-w-full tw-border tw-border-gray-200 tw-text-sm">
+                                        <thead class="tw-bg-gray-100">
                                             <tr>
-                                                <th style="width: 10px;">#</th>
-                                                <th>Description</th>
-                                                <th>Statut</th>
-                                                <th>Transmis</th>
-                                                <th>Fichier</th>
+                                                <th class="tw-w-[40px] tw-px-3 tw-py-2">#</th>
+                                                <th class="tw-px-3 tw-py-2">Description</th>
+                                                <th class="tw-px-3 tw-py-2">Statut</th>
+                                                <th class="tw-px-3 tw-py-2">Transmis</th>
+                                                <th class="tw-px-3 tw-py-2">Fichier</th>
                                     
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr *ngFor="let d of activity_reports ">
-                                                <td>
-                                                    <div class="form-check mb-2">
+                                                 <td class="tw-px-3 tw-py-2">
+                                                    <div class="tw-form-check tw-mb-2">
                                                         <input (click)="checked2(d)" class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
                                                     
                                                     </div>
                                                 </td>
-                                                <td>{{d.description}}</td>
-                                                <td>
+                                                 <td class="tw-px-3 tw-py-2">{{d.description}}</td>
+                                                 <td class="tw-px-3 tw-py-2">
                                                     <span [ngClass]="{
                                                         'p-1 bg-secondary  text-white rounded':d.status==0,
                                                         'p-1 bg-success  text-white rounded':d.status==1,
@@ -228,7 +240,7 @@
                                                     {{getStatus(d.status)}}
                                                 </span>
                                                 </td>
-                                                <td>
+                                                 <td class="tw-px-3 tw-py-2">
                                                     <span [ngClass]="{
                                                         'p-1 bg-secondary  text-white rounded':d.is_transmitted==0,
                                                         'p-1 bg-success  text-white rounded':d.is_transmitted==1
@@ -236,7 +248,7 @@
                                                     {{d.is_transmitted?"Oui":"Non"}}
                                                 </span>
                                                 </td>
-                                                <td>
+                                                 <td class="tw-px-3 tw-py-2">
                                                     <div class="d-flex justify-content-between">
                                                         <button class="btn btn-outline-primary btn-sm" (click)="showFile(d.activity_report_filename,d)">Ouvrir le rapport d'activité</button>
                                                         <button class="btn btn-outline-primary btn-sm" (click)="showFile(d.financial_report_filename,d)">Ouvrir le rapport financier</button>
@@ -255,40 +267,40 @@
                 <!-- end col -->
             </div>
             <div class="row mb-5">
-                <div class="col-lg-12">
-                    <div class="card">
+                 <div class="tw-col-span-12">
+                   <div class="tw-bg-white tw-rounded-lg tw-shadow">
                       <div class="card-header cape-bg-blue text-white">
                         <h6 class="text-white">Instructions sur le rapport d'activité</h6>
                       </div>
-                        <div class="card-body">
+                          <div class="tw-p-6">
 
                             <div *ngIf="role=='ministre' " class="d-flex justify-content-between">
-                                <button  type="button" class="btn btn-primary btn-sm me-3" (click)="add2(addObsContent)">Ajouter une observation</button>
+                                <button  type="button" class="tw-bg-blue-600 tw-text-white tw-text-sm tw-px-3 tw-py-1 tw-rounded hover:tw-bg-blue-700 tw-me-3" (click)="add2(addObsContent)">Ajouter une observation</button>
 
-                                    <button *ngIf="activity_report_responses.length>0"  (click)="edit2(editObsContent)" type="button"  class="btn btn-outline-warning btn-sm  me-3">
+                                    <button *ngIf="activity_report_responses.length>0"  (click)="edit2(editObsContent)" type="button"  class="tw-border tw-border-yellow-500 tw-text-yellow-500 tw-text-sm tw-px-3 tw-py-1 tw-rounded hover:tw-bg-yellow-50 tw-me-3">
                                        Editer</button>
-                                       <button *ngIf="activity_report_responses.length>0"   (click)="deleteObs()" type="button" class="btn btn-outline-danger btn-sm  me-3">
+                                       <button *ngIf="activity_report_responses.length>0"   (click)="deleteObs()" type="button" class="tw-border tw-border-red-500 tw-text-red-500 tw-text-sm tw-px-3 tw-py-1 tw-rounded hover:tw-bg-red-50 tw-me-3">
                                            Supprimer</button>
                             </div>
                                     <p>{{activity_report_responses.length}} élément(s)</p>
-                                    <div class="table-responsive">
+                                    <div class="tw-overflow-x-auto">
                                     <table class="table">
-                                        <thead class="">
+                                        <thead class="tw-bg-gray-100">
                                             <tr>
-                                                <th style="width: 10px;">#</th>
-                                                <th>Instruction</th>
+                                                <th class="tw-w-[40px] tw-px-3 tw-py-2">#</th>
+                                                <th class="tw-px-3 tw-py-2">Instruction</th>
                                     
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr *ngFor="let d of activity_report_responses ">
-                                                <td>
-                                                    <div class="form-check mb-2">
+                                                 <td class="tw-px-3 tw-py-2">
+                                                    <div class="tw-form-check tw-mb-2">
                                                         <input (click)="checked3(d)" class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
                                                     
                                                     </div>
                                                 </td>
-                                                <td>{{d.instruction}}</td>
+                                                 <td class="tw-px-3 tw-py-2">{{d.instruction}}</td>
                                                
                                             </tr>
                                         

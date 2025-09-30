@@ -10,6 +10,8 @@ const routes: Routes = [
   { path: '', loadChildren: () => import('./views/public/public.module').then(m => m.PublicModule)},
   { path: 'admin', loadChildren: () => import('./views/admin/admin.module').then(m => m.AdminModule)},
   { path: 'public', loadChildren: () => import('./views/public-auth/public-auth.module').then(m => m.PublicAuthModule)},
+    { path: 'promoter', loadChildren: () => import('./views/promoter/promoter.module').then(m => m.PromoterModule)},
+
   {path: '404', component: NotFoundComponent},
   {path: '**', redirectTo: '/404'}
 ];

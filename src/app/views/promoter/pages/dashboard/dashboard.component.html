@@ -1,0 +1,61 @@
+<div class="tw-space-y-8">
+  <!-- Bandeau d’accueil -->
+  <div class="tw-bg-gradient-to-r tw-from-blue-600 tw-to-blue-800 tw-rounded-2xl tw-p-8 tw-text-white">
+    <h1 class="tw-text-3xl tw-font-bold tw-mb-2">Bienvenue dans votre espace personnel</h1>
+    <p class="tw-text-blue-100 tw-text-lg">
+      Gérez vos demandes d'autorisation et suivez vos dossiers en toute simplicité
+    </p>
+  </div>
+
+  <!-- Actions rapides -->
+  <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-gap-6">
+    <div
+      *ngFor="let action of quickActions"
+      class="tw-bg-white tw-rounded-xl tw-shadow-sm tw-border tw-border-gray-200 tw-p-6 hover:tw-shadow-md tw-transition-shadow tw-duration-200 tw-cursor-pointer"
+      (click)="handleAction(action.action)"
+    >
+      <div class="tw-flex tw-items-start tw-space-x-4">
+        <div class="tw-w-12 tw-h-12 tw-rounded-lg tw-flex tw-items-center tw-justify-center tw-flex-shrink-0"
+             [ngClass]="action.color">
+          <i class="{{ action.icon }} tw-text-white tw-text-xl"></i>
+        </div>
+        <div class="tw-flex-1">
+          <h3 class="tw-text-lg tw-font-semibold tw-text-gray-900 tw-mb-2">{{ action.title }}</h3>
+          <p class="tw-text-gray-600 tw-text-sm tw-leading-relaxed">{{ action.description }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Activité récente -->
+  <div class="tw-bg-white tw-rounded-xl tw-shadow-sm tw-border tw-border-gray-200 tw-p-6">
+    <h2 class="tw-text-xl tw-font-semibold tw-text-gray-900 tw-mb-4">Activité récente</h2>
+    <div class="tw-space-y-4">
+      <div class="tw-flex tw-items-center tw-space-x-4 tw-p-4 tw-bg-gray-50 tw-rounded-lg">
+        <div class="tw-w-10 tw-h-10 tw-bg-blue-100 tw-rounded-full tw-flex tw-items-center tw-justify-center">
+          <i class="ri-file-text-line tw-text-blue-600"></i>
+        </div>
+        <div class="tw-flex-1">
+          <p class="tw-text-sm tw-font-medium tw-text-gray-900">Compte créé avec succès</p>
+          <p class="tw-text-xs tw-text-gray-500">Votre espace personnel est maintenant actif</p>
+        </div>
+        <span class="tw-text-xs tw-text-gray-400">Aujourd'hui</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Informations importantes -->
+  <div class="tw-bg-yellow-50 tw-border tw-border-yellow-200 tw-rounded-xl tw-p-6">
+    <div class="tw-flex tw-items-start tw-space-x-3">
+      <i class="ri-information-line tw-text-yellow-600 tw-text-xl tw-mt-1"></i>
+      <div>
+        <h3 class="tw-text-lg tw-font-semibold tw-text-yellow-800 tw-mb-2">Informations importantes</h3>
+        <ul class="tw-text-sm tw-text-yellow-700 tw-space-y-1">
+          <li>• Les demandes sont traitées sous 15 jours ouvrables</li>
+          <li>• Assurez-vous d'avoir tous les documents requis avant de soumettre</li>
+          <li>• Vous recevrez une notification par email à chaque étape</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

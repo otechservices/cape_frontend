@@ -12,32 +12,38 @@
   </div>
 
 
-  <div class="row">
-    <div class="col-lg-12">
-        <div class="card">
+  <div class="tw-grid tw-grid-cols-12 tw-gap-4">
+     <div class="tw-col-span-12">
+       <div class="tw-bg-white tw-rounded-lg tw-shadow">
           
-            <div class="card-body">
+              <div class="tw-p-6">
 
                         <p>{{data.length}} élément(s)</p>
-                        <div class="table-responsive">
-                        <table class="table" >
-                            <thead class="">
+                        <div class="tw-overflow-x-auto">
+                        <table class="tw-min-w-full tw-border tw-border-gray-200 tw-text-sm">
+                            <thead class="tw-bg-gray-100">
                                 <tr>
-                                    <th style="width: 10px;">#</th>
-                                    <th>CAPE</th>
-                                    <th>Action</th>
+                                    <th class="tw-w-[40px] tw-px-3 tw-py-2">#</th>
+                                    <th class="tw-px-3 tw-py-2">CAPE</th>
+                                    <th class="tw-px-3 tw-py-2">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr *ngFor="let d of data ">
-                                    <td>
-                                        <div class="form-check mb-2">
-                                            <input (click)="checked(d)" class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                                <tr *ngFor="let d of data" class="tw-border-t">
+                                     <td class="tw-px-3 tw-py-2">
+                                        <div class="tw-form-check tw-mb-2">
+                                            <input
+                      type="radio"
+                      name="flexRadioDefault"
+                      id="flexRadioDefault{{d.id}}"
+                      class="tw-form-radio tw-text-blue-600"
+                      (click)="checked(d)"
+                    />
                                         
                                         </div>
                                     </td>
-                                    <td>{{d.name}}</td>
-                                    <td>
+                                     <td class="tw-px-3 tw-py-2">{{d.name}}</td>
+                                     <td class="tw-px-3 tw-py-2">
                                         <a class="btn btn-sm btn-primary" [routerLink]="'/admin/session-request-show/'+ d.code">Ouvrir le dossier </a>
                                     </td>
                                

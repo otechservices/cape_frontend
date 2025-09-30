@@ -15,23 +15,23 @@
       </div>
   
       <ng-container  *ngIf="!showPreview">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="card">
+        <div class="tw-grid tw-grid-cols-12 tw-gap-4">
+             <div class="tw-col-span-12">
+               <div class="tw-bg-white tw-rounded-lg tw-shadow">
                   
-                    <div class="card-body">
-                        <div class="d-flex mb-5 " *ngIf="buttonsPermission">
-                            <button type="button" class="btn btn-primary btn-sm me-3" (click)="add(addContent)">Ajouter un cape</button>
+                      <div class="tw-p-6">
+                         <div class="tw-flex tw-mb-5" *ngIf="buttonsPermission">
+                            <button type="button" class="tw-bg-blue-600 tw-text-white tw-text-sm tw-px-3 tw-py-1 tw-rounded hover:tw-bg-blue-700 tw-me-3" (click)="add(addContent)">Ajouter un cape</button>
 
-                            <button  (click)="show(showContent)" type="button" class="btn btn-outline-primary btn-sm  me-3">
+                            <button  (click)="show(showContent)" type="button" class="tw-border tw-border-blue-500 tw-text-blue-500 tw-text-sm tw-px-3 tw-py-1 tw-rounded hover:tw-bg-blue-50 tw-me-3">
                                  <span>Consulter</span></button>
-                            <button  (click)="edit(editContent)" type="button"  class="btn btn-outline-warning btn-sm  me-3">
+                            <button  (click)="edit(editContent)" type="button"  class="tw-border tw-border-yellow-500 tw-text-yellow-500 tw-text-sm tw-px-3 tw-py-1 tw-rounded hover:tw-bg-yellow-50 tw-me-3">
                                Editer</button>
                          
 
                                  <button *ngIf="selected_data && !selected_data.is_validate"  (click)="setStatus(1)" type="button" class="btn btn-outline-success btn-sm  me-3">
                                     Valider </button>
-                                   <button *ngIf="selected_data && selected_data.is_validate"  (click)="setStatus(0)" type="button" class="btn btn-outline-danger btn-sm  me-3">
+                                   <button *ngIf="selected_data && selected_data.is_validate"  (click)="setStatus(0)" type="button" class="tw-border tw-border-red-500 tw-text-red-500 tw-text-sm tw-px-3 tw-py-1 tw-rounded hover:tw-bg-red-50 tw-me-3">
                                     Rejeter</button>
 
                         <!-- <button [disabled]="loading" class="pull-right btn  btn-sm btn-outline-info" (click)="show2(imporContent)">Importer en masse les données</button> -->
@@ -39,30 +39,36 @@
                                     </div>
 
                                 <p>{{data.length}} élément(s)</p>
-                                <div class="table-responsive">
-                                <table class="table" >
-                                    <thead class="">
+                                <div class="tw-overflow-x-auto">
+                                <table class="tw-min-w-full tw-border tw-border-gray-200 tw-text-sm">
+                                    <thead class="tw-bg-gray-100">
                                         <tr>
-                                            <th style="width: 10px;">#</th>
-                                            <th>Libellé</th>
-                                            <th>Identité promoteur</th>
-                                            <th>Localisation</th>
-                                            <th>Adresse</th>
-                                            <th>Statut</th>
+                                            <th class="tw-w-[40px] tw-px-3 tw-py-2">#</th>
+                                            <th class="tw-px-3 tw-py-2">Libellé</th>
+                                            <th class="tw-px-3 tw-py-2">Identité promoteur</th>
+                                            <th class="tw-px-3 tw-py-2">Localisation</th>
+                                            <th class="tw-px-3 tw-py-2">Adresse</th>
+                                            <th class="tw-px-3 tw-py-2">Statut</th>
     
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr *ngFor="let d of data ">
-                                            <td>
-                                                <div class="form-check mb-2">
-                                                    <input (click)="checked(d)" class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                                        <tr *ngFor="let d of data" class="tw-border-t">
+                                             <td class="tw-px-3 tw-py-2">
+                                                <div class="tw-form-check tw-mb-2">
+                                                    <input
+                      type="radio"
+                      name="flexRadioDefault"
+                      id="flexRadioDefault{{d.id}}"
+                      class="tw-form-radio tw-text-blue-600"
+                      (click)="checked(d)"
+                    />
                                                 
                                                 </div>
                                             </td>
-                                            <td>{{d.name}}</td>
-                                            <td>{{d.name_pomoter}} {{d.first_pomoter}}</td>
-                                            <td>
+                                             <td class="tw-px-3 tw-py-2">{{d.name}}</td>
+                                             <td class="tw-px-3 tw-py-2">{{d.name_pomoter}} {{d.first_pomoter}}</td>
+                                             <td class="tw-px-3 tw-py-2">
                                                 <small>
                                                     <ul>
                                                         <li><strong>Département  : </strong> {{d.district?.municipality?.department?.name}}</li>
@@ -72,8 +78,8 @@
                                                     </ul>
                                                 </small>
                                             </td>
-                                            <td>{{d.address}}</td>
-                                            <td>
+                                             <td class="tw-px-3 tw-py-2">{{d.address}}</td>
+                                             <td class="tw-px-3 tw-py-2">
                                                 <span *ngIf="d.is_validated == null" class="text-secondary" style="font-weight: 700; color: gray;">En attente de validation</span>
                                                 <span *ngIf="d.is_validated == 1" class="text-success" style="font-weight: 700; color: green;">Validé</span>
                                                 <span *ngIf="d.is_validated == 0" class="text-secondary" style="font-weight: 700; color: red;">Validation retirée</span>
@@ -142,7 +148,7 @@
 
           <fieldset>
             <legend>Localisation du centre</legend>
-            <div class="row">
+            <div class="tw-grid tw-grid-cols-12 tw-gap-4">
                 <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
                     <label for="">Type de centre <span class="mx-1 text-danger">*</span></label>
                     <select class="form-control" name="type_cape_id" [(ngModel)]="myRequestForm.type_cape_id">
@@ -216,7 +222,7 @@
             </fieldset>
             <fieldset>
                 <legend>Information du centre</legend>
-                <div class="row">
+                <div class="tw-grid tw-grid-cols-12 tw-gap-4">
                  
                     <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
     
@@ -257,7 +263,7 @@
 
             <fieldset>
                 <legend>Information du directeur</legend>
-                <div class="row">
+                <div class="tw-grid tw-grid-cols-12 tw-gap-4">
                     <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
                         <label for="">Nom </label>
                         <input type="text" [readonly]="myRequestForm.chief_is_directeor" maxlength="100" name="name_chief" class="form-control"   [(ngModel)]="myRequestForm.name_chief">
@@ -321,7 +327,7 @@
 
         <fieldset>
             <legend>Information du directeur</legend>
-            <div class="row">
+            <div class="tw-grid tw-grid-cols-12 tw-gap-4">
                 <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
                     <label for="">Nom </label>
                     <input type="text" [readonly]="myRequestForm.chief_is_directeor" maxlength="100" name="name_chief" class="form-control"   [(ngModel)]="myRequestForm.name_chief">
@@ -345,7 +351,7 @@
 
         <fieldset>
             <legend>Information du centre</legend>
-            <div class="row">
+            <div class="tw-grid tw-grid-cols-12 tw-gap-4">
                 <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
                     <label for="">Type de centre <span class="mx-1 text-danger">*</span></label>
                     <select class="form-control" name="type_cape_id" [(ngModel)]="myRequestForm.type_cape_id">
@@ -394,7 +400,7 @@
    
         <fieldset>
             <legend>Localisation du centre</legend>
-            <div class="row">
+            <div class="tw-grid tw-grid-cols-12 tw-gap-4">
                 <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
                     <label for="">Sélectionnez un département <span class="mx-1 text-danger">*</span></label>
                     <select class="form-control" (change)="loadMunicipalities($event)" name="department_id" [(ngModel)]="myRequestForm.department_id">
@@ -447,7 +453,7 @@
       </div>
 
       <div class="modal-body">
-        <div class="table-responsive table-card">
+        <div class="tw-overflow-x-auto table-card">
             <table class="table table-borderless align-middle mb-0">
                 <tbody>
                   

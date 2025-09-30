@@ -41,6 +41,12 @@ export class AuthService {
      ConfigService.httpHeader(null,true));
   }
 
+
+    register(ressource:any){
+    return this.http.post<any>(`${this.url2}api/register`, ressource,
+     ConfigService.httpHeader(null,true));
+  }
+
   sendMail(ressource:any){
     return this.http.post<any>(`${this.url2}api/send-reset-password-link`, ressource,
      ConfigService.httpHeader(null,true));

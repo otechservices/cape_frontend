@@ -52,6 +52,7 @@ export class RequetesComponent implements OnInit {
   ngOnInit(): void {
     this.user=this.lsService.get(GlobalName.userName)
     this.activatedRoute.paramMap.subscribe(params => {
+      this.type=params.get('type')
       this.init()
     })
     

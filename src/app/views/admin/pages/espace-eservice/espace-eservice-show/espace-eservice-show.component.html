@@ -50,7 +50,7 @@
 
     <fieldset *ngIf="data?.nature_promotor?.name.includes('morale')">
         <legend class="bg-secondary text-white">Information sur la personne morale</legend>
-        <div class="row">
+        <div class="tw-grid tw-grid-cols-12 tw-gap-4">
             <div class="col-6">
                 <dl>
                     <dt>Dénomination </dt>
@@ -96,7 +96,7 @@
     </fieldset>
     <fieldset>
         <legend class="bg-secondary text-white">{{data?.nature_promotor?.name.includes('morale')?'Information sur le représentant légal' :'Information sur le promoteur' }}</legend>
-        <div class="row">
+        <div class="tw-grid tw-grid-cols-12 tw-gap-4">
             <div class="col-6">
                 <dl>
                     <dt>Nom </dt>
@@ -126,7 +126,7 @@
     </fieldset>
     <fieldset>
         <legend class="bg-secondary text-white">Information sur le directeur</legend>
-        <div class="row">
+        <div class="tw-grid tw-grid-cols-12 tw-gap-4">
             <div class="col-6">
                 <dl>
                     <dt>Nom </dt>
@@ -156,7 +156,7 @@
     </fieldset>
     <fieldset>
         <legend class="bg-secondary text-white">Information sur le centre</legend>
-        <div class="row">
+        <div class="tw-grid tw-grid-cols-12 tw-gap-4">
             <div class="col-6" *ngIf="data.service?.name?.toLowerCase().includes('cape')">
                 <dl>
                     <dt>Type Centre</dt>
@@ -211,7 +211,7 @@
         </div>
         <hr>
         <legend class="bg-secondary text-white">Localisation</legend>
-        <div class="row">
+        <div class="tw-grid tw-grid-cols-12 tw-gap-4">
          <div class="col-6">
              <dl>
                  <dt>Département</dt>
@@ -262,14 +262,14 @@
     <div class="mb-3">
         <h4> <i class="fa fa-chevron-right fw-bold me-3"></i>  <u>Documents joints à la soumission</u>  </h4>
     </div>
-    <div class="table-responsive">
+    <div class="tw-overflow-x-auto">
         <table class="table table-bordered">
             <thead>
                 <th style="width: 5%;"><i class="fa fa-check"></i></th>
                 <th style="width: 5%;">#</th>
-                <th>Référence</th>
-                <th>Observation / Statut</th>
-                <th>Action</th>
+                <th class="tw-px-3 tw-py-2">Référence</th>
+                <th class="tw-px-3 tw-py-2">Observation / Statut</th>
+                <th class="tw-px-3 tw-py-2">Action</th>
             </thead>
             <tbody>
                 <tr>
@@ -278,14 +278,14 @@
               <ng-container *ngFor="let f of data.files; let i=index">
 
                 <tr *ngIf="f.file.type_file.code =='DP'">
-                    <td>
+                     <td class="tw-px-3 tw-py-2">
                         <div class="form-check">
                             <input class="form-check-input bg-success" type="checkbox" disabled [checked]="f.is_treated">
                           </div>
                     </td>
-                    <td>{{i+1}}</td>
-                    <td>{{f.file.name}}</td>
-                    <td>
+                     <td class="tw-px-3 tw-py-2">{{i+1}}</td>
+                     <td class="tw-px-3 tw-py-2">{{f.file.name}}</td>
+                     <td class="tw-px-3 tw-py-2">
                         <h6><b>Observation</b></h6>
                         <p>{{f.observation ?? 'En attente'}}</p>
                         <br>
@@ -309,14 +309,14 @@
                 <ng-container *ngFor="let f of data.files; let i=index" >
                     <tr *ngIf="f.file.type_file.code =='DD'">
 
-                        <td>
+                         <td class="tw-px-3 tw-py-2">
                             <div class="form-check">
                                 <input class="form-check-input bg-success" type="checkbox" disabled [checked]="f.is_treated">
                               </div>
                         </td>
-                        <td>{{i+1}}</td>
-                        <td>{{f.file.name}}</td>
-                        <td>
+                         <td class="tw-px-3 tw-py-2">{{i+1}}</td>
+                         <td class="tw-px-3 tw-py-2">{{f.file.name}}</td>
+                         <td class="tw-px-3 tw-py-2">
                             <h6><b>Observation</b></h6>
                             <p>{{f.observation ?? 'En attente'}}</p>
                             <br>
@@ -324,7 +324,7 @@
                             <span *ngIf="f.is_treated && f.is_valid" class="p-2 bg-success rounded text-white"> Validé</span>
                             <span *ngIf="f.is_treated && !f.is_valid" class="p-2 bg-danger rounded text-white"> Non Validé</span>
                         </td>
-                        <td>
+                         <td class="tw-px-3 tw-py-2">
                             <div class="d-flex justify-content-center h-100">
 
                             <button (click)="showFile(f.filename,f)" class="btn btn-sm btn-dark">Voir document</button>
@@ -340,14 +340,14 @@
         </tr>
       <ng-container *ngFor="let f of data.files; let i=index">
         <tr *ngIf="f.file.type_file.code =='DC'">
-            <td>
+             <td class="tw-px-3 tw-py-2">
                 <div class="form-check">
                     <input class="form-check-input bg-success" type="checkbox" disabled [checked]="f.is_treated">
                   </div>
             </td>
-            <td>{{i+1}}</td>
-            <td>{{f.file.name}}</td>
-            <td>
+             <td class="tw-px-3 tw-py-2">{{i+1}}</td>
+             <td class="tw-px-3 tw-py-2">{{f.file.name}}</td>
+             <td class="tw-px-3 tw-py-2">
                 <h6><b>Observation</b></h6>
                 <p>{{f.observation ?? 'En attente'}}</p>
                 <br>
@@ -355,7 +355,7 @@
                 <span *ngIf="f.is_treated && f.is_valid" class="p-2 bg-success rounded text-white"> Validé</span>
                 <span *ngIf="f.is_treated && !f.is_valid" class="p-2 bg-danger rounded text-white"> Non Validé</span>
             </td>
-            <td>
+             <td class="tw-px-3 tw-py-2">
                 <div class="d-flex justify-content-center h-100">
 
                 <button (click)="showFile(f.filename,f)" class="btn btn-sm btn-dark">Voir document</button>
@@ -369,14 +369,14 @@
         </tr>
       <ng-container *ngFor="let f of data.files; let i=index">
         <tr *ngIf="f.file.type_file.code =='DJ'">
-            <td>
+             <td class="tw-px-3 tw-py-2">
                 <div class="form-check">
                     <input class="form-check-input bg-success" type="checkbox" disabled [checked]="f.is_treated">
                   </div>
             </td>
-            <td>{{i+1}}</td>
-            <td>{{f.file.name}}</td>
-            <td>
+             <td class="tw-px-3 tw-py-2">{{i+1}}</td>
+             <td class="tw-px-3 tw-py-2">{{f.file.name}}</td>
+             <td class="tw-px-3 tw-py-2">
                 <h6><b>Observation</b></h6>
                 <p>{{f.observation ?? 'En attente'}}</p>
                 <br>
@@ -384,7 +384,7 @@
                 <span *ngIf="f.is_treated && f.is_valid" class="p-2 bg-success rounded text-white"> Validé</span>
                 <span *ngIf="f.is_treated && !f.is_valid" class="p-2 bg-danger rounded text-white"> Non Validé</span>
             </td>
-            <td>
+             <td class="tw-px-3 tw-py-2">
                 <div class="d-flex justify-content-center h-100">
 
                 <button (click)="showFile(f.filename,f)" class="btn btn-sm btn-dark">Voir document</button>
@@ -400,18 +400,18 @@
     <div class="mb-3">
         <h4> <i class="fa fa-chevron-right fw-bold me-3"></i>  <u>Documents délivrés par l'administration</u>  </h4>
     </div>
-    <div class="table-responsive">
+    <div class="tw-overflow-x-auto">
         <table class="table table-bordered">
             <thead>
                 <th style="width: 5%;">#</th>
-                <th>Référence</th>
-                <th>Action</th>
+                <th class="tw-px-3 tw-py-2">Référence</th>
+                <th class="tw-px-3 tw-py-2">Action</th>
             </thead>
             <tbody>
                 <tr *ngFor="let f of data.files2; let i=index">
-                    <td>{{i+1}}</td>
-                    <td>{{f.reference}}</td>
-                    <td>
+                     <td class="tw-px-3 tw-py-2">{{i+1}}</td>
+                     <td class="tw-px-3 tw-py-2">{{f.reference}}</td>
+                     <td class="tw-px-3 tw-py-2">
                         <button (click)="showFile(f.filename)" class="btn btn-sm btn-dark">Voir document</button>
                     </td>
                 </tr>
@@ -430,7 +430,7 @@
         </h4>
     </div>
     <div class="" *ngIf="data.has_cps_file">
-        <div class="row">
+        <div class="tw-grid tw-grid-cols-12 tw-gap-4">
             <div class="col-6">
                 <dl>
                     <dt>Nom de l'enquêteur</dt>
@@ -483,7 +483,7 @@
     </div>
 
     <div class="" *ngIf="data.has_physical_deposit">
-        <div class="row">
+        <div class="tw-grid tw-grid-cols-12 tw-gap-4">
             <div class="col-6">
                 <dl>
                     <dt>Nom du déposant</dt>

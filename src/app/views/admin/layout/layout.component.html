@@ -1,16 +1,22 @@
-<div class="wrapper">
 
-<app-header></app-header>
+<div class="tw-flex tw-h-screen tw-bg-gray-50">
+  <!-- Sidebar -->
+ <app-menu></app-menu>
 
-<app-menu></app-menu>
-<main class="page-content">
+  <!-- Contenu principal -->
+  <div class="tw-flex-1 tw-flex tw-flex-col tw-overflow-hidden">
+    <!-- TopBar -->
+    <app-header></app-header>
 
-<router-outlet></router-outlet>
-
-</main>
-<app-footer></app-footer>
-
+    <!-- Zone de contenu -->
+    <main class="tw-flex-1 tw-overflow-y-auto tw-p-10">
+      <div class="tw-space-y-6">
+        <router-outlet></router-outlet>
+      </div>
+    </main>
+  </div>
 </div>
+
 
 <ngx-spinner
       bdColor="rgba(12,87,78,0.2)"

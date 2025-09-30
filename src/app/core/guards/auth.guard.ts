@@ -37,7 +37,7 @@ export class AuthGuard  {
           return true;
        // }
     } else {
-      this.router.navigate(['/admin/auth/login']);
+      this.router.navigate(['/public/auth/login']);
       return false;
     }
   }

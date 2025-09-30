@@ -234,7 +234,7 @@ const routes: Routes = [
         component:UserProfilComponent
       },
       {
-        path:"list-requetes",
+        path:"list-requetes/:type",
         component:RequetesComponent
       },
       {

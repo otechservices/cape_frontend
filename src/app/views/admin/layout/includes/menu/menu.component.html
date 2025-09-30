@@ -1,40 +1,88 @@
-<aside class="sidebar-wrapper" data-simplebar="true">
-    <div class="sidebar-header">
-      <div>
-        <img src="assets/template/images/logo-icon.png" class="logo-icon" alt="logo icon">
+<div class="tw-w-64 tw-bg-slate-800 tw-text-white tw-min-h-screen tw-overflow-y-auto">
+  <div class="tw-p-6">
+    <!-- Logo + Titre -->
+    <div class="tw-flex tw-items-center tw-gap-3 tw-mb-8">
+      <div class="tw-w-8 tw-h-8 tw-bg-blue-600 tw-rounded-lg tw-flex tw-items-center tw-justify-center">
+        <i class="ri-building-line tw-text-white"></i>
       </div>
-      <div>
-        <h4 class="logo-text">CAPE</h4>
-      </div>
-      <div class="toggle-icon ms-auto"> <i class="fa fa-list"></i>
-      </div>
+      <span class="tw-font-bold tw-text-xl">CAPE</span>
     </div>
-    <!--navigation-->
-    <ul class="metismenu cape-bg-blue" id="menu" style="height: 95vh; overflow: scroll;">
-        <ng-container *ngFor="let m of menu; let i= index">
-            <li class="menu-label" *ngIf="m.isTitle">{{m.title}}</li>
-            <li *ngIf="!m.isTitle && !m.hasChildren">
-                <a [routerLink]="m.route" routerLinkActive="active">
-                  <div class="parent-icon"><i class="bi bi-file-code-fill"></i>
-                  </div>
-                  <div class="menu-title text-info">{{m.name}}</div>
-                </a>
-              </li>
-              <li *ngIf="!m.isTitle && m.hasChildren">
-                <a class="text-info" data-bs-toggle="collapse" href="#collapseExample{{i}}"  aria-expanded="false" aria-controls="collapseExample">
-                 
-                  <div class="menu-title">{{m.name}}</div>
-                  <div class="parent-icon float-end"><i class="fa fa-chevron-right"></i>
-                  </div>
-                </a>
-                <ul class="collapse" id="collapseExample{{i}}">
-                  <li  *ngFor="let sm of m.children"> <a class="text-white" routerLink="{{sm?.route}}" routerLinkActive="active"><i class="bi bi-circle"></i>{{sm?.name}}</a>
-                  </li>
-                
-                </ul>
-              </li>
+
+    <!-- Navigation -->
+    <nav class="tw-space-y-1">
+      <div *ngFor="let item of menu">
+        <!-- Bouton menu principal -->
+        <button
+          (click)="handleItemClick(item)"
+          class="tw-w-full tw-flex tw-items-center tw-justify-between tw-px-3 tw-py-2 tw-rounded-lg tw-text-left tw-transition-colors tw-cursor-pointer tw-whitespace-nowrap"
+          [ngClass]="
+            item.children
+              ? 'tw-text-gray-300 hover:tw-text-white hover:tw-bg-slate-700'
+              : isActive(item.path)
+                ? 'tw-bg-blue-600 tw-text-white'
+                : 'tw-text-gray-300 hover:tw-text-white hover:tw-bg-slate-700'
+          "
+        >
+       <div class="tw-flex tw-items-center tw-gap-3">
+        <div class="tw-w-5 tw-h-5 tw-flex tw-items-center tw-justify-center tw-flex-shrink-0">
+          <i class="{{ item?.icon }} tw-text-sm"></i>
+        </div>
+
+        <!-- Si c'est un titre -->
+        <span *ngIf="item?.isTitle" class="tw-text-sm tw-font-bold tw-text-blue-600">
+          {{ item?.title }}
+        </span>
+
+        <!-- Sinon -->
+        <span *ngIf="!item?.isTitle" class="tw-text-sm tw-font-medium">
+          {{ item?.name }}
+        </span>
+      </div>
+
+          <div
+            *ngIf="item.children"
+            class="tw-w-4 tw-h-4 tw-flex tw-items-center tw-justify-center tw-flex-shrink-0"
+          >
+            <i
+              class="ri-arrow-right-s-line tw-text-xs tw-transition-transform"
+              [ngClass]="{ 'tw-rotate-90': expandedItems.includes(item.id) }"
+            ></i>
+          </div>
+        </button>
+
+        <!-- Sous-menus -->
+        <div
+          *ngIf="item.children && expandedItems.includes(item.id)"
+          class="tw-ml-4 tw-mt-1 tw-space-y-1"
+        >
+    <ng-container *ngFor="let child of item.children">
+        <!-- Si c'est un titre -->
+        <div *ngIf="child.isTitle"
+            class="tw-w-full tw-flex tw-items-center tw-gap-3 tw-px-3 tw-py-2 tw-rounded-lg tw-text-left tw-font-semibold tw-text-gray-500 tw-uppercase">
+        <div class="tw-w-4 tw-h-4 tw-flex tw-items-center tw-justify-center tw-flex-shrink-0">
+          <i class="{{ child.icon }} tw-text-xs"></i>
+        </div>
+        <span class="tw-text-sm">{{ child.title }}</span>
+        </div>
+
+        <!-- Sinon c'est un vrai bouton -->
+        <button *ngIf="!child.isTitle"
+              (click)="handleItemClick(child)"
+              class="tw-w-full tw-flex tw-items-center tw-gap-3 tw-px-3 tw-py-2 tw-rounded-lg tw-text-left tw-transition-colors tw-cursor-pointer tw-whitespace-nowrap"
+              [ngClass]="
+                isActive(child.path)
+                  ? 'tw-bg-blue-600 tw-text-white'
+                  : 'tw-text-gray-400 hover:tw-text-white hover:tw-bg-slate-700'
+              ">
+        <div class="tw-w-4 tw-h-4 tw-flex tw-items-center tw-justify-center tw-flex-shrink-0">
+          <i class="{{ child.icon }} tw-text-xs"></i>
+        </div>
+        <span class="tw-text-sm">{{ child.name }}</span>
+        </button>
         </ng-container>
-    
-    </ul>
-    <!--end navigation-->
- </aside>
+
+        </div>
+      </div>
+    </nav>
+  </div>
+</div>

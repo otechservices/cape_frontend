@@ -57,13 +57,13 @@
         <h6 class="bg-secondary p-1 text-white">Table de valeur</h6>
         <table class="table table-bordered">
             <thead>
-              <th>Arrondissement</th>
+              <th class="tw-px-3 tw-py-2">Arrondissement</th>
               <th *ngFor="let y of chartLabels">{{y}}</th>
             </thead>
 
             <tbody>
               <tr *ngFor="let d of chartData">
-                <td>{{d.label}}</td>
+                 <td class="tw-px-3 tw-py-2">{{d.label}}</td>
                 <td *ngFor="let dt of d.data">{{dt}}</td>
               </tr>
             </tbody>
@@ -76,14 +76,14 @@
         <h6 class="bg-secondary p-1 text-white">Table de valeur</h6>
         <table class="table table-bordered">
             <thead>
-              <th>Cape</th>
+              <th class="tw-px-3 tw-py-2">Cape</th>
               <th >Nombre de contrôles effectués</th>
             </thead>
 
             <tbody>
               <tr *ngFor="let d of data">
-                <td>{{d.name}}</td>
-                <td>{{d.count}}</td>
+                 <td class="tw-px-3 tw-py-2">{{d.name}}</td>
+                 <td class="tw-px-3 tw-py-2">{{d.count}}</td>
               </tr>
             </tbody>
         </table>
@@ -114,13 +114,13 @@
         <h6 class="bg-secondary p-1 text-white">Table de valeur</h6>
         <table class="table table-bordered">
             <thead>
-              <th>Année</th>
+              <th class="tw-px-3 tw-py-2">Année</th>
               <th *ngFor="let y of chartLabels">{{y}}</th>
             </thead>
 
             <tbody>
               <tr *ngFor="let d of chartData">
-                <td>{{d.label}}</td>
+                 <td class="tw-px-3 tw-py-2">{{d.label}}</td>
                 <td *ngFor="let dt of d.data">{{dt}}</td>
               </tr>
             </tbody>

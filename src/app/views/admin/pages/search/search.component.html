@@ -13,11 +13,11 @@
     </div>
   </div>
 
-  <div class="row">
-    <div class="col-lg-12">
-        <div class="card">
+  <div class="tw-grid tw-grid-cols-12 tw-gap-4">
+     <div class="tw-col-span-12">
+       <div class="tw-bg-white tw-rounded-lg tw-shadow">
           
-            <div class="card-body">
+              <div class="tw-p-6">
                 <form #formR="ngForm" (ngSubmit)="reset(formR)">
                     <div class="d-flex">
                         <div class="input-group mb-3">
@@ -44,27 +44,27 @@
                     </div>
                 </form>
                         <p>{{data.length}} élément(s)</p>
-                        <div class="table-responsive">
-                        <table class="table" >
-                            <thead class="">
+                        <div class="tw-overflow-x-auto">
+                        <table class="tw-min-w-full tw-border tw-border-gray-200 tw-text-sm">
+                            <thead class="tw-bg-gray-100">
                                 <tr>
-                                    <th style="width: 10px;">#</th>
-                                    <th>Libellé</th>
-                                    <th>Departement</th>
-                                    <th>Commune</th>
-                                    <th>Arrondissement</th>
+                                    <th class="tw-w-[40px] tw-px-3 tw-py-2">#</th>
+                                    <th class="tw-px-3 tw-py-2">Libellé</th>
+                                    <th class="tw-px-3 tw-py-2">Departement</th>
+                                    <th class="tw-px-3 tw-py-2">Commune</th>
+                                    <th class="tw-px-3 tw-py-2">Arrondissement</th>
 
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr *ngFor="let d of filteredData; let i=index ">
-                                    <td>
+                                     <td class="tw-px-3 tw-py-2">
                                         {{i+1}}
                                     </td>
-                                    <td>{{d.name}}</td>
-                                    <td>{{d.district?.municipality?.department?.name}}</td>
-                                    <td>{{d.district?.municipality?.name}}</td>
-                                    <td>{{d.district?.name}}</td>
+                                     <td class="tw-px-3 tw-py-2">{{d.name}}</td>
+                                     <td class="tw-px-3 tw-py-2">{{d.district?.municipality?.department?.name}}</td>
+                                     <td class="tw-px-3 tw-py-2">{{d.district?.municipality?.name}}</td>
+                                     <td class="tw-px-3 tw-py-2">{{d.district?.name}}</td>
                                   
                                
                                 </tr>

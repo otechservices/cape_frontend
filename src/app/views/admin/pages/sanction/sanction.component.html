@@ -15,59 +15,65 @@
       </div>
   
       <div class="row" *ngIf="!showPreview">
-        <div class="col-lg-12">
-            <div class="card">
+         <div class="tw-col-span-12">
+           <div class="tw-bg-white tw-rounded-lg tw-shadow">
               
                 <div class="card-body" >
-                    <div class="d-flex mb-5 " *ngIf="buttonsPermission">
-                      <button type="button" class="btn btn-primary btn-sm me-3" (click)="add(addContent)">Ajouter une sanction</button>
+                     <div class="tw-flex tw-mb-5" *ngIf="buttonsPermission">
+                      <button type="button" class="tw-bg-blue-600 tw-text-white tw-text-sm tw-px-3 tw-py-1 tw-rounded hover:tw-bg-blue-700 tw-me-3" (click)="add(addContent)">Ajouter une sanction</button>
 
-                        <button *ngIf="buttonsPermission.show"  (click)="show(showContent)" type="button" class="btn btn-outline-primary btn-sm  me-3">
+                        <button *ngIf="buttonsPermission.show"  (click)="show(showContent)" type="button" class="tw-border tw-border-blue-500 tw-text-blue-500 tw-text-sm tw-px-3 tw-py-1 tw-rounded hover:tw-bg-blue-50 tw-me-3">
                              <span>Consulter</span></button>
-                        <button *ngIf="buttonsPermission.edit" (click)="edit(editContent)" type="button"  class="btn btn-outline-warning btn-sm  me-3">
+                        <button *ngIf="buttonsPermission.edit" (click)="edit(editContent)" type="button"  class="tw-border tw-border-yellow-500 tw-text-yellow-500 tw-text-sm tw-px-3 tw-py-1 tw-rounded hover:tw-bg-yellow-50 tw-me-3">
                            Editer</button>
-                        <button *ngIf="buttonsPermission.delete" (click)="delete()" type="button" class="btn btn-outline-danger btn-sm  me-3">
+                        <button *ngIf="buttonsPermission.delete" (click)="delete()" type="button" class="tw-border tw-border-red-500 tw-text-red-500 tw-text-sm tw-px-3 tw-py-1 tw-rounded hover:tw-bg-red-50 tw-me-3">
                              Supprimer</button>
                              <button *ngIf="is_active!=null && !is_active" (click)="setStatus(1)" type="button" class="btn btn-outline-success btn-sm  me-3">
                               Clôtuer</button>
-                             <!--button  *ngIf="is_active!=null &&  is_active" (click)="setStatus(0)" type="button" class="btn btn-outline-danger btn-sm  me-3">
+                             <!--button  *ngIf="is_active!=null &&  is_active" (click)="setStatus(0)" type="button" class="tw-border tw-border-red-500 tw-text-red-500 tw-text-sm tw-px-3 tw-py-1 tw-rounded hover:tw-bg-red-50 tw-me-3">
                               Désactiver</!--button-->
                     </div>
     
                             <p>{{data.length}} élément(s)</p>
-                            <div class="table-responsive">
-                            <table class="table" >
-                                <thead class="">
+                            <div class="tw-overflow-x-auto">
+                            <table class="tw-min-w-full tw-border tw-border-gray-200 tw-text-sm">
+                                <thead class="tw-bg-gray-100">
                                     <tr>
-                                        <th style="width: 10px;">#</th>
-                                        <th>Type de sanction</th>
-                                        <th>Instruction</th>
-                                        <th>Décision de fermeture</th>
-                                        <th>Délai de clôture</th>
-                                        <th>Statut de la sanction</th>
+                                        <th class="tw-w-[40px] tw-px-3 tw-py-2">#</th>
+                                        <th class="tw-px-3 tw-py-2">Type de sanction</th>
+                                        <th class="tw-px-3 tw-py-2">Instruction</th>
+                                        <th class="tw-px-3 tw-py-2">Décision de fermeture</th>
+                                        <th class="tw-px-3 tw-py-2">Délai de clôture</th>
+                                        <th class="tw-px-3 tw-py-2">Statut de la sanction</th>
 
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr *ngFor="let d of data ">
-                                        <td>
-                                            <div class="form-check mb-2">
-                                                <input (click)="checked(d)" class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                                    <tr *ngFor="let d of data" class="tw-border-t">
+                                         <td class="tw-px-3 tw-py-2">
+                                            <div class="tw-form-check tw-mb-2">
+                                                <input
+                      type="radio"
+                      name="flexRadioDefault"
+                      id="flexRadioDefault{{d.id}}"
+                      class="tw-form-radio tw-text-blue-600"
+                      (click)="checked(d)"
+                    />
                                             
                                             </div>
                                         </td>
-                                        <td>{{d.type_sanction.name}}</td>
-                                        <td>{{d.description}}</td>
-                                        <td>
+                                         <td class="tw-px-3 tw-py-2">{{d.type_sanction.name}}</td>
+                                         <td class="tw-px-3 tw-py-2">{{d.description}}</td>
+                                         <td class="tw-px-3 tw-py-2">
                                           <span *ngIf="d.decret_filename != undefined">
                                             <button  (click)="showFile(d.decret_filename,d.cape.requete.code)" class="btn btn-sm btn-outline-success">Ouvrir</button></span>
                                           <span *ngIf="d.decret_filename == undefined">Non défini</span>
                                         </td>
-                                        <td>
+                                         <td class="tw-px-3 tw-py-2">
                                           <span *ngIf="d.closed_date != undefined">{{d.closed_date | date:"shortDate"}}</span>
                                           <span *ngIf="d.closed_date == undefined">Non défini</span>
                                         </td>
-                                        <td>
+                                         <td class="tw-px-3 tw-py-2">
                                           <span *ngIf="d.status" class="bg-success p-1 rounded text-white">Clôturée</span>
                                           <span *ngIf="!d.status" class="bg-danger p-1 rounded text-white">En cours</span>
                                  
@@ -82,7 +88,7 @@
     
                 </div><!-- end card -->
 
-                <div class="card-body">
+                  <div class="tw-p-6">
 
                 </div>
             </div>
@@ -203,7 +209,7 @@
           </div>
     
           <div class="modal-body">
-            <div class="table-responsive table-card">
+            <div class="tw-overflow-x-auto table-card">
                 <table class="table table-borderless align-middle mb-0">
                     <tbody>
                       

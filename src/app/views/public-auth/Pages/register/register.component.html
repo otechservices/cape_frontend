@@ -18,22 +18,22 @@
         <form [formGroup]="registerForm" (ngSubmit)="handleSubmit()" class="tw-space-y-6">
           <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-gap-6">
             <div>
-              <label for="nom" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 tw-mb-2">Nom*</label>
+              <label for="lastname" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 tw-mb-2">Nom*</label>
               <input
-                id="nom"
+                id="lastname"
                 type="text"
-                formControlName="nom"
-                placeholder="Votre nom"
+                formControlName="lastname"
+                placeholder="Votre lastname"
                 class="tw-w-full tw-px-4 tw-py-3 tw-border tw-border-gray-300 tw-rounded-lg tw-focus:ring-2 tw-focus:ring-green-500 tw-focus:border-transparent tw-text-sm"
               />
             </div>
 
             <div>
-              <label for="prenom" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 tw-mb-2">Prénom*</label>
+              <label for="firstname" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 tw-mb-2">Prénom*</label>
               <input
-                id="prenom"
+                id="firstname"
                 type="text"
-                formControlName="prenom"
+                formControlName="firstname"
                 placeholder="Votre prénom"
                 class="tw-w-full tw-px-4 tw-py-3 tw-border tw-border-gray-300 tw-rounded-lg tw-focus:ring-2 tw-focus:ring-green-500 tw-focus:border-transparent tw-text-sm"
               />
@@ -52,17 +52,17 @@
           </div>
 
           <div>
-            <label for="telephone" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 tw-mb-2">Numéro de téléphone*</label>
+            <label for="phone" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 tw-mb-2">Numéro de téléphone*</label>
             <input
-              id="telephone"
+              id="phone"
               type="tel"
-              formControlName="telephone"
+              formControlName="phone"
               placeholder="+229 XX XX XX XX"
               class="tw-w-full tw-px-4 tw-py-3 tw-border tw-border-gray-300 tw-rounded-lg tw-focus:ring-2 tw-focus:ring-green-500 tw-focus:border-transparent tw-text-sm"
             />
           </div>
 
-          <div>
+          <!-- <div>
             <label for="typeCompte" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 tw-mb-2">Type de compte*</label>
             <select
               id="typeCompte"
@@ -73,7 +73,7 @@
               <option value="professionnel">Professionnel</option>
               <option value="structure">Structure/Organisation</option>
             </select>
-          </div>
+          </div> -->
 
           <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-gap-6">
             <div>
@@ -88,11 +88,11 @@
             </div>
 
             <div>
-              <label for="confirmPassword" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 tw-mb-2">Confirmer le mot de passe*</label>
+              <label for="password_confirmation" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 tw-mb-2">Confirmer le mot de passe*</label>
               <input
-                id="confirmPassword"
+                id="password_confirmation"
                 type="password"
-                formControlName="confirmPassword"
+                formControlName="password_confirmation"
                 placeholder="Répétez le mot de passe"
                 class="tw-w-full tw-px-4 tw-py-3 tw-border tw-border-gray-300 tw-rounded-lg tw-focus:ring-2 tw-focus:ring-green-500 tw-focus:border-transparent tw-text-sm"
               />

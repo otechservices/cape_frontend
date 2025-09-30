@@ -75,4 +75,24 @@ export class MenuComponent implements OnInit {
     })
   }
 
+
+    expandedItems: number[] = [];
+
+  handleItemClick(item: any) {
+    if (item.children) {
+      if (this.expandedItems.includes(item.id)) {
+        this.expandedItems = this.expandedItems.filter(id => id !== item.id);
+      } else {
+        this.expandedItems.push(item.id);
+      }
+    } else if (item.route) {
+      this.router.navigate([ item.route])
+      // TODO: Navigation Angular Router
+    }
+  }
+
+  isActive(path?: string): boolean {
+    // TODO: brancher avec Router
+    return false;
+  }
 }
