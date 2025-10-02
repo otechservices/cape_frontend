@@ -26,6 +26,7 @@ export class AuthGuard  {
     //   return false;
     // }
       let token=this.lsService.get(GlobalName.tokenName) 
+      let role=this.lsService.get(GlobalName.userName)?.roles[0]?.name 
       if (token!= null) {
         // if (this.jwtService.isTokenExpired(token)) {
         //   this.lsService.remove(GlobalName.tokenName)
@@ -37,7 +38,13 @@ export class AuthGuard  {
           return true;
        // }
     } else {
+      if(role == "Promoteur"){
       this.router.navigate(['/public/auth/login']);
+
+      }else{
+      this.router.navigate(['/admin/auth/login']);
+
+      }
       return false;
     }
   }

@@ -19,200 +19,264 @@
   </div>
 
 
-<ng-container *ngIf="!showPreview">
-  <ng-container *ngIf="data != undefined">
-    <!-- Bandeau session -->
-    <div class="tw-container tw-flex tw-justify-between tw-items-center tw-mb-5">
-      <div>
-        <p *ngIf="data.session.is_active == false" 
-           class="tw-text-white tw-flex tw-justify-between tw-bg-red-600 tw-rounded tw-px-3 tw-py-2">
-          Session clôturée
-        </p>
-        <p *ngIf="data.session.is_active == null" 
-           class="tw-text-white tw-flex tw-justify-between tw-bg-gray-500 tw-rounded tw-px-3 tw-py-2">
-          Session en attente d'ouverture
-        </p>
-        <p *ngIf="data.session.is_active" 
-           class="tw-text-white tw-flex tw-justify-between tw-bg-green-600 tw-rounded tw-px-3 tw-py-2">
-          Session ouverte
-        </p>
-      </div>
-
-      <div class="tw-self-center">
-        <button class="btn btn-sm btn-outline-dark">
-          Consulter la note d'accord à la session
-        </button>
-      </div>
-    </div>
-
-    <!-- Notes -->
-    <div class="tw-flex tw-flex-col tw-gap-2 tw-mb-6">
-      <div>
-        <h4 class="tw-text-lg tw-font-semibold">
-          <b>Note globale Dossier :</b> {{note2.max | number:".2"}} / <b>{{note2.total}}</b>
-        </h4>
-      </div>
-      <div *ngIf="role == 'member'">
-        <h4 class="tw-text-lg tw-font-semibold">
-          <b>Note globale Membre :</b> {{note3.max | number:".2"}} / <b>{{note3.total}}</b>
-        </h4>
-      </div>
-    </div>
-  </ng-container>
-
-  <!-- Détails -->
-  <div class="tw-container" *ngIf="data != undefined">
-    <!-- Décision -->
-    <ng-container *ngIf="data.has_agreemant != null">
-      <div class="tw-mb-4">
-        <h4 class="tw-text-lg tw-font-bold">
-          <i class="fa fa-chevron-right tw-me-2"></i><u>Décision de la session</u>
-        </h4>
-      </div>
-      <div class="tw-flex tw-flex-col tw-gap-2 tw-mb-6">
-        <dl>
-          <dt class="tw-font-medium">Observation</dt>
-          <dd class="tw-text-gray-700">{{data.observation}}</dd>
-        </dl>
-
-        <dl>
-          <dt class="tw-font-medium">Décision</dt>
-          <dd class="tw-text-gray-700">
-            {{data.has_agreemant==0 ?'Accord non donnée': data.has_agreemant==1 ?'Accord donné sous réserve':'Accord donné provisoirement'}}
-          </dd>
-        </dl>
-
-        <dl *ngIf="data.has_agreemant">
-          <dt class="tw-font-medium">Recommandations</dt>
-          <dd>
-            <ol class="tw-list-decimal tw-list-inside tw-text-gray-700">
-              <li *ngFor="let m of data.referals">{{m.libelle}}</li>
-            </ol>
-          </dd>
-        </dl>
-      </div>
-    </ng-container>
-
-    <!-- Infos CAPE -->
-    <div class="tw-mb-4">
-      <h4 class="tw-text-lg tw-font-bold">
-        <i class="fa fa-chevron-right tw-me-2"></i><u>Informations natives du CAPE</u>
-      </h4>
-    </div>
-
-    <!-- Promoteur -->
-    <fieldset class="tw-border tw-border-gray-300 tw-rounded tw-p-4 tw-mb-5">
-      <legend class="tw-bg-gray-500 tw-text-white tw-rounded tw-px-3 tw-py-1">Information sur le promoteur</legend>
-      <div class="tw-grid tw-grid-cols-12 tw-gap-4">
-        <div class="tw-col-6"><dt>Nom</dt><dd>{{data.name_pomoter}} {{data.firstname_pomoter}}</dd></div>
-        <div class="tw-col-6"><dt>Contact</dt><dd>{{data.phone_pomoter}}</dd></div>
-        <div class="tw-col-6"><dt>Email</dt><dd>{{data.email}}</dd></div>
-        <div class="tw-col-6"><dt>Contact N° 2</dt><dd>{{data.phone}}</dd></div>
-      </div>
-    </fieldset>
-
-    <!-- Centre -->
-    <fieldset class="tw-border tw-border-gray-300 tw-rounded tw-p-4 tw-mb-5">
-      <legend class="tw-bg-gray-500 tw-text-white tw-rounded tw-px-3 tw-py-1">Information sur le centre</legend>
-      <div class="tw-grid tw-grid-cols-12 tw-gap-4">
-        <div class="tw-col-6"><dt>Type Cape</dt><dd>{{data.type_cape?.name}}</dd></div>
-        <div class="tw-col-6"><dt>Nom du centre</dt><dd>{{data.name}}</dd></div>
-        <div class="tw-col-6"><dt>Nom du directeur</dt><dd>{{data.name_chief}}</dd></div>
-        <div class="tw-col-6"><dt>Contact du directeur</dt><dd>{{data.phone_chief}}</dd></div>
-        <div class="tw-col-6"><dt>Cible</dt>
-          <dd><ul class="tw-list-disc tw-list-inside">
-            <li *ngFor="let el of getJson(data.target)">{{el.itemName}}</li>
-          </ul></dd>
+  <ng-container  *ngIf="!showPreview">
+    <ng-container *ngIf="data != undefined">
+        <div class=" container d-flex justify-content-between">
+            <div class="">
+                <p  *ngIf="data.session.is_active ==false" class=" text-white d-flex justify-content-between bg-danger p-1">Session clôturée</p>
+                <p  *ngIf="data.session.is_active == null" class=" text-white d-flex justify-content-between bg-secondary p-1">Session en attente d'ouverture</p>
+                <p  *ngIf="data.session.is_active " class=" text-white d-flex justify-content-between bg-success p-1">Session ouverte</p>
+            
+            </div>
+           
+            <div class="align-self-center">
+                <button class="btn btn-sm btn-outline-dark" (click)="showFile2(data.session.filename)">Consulter la note d'accord à la session</button>
+    
+            </div>
         </div>
-      </div>
+
+        <div class=" d-flex flex-column">
+
+            <div class="">
+                <h4><b>Note globale Dossier :</b> {{note2.max | number:".2"}} / <b>{{note2.total}}</b> </h4>
+            </div>
+
+            <div class="" *ngIf="role == 'member'">
+                <h4><b>Note globale Membre :</b> {{note3.max | number:".2"}} / <b>{{note3.total}}</b> </h4>
+            </div>
+        </div>
+      
+    </ng-container>
+    
+  <div class="container" *ngIf="data != undefined">
+    <ng-container *ngIf="data.has_agreemant!= null">
+        <div class="mb-3">
+            <h4> <i class="fa fa-chevron-right fw-bold me-3"></i>  <u>Décision de la session</u>  </h4>
+        </div>
+        <div class=" d-flex flex-column">
+            <dl>
+                <dt>Observation</dt>
+                <dd>
+                    {{data.observation}}
+                </dd>
+            </dl>
+
+            <dl>
+                <dt>Décision</dt>
+                <dd>
+                    {{data.has_agreemant==0 ?'Accord non donnée': data.has_agreemant==1 ?'Accord donné sous réserve':'Accord donné provisoirement'}}
+                </dd>
+            </dl>
+
+            <dl *ngIf="data.has_agreemant">
+                <dt>Recommandations</dt>
+                <dd>
+                    <ol>
+                        <li *ngFor="let m of data.referals">{{m.libelle}}</li>
+                    </ol>
+                </dd>
+            </dl>
+        </div>
+        
+    </ng-container>
+    <div class="mb-3">
+        <h4> <i class="fa fa-chevron-right fw-bold me-3"></i>  <u>Informations native du CAPE</u>  </h4>
+    </div>
+
+    <fieldset>
+        <legend class="bg-secondary text-white">Information sur le promoteur</legend>
+        <div class="tw-grid tw-grid-cols-12 tw-gap-4">
+            <div class="col-6">
+                <dl>
+                    <dt>Nom </dt>
+                    <dd>{{data.name_pomoter}} {{data.firstname_pomoter}}</dd>
+                </dl>
+            </div>
+            <div class="col-6">
+                <dl>
+                    <dt>Contact</dt>
+                    <dd>{{data.phone_pomoter}}</dd>
+                </dl>
+            </div>
+
+            <div class="col-6">
+                <dl>
+                    <dt>Email </dt>
+                    <dd>{{data.email}}</dd>
+                </dl>
+            </div>
+            <div class="col-6">
+                <dl>
+                    <dt>Contact N° 2</dt>
+                    <dd>{{data.phone}}</dd>
+                </dl>
+            </div>
+        </div>
+    </fieldset>
+    <fieldset>
+        <legend class="bg-secondary text-white">Information sur le centre</legend>
+        <div class="tw-grid tw-grid-cols-12 tw-gap-4">
+            <div class="col-6">
+                <dl>
+                    <dt>Type Cape</dt>
+                    <dd>{{data.type_cape?.name}}</dd>
+                </dl>
+            </div>
+            <div class="col-6">
+                <dl>
+                    <dt>Nom du centre</dt>
+                    <dd>{{data.name}}</dd>
+                </dl>
+            </div>
+
+            <div class="col-6">
+                <dl>
+                    <dt>Nom du directeur</dt>
+                    <dd>{{data.name_chief}}</dd>
+                </dl>
+            </div>
+            <div class="col-6">
+                <dl>
+                    <dt>Contact du directeur</dt>
+                    <dd>{{data.phone_chief}}</dd>
+                </dl>
+            </div>
+            <div class="col-6">
+                <dl>
+                    <dt>Cible</dt>
+                    <dd>
+                        <ul>
+                            <li *ngFor="let el of getJson(data.target)">{{el.itemName}}</li>
+                        </ul>
+                    </dd>
+                </dl>
+            </div>
+        </div>
+    </fieldset>
+    <fieldset>
+        <legend class="bg-secondary text-white">Localisation</legend>
+       <div class="tw-grid tw-grid-cols-12 tw-gap-4">
+        <div class="col-6">
+            <dl>
+                <dt>Département</dt>
+                <dd>{{data.district?.municipality?.department?.name}}</dd>
+            </dl>
+        </div>
+        <div class="col-6">
+            <dl>
+                <dt>Commune</dt>
+                <dd>{{data.district?.municipality?.name}}</dd>
+            </dl>
+        </div>
+        <div class="col-6">
+            <dl>
+                <dt>Arrondissement</dt>
+                <dd>{{data.district?.name}}</dd>
+            </dl>
+        </div>
+        <div class="col-6">
+            <dl>
+                <dt>Adresse</dt>
+                <dd>{{data.address}}</dd>
+            </dl>
+        </div>
+       </div>
     </fieldset>
 
-    <!-- Localisation -->
-    <fieldset class="tw-border tw-border-gray-300 tw-rounded tw-p-4 tw-mb-5">
-      <legend class="tw-bg-gray-500 tw-text-white tw-rounded tw-px-3 tw-py-1">Localisation</legend>
-      <div class="tw-grid tw-grid-cols-12 tw-gap-4">
-        <div class="tw-col-6"><dt>Département</dt><dd>{{data.district?.municipality?.department?.name}}</dd></div>
-        <div class="tw-col-6"><dt>Commune</dt><dd>{{data.district?.municipality?.name}}</dd></div>
-        <div class="tw-col-6"><dt>Arrondissement</dt><dd>{{data.district?.name}}</dd></div>
-        <div class="tw-col-6"><dt>Adresse</dt><dd>{{data.address}}</dd></div>
-      </div>
-    </fieldset>
-
-    <!-- Documents -->
-    <div class="tw-mb-4">
-      <h4 class="tw-text-lg tw-font-bold">
-        <i class="fa fa-chevron-right tw-me-2"></i><u>Documents joints à la soumission</u>
-      </h4>
+    <div class="mb-5">
+        <h4> <i class="fa fa-chevron-right fw-bold me-3"></i>  <u>Documents joints à la soumission</u>  </h4>
     </div>
     <div class="tw-overflow-x-auto">
-      <table class="table table-bordered tw-text-sm">
-        <thead class="tw-bg-gray-100">
-          <tr>
-            <th class="tw-px-3 tw-py-2">#</th>
-            <th class="tw-px-3 tw-py-2">Référence</th>
-            <th class="tw-px-3 tw-py-2">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let f of data.files; let i=index">
-            <td class="tw-px-3 tw-py-2">{{i+1}}</td>
-            <td class="tw-px-3 tw-py-2">{{f.file?.name}}</td>
-            <td class="tw-px-3 tw-py-2">
-              <button (click)="showFile(f.filename,f,f.my_avis)" class="btn-sm btn-dark">Voir document</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
+        <table class="table table-bordered">
+            <thead>
+                <th class="tw-px-3 tw-py-2">#</th>
+                <th class="tw-px-3 tw-py-2">Référence</th>
+                <!-- <th class="tw-px-3 tw-py-2">Avis</th> -->
+                <th class="tw-px-3 tw-py-2">Action</th>
+            </thead>
+            <tbody>
+                <tr *ngFor="let f of data.files; let i=index">
+                     <td class="tw-px-3 tw-py-2">{{i+1}}</td>
+                     <td class="tw-px-3 tw-py-2">{{f.file?.name}}</td>
+                    <!--  <td class="tw-px-3 tw-py-2">
+                       <div  *ngIf="role!='dfea' && role!='service'" class="">
+                        <p> {{f.my_avis?.observation ?? "En attente de votre avis "}}</p>
+                        <span><b>Note:</b>  {{f.my_avis?.note}}</span>
+                       </div>
+                      
+                       <div class="d-flex justify-content-between">
+                        <button *ngIf="f.my_avis" class="btn btn-sm btn-warning text-white" (click)="add2(backContentM,f.my_avis)">Modifier mon avis</button>
+                        <button *ngIf="data.session.is_active != null"  class="btn btn-sm cape-bg-blue text-white" (click)="open(content,f.avis)">Voir tous les avis</button>
+                       </div>
 
-  <!-- Enquête sociale -->
-  <div *ngIf="data?.has_cps_file" class="tw-container tw-mt-6">
+                    </td> -->
+                     <td class="tw-px-3 tw-py-2">
+                        <button (click)="showFile(f.filename,f,f.my_avis)" class="btn-sm btn-dark">Voir document</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+  </div>
+  <div class="" *ngIf="data?.has_cps_file">
     <div class="tw-grid tw-grid-cols-12 tw-gap-4">
-      <div class="tw-col-6"><dt>Nom de l'enquêteur</dt><dd>{{data.social_investigator_name}}</dd></div>
-      <div class="tw-col-6"><dt>Observation</dt><dd>{{data.social_investigator_observation}}</dd></div>
-      <div class="tw-col-6"><dt>Date</dt><dd>{{data.social_investigator_date | date:"shortDate"}}</dd></div>
-      <div class="tw-col-6"><dt>Fiche enquête sociale</dt>
-        <dd><button (click)="showFileCpsFile()" class="btn btn-sm btn-dark">Voir document</button></dd>
-      </div>
+        <div class="col-6">
+            <dl>
+                <dt>Nom de l'enquêteur</dt>
+                <dd>{{data.social_investigator_name}}</dd>
+            </dl>
+        </div>
+        <div class="col-6">
+            <dl>
+                <dt>Observation sur  l'enquête</dt>
+                <dd>{{data.social_investigator_observation}}</dd>
+            </dl>
+        </div>
+
+        <div class="col-6">
+            <dl>
+                <dt>Date de l'enquête</dt>
+                <dd>{{data.social_investigator_date | date:"shortDate"}}</dd>
+            </dl>
+        </div>
+
+        <div class="col-6">
+            <dl>
+                <dt>Fiche de l'enquête sociale</dt>
+                <dd>
+                    <button (click)="showFileCpsFile()" class="btn btn-sm btn-dark">Voir document</button>
+
+                </dd>
+            </dl>
+        </div>
+      
+
+        
     </div>
-  </div>
-</ng-container>
+</div>
+
+  </ng-container>
 
 
+  <ng-container *ngIf="showPreview"  class="container">
+            <div class="d-flex justify-content-around">
+                <div class="">
+                    <button class="btn btn-dark mb-3 btn-sm" (click)="back()">Fermer le visualiseur</button>
+                </div>
+                <div class="">
+                    <!-- <button class="btn btn-sm btn-primary" *ngIf="!isSessionFile && data.session.is_active!=false && role=='member' && canSetAvis" (click)="add(backContent)">Laisser mon avis</button> -->
+
+                </div>
+                <!--button  *ngIf="!showResponseFilePreview"  class="btn btn-success mb-3 " [disabled]="!activeobsPanel"  (click)="openWindow(contentTemplateAmendement)">Faire des observations</!--button-->
+        
+            </div>
 
 
-
-<ng-container *ngIf="showPreview" class="tw-container">
-  <div class="tw-flex tw-justify-around">
-    <div>
-      <button class="btn btn-dark tw-mb-3 btn-sm" (click)="back()">Fermer le visualiseur</button>
-    </div>
-    <div>
-      <!-- 
-      <button 
-        class="btn btn-sm btn-primary" 
-        *ngIf="!isSessionFile && data.session.is_active!=false && role=='member' && canSetAvis" 
-        (click)="add(backContent)">
-        Laisser mon avis
-      </button> 
-      -->
-    </div>
-
-    <!-- 
-    <button  
-      *ngIf="!showResponseFilePreview"  
-      class="btn btn-success tw-mb-3" 
-      [disabled]="!activeobsPanel"  
-      (click)="openWindow(contentTemplateAmendement)">
-      Faire des observations
-    </button> 
-    -->
-  </div>
-
-  <object [data]="url" type="application/pdf" width="100%" height="600px"></object>
-</ng-container>
-
+         
+            <object [data]="url" type="application/pdf" width="100%" height="600px"></object>
+    </ng-container>
   
     <ng-template #backContent let-c="close" let-d="dismiss">
         <form #addSusp="ngForm" (ngSubmit)="storeAvis(addSusp.value)">
@@ -428,8 +492,9 @@
 		<button id="closeFicheBtn" type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss('Cross click')"></button>
 	</div>
 	<div class="offcanvas-body">
-          <object [data]="url" type="application/pdf" width="100%" height="600px"></object>
-
+        <ngx-extended-pdf-viewer [src]="pdfSrc"
+        style="width: 100%; height: 100%"
+        ></ngx-extended-pdf-viewer>
     </div>
 </ng-template>
 <ng-template #contentFinish let-c="close" let-d="dismiss">

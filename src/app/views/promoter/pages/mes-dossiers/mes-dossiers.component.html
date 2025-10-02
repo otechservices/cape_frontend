@@ -1,1 +1,179 @@
-<p>mes-dossiers works!</p>
+<div class="tw-max-w-6xl tw-mx-auto">
+  <div class="tw-mb-8">
+    <h1 class="tw-text-2xl tw-font-bold tw-text-gray-900 tw-mb-2">Mes Dossiers</h1>
+    <p class="tw-text-gray-600">
+      Suivez l'avancement de vos demandes d'autorisation
+    </p>
+  </div>
+
+  <!-- Statistiques -->
+  <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-4 tw-gap-6 tw-mb-8">
+    <div class="tw-bg-white tw-rounded-lg tw-shadow-sm tw-p-6">
+      <div class="tw-flex tw-items-center">
+        <div class="tw-w-12 tw-h-12 tw-bg-blue-100 tw-rounded-lg tw-flex tw-items-center tw-justify-center">
+          <i class="ri-file-list-3-line tw-text-xl tw-text-blue-600"></i>
+        </div>
+        <div class="tw-ml-4">
+          <p class="tw-text-sm tw-font-medium tw-text-gray-600">Total</p>
+          <p class="tw-text-2xl tw-font-bold tw-text-gray-900">{{ dossiers.length }}</p>
+        </div>
+      </div>
+    </div>
+    <!-- autres cartes avec *ngFor si tu veux -->
+  </div>
+
+  <!-- Onglets -->
+  <div class="tw-border-b tw-border-gray-200 tw-mb-8">
+    <nav class="-tw-mb-px tw-flex tw-space-x-8">
+      <button
+        *ngFor="let tab of [
+          { key: 'tous', label: 'Tous les dossiers' },
+          { key: 'en-cours', label: 'En cours' },
+          { key: 'autorises', label: 'Autorisés' },
+          { key: 'refuses', label: 'Refusés' }
+        ]"
+        (click)="setActiveTab(tab.key)"
+        class="tw-py-2 tw-px-1 tw-border-b-2 tw-font-medium tw-text-sm tw-transition-colors"
+        [ngClass]="activeTab === tab.key 
+          ? 'tw-border-blue-500 tw-text-blue-600' 
+          : 'tw-border-transparent tw-text-gray-500 hover:tw-text-gray-700 hover:tw-border-gray-300'"
+      >
+        {{ tab.label }}
+      </button>
+    </nav>
+  </div>
+
+  <!-- Liste + détails -->
+  <div class="tw-grid tw-grid-cols-1 lg:tw-grid-cols-3 tw-gap-6">
+    <!-- Liste -->
+    <div class="lg:tw-col-span-1">
+      <div class="tw-bg-white tw-rounded-lg tw-shadow-sm">
+        <div class="tw-p-4 tw-border-b tw-border-gray-200">
+          <h3 class="tw-font-semibold tw-text-gray-900">
+            Dossiers ({{ filtrerDossiers().length }})
+          </h3>
+        </div>
+        <div class="tw-divide-y tw-divide-gray-200">
+          <div
+            *ngFor="let dossier of filtrerDossiers()"
+            (click)="selectDossier(dossier.id)"
+            class="tw-p-4 tw-cursor-pointer hover:tw-bg-gray-50 tw-transition-colors"
+            [ngClass]="dossierSelectionne === dossier.id 
+              ? 'tw-bg-blue-50 tw-border-r-2 tw-border-blue-500' 
+              : ''"
+          >
+            <div class="tw-flex tw-items-start tw-justify-between tw-mb-2">
+              <span class="tw-text-sm tw-font-medium tw-text-gray-900">{{ dossier.code }}</span>
+              <span class="tw-px-2 tw-py-1 tw-text-xs tw-font-medium tw-rounded-full"
+                    [ngClass]="getStatutColor(dossier.statut)">
+                {{ getStatus(dossier.status) }}
+              </span>
+            </div>
+            <h4 class="tw-text-sm tw-font-medium tw-text-gray-900 tw-mb-1">{{ dossier.name }}</h4>
+            <div class="tw-flex tw-items-center tw-justify-between tw-text-xs tw-text-gray-500">
+              <span>Déposé le {{ dossier.created_at | date:"dd MMMM yyyy" }}</span>
+              <span class="tw-px-2 tw-py-1 tw-rounded-full"
+                    [ngClass]="dossier.type === 'CAPE' 
+                      ? 'tw-bg-purple-100 tw-text-purple-800' 
+                      : 'tw-bg-orange-100 tw-text-orange-800'">
+                {{ dossier.service?.name }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Détails -->
+<!-- Détails -->
+<div class="tw-col-span-1 lg:tw-col-span-2">
+  <ng-container *ngIf="dossierSelectionne; else placeholder">
+    <ng-container *ngFor="let dossier of dossiers">
+      <ng-container *ngIf="dossier.id === dossierSelectionne">
+   <div class="tw-bg-white tw-rounded-lg tw-shadow-sm tw-p-6 tw-space-y-2">
+  <h3 class="tw-text-lg tw-font-semibold tw-mb-2">{{ dossier.name }}</h3>
+  <p class="tw-text-sm tw-text-gray-600">Déposé le {{ dossier.created_at | date:'dd MMMM yyyy' }}</p>
+  
+<div class="tw-bg-white tw-rounded-lg tw-shadow-sm tw-p-6 tw-space-y-4">
+  <!-- Titre et date -->
+  <h3 class="tw-text-lg tw-font-semibold tw-mb-2">{{ dossier.name }}</h3>
+  <p class="tw-text-sm tw-text-gray-600">Déposé le {{ dossier.created_at | date:'dd MMMM yyyy' }}</p>
+
+  <!-- Infos générales -->
+  <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-gap-4">
+    <div>
+      <p><strong>Code :</strong> {{ dossier.code }}</p>
+      <p><strong>Type de centre :</strong> {{ dossier.type_cape.name }}</p>
+      <p><strong>Service :</strong> {{ dossier.service.name }}</p>
+      <p><strong>Statut :</strong> {{ dossier.status === 0 ? 'En attente' : 'Validé' }}</p>
+      <p><strong>Capacité :</strong> {{ dossier.capacity }}</p>
+      <p><strong>Adresse :</strong> {{ dossier.address }}</p>
+      <p><strong>Ville :</strong> {{ dossier.town }}</p>
+      <p><strong>Coordonnées GPS :</strong> {{ dossier.coords }}</p>
+    </div>
+    <div>
+      <p><strong>Promoteur :</strong> {{ dossier.firstname_pomoter }} {{ dossier.name_pomoter }}</p>
+      <p><strong>Email promoteur :</strong> {{ dossier.email_pomoter }}</p>
+      <p><strong>Téléphone promoteur :</strong> {{ dossier.phone_pomoter }}</p>
+      <p><strong>Chef :</strong> {{ dossier.firstname_chief }} {{ dossier.name_chief }}</p>
+      <p><strong>Email chef :</strong> {{ dossier.email_chief }}</p>
+      <p><strong>Téléphone chef :</strong> {{ dossier.phone_chief }}</p>
+      <p><strong>Autorisé :</strong> {{ dossier.is_authorized === 1 ? 'Oui' : 'Non' }}</p>
+      <p><strong>Consentement :</strong> {{ dossier.has_consent === 1 ? 'Oui' : 'Non' }}</p>
+    </div>
+  </div>
+
+  <!-- Fichiers et documents -->
+  <div>
+    <h4 class="tw-font-semibold tw-mb-2">Fichiers associés</h4>
+    <ul class="tw-list-disc tw-pl-5 tw-space-y-1">
+      <li *ngIf="dossier.cps_file">CPS : {{ dossier.cps_file }}</li>
+      <li *ngIf="dossier.dfea_file">DFEA : {{ dossier.dfea_file }}</li>
+      <li *ngIf="dossier.receipt_preview">Reçu : {{ dossier.receipt_preview }}</li>
+      <li *ngIf="dossier.file_aggreement">Accord : {{ dossier.file_aggreement }}</li>
+      <li *ngIf="dossier.consent_file">Consentement : {{ dossier.consent_file }}</li>
+      <li *ngIf="!dossier.cps_file && !dossier.dfea_file && !dossier.receipt_preview && !dossier.file_aggreement && !dossier.consent_file">
+        Aucun fichier disponible
+      </li>
+    </ul>
+  </div>
+
+  <!-- Parcours -->
+  <div>
+    <h4 class="tw-font-semibold tw-mb-2">Parcours du dossier</h4>
+    <ul class="tw-list-disc tw-pl-5 tw-space-y-1">
+      <li *ngFor="let step of dossier.parcours">
+        {{ step.libelle }} - {{ step.created_at | date:'dd/MM/yyyy HH:mm' }}
+      </li>
+    </ul>
+  </div>
+
+  <!-- Observations et notes -->
+  <div>
+    <p><strong>Observation générale :</strong> {{ dossier.observation || 'Aucune' }}</p>
+    <p><strong>Note :</strong> {{ dossier.note || 'Aucune' }}</p>
+    <p><strong>Observation finale :</strong> {{ dossier.final_observation || 'Aucune' }}</p>
+  </div>
+</div>
+
+</div>
+
+      </ng-container>
+    </ng-container>
+  </ng-container>
+
+  <ng-template #placeholder>
+    <div class="tw-bg-white tw-rounded-lg tw-shadow-sm tw-p-8 tw-text-center">
+      <div class="tw-w-16 tw-h-16 tw-bg-gray-100 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-4">
+        <i class="ri-folder-line tw-text-2xl tw-text-gray-400"></i>
+      </div>
+      <h3 class="tw-text-lg tw-font-medium tw-text-gray-900 tw-mb-2">Sélectionnez un dossier</h3>
+      <p class="tw-text-gray-600">
+        Cliquez sur un dossier à gauche pour voir les détails et le suivi.
+      </p>
+    </div>
+  </ng-template>
+</div>
+
+  </div>
+</div>

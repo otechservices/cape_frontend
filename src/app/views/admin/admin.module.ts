@@ -71,6 +71,7 @@ import { TypeSousGarderieComponent } from './pages/type-sous-garderie/type-sous-
 import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
 import { ControlFileElementComponent } from './pages/control-file-element/control-file-element.component';
 import { SharedModule } from '../shared/shared.module';
+import { NgxToggle, NgxToggleModule } from 'ngx-toggle';
 
 
 
@@ -149,7 +150,7 @@ import { SharedModule } from '../shared/shared.module';
     ReactiveFormsModule,
     NgbModule,
     NgxSpinnerModule,
-    NgIdleKeepaliveModule.forRoot(),
+    NgIdleKeepaliveModule.forRoot()
 
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]

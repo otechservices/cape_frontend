@@ -18,7 +18,15 @@ export class IsAuthedGuard  {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
         if (this.lsService.get(GlobalName.tokenName) != null) {
-          this.router.navigate(['/promoter/dashboard']);
+                let role=this.lsService.get(GlobalName.userName)?.roles[0]?.name 
+
+                if (role=="Promoteur") {
+                            this.router.navigate(['/promoter/dashboard']);
+
+                }else{
+                            this.router.navigate(['/admin/dashboard']);
+
+                }
           return false;
         } else {
           return true;

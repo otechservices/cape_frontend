@@ -183,7 +183,7 @@
     <ng-template #addContent let-c="close" let-d="dismiss">
         <form #addForm="ngForm" (ngSubmit)="store(addForm.value)">
         <div class="modal-header bg-secondary">
-          <h6 class="modal-title text-white" id="modal-basic-title">Créer une session</h6>
+          <h6 class="tw-modal-title tw-text-white" id="modal-basic-title">Créer une session</h6>
           <button type="button" class="btn-close" aria-label="Close" (click)="d('Cross click')"></button>
         </div>
         <div class="modal-body" >
@@ -220,7 +220,7 @@
       <ng-template #editContent let-c="close" let-d="dismiss">
         <form #editForm="ngForm" (ngSubmit)="update(editForm.value)">
         <div class="modal-header bg-secondary">
-          <h6 class="modal-title text-white" id="modal-basic-title">Modifier une session</h6>
+          <h6 class="tw-modal-title tw-text-white" id="modal-basic-title">Modifier une session</h6>
           <button type="button" class="btn-close" aria-label="Close" (click)="d('Cross click')"></button>
         </div>
         <div class="modal-body" >
@@ -256,12 +256,20 @@
       <ng-template #arrContent let-c="close" let-d="dismiss">
         <form #editForm="ngForm" (ngSubmit)="storeDistricts(editForm.value)">
         <div class="modal-header bg-secondary">
-          <h6 class="modal-title text-white" id="modal-basic-title">Affeter des membres à la session</h6>
+          <h6 class="tw-modal-title tw-text-white" id="modal-basic-title">Affeter des membres à la session</h6>
           <button type="button" class="btn-close" aria-label="Close" (click)="d('Cross click')"></button>
         </div>
         <div class="modal-body" >
             <div class="form-goup">
                 <label for="">Choix des membres</label>
+                <ng-select
+                [multiple]="true"
+                  [data]="dropdownList"
+                [(ngModel)]="selectedItems" 
+                 name="selectedItems"
+                >
+                <ng-option *ngFor="let m of dropdownList" [value]="m.id">{{m.itemName}}</ng-option>
+                </ng-select>
                 <!-- <angular2-multiselect
                  [data]="dropdownList"
                 [(ngModel)]="selectedItems" 
@@ -285,13 +293,21 @@
       <ng-template #sessContent let-c="close" let-d="dismiss">
         <form #editForm="ngForm" (ngSubmit)="storeRequetes(editForm.value)">
         <div class="modal-header bg-secondary">
-          <h6 class="modal-title text-white" id="modal-basic-title">Inscrire des dossiers à la session</h6>
+          <h6 class="tw-modal-title tw-text-white" id="modal-basic-title">Inscrire des dossiers à la session</h6>
           <button type="button" class="btn-close" aria-label="Close" (click)="d('Cross click')"></button>
         </div>
         <div class="modal-body" >
             <div class="form-goup">
                 <label for="">Choix des dossiers</label>
-                <angular2-multiselect
+                   <ng-select
+                [multiple]="true"
+                  [data]="dropdownList2"
+                [(ngModel)]="selectedItems2" 
+                 name="selectedItems"
+                >
+                <ng-option *ngFor="let d of dropdownList2" [value]="d.id">{{d.itemName}}</ng-option>
+                </ng-select>
+                <!-- <angular2-multiselect
                  [data]="dropdownList2"
                 [(ngModel)]="selectedItems2" 
                 [settings]="dropdownSettings2"
@@ -301,7 +317,7 @@
                 (onSelectAll)="onSelectAll($event)" 
                 (onDeSelectAll)="onDeSelectAll($event)"
                 >
-                </angular2-multiselect>
+                </angular2-multiselect> -->
               
             </div>
            
@@ -314,7 +330,7 @@
     
       <ng-template #showContent let-c="close" let-d="dismiss">
         <div class="modal-header">
-            <h6 class="modal-title text-white" id="modal-basic-title">Détails des informations</h6>
+            <h6 class="tw-modal-title tw-text-white" id="modal-basic-title">Détails des informations</h6>
             <button type="button" class="btn-close" aria-label="Close" (click)="d('Cross click')"></button>
           </div>
     

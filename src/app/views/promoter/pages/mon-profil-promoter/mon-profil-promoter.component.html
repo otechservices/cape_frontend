@@ -1,1 +1,120 @@
-<p>mon-profil-promoter works!</p>
+<div class="tw-max-w-4xl tw-mx-auto">
+  <!-- Titre -->
+  <div class="tw-mb-8">
+    <h1 class="tw-text-2xl tw-font-bold tw-text-gray-900 tw-mb-2">Mon Profil</h1>
+    <p class="tw-text-gray-600">Gérez vos informations personnelles et vos préférences</p>
+  </div>
+
+  <!-- Onglets -->
+  <div class="tw-border-b tw-border-gray-200 tw-mb-8">
+    <nav class="-tw-mb-px tw-flex tw-space-x-8">
+      <button
+        *ngFor="let tab of [
+          { key: 'informations', label: 'Informations personnelles', icon: 'ri-user-line' },
+          { key: 'securite', label: 'Sécurité', icon: 'ri-shield-line' },
+          { key: 'notifications', label: 'Notifications', icon: 'ri-notification-line' }
+        ]"
+        (click)="activeTab = tab.key"
+        class="tw-py-2 tw-px-1 tw-border-b-2 tw-font-medium tw-text-sm tw-transition-colors tw-flex tw-items-center tw-space-x-2"
+        [ngClass]="activeTab === tab.key
+          ? 'tw-border-blue-500 tw-text-blue-600'
+          : 'tw-border-transparent tw-text-gray-500 hover:tw-text-gray-700 hover:tw-border-gray-300'"
+      >
+        <i [class]="tab.icon"></i>
+        <span>{{ tab.label }}</span>
+      </button>
+    </nav>
+  </div>
+
+  <!-- Informations personnelles -->
+  <div *ngIf="activeTab === 'informations'" class="tw-bg-white tw-rounded-lg tw-shadow-sm tw-p-8">
+    <div class="tw-flex tw-items-center tw-justify-between tw-mb-6">
+      <h3 class="tw-text-lg tw-font-semibold tw-text-gray-900">Informations personnelles</h3>
+      <button *ngIf="!isEditing" (click)="isEditing = true"
+        class="tw-px-4 tw-py-2 tw-bg-blue-600 tw-text-white tw-rounded-lg hover:tw-bg-blue-700 tw-transition-colors tw-flex tw-items-center tw-space-x-2">
+        <i class="ri-edit-line"></i> <span>Modifier</span>
+      </button>
+      <button *ngIf="isEditing" (click)="isEditing = false"
+        class="tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-text-gray-700 tw-rounded-lg hover:tw-bg-gray-50 tw-transition-colors">
+        Annuler
+      </button>
+    </div>
+
+    <form [formGroup]="profilForm" (ngSubmit)="onProfilSubmit()" class="tw-space-y-6">
+      <!-- Exemple champ prénom -->
+      <div>
+        <label class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 tw-mb-2">Prénom *</label>
+        <input type="text" formControlName="prenom" [disabled]="!isEditing"
+          class="tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-lg focus:tw-ring-2 focus:tw-ring-blue-500 disabled:tw-bg-gray-50" />
+      </div>
+
+      <!-- Autres champs à reproduire comme en React -->
+      
+      <div *ngIf="isEditing" class="tw-flex tw-justify-end">
+        <button type="submit" [disabled]="isSaving"
+          class="tw-px-6 tw-py-2 tw-bg-blue-600 tw-text-white tw-rounded-lg hover:tw-bg-blue-700 disabled:tw-opacity-50 tw-transition-colors">
+          <span *ngIf="isSaving">Sauvegarde...</span>
+          <span *ngIf="!isSaving">Sauvegarder</span>
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Sécurité -->
+  <div *ngIf="activeTab === 'securite'" class="tw-bg-white tw-rounded-lg tw-shadow-sm tw-p-8">
+    <!-- Formulaire mot de passe -->
+    <form [formGroup]="motDePasseForm" (ngSubmit)="onMotDePasseSubmit()" class="tw-space-y-6">
+      <input type="password" formControlName="ancien" placeholder="Mot de passe actuel *" />
+      <input type="password" formControlName="nouveau" placeholder="Nouveau mot de passe *" />
+      <input type="password" formControlName="confirmation" placeholder="Confirmer mot de passe *" />
+      <button type="submit" [disabled]="isSaving" class="btn-primary">
+        {{ isSaving ? 'Modification...' : 'Modifier le mot de passe' }}
+      </button>
+    </form>
+  </div>
+
+  <!-- Notifications -->
+  <div *ngIf="activeTab === 'notifications'" class="tw-bg-white tw-rounded-lg tw-shadow-sm tw-p-8">
+    <form [formGroup]="notificationsForm" (ngSubmit)="onNotificationsSubmit()">
+      
+      <!-- Groupe Email -->
+      <div formGroupName="email" class="tw-mb-4">
+        <h3 class="tw-text-lg tw-font-semibold tw-mb-2">Notifications Email</h3>
+        
+        <label class="tw-block">
+          <input type="checkbox" formControlName="dossiers" />
+          Suivi des dossiers
+        </label>
+
+        <label class="tw-block">
+          <input type="checkbox" formControlName="rappels" />
+          Rappels automatiques
+        </label>
+
+        <label class="tw-block">
+          <input type="checkbox" formControlName="newsletter" />
+          Newsletter
+        </label>
+      </div>
+
+      <!-- Groupe SMS -->
+      <div formGroupName="sms" class="tw-mb-4">
+        <h3 class="tw-text-lg tw-font-semibold tw-mb-2">Notifications SMS</h3>
+        
+        <label class="tw-block">
+          <input type="checkbox" formControlName="urgences" />
+          Urgences
+        </label>
+
+        <label class="tw-block">
+          <input type="checkbox" formControlName="confirmations" />
+          Confirmations
+        </label>
+      </div>
+
+      <button type="submit" [disabled]="isSaving" class="btn-primary tw-mt-4">
+        {{ isSaving ? 'Sauvegarde...' : 'Sauvegarder' }}
+      </button>
+    </form>
+  </div>
+</div>

@@ -74,7 +74,7 @@
   <ng-template #addContent let-c="close" let-d="dismiss">
       <form #addForm="ngForm" (ngSubmit)="store(addForm.value)">
       <div class="modal-header bg-secondary">
-        <h6 class="modal-title text-white" id="modal-basic-title">Enregistrer un rôle</h6>
+        <h6 class="tw-modal-title tw-text-white" id="modal-basic-title">Enregistrer un rôle</h6>
         <button type="button" class="btn-close" aria-label="Close" (click)="d('Cross click')"></button>
       </div>
       <div class="modal-body" >
@@ -97,7 +97,7 @@
     <ng-template #editContent let-c="close" let-d="dismiss">
       <form #editForm="ngForm" (ngSubmit)="update(editForm.value)">
       <div class="modal-header">
-        <h6 class="modal-title text-white" id="modal-basic-title">Modifier un rôle</h6>
+        <h6 class="tw-modal-title tw-text-white" id="modal-basic-title">Modifier un rôle</h6>
         <button type="button" class="btn-close" aria-label="Close" (click)="d('Cross click')"></button>
       </div>
       <div class="modal-body" >

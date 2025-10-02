@@ -14,9 +14,9 @@ interface MenuItem {
   styleUrl: './promoter-side-bar.component.css'
 })
 export class PromoterSideBarComponent {
-  activeSection: string = 'accueil';
+  activeSection: string = 'dashboard';
 menuItems: MenuItem[] = [
-    { id: 'accueil', label: 'Accueil', icon: 'ri-home-line' },
+    { id: 'dashboard', label: 'Accueil', icon: 'ri-home-line' },
     { id: 'inscription-cape', label: 'Inscription CAPE', icon: 'ri-file-add-line' },
     { id: 'inscription-garderie', label: 'Inscription Garderie', icon: 'ri-building-line' },
     { id: 'mes-dossiers', label: 'Mes Dossiers', icon: 'ri-folder-line' },

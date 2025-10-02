@@ -40,6 +40,7 @@
     "ngx-quill": "^28.0.1",
     "ngx-spinner": "^16.0.0",
     "ngx-toastr": "^17.0.0",
+    "ngx-toggle": "^2.0.1",
     "primeflex": "^4.0.0",
     "primeicons": "^7.0.0",
     "primeng": "^17.18.15",

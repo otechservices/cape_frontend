@@ -162,7 +162,9 @@
     
         <div class="modal-header bg-secondary">
           <h6 class="text-white">Parcours demande</h6>
-          <button type="button" class="btn btn-dark"  (click)="d('Cross click')"> <i class="fa fa-times"></i></button>
+           <button type="button" class="tw-btn tw-btn-dark tw-text-white tw-px-2 tw-py-1 tw-rounded" (click)="d('Cross click')">
+                <i class="fa fa-times"></i>
+            </button>
         </div>
         <div class="modal-body">
            <table class="table">
@@ -187,3 +189,19 @@
 
       </ng-template>
       
+
+
+
+    <ng-template #parcoursContent let-c="close" let-d="dismiss">
+    
+        <div class="modal-header bg-secondary">
+          <h6 class="text-white">Cibles</h6>
+           <button type="button" class="tw-btn tw-btn-dark tw-text-white tw-px-2 tw-py-1 tw-rounded" (click)="d('Cross click')">
+                <i class="fa fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+        
+        </div>
+
+      </ng-template>

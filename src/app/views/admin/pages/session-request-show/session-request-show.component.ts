@@ -316,8 +316,8 @@ storeResponse(value:any){
    // window.location=url 
   }
   showFile3(url:any){
-    this.pdfSrc=url
-    // this.url=this._sanitizationService.bypassSecurityTrustResourceUrl(url)
+    //this.pdfSrc=url
+    this.url=this._sanitizationService.bypassSecurityTrustResourceUrl(url)
      this.offcanvasService.open(this.contentFilePreview,{panelClass: 'details-panel3',position: 'bottom'  })
 
    // window.location=url 
@@ -359,6 +359,7 @@ storeResponse(value:any){
       AppSweetAlert.simpleAlert("success","Avis",res?.message)
       this.loading=false
       this.modalService.dismissAll()
+      this.offcanvasService.dismiss()
      // this.back()
       this.init()
       

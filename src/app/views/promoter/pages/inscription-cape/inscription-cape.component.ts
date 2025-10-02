@@ -97,6 +97,7 @@ export class InscriptionCapeComponent  implements OnInit{
       email_pomoter: ['', [Validators.required, Validators.email]],
       phone_pomoter: ['', Validators.required],
       chief_is_directeor: [false],
+      has_aggrement:[false],
       has_consent: [false, Validators.requiredTrue],
 
 
@@ -113,7 +114,7 @@ export class InscriptionCapeComponent  implements OnInit{
       capacity: [null, [Validators.required, Validators.min(0)]],
       email: ['', [Validators.required, Validators.email, Validators.maxLength(100)]],
       phone: ['', [Validators.required, Validators.maxLength(20)]],
-      selectedItems: [[], Validators.required], // Multiselect
+      targets: [[], Validators.required], // Multiselect
 
       // Localisation
       department_id: [null, Validators.required],
@@ -121,7 +122,7 @@ export class InscriptionCapeComponent  implements OnInit{
       district_id: [null, Validators.required],
       town: ['', [Validators.required, Validators.maxLength(255)]],
       address: ['', [Validators.required, Validators.maxLength(255)]],
-      coords: ['', Validators.required],
+      coords: ['', Validators.required]
     });
   }
   ngOnInit(): void {
@@ -317,7 +318,7 @@ validateStep(step: number): boolean {
              this.formData.get('capacity')?.valid &&
              this.formData.get('email')?.valid &&
              this.formData.get('phone')?.valid &&
-             this.formData.get('selectedItems')?.valid &&
+             this.formData.get('targets')?.valid &&
              this.formData.get('department_id')?.valid &&
              this.formData.get('municipality_id')?.valid &&
              this.formData.get('district_id')?.valid &&
@@ -401,12 +402,19 @@ validateStep(step: number): boolean {
   this.eService.store(formData2).subscribe(
     (res: any) => {
       this.loading = false;
+
+    this.isSubmitting = false;
+    this.submitStatus = 'idle';
       this.toastrService.success(res.message);
       this.lsService.remove(GlobalName.reqName);
       this.is_stored = true;
-      this.router.navigate(['/']);
+            this.eService.purgeFile({init_code:this.initCode}).subscribe((res:any)=>{ },)
+      this.router.navigate(['promoter/dashboard']);
     },
     (err: any) => {
+
+    this.isSubmitting = false;
+    this.submitStatus = 'idle';
       this.loading = false;
       AppSweetAlert.simpleAlert("error", "Nouvelle inscription", err.error.message);
     }
@@ -520,20 +528,20 @@ upload5(event:any){
 
 
   ngOnDestroy(): void {
-    if (this.formData.get('nature_promotor_id') != undefined && !this.is_stored) {
+    if (this.formData.get('nature_promotor_id') != null && !this.is_stored) {
           AppSweetAlert.confirmBox2('warning','Enregistrement de CAPE','Vous étiez en train d\'enregistrer des données, voulez vous concerver les données saisies?').then((result:any)=>{
       if(result.value){
         this.lsService.set(`${GlobalName.reqName}-${this.user.code}`,JSON.stringify(this.formData))
       }else{
         this.lsService.remove(`${GlobalName.reqName}-${this.user.code}`)
-
+      this.eService.purgeFile({init_code:this.initCode}).subscribe((res:any)=>{ },)
       }
     })
     }
 
-    this.eService.purgeFile({init_code:this.initCode}).subscribe((res:any)=>{ },)
 
   }
+
 
    getTCName(id:any){
     return this.tds.find((el:any) => el.id == id)?.name

@@ -1,8 +1,8 @@
 import { formatDate } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Router, ActivatedRoute } from '@angular/router';
-import { NgbModalConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalConfig, NgbModal, NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
 import { inherit } from 'hammerjs';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
@@ -16,9 +16,11 @@ import { LocalStorageService } from 'src/app/core/utils/local-stoarge-service';
 @Component({
   selector: 'app-espace-eservice-show',
   templateUrl: './espace-eservice-show.component.html',
-  styleUrls: ['./espace-eservice-show.component.css']
+  styleUrls: ['./espace-eservice-show.component.css'],
+  encapsulation:ViewEncapsulation.None
 })
 export class EspaceEserviceShowComponent implements OnInit {
+  @ViewChild('previewContent')previewContent:any
   url:SafeResourceUrl | undefined
   showPreview=false
   fileSelected:any
@@ -30,12 +32,15 @@ export class EspaceEserviceShowComponent implements OnInit {
   loading=false
   user:any
   role:any
+  isValid=false
   constructor(
     private reqService:RequeteService,
     private toastrService:ToastrService,
       config: NgbModalConfig,
       private lsService:LocalStorageService,
       private router:Router,
+             private offcanvasService: NgbOffcanvas,
+      
     private activatedRoute:ActivatedRoute,
     private _sanitizationService: DomSanitizer,
     private responseService:ResponseService,
@@ -89,14 +94,15 @@ export class EspaceEserviceShowComponent implements OnInit {
       this.fileSelected=f
      let url=ConfigService.toFile("docs/"+this.data.code+"/"+filename);
      this.url=this._sanitizationService.bypassSecurityTrustResourceUrl(url)
-     this.showPreview=true
-     console.log(this.fileSelected, this.data.status)
+     this.offcanvasService.open(this.previewContent,{  panelClass: 'details-panel', position: 'start'  });
+     console.log(this.fileSelected)
    // window.location=url 
   }
   showFile2(filename:any){
      let url=ConfigService.toFile("docs/"+this.data.code+"/"+filename);
      this.url=this._sanitizationService.bypassSecurityTrustResourceUrl(url)
-     this.showPreview=true
+     this.offcanvasService.open(this.previewContent,{  panelClass: 'details-panel', position: 'start'  });
+
      console.log(this.fileSelected, this.data.status)
    // window.location=url 
   }
@@ -104,7 +110,7 @@ export class EspaceEserviceShowComponent implements OnInit {
       let filename = this.data.files2.find((el:any)=>el.reference == "Enquête sociale")?.filename
      let url=ConfigService.toFile("docs/"+this.data.code+"/"+filename);
      this.url=this._sanitizationService.bypassSecurityTrustResourceUrl(url)
-     this.showPreview=true
+     this.offcanvasService.open(this.previewContent,{  panelClass: 'details-panel', position: 'start'  });
    // window.location=url 
   }
   showFileRecepisseFile(){
@@ -118,12 +124,12 @@ export class EspaceEserviceShowComponent implements OnInit {
     }
      let url=ConfigService.toFile("docs/"+this.data.code+"/"+filename);
      this.url=this._sanitizationService.bypassSecurityTrustResourceUrl(url)
-     this.showPreview=true
+     this.offcanvasService.open(this.previewContent,{  panelClass: 'details-panel', position: 'start'  });
    // window.location=url 
   }
 
   back(){
-    this.showPreview=false
+    this.offcanvasService.dismiss()
   }
   add(content:any){
     this.modalService.open(content,{size:'lg'});
@@ -317,16 +323,22 @@ export class EspaceEserviceShowComponent implements OnInit {
   }
 
 
+    toggleValid() {
+    this.isValid = !this.isValid;
+  }
+
+
   setFileTreatment(value:any){
     
     this.loading=true
     value.id=this.fileSelected.id
-    value.is_valid= value.is_valid==""?false:true
+    value.is_valid= this.isValid
     this.reqService.setFileTreatment(value).subscribe((res:any)=>{
       AppSweetAlert.simpleAlert("success","Traitement de fichier",res?.message)
       this.loading=false
       this.fileSelected=null
       this.modalService.dismissAll()
+      this.isValid=false
       this.back()
       this.init()
     
@@ -338,4 +350,6 @@ export class EspaceEserviceShowComponent implements OnInit {
 
     })
   }
+
+  
 }

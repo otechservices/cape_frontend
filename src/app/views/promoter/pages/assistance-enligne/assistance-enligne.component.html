@@ -1,1 +1,158 @@
-<p>assistance-enligne works!</p>
+<div class="tw-max-w-6xl tw-mx-auto">
+  <div class="tw-mb-8">
+    <h1 class="tw-text-2xl tw-font-bold tw-text-gray-900 tw-mb-2">Support</h1>
+    <p class="tw-text-gray-600">
+      Créez un ticket de support ou consultez vos demandes existantes
+    </p>
+  </div>
+
+  <!-- Onglets -->
+  <div class="tw-border-b tw-border-gray-200 tw-mb-8">
+    <nav class="-tw-mb-px tw-flex tw-space-x-8">
+      <button (click)="activeTab='nouveau'"
+        [ngClass]="activeTab==='nouveau' ? 'tw-border-blue-500 tw-text-blue-600' : 'tw-border-transparent tw-text-gray-500 hover:tw-text-gray-700 hover:tw-border-gray-300'"
+        class="tw-py-2 tw-px-1 tw-border-b-2 tw-font-medium tw-text-sm tw-transition-colors">
+        Nouveau ticket
+      </button>
+      <button (click)="activeTab='mes-tickets'"
+        [ngClass]="activeTab==='mes-tickets' ? 'tw-border-blue-500 tw-text-blue-600' : 'tw-border-transparent tw-text-gray-500 hover:tw-text-gray-700 hover:tw-border-gray-300'"
+        class="tw-py-2 tw-px-1 tw-border-b-2 tw-font-medium tw-text-sm tw-transition-colors">
+        Mes tickets ({{tickets.length}})
+      </button>
+    </nav>
+  </div>
+
+  <!-- Formulaire nouveau ticket -->
+  <div *ngIf="activeTab==='nouveau'" class="tw-bg-white tw-rounded-lg tw-shadow-sm tw-p-8">
+    <form (ngSubmit)="handleNouveauTicketSubmit()" #ticketForm="ngForm" class="tw-space-y-6">
+      <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-gap-6">
+        <div>
+          <label class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 tw-mb-2">Sujet *</label>
+          <input type="text" [(ngModel)]="nouveauTicket.sujet" name="sujet" required
+            class="tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-lg focus:tw-ring-2 focus:tw-ring-blue-500">
+        </div>
+
+        <div>
+          <label class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 tw-mb-2">Catégorie *</label>
+          <select [(ngModel)]="nouveauTicket.categorie" name="categorie" required
+            class="tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-lg focus:tw-ring-2 focus:tw-ring-blue-500 tw-pr-8">
+            <option value="">Sélectionner une catégorie</option>
+            <option value="dossier-cape">Dossier CAPE</option>
+            <option value="dossier-garderie">Dossier Garderie</option>
+            <option value="compte">Problème de compte</option>
+            <option value="technique">Problème technique</option>
+            <option value="information">Demande d'information</option>
+            <option value="autre">Autre</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Priorité -->
+      <div>
+        <label class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 tw-mb-2">Priorité</label>
+        <div class="tw-flex tw-space-x-4">
+          <label *ngFor="let option of [{value:'faible',label:'Faible'},{value:'normale',label:'Normale'},{value:'urgente',label:'Urgente'}]"
+            class="tw-flex tw-items-center">
+            <input type="radio" [(ngModel)]="nouveauTicket.priorite" name="priorite" [value]="option.value" class="tw-mr-2">
+            {{option.label}}
+          </label>
+        </div>
+      </div>
+
+      <!-- Description -->
+      <div>
+        <label class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 tw-mb-2">Description détaillée *</label>
+        <textarea [(ngModel)]="nouveauTicket.message" name="message" required rows="6" maxlength="500"
+          class="tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-lg focus:tw-ring-2 focus:tw-ring-blue-500"></textarea>
+        <p class="tw-text-sm tw-text-gray-500 tw-mt-1">{{nouveauTicket.message.length}}/500 caractères</p>
+      </div>
+
+      <div class="tw-flex tw-justify-end">
+        <button type="submit" [disabled]="isSubmitting"
+          class="tw-px-6 tw-py-2 tw-bg-blue-600 tw-text-white tw-rounded-lg hover:tw-bg-blue-700 disabled:tw-opacity-50">
+          <span *ngIf="isSubmitting">Création...</span>
+          <span *ngIf="!isSubmitting">Créer le ticket</span>
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Liste tickets -->
+  <div *ngIf="activeTab==='mes-tickets'" class="tw-space-y-6">
+    <div *ngIf="tickets.length===0" class="tw-bg-white tw-rounded-lg tw-shadow-sm tw-p-8 tw-text-center">
+      <p class="tw-text-gray-600">Vous n'avez pas encore créé de ticket de support.</p>
+    </div>
+
+    <div *ngIf="tickets.length>0" class="tw-grid tw-grid-cols-1 lg:tw-grid-cols-3 tw-gap-6">
+      <!-- Colonne gauche -->
+      <div class="tw-bg-white tw-rounded-lg tw-shadow-sm">
+        <div class="tw-p-4 tw-border-b"><h3 class="tw-font-semibold">Vos tickets</h3></div>
+        <div *ngFor="let ticket of tickets" (click)="ticketSelectionne=ticket.id"
+          [ngClass]="ticketSelectionne===ticket.id ? 'tw-bg-blue-50 tw-border-r-2 tw-border-blue-500' : ''"
+          class="tw-p-4 tw-cursor-pointer hover:tw-bg-gray-50">
+          <div class="tw-flex tw-items-start tw-justify-between tw-mb-2">
+            <span class="tw-text-sm tw-font-medium">{{ticket.id}}</span>
+            <span class="tw-px-2 tw-py-1 tw-text-xs tw-font-medium tw-rounded-full" [ngClass]="getStatutColor(ticket.statut)">
+              {{ticket.statut}}
+            </span>
+          </div>
+          <h4 class="tw-text-sm tw-font-medium tw-mb-1">{{ticket.sujet}}</h4>
+          <div class="tw-flex tw-justify-between tw-text-xs tw-text-gray-500">
+            <span>{{ticket.dateCreation}}</span>
+            <span class="tw-px-2 tw-py-1 tw-rounded-full" [ngClass]="getPrioriteColor(ticket.priorite)">
+              {{ticket.priorite}}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Colonne droite -->
+      <div class="lg:tw-col-span-2">
+        <div *ngIf="ticketSelectionne; else noTicket" class="tw-bg-white tw-rounded-lg tw-shadow-sm">
+          <ng-container *ngFor="let ticket of tickets">
+            <ng-container *ngIf="ticket.id===ticketSelectionne">
+              <div class="tw-p-6 tw-border-b">
+                <h3 class="tw-text-lg tw-font-semibold">{{ticket.sujet}}</h3>
+                <p class="tw-text-sm tw-text-gray-600">Ticket #{{ticket.id}}</p>
+              </div>
+
+              <!-- Messages -->
+              <div class="tw-p-6 tw-max-h-96 tw-overflow-y-auto">
+                <div *ngFor="let message of ticket.messages" class="tw-mb-4">
+                  <div [ngClass]="message.type==='client' ? 'tw-text-right' : 'tw-text-left'">
+                    <div [ngClass]="message.type==='client' ? 'tw-bg-blue-600 tw-text-white tw-inline-block tw-p-3 tw-rounded-lg' : 'tw-bg-gray-100 tw-inline-block tw-p-3 tw-rounded-lg'">
+                      <strong>{{message.auteur}}</strong> <small>{{message.date}}</small>
+                      <p>{{message.message}}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Réponse -->
+              <div *ngIf="ticket.statut!=='Résolu' && ticket.statut!=='Fermé'" class="tw-p-6 tw-border-t">
+                <form (ngSubmit)="handleReponseSubmit()">
+                  <textarea [(ngModel)]="nouvelleReponse" name="nouvelleReponse" rows="4" maxlength="500"
+                    class="tw-w-full tw-border tw-rounded-lg tw-p-2"></textarea>
+                  <p class="tw-text-sm tw-text-gray-500 tw-mt-1">{{nouvelleReponse.length}}/500 caractères</p>
+                  <div class="tw-flex tw-justify-end">
+                    <button type="submit" [disabled]="isSubmitting || !nouvelleReponse.trim()"
+                      class="tw-px-4 tw-py-2 tw-bg-blue-600 tw-text-white tw-rounded-lg tw-mt-2">
+                      <span *ngIf="isSubmitting">Envoi...</span>
+                      <span *ngIf="!isSubmitting">Envoyer</span>
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </ng-container>
+          </ng-container>
+        </div>
+
+        <ng-template #noTicket>
+          <div class="tw-bg-white tw-rounded-lg tw-shadow-sm tw-p-8 tw-text-center">
+            <p class="tw-text-gray-600">Cliquez sur un ticket à gauche pour voir les détails.</p>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</div>

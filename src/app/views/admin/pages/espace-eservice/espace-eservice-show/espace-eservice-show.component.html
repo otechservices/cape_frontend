@@ -12,250 +12,182 @@
   </div>
 
 
-  <ng-container  *ngIf="!showPreview">
-<div class="d-flex justify-content-end" *ngIf="data != undefined">
-    <div class="mb-3 d-flex justify-content-end">
-        <a routerLink="/admin/requetes/new" class=" btn btn btn-sm btn-dark float-start">Retourner à la liste</a>
+  <ng-container *ngIf="data"  >
+ <!-- Boutons d'action -->
+  <div class="tw-flex tw-justify-end tw-mb-6" *ngIf="data">
+    <div class="tw-flex tw-space-x-2 tw-flex-wrap">
+      <a routerLink="/admin/requetes/new" class="tw-bg-gray-800 tw-text-white tw-px-3 tw-py-1 tw-rounded tw-text-sm hover:tw-bg-gray-700">Retourner à la liste</a>
 
-        <button [disabled]="loading" (click)="add(backContent)" *ngIf=" (data.status ==5 || data.status ==6)  && role !='cps' " class="btn btn-sm btn-secondary mx-1 ">Retourner pour correction <app-loading [isVisible]="loading"></app-loading></button>
-        <button [disabled]="loading" (click)="add(resp)" *ngIf=" data.status==6" class="btn btn-sm btn-success">Dossier recevable pour inscription <app-loading [isVisible]="loading"></app-loading></button>
-        <button [disabled]="loading" (click)="add(resp)" *ngIf=" data.status==5 || data.affectation.sens==-1" class="btn btn-sm btn-primary mx-1">Transmettre <app-loading [isVisible]="loading"></app-loading></button>
-        <button [disabled]="loading" (click)="add(finishContent1)" *ngIf=" data.status==4  && !data.has_cps_file" class="btn btn-sm btn-outline-primary mx-1">Ajouter le rapport de l'enquête sociale <app-loading [isVisible]="loading"></app-loading></button>
-        <button [disabled]="loading"(click)="add(finishContent2)" *ngIf=" data.status==4 && !data.has_physical_deposit" class="btn btn-sm btn-outline-primary mx-1">Délivrer fiche de dépôt physique <app-loading [isVisible]="loading"></app-loading></button>
-        <button [disabled]="loading" (click)="add(pendingContent)" *ngIf=" data.status==0 || data.status==3" class="btn btn-sm btn-outline-warning mx-1">Mettre en attente <app-loading [isVisible]="loading"></app-loading></button>
-        <button [disabled]="loading" (click)="add(inviteContent)" *ngIf=" data.status==0 || data.status==3" class="btn btn-sm btn-outline-success mx-1">Inviter pour dépôt de dossier physique <app-loading [isVisible]="loading"></app-loading></button>
+      <button [disabled]="loading" (click)="add(backContent)" *ngIf="(data.status ==5 || data.status ==6) && role !='cps'" class="tw-bg-gray-600 tw-text-white tw-px-3 tw-py-1 tw-rounded tw-text-sm hover:tw-bg-gray-500">
+        Retourner pour correction <app-loading [isVisible]="loading"></app-loading>
+      </button>
+
+      <button [disabled]="loading" (click)="add(resp)" *ngIf="data.status==6" class="tw-bg-green-600 tw-text-white tw-px-3 tw-py-1 tw-rounded tw-text-sm hover:tw-bg-green-500">
+        Dossier recevable pour inscription <app-loading [isVisible]="loading"></app-loading>
+      </button>
+
+      <button [disabled]="loading" (click)="add(resp)" *ngIf="data.status==5 || data.affectation.sens==-1" class="tw-bg-blue-600 tw-text-white tw-px-3 tw-py-1 tw-rounded tw-text-sm hover:tw-bg-blue-500">
+        Transmettre <app-loading [isVisible]="loading"></app-loading>
+      </button>
+
+      <button [disabled]="loading" (click)="add(finishContent1)" *ngIf="data.status==4 && !data.has_cps_file" class="tw-border tw-border-blue-600 tw-text-blue-600 tw-px-3 tw-py-1 tw-rounded tw-text-sm hover:tw-bg-blue-50">
+        Ajouter le rapport de l'enquête sociale <app-loading [isVisible]="loading"></app-loading>
+      </button>
+
+      <button [disabled]="loading" (click)="add(finishContent2)" *ngIf="data.status==4 && !data.has_physical_deposit" class="tw-border tw-border-blue-600 tw-text-blue-600 tw-px-3 tw-py-1 tw-rounded tw-text-sm hover:tw-bg-blue-50">
+        Délivrer fiche de dépôt physique <app-loading [isVisible]="loading"></app-loading>
+      </button>
+
+      <button [disabled]="loading" (click)="add(pendingContent)" *ngIf="data.status==0 || data.status==3" class="tw-border tw-border-yellow-400 tw-text-yellow-500 tw-px-3 tw-py-1 tw-rounded tw-text-sm hover:tw-bg-yellow-50">
+        Mettre en attente <app-loading [isVisible]="loading"></app-loading>
+      </button>
+
+      <button [disabled]="loading" (click)="add(inviteContent)" *ngIf="data.status==0 || data.status==3" class="tw-border tw-border-green-500 tw-text-green-600 tw-px-3 tw-py-1 tw-rounded tw-text-sm hover:tw-bg-green-50">
+        Inviter pour dépôt de dossier physique <app-loading [isVisible]="loading"></app-loading>
+      </button>
     </div>
-    <!--a-- [href]="'/admin/requetes/edit/'+data.code" *ngIf="data.status==0 || data.status==1 || data.status==3" class="btn btn-outline-warning">
-        Traiter la demande {{data.status}}
-    </!--a-->
-</div>
+  </div>
 
-  <div class="container" *ngIf="data != undefined">
+  <!-- Contenu principal -->
+  <div class="tw-container tw-mx-auto tw-px-4">
 
-    <h2>Dossier soumis le: {{data.created_at | date:"shortDate"}}</h2>
+    <h2 class="tw-text-2xl tw-font-semibold tw-mb-4">Dossier soumis le: {{data?.created_at | date:"shortDate"}}</h2>
 
-    <div class="mb-3"  *ngIf="data.affectation.sens==-1">
-        <h4> <i class="fa fa-chevron-right fw-bold me-3"></i>  <u>Correction demandée</u>  </h4>
-        <p>
-            {{data.affectation.instruction}}
-        </p>
+    <!-- Correction demandée -->
+    <div class="tw-bg-yellow-50 tw-border-l-4 tw-border-yellow-400 tw-p-4 tw-rounded tw-mb-4" *ngIf="data.affectation.sens==-1">
+      <h4 class="tw-font-semibold tw-mb-2"><i class="fa fa-chevron-right tw-mr-2"></i>Correction demandée</h4>
+      <p>{{data.affectation.instruction}}</p>
     </div>
 
-
-    <div class="mb-3">
-        <h4> <i class="fa fa-chevron-right fw-bold me-3"></i>  <u>Identification</u>  </h4>
+    <!-- Identification -->
+    <div class="tw-mb-4">
+      <h4 class="tw-font-semibold tw-mb-2"><i class="fa fa-chevron-right tw-mr-2"></i>Identification</h4>
+      <h6><strong>Nature promoteur :</strong> {{data?.nature_promotor?.name}}</h6>
     </div>
 
-    <h6> <strong>Nature promoteur :</strong> {{data?.nature_promotor?.name}}</h6>
-
-    <fieldset *ngIf="data?.nature_promotor?.name.includes('morale')">
-        <legend class="bg-secondary text-white">Information sur la personne morale</legend>
-        <div class="tw-grid tw-grid-cols-12 tw-gap-4">
-            <div class="col-6">
-                <dl>
-                    <dt>Dénomination </dt>
-                    <dd>{{data?.social_reason}}</dd>
-                </dl>
-            </div>
-            <div class="col-6">
-                <dl>
-                    <dt>N° enregistrement</dt>
-                    <dd> {{data?.registered_number}}</dd>
-                </dl>
-            </div>
-
-            <div class="col-6">
-                <dl>
-                    <dt>Date d'enregistrement </dt>
-                    <dd>{{data?.registered_date | date:"dd-MM-yyyy"}}</dd>
-                </dl>
-            </div>
-            <div class="col-6">
-                <dl>
-                    <dt>Contact </dt>
-                    <dd>{{data?.registered_phone}}</dd>
-                </dl>
-            </div>
-            <div class="col-6">
-                <dl>
-                    <dt>Siège</dt>
-                    <dd>{{data?.head_office}}</dd>
-                </dl>
-            </div>
-
-            <div class="col-6">
-                <dl>
-                    <dt>Preuve de l'enregistrement</dt>
-                    <dd>  
-                       <button (click)="showFile2(data?.registered_proof)" class="btn btn-sm btn-dark align-self-center">Voir document</button>
-                    </dd>
-                </dl>
-            </div>
-           
-        </div>
+    <!-- Personne morale -->
+    <fieldset *ngIf="data?.nature_promotor?.name.includes('morale')" class="tw-border tw-border-gray-200 tw-rounded tw-p-4 tw-mb-4">
+      <legend class="tw-bg-gray-600 tw-text-white tw-px-2 tw-rounded">Information sur la personne morale</legend>
+      <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-gap-4 tw-mt-2">
+        <dl>
+          <dt class="tw-font-medium">Dénomination</dt>
+          <dd>{{data?.social_reason}}</dd>
+        </dl>
+        <dl>
+          <dt class="tw-font-medium">N° enregistrement</dt>
+          <dd>{{data?.registered_number}}</dd>
+        </dl>
+        <dl>
+          <dt class="tw-font-medium">Date d'enregistrement</dt>
+          <dd>{{data?.registered_date | date:"dd-MM-yyyy"}}</dd>
+        </dl>
+        <dl>
+          <dt class="tw-font-medium">Contact</dt>
+          <dd>{{data?.registered_phone}}</dd>
+        </dl>
+        <dl>
+          <dt class="tw-font-medium">Siège</dt>
+          <dd>{{data?.head_office}}</dd>
+        </dl>
+        <dl>
+          <dt class="tw-font-medium">Preuve de l'enregistrement</dt>
+          <dd>
+            <button (click)="showFile2(data?.registered_proof)" class="tw-bg-gray-800 tw-text-white tw-px-2 tw-py-1 tw-rounded tw-text-sm hover:tw-bg-gray-700">Voir document</button>
+          </dd>
+        </dl>
+      </div>
     </fieldset>
-    <fieldset>
-        <legend class="bg-secondary text-white">{{data?.nature_promotor?.name.includes('morale')?'Information sur le représentant légal' :'Information sur le promoteur' }}</legend>
-        <div class="tw-grid tw-grid-cols-12 tw-gap-4">
-            <div class="col-6">
-                <dl>
-                    <dt>Nom </dt>
-                    <dd>{{data.name_pomoter}}</dd>
-                </dl>
-            </div>
-            <div class="col-6">
-                <dl>
-                    <dt>Prénom(s) </dt>
-                    <dd> {{data.firstname_pomoter}}</dd>
-                </dl>
-            </div>
 
-            <div class="col-6">
-                <dl>
-                    <dt>Email </dt>
-                    <dd>{{data.email_pomoter}}</dd>
-                </dl>
-            </div>
-            <div class="col-6">
-                <dl>
-                    <dt>Contact</dt>
-                    <dd>{{data.phone_pomoter}}</dd>
-                </dl>
-            </div>
-        </div>
+    <!-- Promoteur / représentant légal -->
+    <fieldset class="tw-border tw-border-gray-200 tw-rounded tw-p-4 tw-mb-4">
+      <legend class="tw-bg-gray-600 tw-text-white tw-px-2 tw-rounded">
+        {{data?.nature_promotor?.name.includes('morale')?'Information sur le représentant légal' :'Information sur le promoteur'}}
+      </legend>
+      <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-gap-4 tw-mt-2">
+        <dl>
+          <dt class="tw-font-medium">Nom</dt>
+          <dd>{{data.name_pomoter}}</dd>
+        </dl>
+        <dl>
+          <dt class="tw-font-medium">Prénom(s)</dt>
+          <dd>{{data.firstname_pomoter}}</dd>
+        </dl>
+        <dl>
+          <dt class="tw-font-medium">Email</dt>
+          <dd>{{data.email_pomoter}}</dd>
+        </dl>
+        <dl>
+          <dt class="tw-font-medium">Contact</dt>
+          <dd>{{data.phone_pomoter}}</dd>
+        </dl>
+      </div>
     </fieldset>
-    <fieldset>
-        <legend class="bg-secondary text-white">Information sur le directeur</legend>
-        <div class="tw-grid tw-grid-cols-12 tw-gap-4">
-            <div class="col-6">
-                <dl>
-                    <dt>Nom </dt>
-                    <dd>{{data.name_chief}}</dd>
-                </dl>
-            </div>
-            <div class="col-6">
-                <dl>
-                    <dt>Prénom(s) </dt>
-                    <dd> {{data.firstname_chief}}</dd>
-                </dl>
-            </div>
 
-            <div class="col-6">
-                <dl>
-                    <dt>Email </dt>
-                    <dd>{{data.email_chief}}</dd>
-                </dl>
-            </div>
-            <div class="col-6">
-                <dl>
-                    <dt>Contact</dt>
-                    <dd>{{data.phone_chief}}</dd>
-                </dl>
-            </div>
-        </div>
-    </fieldset>
-    <fieldset>
-        <legend class="bg-secondary text-white">Information sur le centre</legend>
-        <div class="tw-grid tw-grid-cols-12 tw-gap-4">
-            <div class="col-6" *ngIf="data.service?.name?.toLowerCase().includes('cape')">
-                <dl>
-                    <dt>Type Centre</dt>
-                    <dd>{{data.type_cape?.name ?? data.type_garderie?.name}}</dd>
-                </dl>
-            </div>
-            <div class="col-6" *ngIf="data.service?.name?.toLowerCase().includes('garderie')">
-                <dl>
-                    <dt>Type Garderie</dt>
-                    <dd>
-                        <ul>
-                            <li *ngFor="let el of data.requete_type_garderies">{{el.type_garderie?.name}}</li>
-                        </ul>
-                    </dd>
-                </dl>
-            </div>
-            <div class="col-6">
-                <dl>
-                    <dt>Type Garderie</dt>
-                    <dd>{{data.type_cape?.name ?? data.type_garderie?.name}}</dd>
-                </dl>
-            </div>
-            <div class="col-6">
-                <dl>
-                    <dt>Nom du centre</dt>
-                    <dd>{{data.name}}</dd>
-                </dl>
-            </div>
+    <!-- Centre et localisation -->
+    <fieldset class="tw-border tw-border-gray-200 tw-rounded tw-p-4 tw-mb-4">
+      <legend class="tw-bg-gray-600 tw-text-white tw-px-2 tw-rounded">Information sur le centre</legend>
+      <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-gap-4 tw-mt-2">
+        <dl *ngIf="data.service?.name?.toLowerCase().includes('cape')">
+          <dt class="tw-font-medium">Type Centre</dt>
+          <dd>{{data.type_cape?.name ?? data.type_garderie?.name}}</dd>
+        </dl>
+        <dl *ngIf="data.service?.name?.toLowerCase().includes('garderie')">
+          <dt class="tw-font-medium">Type Garderie</dt>
+          <dd>
+            <ul class="tw-list-disc tw-pl-5">
+              <li *ngFor="let el of data.requete_type_garderies">{{el.type_garderie?.name}}</li>
+            </ul>
+          </dd>
+        </dl>
+        <dl>
+          <dt class="tw-font-medium">Nom du centre</dt>
+          <dd>{{data.name}}</dd>
+        </dl>
+        <dl>
+          <dt class="tw-font-medium">Email</dt>
+          <dd>{{data.email}}</dd>
+        </dl>
+        <dl>
+          <dt class="tw-font-medium">Contact</dt>
+          <dd>{{data.phone}}</dd>
+        </dl>
+      </div>
 
-            <div class="col-6" *ngIf="data.service?.name?.toLowerCase().includes('cape')">
-                <dl>
-                    <dt>Cible</dt>
-                    <dd>
-                        <ul>
-                            <li *ngFor="let el of getJson(data.target)">{{el}}</li>
-                        </ul>
-                    </dd>
-                </dl>
-            </div>
-            <div class="col-6">
-                <dl>
-                    <dt>Email </dt>
-                    <dd>{{data.email}}</dd>
-                </dl>
-            </div>
-            <div class="col-6">
-                <dl>
-                    <dt>Contact</dt>
-                    <dd>{{data.phone}}</dd>
-                </dl>
-            </div>
-        </div>
-        <hr>
-        <legend class="bg-secondary text-white">Localisation</legend>
-        <div class="tw-grid tw-grid-cols-12 tw-gap-4">
-         <div class="col-6">
-             <dl>
-                 <dt>Département</dt>
-                 <dd>{{data.district?.municipality?.department?.name}}</dd>
-             </dl>
-         </div>
-         <div class="col-6">
-             <dl>
-                 <dt>Commune</dt>
-                 <dd>{{data.district?.municipality?.name}}</dd>
-             </dl>
-         </div>
-         <div class="col-6">
-             <dl>
-                 <dt>Arrondissement</dt>
-                 <dd>{{data.district?.name}}</dd>
-             </dl>
-         </div>
-         <div class="col-6">
-             <dl>
-                 <dt>Quartier de ville / Village</dt>
-                 <dd>{{data.town}}</dd>
-             </dl>
-         </div>
-         <div class="col-6">
-             <dl>
-                 <dt>Adresse</dt>
-                 <dd>{{data.address}}</dd>
-             </dl>
-         </div>
-         <div class="col-6">
+      <hr class="tw-my-4">
 
-             <dl>
-                 <dt>Image de la zone</dt>
-                 <dd *ngIf="data.zone_file!=null">
-                   <a [href]="getZoneFile(data.zone_file)" target="_blank"><img [src]="getZoneFile(data.zone_file)" alt="Image de la zone" style="height: 100px; cursor: pointer;"></a> 
-                    <p>Cliquez sur l'image pour agrandir</p>
-                 </dd>
-                 <dd *ngIf="data.zone_file==null">
-                    <p>Aucune image enregistrée</p>
-                 </dd>
-             </dl>
-         </div>
-        </div>
+      <legend class="tw-bg-gray-600 tw-text-white tw-px-2 tw-rounded">Localisation</legend>
+      <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-gap-4 tw-mt-2">
+        <dl>
+          <dt class="tw-font-medium">Département</dt>
+          <dd>{{data.district?.municipality?.department?.name}}</dd>
+        </dl>
+        <dl>
+          <dt class="tw-font-medium">Commune</dt>
+          <dd>{{data.district?.municipality?.name}}</dd>
+        </dl>
+        <dl>
+          <dt class="tw-font-medium">Arrondissement</dt>
+          <dd>{{data.district?.name}}</dd>
+        </dl>
+        <dl>
+          <dt class="tw-font-medium">Quartier / Village</dt>
+          <dd>{{data.town}}</dd>
+        </dl>
+        <dl>
+          <dt class="tw-font-medium">Adresse</dt>
+          <dd>{{data.address}}</dd>
+        </dl>
+        <dl>
+          <dt class="tw-font-medium">Image de la zone</dt>
+          <dd *ngIf="data.zone_file">
+            <a [href]="getZoneFile(data.zone_file)" target="_blank">
+              <img [src]="getZoneFile(data.zone_file)" class="tw-h-24 tw-rounded tw-cursor-pointer" alt="Image de la zone">
+            </a>
+            <p class="tw-text-sm tw-text-gray-500">Cliquez sur l'image pour agrandir</p>
+          </dd>
+          <dd *ngIf="!data.zone_file" class="tw-text-gray-500">Aucune image enregistrée</dd>
+        </dl>
+      </div>
     </fieldset>
 
 
@@ -419,112 +351,124 @@
         </table>
     </div>
 
-    <div class="mb-3">
-        <h4 class=" d-flex justify-content-between"> 
-            
-            <div class="">
-                <i class="fa fa-chevron-right fw-bold me-3 "></i>  <u>Rapport social  </u> 
-            </div>
-        
-        <button (click)="add(finishContent1M)"  *ngIf="data.has_cps_file && data.status==4" class="btn btn-sm btn-warning float-right">Modifier</button>
-        </h4>
+ <div class="tw-mb-3">
+  <h4 class="tw-flex tw-justify-between"> 
+    <div class="tw-flex tw-items-center">
+      <i class="fa fa-chevron-right tw-font-bold tw-mr-3"></i>  
+      <u>Rapport social</u>
     </div>
-    <div class="" *ngIf="data.has_cps_file">
-        <div class="tw-grid tw-grid-cols-12 tw-gap-4">
-            <div class="col-6">
-                <dl>
-                    <dt>Nom de l'enquêteur</dt>
-                    <dd>{{data.social_investigator_name}}</dd>
-                </dl>
-            </div>
-            <div class="col-6">
-                <dl>
-                    <dt>Observation sur  l'enquête</dt>
-                    <dd>{{data.social_investigator_observation}}</dd>
-                </dl>
-            </div>
-
-            <div class="col-6">
-                <dl>
-                    <dt>Date de l'enquête</dt>
-                    <dd>{{data.social_investigator_date | date:"shortDate"}}</dd>
-                </dl>
-            </div>
-
-            <div class="col-6">
-                <dl>
-                    <dt>Fiche de l'enquête sociale</dt>
-                    <dd>
-                        <button (click)="showFileCpsFile()" class="btn btn-sm btn-dark">Voir document</button>
-
-                    </dd>
-                </dl>
-            </div>
-          
- 
-            
-        </div>
-    </div>
-    <div class="" *ngIf="!data.has_cps_file">
-        <p class="text-center">Rapport social   non disponible</p>
-    </div>
-
-
-    <div class="mb-3">
-        <h4 class=" d-flex justify-content-between">
-            <div class="">
-                <i class="fa fa-chevron-right fw-bold me-3"></i>  <u>Dépôt physique</u> 
-            </div>
     
-         <button (click)="add(finishContent2M)"  *ngIf="data.has_physical_deposit && data.status==4" class="btn btn-sm btn-warning float-right">Modifier</button>
-        </h4>
-       
+    <button 
+      (click)="add(finishContent1M)"  
+      *ngIf="data.has_cps_file && data.status==4"  
+      class="tw-bg-yellow-500 tw-text-white tw-text-sm tw-px-3 tw-py-1 tw-rounded tw-shadow hover:tw-bg-yellow-600"
+    >
+      Modifier
+    </button>
+  </h4>
+</div>
 
+<div *ngIf="data.has_cps_file">
+  <div class="tw-grid tw-grid-cols-12 tw-gap-4">
+    <div class="tw-col-span-6">
+      <dl>
+        <dt class="tw-font-semibold">Nom de l'enquêteur</dt>
+        <dd>{{data.social_investigator_name}}</dd>
+      </dl>
     </div>
+
+    <div class="tw-col-span-6">
+      <dl>
+        <dt class="tw-font-semibold">Observation sur l'enquête</dt>
+        <dd>{{data.social_investigator_observation}}</dd>
+      </dl>
+    </div>
+
+    <div class="tw-col-span-6">
+      <dl>
+        <dt class="tw-font-semibold">Date de l'enquête</dt>
+        <dd>{{data.social_investigator_date | date:"shortDate"}}</dd>
+      </dl>
+    </div>
+
+    <div class="tw-col-span-6">
+      <dl>
+        <dt class="tw-font-semibold">Fiche de l'enquête sociale</dt>
+        <dd>
+          <button 
+            (click)="showFileCpsFile()"  
+            class="tw-bg-gray-800 tw-text-white tw-text-sm tw-px-3 tw-py-1 tw-rounded hover:tw-bg-gray-900"
+          >
+            Voir document
+          </button>
+        </dd>
+      </dl>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="!data.has_cps_file">
+  <p class="tw-text-center">Rapport social non disponible</p>
+</div>
+
+<div class="tw-mb-3">
+  <h4 class="tw-flex tw-justify-between"> 
+    <div class="tw-flex tw-items-center">
+      <i class="fa fa-chevron-right tw-font-bold tw-mr-3"></i>  
+      <u>Dépôt physique</u>
+    </div>
+    
+    <button 
+      (click)="add(finishContent2M)"  
+      *ngIf="data.has_physical_deposit && data.status==4"  
+      class="tw-bg-yellow-500 tw-text-white tw-text-sm tw-px-3 tw-py-1 tw-rounded tw-shadow hover:tw-bg-yellow-600"
+    >
+      Modifier
+    </button>
+  </h4>
+</div>
+
 
     <div class="" *ngIf="data.has_physical_deposit">
-        <div class="tw-grid tw-grid-cols-12 tw-gap-4">
-            <div class="col-6">
-                <dl>
-                    <dt>Nom du déposant</dt>
-                    <dd>{{data.name_depositor}}</dd>
-                </dl>
-            </div>
-            <div class="col-6">
-                <dl>
-                    <dt>Contact du déposant</dt>
-                    <dd>{{data.phone_depositor}}</dd>
-                </dl>
-            </div>
+       <div class="tw-grid tw-grid-cols-12 tw-gap-4">
+  <div class="tw-col-span-6">
+    <dl>
+      <dt>Nom du déposant</dt>
+      <dd>{{data.name_depositor}}</dd>
+    </dl>
+  </div>
 
-            <div class="col-6">
-                <dl>
-                    <dt>Observation du déposant</dt>
-                    <dd>{{data.observation_depositor}}</dd>
-                </dl>
-            </div>
+  <div class="tw-col-span-6">
+    <dl>
+      <dt>Contact du déposant</dt>
+      <dd>{{data.phone_depositor}}</dd>
+    </dl>
+  </div>
 
-            <div class="col-6">
-                <dl>
-                    <dt>Date du déposant</dt>
-                    <dd>{{data.date_depositor | date:"shortDate"}}</dd>
-                </dl>
-            </div>
+  <div class="tw-col-span-6">
+    <dl>
+      <dt>Observation du déposant</dt>
+      <dd>{{data.observation_depositor}}</dd>
+    </dl>
+  </div>
 
+  <div class="tw-col-span-6">
+    <dl>
+      <dt>Date du déposant</dt>
+      <dd>{{data.date_depositor | date:"shortDate"}}</dd>
+    </dl>
+  </div>
 
-            <div class="col-6">
-                <dl>
-                    <dt>Prototype du récépissé de dépôt</dt>
-                    <dd>
-                        <button (click)="showFileRecepisseFile()" class="btn btn-sm btn-dark">Voir document</button>
+  <div class="tw-col-span-6">
+    <dl>
+      <dt>Prototype du récépissé de dépôt</dt>
+      <dd>
+        <button (click)="showFileRecepisseFile()" class="btn btn-sm btn-dark">Voir document</button>
+      </dd>
+    </dl>
+  </div>
+</div>
 
-                    </dd>
-                </dl>
-            </div>
-          
- 
-            
-        </div>
     </div>
     <div class="" *ngIf="!data.has_physical_deposit">
         <p class="text-center">Dépôt physique non disponible</p>
@@ -545,8 +489,16 @@
  
   </ng-container>
 
-  <ng-container *ngIf="showPreview"  class="container">
-            <div class="d-flex justify-content-around">
+
+  
+
+    <ng-template #previewContent let-offcanvas id="myCanvas">
+	<div class="offcanvas-header">
+		<h4 class="offcanvas-title">Visualisation du document</h4>
+		<!-- <button type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss('Cross click')"></button> -->
+	</div>
+	<div class="offcanvas-body">
+          <div class="d-flex justify-content-around">
                 <button class="btn btn-dark mb-3 btn-sm" (click)="back()">Fermer le visualiseur</button>
              
                 <button *ngIf="fileSelected && !fileSelected.is_treated && data.status<4" class="btn btn-primary mb-3 btn-sm" (click)="add(fileTreatmentContent)">Enregistrer les observations</button>
@@ -554,20 +506,22 @@
                 <!--button  *ngIf="!showResponseFilePreview"  class="btn btn-success mb-3 " [disabled]="!activeobsPanel"  (click)="openWindow(contentTemplateAmendement)">Faire des observations</!--button-->
         
             </div>
+        <object [data]="url" type="application/pdf" width="100%" height="100%"></object>
 
+	</div>
+</ng-template>
 
-         
-            <object [data]="url" type="application/pdf" width="100%" height="600px"></object>
-    </ng-container>
-  
     
     <ng-template #finishContent1 let-c="close" let-d="dismiss">
         <form #addSusp="ngForm" (ngSubmit)="finishStore1(addSusp.value)">
     
-        <div class="modal-header cape-bg-blue">
-          <h6 class="modal-title text-white" id="modal-basic-title">Rapport social  </h6>
-          <button type="button" class="btn btn-dark"  (click)="d('Cross click')"> <i class="fa fa-times"></i></button>
-        </div>
+      <div class="tw-modal-header tw-bg-blue-600 tw-flex tw-justify-between tw-items-center tw-p-4">
+            <h6 class="tw-modal-title tw-text-white" id="modal-basic-title">Rapport social</h6>
+            <button type="button" class="tw-btn tw-btn-dark tw-text-white tw-px-2 tw-py-1 tw-rounded" (click)="d('Cross click')">
+                <i class="fa fa-times"></i>
+            </button>
+            </div>
+
         <div class="modal-body">
             <div class="form-group mb-3">
                 <label for="">Nom de l'enquêteur</label>
@@ -597,9 +551,11 @@
       <ng-template #resp let-c="close" let-d="dismiss">
         <form #addSusp="ngForm" (ngSubmit)="transUp(addSusp.value)">
     
-        <div class="modal-header cape-bg-blue">
-          <h6 class="modal-title text-white" id="modal-basic-title">Rapport final</h6>
-          <button type="button" class="btn btn-dark"  (click)="d('Cross click')"> <i class="fa fa-times"></i></button>
+        <div class="tw-modal-header tw-bg-blue-600 tw-flex tw-justify-between tw-items-center tw-p-4">
+          <h6 class="tw-modal-title tw-text-white" id="modal-basic-title">Rapport final</h6>
+           <button type="button" class="tw-btn tw-btn-dark tw-text-white tw-px-2 tw-py-1 tw-rounded" (click)="d('Cross click')">
+                <i class="fa fa-times"></i>
+            </button>
         </div>
         <div class="modal-body">
      
@@ -620,9 +576,11 @@
       <ng-template #finishContent1M let-c="close" let-d="dismiss">
         <form #addSusp="ngForm" (ngSubmit)="finishStore1(addSusp.value)">
     
-        <div class="modal-header cape-bg-blue">
-          <h6 class="modal-title text-white" id="modal-basic-title">Rapport social  </h6>
-          <button type="button" class="btn btn-dark"  (click)="d('Cross click')"> <i class="fa fa-times"></i></button>
+        <div class="tw-modal-header tw-bg-blue-600 tw-flex tw-justify-between tw-items-center tw-p-4">
+          <h6 class="tw-modal-title tw-text-white" id="modal-basic-title">Rapport social  </h6>
+           <button type="button" class="tw-btn tw-btn-dark tw-text-white tw-px-2 tw-py-1 tw-rounded" (click)="d('Cross click')">
+                <i class="fa fa-times"></i>
+            </button>
         </div>
         <div class="modal-body">
             <div class="form-group mb-3">
@@ -652,9 +610,11 @@
     <ng-template #finishContent2 let-c="close" let-d="dismiss">
         <form #addDep="ngForm" (ngSubmit)="finishStore2(addDep.value)">
     
-        <div class="modal-header cape-bg-blue">
-          <h6 class="modal-title text-white" id="modal-basic-title">Dépôt physique</h6>
-          <button type="button" class="btn btn-dark"  (click)="d('Cross click')"> <i class="fa fa-times"></i></button>
+        <div class="tw-modal-header tw-bg-blue-600 tw-flex tw-justify-between tw-items-center tw-p-4">
+          <h6 class="tw-modal-title tw-text-white" id="modal-basic-title">Dépôt physique</h6>
+           <button type="button" class="tw-btn tw-btn-dark tw-text-white tw-px-2 tw-py-1 tw-rounded" (click)="d('Cross click')">
+                <i class="fa fa-times"></i>
+            </button>
         </div>
         <div class="modal-body">
             <div class="form-group mb-3">
@@ -685,9 +645,11 @@
     <ng-template #finishContent2M let-c="close" let-d="dismiss">
         <form #addDep="ngForm" (ngSubmit)="finishStore2(addDep.value)">
     
-        <div class="modal-header cape-bg-blue">
-          <h6 class="modal-title text-white" id="modal-basic-title">Dépôt physique</h6>
-          <button type="button" class="btn btn-dark"  (click)="d('Cross click')"> <i class="fa fa-times"></i></button>
+        <div class="tw-modal-header tw-bg-blue-600 tw-flex tw-justify-between tw-items-center tw-p-4">
+          <h6 class="tw-modal-title tw-text-white" id="modal-basic-title">Dépôt physique</h6>
+           <button type="button" class="tw-btn tw-btn-dark tw-text-white tw-px-2 tw-py-1 tw-rounded" (click)="d('Cross click')">
+                <i class="fa fa-times"></i>
+            </button>
         </div>
         <div class="modal-body">
             <div class="form-group mb-3">
@@ -741,9 +703,11 @@
     <ng-template #pendingContent let-c="close" let-d="dismiss">
         <form #addSusp="ngForm" (ngSubmit)="storePending(addSusp.value)">
     
-        <div class="modal-header cape-bg-blue">
+        <div class="tw-modal-header tw-bg-blue-600 tw-flex tw-justify-between tw-items-center tw-p-4">
           <h6 class="modal-title text-white " id="modal-basic-title">Motif de mise en attente</h6>
-          <button type="button" class="btn btn-dark"  (click)="d('Cross click')"> <i class="fa fa-times"></i></button>
+           <button type="button" class="tw-btn tw-btn-dark tw-text-white tw-px-2 tw-py-1 tw-rounded" (click)="d('Cross click')">
+                <i class="fa fa-times"></i>
+            </button>
         </div>
         <div class="modal-body">
             <div class="form-group mb-3 mb-5">
@@ -760,9 +724,11 @@
     <ng-template #inviteContent let-c="close" let-d="dismiss">
         <form #addInvite="ngForm" (ngSubmit)="inviteStore(addInvite.value)">
     
-        <div class="modal-header cape-bg-blue">
+        <div class="tw-modal-header tw-bg-blue-600 tw-flex tw-justify-between tw-items-center tw-p-4">
           <h6 class="modal-title text-white " id="modal-basic-title">Invitation au dépôt physique</h6>
-          <button type="button" class="btn btn-dark"  (click)="d('Cross click')"> <i class="fa fa-times"></i></button>
+           <button type="button" class="tw-btn tw-btn-dark tw-text-white tw-px-2 tw-py-1 tw-rounded" (click)="d('Cross click')">
+                <i class="fa fa-times"></i>
+            </button>
         </div>
         <div class="modal-body">
             <div class="form-group mb-3 mb-5">
@@ -780,9 +746,11 @@
     <ng-template #backContent let-c="close" let-d="dismiss">
         <form #addSusp="ngForm" (ngSubmit)="transDown(addSusp.value)">
     
-        <div class="modal-header cape-bg-blue">
+        <div class="tw-modal-header tw-bg-blue-600 tw-flex tw-justify-between tw-items-center tw-p-4">
           <h6 class="modal-title text-white " id="modal-basic-title">Retourner le dossier</h6>
-          <button type="button" class="btn btn-dark"  (click)="d('Cross click')"> <i class="fa fa-times"></i></button>
+           <button type="button" class="tw-btn tw-btn-dark tw-text-white tw-px-2 tw-py-1 tw-rounded" (click)="d('Cross click')">
+                <i class="fa fa-times"></i>
+            </button>
         </div>
         <div class="modal-body">
             <div class="form-group mb-3 mb-5">
@@ -800,9 +768,11 @@
     <ng-template #fileTreatmentContent let-c="close" let-d="dismiss">
         <form #fileT="ngForm" (ngSubmit)="setFileTreatment(fileT.value)">
     
-        <div class="modal-header cape-bg-blue">
+        <div class="tw-modal-header tw-bg-blue-600 tw-flex tw-justify-between tw-items-center tw-p-4">
           <h6 class="modal-title text-white " id="modal-basic-title">Enregistrer l'analyse du fichier</h6>
-          <button type="button" class="btn btn-dark"  (click)="d('Cross click')"> <i class="fa fa-times"></i></button>
+           <button type="button" class="tw-btn tw-btn-dark tw-text-white tw-px-2 tw-py-1 tw-rounded" (click)="d('Cross click')">
+                <i class="fa fa-times"></i>
+            </button>
         </div>
         <div class="modal-body">
             <div class="form-group mb-3 mb-5">
@@ -811,19 +781,22 @@
             </div>
             <div class="d-flex justify-content-between">
             <span>Document valide</span>
-            <!-- <ng-toggle
-            ngModel
-            [values]="{
-                unchecked: false,
-                checked:true
-            }"
-                name="is_valid"
-                
-                [color]="{
-                    unchecked: '#939da2',
-                    checked: '#0f0'
-                }"
-                ></ng-toggle> -->
+          <div class="tw-flex tw-items-center tw-gap-2">
+            <span>Valide</span>
+            <label class="tw-relative tw-inline-flex tw-items-center tw-cursor-pointer">
+                <input type="checkbox" name="isValid" [(ngModel)]="isValid" class="tw-sr-only" />
+                <div
+                class="tw-w-11 tw-h-6 tw-bg-gray-300 tw-rounded-full tw-transition-colors tw-duration-300"
+                [ngClass]="isValid ? 'tw-bg-green-500' : 'tw-bg-gray-300'"
+                 (click)="toggleValid()"
+                ></div>
+                <div
+                class="tw-absolute tw-left-0.5 tw-top-0.5 tw-w-5 tw-h-5 tw-bg-white tw-rounded-full tw-shadow-md tw-transform tw-transition-transform tw-duration-300"
+                [ngStyle]="{ transform: isValid ? 'translateX(100%)' : 'translateX(0)' }"
+                ></div>
+            </label>
+            </div>
+
             </div>
           
         </div>
@@ -836,9 +809,11 @@
     <ng-template #fileTreatmentEditContent let-c="close" let-d="dismiss">
         <form #fileT="ngForm" (ngSubmit)="setFileTreatment(fileT.value)">
     
-        <div class="modal-header cape-bg-blue">
-          <h6 class="modal-title text-white " id="modal-basic-title">Enregistrer l'analyse du fichier</h6>
-          <button type="button" class="btn btn-dark"  (click)="d('Cross click')"> <i class="fa fa-times"></i></button>
+        <div class="tw-modal-header tw-bg-yellow-600 tw-flex tw-justify-between tw-items-center tw-p-4">
+          <h6 class="modal-title text-white " id="modal-basic-title">Modifier l'analyse du fichier</h6>
+           <button type="button" class="tw-btn tw-btn-dark tw-text-white tw-px-2 tw-py-1 tw-rounded" (click)="d('Cross click')">
+                <i class="fa fa-times"></i>
+            </button>
         </div>
         <div class="modal-body">
             <div class="form-group mb-3 mb-5">
@@ -847,19 +822,23 @@
             </div>
             <div class="d-flex justify-content-between">
             <span>Document valide</span>
-            <!-- <ng-toggle
-            [(ngModel)]="fileSelected.is_valid"
-            [values]="{
-                unchecked: false,
-                checked:true
-            }"
-                name="is_valid"
 
-                [color]="{
-                    unchecked: '#939da2',
-                    checked: '#0f0'
-                }"
-                ></ng-toggle> -->
+              <div class="tw-flex tw-items-center tw-gap-2">
+            <span>Valide</span>
+            <label class="tw-relative tw-inline-flex tw-items-center tw-cursor-pointer">
+                <input type="checkbox" name="isValid" [(ngModel)]="isValid" class="tw-sr-only" />
+                <div
+                class="tw-w-11 tw-h-6 tw-bg-gray-300 tw-rounded-full tw-transition-colors tw-duration-300"
+                [ngClass]="isValid ? 'tw-bg-green-500' : 'tw-bg-gray-300'"
+                 (click)="toggleValid()"
+                ></div>
+                <div
+                class="tw-absolute tw-left-0.5 tw-top-0.5 tw-w-5 tw-h-5 tw-bg-white tw-rounded-full tw-shadow-md tw-transform tw-transition-transform tw-duration-300"
+                [ngStyle]="{ transform: isValid ? 'translateX(100%)' : 'translateX(0)' }"
+                ></div>
+            </label>
+            </div>
+           
             </div>
           
         </div>

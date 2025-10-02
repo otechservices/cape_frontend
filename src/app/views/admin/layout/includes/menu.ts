@@ -262,13 +262,8 @@ export const DFEAMenu: menu[] = [
 // ================== MemberMenu ==================
 export const MemberMenu: menu[] = [
     { id: 'member-1', isTitle:false, name:"Tableau de bord", route:'/admin/dashboard', hasChildren:false },
-    { id: 'member-2', isTitle:true, title:"Gestion des sessions", hasChildren:false },
-    { id: 'member-3', isTitle:false, name:"Sessions en cours", route:'/admin/sessions', hasChildren:false },
-    { id: 'member-4', isTitle:false, name:"Création des membres", route:'/admin/members', hasChildren:false },
-    { id: 'member-5', isTitle:true, title:"Gestion des sanctions", hasChildren:false },
-    { id: 'member-6', isTitle:false, name:"Sanctions", route:'/admin/sanctions', hasChildren:false },
-    { id: 'member-7', isTitle:true, title:"Rapports", hasChildren:false },
-    { id: 'member-8', isTitle:false, name:"Rapports d’activité", route:'/admin/activity-report', hasChildren:false }
+    { id: 'member-2', isTitle:true, title:"Etude de dossiers", hasChildren:false },
+    { id: 'member-3', isTitle:false, name:"Dossiers inscrits", route:'/admin/session-requests', hasChildren:false },
 ];
 
 // ================== ServiceMenu ==================
