@@ -126,8 +126,10 @@ export class InscriptionCapeComponent  implements OnInit{
     });
   }
   ngOnInit(): void {
-         this.user=this.lsService.get(GlobalName.userName)
-    this.role=this.user.roles[0]?.name
+  
+ this.user=this.lsService.get(GlobalName.userName)
+                  this.role=this.user.roles[0]?.name
+                    console.log(this.user)
 
      this.token=this.activatedRoute.snapshot.paramMap.get('token')
     this.code=this.activatedRoute.snapshot.paramMap.get('code')
@@ -170,6 +172,13 @@ export class InscriptionCapeComponent  implements OnInit{
           }
 
            this.activatedRoute.paramMap.subscribe(params => {
+                  
+                  this.formData.patchValue({
+                name_pomoter: this?.user?.promoter?.lastname,
+                firstname_pomoter: this?.user?.promoter?.firstname,
+                email_pomoter: this?.user?.promoter?.email,
+                phone_pomoter:this?.user?.promoter?.phone
+              });
             if(this.initCode!=undefined){
               this.getDepartmentWithRelations()
               this.getTargets()

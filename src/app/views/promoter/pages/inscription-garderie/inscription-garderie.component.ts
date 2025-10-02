@@ -170,6 +170,12 @@ export class InscriptionGarderieComponent {
           }
 
            this.activatedRoute.paramMap.subscribe(params => {
+             this.formData.patchValue({
+                name_pomoter: this?.user?.promoter?.lastname,
+                firstname_pomoter: this?.user?.promoter?.firstname,
+                email_pomoter: this?.user?.promoter?.email,
+                phone_pomoter:this?.user?.promoter?.phone
+              });
             if(this.initCode!=undefined){
               this.getDepartmentWithRelations()
               this.getTargets()
