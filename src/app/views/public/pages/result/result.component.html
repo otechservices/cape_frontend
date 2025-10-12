@@ -4,7 +4,7 @@
   class="tw-relative tw-min-h-[400px] tw-flex tw-items-center tw-justify-center tw-bg-cover tw-bg-center tw-pt-20"
   [ngStyle]="{
     'background-image':
-      'url(https://readdy.ai/api/search-image?query=Professional%20meeting%20room%20with%20African%20officials%20reviewing%20documents%20and%20making%20decisions%2C%20official%20government%20setting%20with%20formal%20atmosphere%2C%20legal%20documentation%20and%20administrative%20processes%2C%20modern%20office%20environment%20with%20conference%20table&width=1920&height=600&seq=deliberations-cape-bg&orientation=landscape)'
+      'url(assets/result_cape.jpg)'
   }"
 >
   <div class="tw-absolute tw-inset-0 tw-bg-black/50"></div>
@@ -27,53 +27,52 @@
     <div class="tw-max-w-7xl tw-mx-auto tw-px-6">
       <div class="tw-text-center tw-mb-12">
         <h3 class="tw-text-2xl tw-font-bold tw-text-gray-900 tw-mb-4">
-          Statistiques des délibérations garderies 2024
+          Statistiques des délibérations CAPE
         </h3>
       </div>
 
-      <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-4 tw-gap-8">
-        <div class="tw-text-center">
-          <div
-            class="tw-w-16 tw-h-16 tw-bg-green-100 tw-rounded-lg tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-4"
-          >
-            <i class="ri-check-circle-line tw-text-2xl tw-text-green-600"></i>
-          </div>
-          <div class="tw-text-3xl tw-font-bold tw-text-gray-900 tw-mb-2">
-            12
-          </div>
-          <p class="tw-text-gray-600">Autorisations accordées</p>
-        </div>
+    <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-4 tw-gap-8">
+  <div class="tw-text-center">
+    <div class="tw-w-16 tw-h-16 tw-bg-green-100 tw-rounded-lg tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-4">
+      <i class="ri-check-circle-line tw-text-2xl tw-text-green-600"></i>
+    </div>
+    <div class="tw-text-3xl tw-font-bold tw-text-gray-900 tw-mb-2">
+      {{ stats.totalAccordees }}
+    </div>
+    <p class="tw-text-gray-600">Autorisations accordées</p>
+  </div>
 
-        <div class="tw-text-center">
-          <div
-            class="tw-w-16 tw-h-16 tw-bg-yellow-100 tw-rounded-lg tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-4"
-          >
-            <i class="ri-time-line tw-text-2xl tw-text-yellow-600"></i>
-          </div>
-          <div class="tw-text-3xl tw-font-bold tw-text-gray-900 tw-mb-2">4</div>
-          <p class="tw-text-gray-600">Dossiers en étude</p>
-        </div>
+  <div class="tw-text-center">
+    <div class="tw-w-16 tw-h-16 tw-bg-blue-100 tw-rounded-lg tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-4">
+      <i class="ri-folder-2-line tw-text-2xl tw-text-blue-600"></i>
+    </div>
+    <div class="tw-text-3xl tw-font-bold tw-text-gray-900 tw-mb-2">
+      {{ stats.totalRequetes }}
+    </div>
+    <p class="tw-text-gray-600">Dossiers déposés</p>
+  </div>
 
-        <div class="tw-text-center">
-          <div
-            class="tw-w-16 tw-h-16 tw-bg-red-100 tw-rounded-lg tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-4"
-          >
-            <i class="ri-close-circle-line tw-text-2xl tw-text-red-600"></i>
-          </div>
-          <div class="tw-text-3xl tw-font-bold tw-text-gray-900 tw-mb-2">3</div>
-          <p class="tw-text-gray-600">Demandes refusées</p>
-        </div>
+  <div class="tw-text-center">
+    <div class="tw-w-16 tw-h-16 tw-bg-yellow-100 tw-rounded-lg tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-4">
+      <i class="ri-time-line tw-text-2xl tw-text-yellow-600"></i>
+    </div>
+    <div class="tw-text-3xl tw-font-bold tw-text-gray-900 tw-mb-2">
+      {{ stats.totalNok }}
+    </div>
+    <p class="tw-text-gray-600">Dossiers en attente</p>
+  </div>
 
-        <div class="tw-text-center">
-          <div
-            class="tw-w-16 tw-h-16 tw-bg-blue-100 tw-rounded-lg tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-4"
-          >
-            <i class="ri-refresh-line tw-text-2xl tw-text-blue-600"></i>
-          </div>
-          <div class="tw-text-3xl tw-font-bold tw-text-gray-900 tw-mb-2">8</div>
-          <p class="tw-text-gray-600">Renouvellements</p>
-        </div>
-      </div>
+  <div class="tw-text-center">
+    <div class="tw-w-16 tw-h-16 tw-bg-gray-100 tw-rounded-lg tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-4">
+      <i class="ri-calendar-check-line tw-text-2xl tw-text-gray-600"></i>
+    </div>
+    <div class="tw-text-3xl tw-font-bold tw-text-gray-900 tw-mb-2">
+      {{ stats.totalSessions }}
+    </div>
+    <p class="tw-text-gray-600">Sessions organisées</p>
+  </div>
+</div>
+
     </div>
   </section>
   
@@ -112,82 +111,79 @@
     </div>
 
     <!-- Liste des délibérations -->
-    <div class="tw-space-y-6">
-      <div
-        *ngFor="let deliberation of data"
-        class="tw-bg-white tw-rounded-2xl tw-shadow-sm tw-border tw-border-gray-200 tw-p-8 hover:tw-shadow-md tw-transition-shadow"
-      >
+     <div class="tw-space-y-6">
         <div
-          class="tw-flex tw-flex-col lg:tw-flex-row lg:tw-items-start lg:tw-justify-between tw-mb-6"
-        >
-          <div class="tw-flex-1 tw-mb-4 lg:tw-mb-0">
-            <div class="tw-flex tw-items-start tw-space-x-4">
-              <div class="tw-flex-shrink-0">
-                <div
-                  class="tw-w-12 tw-h-12 tw-bg-blue-100 tw-rounded-lg tw-flex tw-items-center tw-justify-center"
-                >
-                  <i class="ri-file-text-line tw-text-blue-600 tw-text-xl"></i>
-                </div>
-              </div>
-              <div class="tw-flex-1">
-                <h3 class="tw-text-xl tw-font-bold tw-text-gray-900 tw-mb-2">
-                  {{ deliberation.title }}
-                </h3>
-                <p class="tw-text-gray-600 tw-mb-3">
-                  {{ deliberation.description }}
-                </p>
-                <p class="tw-text-sm tw-text-gray-500">
-                  {{ deliberation.details }}
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div class="tw-flex tw-items-center tw-space-x-4">
-            <div class="tw-text-right">
-              <p class="tw-text-sm tw-text-gray-500 tw-mb-2">
-                Date de délibération
-              </p>
-              <p class="tw-font-medium tw-text-gray-900">
-                {{ deliberation.date }}
-              </p>
-            </div>
-
-            <div
-              class="tw-flex tw-items-center tw-space-x-2 tw-px-4 tw-py-2 tw-rounded-full tw-text-sm tw-font-medium"
-              [ngClass]="getStatusColor(deliberation.status)"
-            >
-              <i
-                [class]="getStatusIcon(deliberation.status) + ' tw-text-base'"
-              ></i>
-              <span>{{ deliberation.status }}</span>
-            </div>
-          </div>
-        </div>
-
-        <div
-          class="tw-flex tw-items-center tw-justify-between tw-pt-6 tw-border-t tw-border-gray-100"
+          *ngFor="let deliberation of data"
+          class="tw-bg-white tw-rounded-2xl tw-shadow-sm tw-border tw-border-gray-200 tw-p-8 hover:tw-shadow-md tw-transition-shadow"
         >
           <div
-            class="tw-flex tw-items-center tw-space-x-4 tw-text-sm tw-text-gray-500"
+            class="tw-flex tw-flex-col lg:tw-flex-row lg:tw-items-start lg:tw-justify-between tw-mb-6"
           >
-            <span
-              >Délibération #{{ deliberation.id.toString().padStart(3, '0')
-              }}</span
-            >
-            <span>•</span>
-            <span>MASM - Département Enfant et Adolescent</span>
+            <div class="tw-flex-1 tw-mb-4 lg:tw-mb-0">
+              <div class="tw-flex tw-items-start tw-space-x-4">
+                <div class="tw-flex-shrink-0">
+                  <div
+                    class="tw-w-12 tw-h-12 tw-bg-orange-100 tw-rounded-lg tw-flex tw-items-center tw-justify-center"
+                  >
+                    <i class="ri-building-line tw-text-orange-600 tw-text-xl"></i>
+                  </div>
+                </div>
+                <div class="tw-flex-1">
+                  <h3 class="tw-text-xl tw-font-bold tw-text-gray-900 tw-mb-2">
+                    {{ deliberation.name }}
+                  </h3>
+                  <p class="tw-text-gray-600 tw-mb-3">
+                    Sesssion de {{ deliberation.date_start | date:"dd/MMMM/yyyy":"fr" }} au {{ deliberation.date_end | date:"dd/MMMM/yyyy":"fr" }}
+                  </p>
+                  <!-- <p class="tw-text-sm tw-text-gray-500">
+                    {{ deliberation.details }}
+                  </p> -->
+                </div>
+              </div>
+            </div>
+
+            <div class="tw-flex tw-items-center tw-space-x-4">
+              <div class="tw-text-right">
+                <p class="tw-text-sm tw-text-gray-500 tw-mb-2">
+                  Date de délibération
+                </p>
+                <p class="tw-font-medium tw-text-gray-900">
+                  {{ deliberation.date_end | date:"dd/MMMM/yyyy":"fr"}}
+                </p>
+              </div>
+
+              <div
+                class="tw-flex tw-items-center tw-space-x-2 tw-px-4 tw-py-2 tw-rounded-full tw-text-sm tw-font-medium"
+                [ngClass]="getStatusColor(deliberation.status)"
+              >
+                <i
+                  [class]="getStatusIcon(deliberation.status) + ' tw-text-base'"
+                ></i>
+                <span>{{ deliberation.status }}</span>
+              </div>
+            </div>
           </div>
 
-          <button
-            class="tw-flex tw-items-center tw-space-x-2 tw-text-blue-600 hover:tw-text-blue-700 tw-font-medium tw-text-sm"
+          <div
+            class="tw-flex tw-items-center tw-justify-between tw-pt-6 tw-border-t tw-border-gray-100"
           >
-            <span>Télécharger</span>
-            <i class="ri-download-line"></i>
-          </button>
+            <div class="tw-flex tw-items-center tw-space-x-4 tw-text-sm tw-text-gray-500">
+              <span>
+                Délibération #G{{ deliberation.id.toString().padStart(3, '0') }}
+              </span>
+              <span>•</span>
+              <span>MASM - Département Enfant et Adolescent</span>
+            </div>
+
+            <!-- <button
+              class="tw-flex tw-items-center tw-space-x-2 tw-text-blue-600 hover:tw-text-blue-700 tw-font-medium tw-text-sm"
+            >
+              <span>Télécharger</span>
+              <i class="ri-download-line"></i>
+            </button> -->
+          </div>
         </div>
       </div>
-    </div>
 
     <!-- Pagination -->
     <div class="tw-flex tw-items-center tw-justify-center tw-mt-12">
@@ -268,7 +264,7 @@
     class="tw-relative tw-min-h-[400px] tw-flex tw-items-center tw-justify-center tw-bg-cover tw-bg-center tw-pt-20"
     [ngStyle]="{
       'background-image':
-        'url(https://readdy.ai/api/search-image?query=Professional%20African%20woman%20in%20business%20attire%20reviewing%20documents%20at%20modern%20desk%2C%20official%20administrative%20setting%20with%20paperwork%20and%20legal%20documents%2C%20government%20office%20environment%20focused%20on%20childcare%20regulations%20and%20approvals&width=1920&height=600&seq=deliberations-garderie-bg&orientation=landscape)'
+        'url(assets/result_garderie.jpg)'
     }"
   >
     <div class="tw-absolute tw-inset-0 tw-bg-black/50"></div>
@@ -291,53 +287,52 @@
     <div class="tw-max-w-7xl tw-mx-auto tw-px-6">
       <div class="tw-text-center tw-mb-12">
         <h3 class="tw-text-2xl tw-font-bold tw-text-gray-900 tw-mb-4">
-          Statistiques des délibérations garderies 2024
+          Statistiques des délibérations garderies
         </h3>
       </div>
 
       <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-4 tw-gap-8">
-        <div class="tw-text-center">
-          <div
-            class="tw-w-16 tw-h-16 tw-bg-green-100 tw-rounded-lg tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-4"
-          >
-            <i class="ri-check-circle-line tw-text-2xl tw-text-green-600"></i>
-          </div>
-          <div class="tw-text-3xl tw-font-bold tw-text-gray-900 tw-mb-2">
-            12
-          </div>
-          <p class="tw-text-gray-600">Autorisations accordées</p>
-        </div>
+  <div class="tw-text-center">
+    <div class="tw-w-16 tw-h-16 tw-bg-green-100 tw-rounded-lg tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-4">
+      <i class="ri-check-circle-line tw-text-2xl tw-text-green-600"></i>
+    </div>
+    <div class="tw-text-3xl tw-font-bold tw-text-gray-900 tw-mb-2">
+      {{ stats.totalAccordees }}
+    </div>
+    <p class="tw-text-gray-600">Autorisations accordées</p>
+  </div>
 
-        <div class="tw-text-center">
-          <div
-            class="tw-w-16 tw-h-16 tw-bg-yellow-100 tw-rounded-lg tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-4"
-          >
-            <i class="ri-time-line tw-text-2xl tw-text-yellow-600"></i>
-          </div>
-          <div class="tw-text-3xl tw-font-bold tw-text-gray-900 tw-mb-2">4</div>
-          <p class="tw-text-gray-600">Dossiers en étude</p>
-        </div>
+  <div class="tw-text-center">
+    <div class="tw-w-16 tw-h-16 tw-bg-blue-100 tw-rounded-lg tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-4">
+      <i class="ri-folder-2-line tw-text-2xl tw-text-blue-600"></i>
+    </div>
+    <div class="tw-text-3xl tw-font-bold tw-text-gray-900 tw-mb-2">
+      {{ stats.totalRequetes }}
+    </div>
+    <p class="tw-text-gray-600">Dossiers déposés</p>
+  </div>
 
-        <div class="tw-text-center">
-          <div
-            class="tw-w-16 tw-h-16 tw-bg-red-100 tw-rounded-lg tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-4"
-          >
-            <i class="ri-close-circle-line tw-text-2xl tw-text-red-600"></i>
-          </div>
-          <div class="tw-text-3xl tw-font-bold tw-text-gray-900 tw-mb-2">3</div>
-          <p class="tw-text-gray-600">Demandes refusées</p>
-        </div>
+  <div class="tw-text-center">
+    <div class="tw-w-16 tw-h-16 tw-bg-yellow-100 tw-rounded-lg tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-4">
+      <i class="ri-time-line tw-text-2xl tw-text-yellow-600"></i>
+    </div>
+    <div class="tw-text-3xl tw-font-bold tw-text-gray-900 tw-mb-2">
+      {{ stats.totalNok }}
+    </div>
+    <p class="tw-text-gray-600">Dossiers en attente</p>
+  </div>
 
-        <div class="tw-text-center">
-          <div
-            class="tw-w-16 tw-h-16 tw-bg-blue-100 tw-rounded-lg tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-4"
-          >
-            <i class="ri-refresh-line tw-text-2xl tw-text-blue-600"></i>
-          </div>
-          <div class="tw-text-3xl tw-font-bold tw-text-gray-900 tw-mb-2">8</div>
-          <p class="tw-text-gray-600">Renouvellements</p>
-        </div>
-      </div>
+  <div class="tw-text-center">
+    <div class="tw-w-16 tw-h-16 tw-bg-gray-100 tw-rounded-lg tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-4">
+      <i class="ri-calendar-check-line tw-text-2xl tw-text-gray-600"></i>
+    </div>
+    <div class="tw-text-3xl tw-font-bold tw-text-gray-900 tw-mb-2">
+      {{ stats.totalSessions }}
+    </div>
+    <p class="tw-text-gray-600">Sessions organisées</p>
+  </div>
+</div>
+
     </div>
   </section>
 
@@ -397,14 +392,14 @@
                 </div>
                 <div class="tw-flex-1">
                   <h3 class="tw-text-xl tw-font-bold tw-text-gray-900 tw-mb-2">
-                    {{ deliberation.title }}
+                    {{ deliberation.name }}
                   </h3>
                   <p class="tw-text-gray-600 tw-mb-3">
-                    {{ deliberation.description }}
+                    Sesssion de {{ deliberation.date_start | date:"dd/MMMM/yyyy":"fr" }} au {{ deliberation.date_end | date:"dd/MMMM/yyyy":"fr" }}
                   </p>
-                  <p class="tw-text-sm tw-text-gray-500">
+                  <!-- <p class="tw-text-sm tw-text-gray-500">
                     {{ deliberation.details }}
-                  </p>
+                  </p> -->
                 </div>
               </div>
             </div>
@@ -415,7 +410,7 @@
                   Date de délibération
                 </p>
                 <p class="tw-font-medium tw-text-gray-900">
-                  {{ deliberation.date }}
+                  {{ deliberation.date_end | date:"dd/MMMM/yyyy":"fr"}}
                 </p>
               </div>
 
@@ -442,12 +437,12 @@
               <span>MASM - Département Enfant et Adolescent</span>
             </div>
 
-            <button
+            <!-- <button
               class="tw-flex tw-items-center tw-space-x-2 tw-text-blue-600 hover:tw-text-blue-700 tw-font-medium tw-text-sm"
             >
               <span>Télécharger</span>
               <i class="ri-download-line"></i>
-            </button>
+            </button> -->
           </div>
         </div>
       </div>

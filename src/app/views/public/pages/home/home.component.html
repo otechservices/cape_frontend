@@ -1,7 +1,7 @@
 <section 
   class="tw-relative tw-min-h-screen tw-flex tw-py-20 tw-items-center tw-justify-center tw-bg-cover tw-bg-center"
   [ngStyle]="{
-    'background-image': 'url(https://readdy.ai/api/search-image?query=Professional%20African%20government%20office%20building%20with%20modern%20architecture%2C%20official%20ministry%20environment%2C%20bright%20daylight%2C%20clean%20professional%20atmosphere%2C%20welcoming%20entrance%20for%20public%20services%20and%20administration&width=1920&height=1080&seq=hero-government-bg&orientation=landscape)'
+    'background-image': 'url(https://readdy.ai/api/search-image?query=Professional%20African%20childcare%20workers%20smiling%20while%20supervising%20happy%20children%20playing%20in%20a%20modern%20bright%20CAPE%20center%20or%20daycare%20facility%2C%20colorful%20educational%20environment%20with%20safety%20equipment%2C%20warm%20natural%20lighting%2C%20children%20engaged%20in%20learning%20activities%2C%20protective%20and%20nurturing%20atmosphere%20showcasing%20quality%20childcare%20services&width=1920&height=1080&seq=hero-cape-bg&orientation=landscape)'
   }"
 >
   <div class="tw-absolute tw-inset-0 tw-bg-black/40"></div>
@@ -26,7 +26,7 @@
         <h3 class="tw-text-lg tw-font-bold tw-text-gray-900 tw-mb-3">Inscription Garderie</h3>
         <p class="tw-text-sm tw-text-gray-600 tw-mb-4">Demandez l'autorisation d'ouverture de votre garderie</p>
         <button
-          (click)="goTo('/inscription-garderie')"
+          (click)="goTo('/promoter/inscription-garderie')"
           class="tw-w-full tw-bg-blue-600 hover:tw-bg-blue-700 tw-text-white tw-py-3 tw-rounded-lg tw-font-medium tw-transition-colors tw-cursor-pointer tw-whitespace-nowrap"
         >
           Commencer
@@ -41,7 +41,7 @@
         <h3 class="tw-text-lg tw-font-bold tw-text-gray-900 tw-mb-3">Inscription CAPE</h3>
         <p class="tw-text-sm tw-text-gray-600 tw-mb-4">Obtenez votre autorisation CAPE facilement</p>
         <button
-          (click)="goTo('/inscription-cape')"
+          (click)="goTo('/promoter/inscription-cape')"
           class="tw-w-full tw-bg-green-600 hover:tw-bg-green-700 tw-text-white tw-py-3 tw-rounded-lg tw-font-medium tw-transition-colors tw-cursor-pointer tw-whitespace-nowrap"
         >
           Commencer
@@ -56,7 +56,7 @@
         <h3 class="tw-text-lg tw-font-bold tw-text-gray-900 tw-mb-3">Suivi de dossier</h3>
         <p class="tw-text-sm tw-text-gray-600 tw-mb-4">Consultez l'état d'avancement de votre dossier</p>
         <button
-          (click)="scrollTo('ticket-support')"
+          (click)="goTo('promoter/mes-dossiers')"
           class="tw-w-full tw-bg-orange-600 hover:tw-bg-orange-700 tw-text-white tw-py-3 tw-rounded-lg tw-font-medium tw-transition-colors tw-cursor-pointer tw-whitespace-nowrap"
         >
           Suivre
@@ -71,7 +71,7 @@
         <h3 class="tw-text-lg tw-font-bold tw-text-gray-900 tw-mb-3">Assistance</h3>
         <p class="tw-text-sm tw-text-gray-600 tw-mb-4">Obtenez de l'aide pour vos démarches</p>
         <button
-          (click)="scrollTo('ticket-support')"
+          (click)="goTo('promoter/assistance-en-ligne')"
           class="tw-w-full tw-bg-purple-600 hover:tw-bg-purple-700 tw-text-white tw-py-3 tw-rounded-lg tw-font-medium tw-transition-colors tw-cursor-pointer tw-whitespace-nowrap"
         >
           Contacter
@@ -112,7 +112,7 @@
         <!-- Image + Catégorie -->
         <div class="tw-relative">
           <img 
-            [src]="item.image" 
+            [src]="getLink('actualities',item.short_photo)" 
             [alt]="item.title"
             class="tw-w-full tw-h-48 tw-object-cover tw-object-top"
           />
@@ -130,15 +130,15 @@
         <div class="tw-p-6">
           <div class="tw-flex tw-items-center tw-text-sm tw-text-gray-500 tw-mb-3">
             <i class="ri-calendar-line tw-mr-2"></i>
-            {{ item.date }}
-          </div>
+            {{ item.created_at | date:"dd/MMMM/yyyy":'fr' }}
+          </div>  
 
           <h3 class="tw-text-lg tw-font-semibold tw-text-gray-900 tw-mb-3 tw-line-clamp-2">
             {{ item.title }}
           </h3>
 
           <p class="tw-text-gray-600 tw-text-sm tw-line-clamp-3 tw-mb-4">
-            {{ item.excerpt }}
+            {{ item.subtitle }}
           </p>
 
           <a 
@@ -192,6 +192,7 @@
           <div class="tw-flex-1">
             <h3 class="tw-font-medium tw-text-gray-900 tw-mb-2">{{ doc.title }}</h3>
             <button 
+            (click)="download(doc.index)"
               class="tw-text-red-600 hover:tw-text-red-700 tw-text-sm tw-font-medium tw-flex tw-items-center tw-space-x-1 tw-cursor-pointer tw-whitespace-nowrap"
             >
               <i class="ri-download-line"></i>

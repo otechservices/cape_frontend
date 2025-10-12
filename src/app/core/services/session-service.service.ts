@@ -16,8 +16,8 @@ export class SessionServiceService {
   getAll(){
     return this.http.get<any[]>(`${this.url}`);
   }
-  results(){
-    return this.http.get<any[]>(`${this.url}/results/all`);
+  results(type:any){
+    return this.http.get<any[]>(`${this.url}/results/all?type=${type}`);
   }
 
   getSessionRequest(){

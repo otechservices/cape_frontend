@@ -25,12 +25,12 @@ import { FileService as myFileService} from 'src/app/core/utils/file-service';
   styleUrl: './inscription-garderie.component.css'
 })
 export class InscriptionGarderieComponent {
-  currentStep = 1;
+  currentStep = 1 ;
   isSubmitting = false;
   submitStatus: 'idle' | 'success' | 'error' = 'idle';
   requiredFiles:any[]=[];
   imageSrc!: string | SafeResourceUrl | undefined ;
-  type:string="cape"
+  type:string="garderie"
   formData: FormGroup;
     fileInput2:any
     fileInput3:any

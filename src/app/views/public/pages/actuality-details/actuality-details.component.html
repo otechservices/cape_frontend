@@ -1,7 +1,7 @@
 
   <ng-container *ngIf="article; else notFound">
     <!-- Hero Section -->
-    <section class="tw-relative tw-pt-20 tw-pb-16 tw-bg-cover tw-bg-center" [ngStyle]="{'background-image': 'url(' + article.image + ')'}">
+    <section class="tw-relative tw-pt-20 tw-pb-16 tw-bg-cover tw-bg-center" [ngStyle]="{'background-image': 'url(' + getLink(article.big_photo )+ ')'}">
       <div class="tw-absolute tw-inset-0 tw-bg-black/50"></div>
       <div class="tw-relative tw-z-10 tw-max-w-4xl tw-mx-auto tw-px-6 tw-text-white">
         <div class="tw-flex tw-items-center tw-mb-4">
@@ -16,9 +16,9 @@
         </div>
         <h1 class="tw-text-3xl md:tw-text-4xl tw-font-bold tw-mb-6">{{ article.title }}</h1>
         <div class="tw-flex tw-flex-wrap tw-items-center tw-gap-6 tw-text-white/90">
-          <div class="tw-flex tw-items-center"><i class="ri-calendar-line tw-mr-2"></i>{{ article.date }}</div>
+          <div class="tw-flex tw-items-center"><i class="ri-calendar-line tw-mr-2"></i>{{ article.created_at|date:"dd/MM/yyyy":"fr" }}</div>
           <div class="tw-flex tw-items-center"><i class="ri-user-line tw-mr-2"></i>{{ article.author }}</div>
-          <div class="tw-flex tw-items-center"><i class="ri-time-line tw-mr-2"></i>{{ article.readTime }}</div>
+          <!-- <div class="tw-flex tw-items-center"><i class="ri-time-line tw-mr-2"></i>{{ article.readTime }}</div> -->
         </div>
       </div>
     </section>
@@ -35,13 +35,13 @@
               <div class="tw-flex tw-items-center tw-flex-wrap tw-gap-3">
                 <span class="tw-text-gray-600 tw-font-medium">Mots-clés :</span>
                 <span class="tw-px-3 tw-py-1 tw-bg-gray-100 tw-text-gray-700 tw-rounded-full tw-text-sm">{{ article.category }}</span>
-                <span class="tw-px-3 tw-py-1 tw-bg-gray-100 tw-text-gray-700 tw-rounded-full tw-text-sm">Protection enfant</span>
-                <span class="tw-px-3 tw-py-1 tw-bg-gray-100 tw-text-gray-700 tw-rounded-full tw-text-sm">Bénin</span>
+                <!-- <span class="tw-px-3 tw-py-1 tw-bg-gray-100 tw-text-gray-700 tw-rounded-full tw-text-sm">Protection enfant</span>
+                <span class="tw-px-3 tw-py-1 tw-bg-gray-100 tw-text-gray-700 tw-rounded-full tw-text-sm">Bénin</span> -->
               </div>
             </div>
 
             <!-- Partage -->
-            <div class="tw-mt-8 tw-pt-8 tw-border-t tw-border-gray-200">
+            <!-- <div class="tw-mt-8 tw-pt-8 tw-border-t tw-border-gray-200">
               <div class="tw-flex tw-items-center tw-justify-between">
                 <span class="tw-text-gray-600 tw-font-medium">Partager cet article :</span>
                 <div class="tw-flex tw-items-center tw-space-x-4">
@@ -51,7 +51,7 @@
                   <button class="tw-w-10 tw-h-10 tw-bg-green-600 tw-text-white tw-rounded-full tw-flex tw-items-center tw-justify-center hover:tw-bg-green-700"><i class="ri-whatsapp-line"></i></button>
                 </div>
               </div>
-            </div>
+            </div> -->
           </div>
         </div>
       </div>
@@ -64,17 +64,17 @@
         <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-3 tw-gap-8">
           <article *ngFor="let item of relatedArticles" class="tw-bg-white tw-rounded-lg tw-shadow-sm tw-overflow-hidden hover:tw-shadow-lg tw-transition-shadow">
             <div class="tw-relative">
-              <img [src]="item.image" [alt]="item.title" class="tw-w-full tw-h-48 tw-object-cover tw-object-top" />
+              <img [src]="getLink(item.short_photo)" [alt]="item.title" class="tw-w-full tw-h-48 tw-object-cover tw-object-top" />
               <div class="tw-absolute tw-top-4 tw-left-4">
                 <span class="tw-px-3 tw-py-1 tw-rounded-full tw-text-xs tw-font-medium" [ngClass]="getCategoryColor(item.category)">{{ item.category }}</span>
               </div>
             </div>
             <div class="tw-p-6">
               <div class="tw-flex tw-items-center tw-text-sm tw-text-gray-500 tw-mb-3">
-                <i class="ri-calendar-line tw-mr-2"></i>{{ item.date }}
+                <i class="ri-calendar-line tw-mr-2"></i>{{ item.created_at|date:"dd/MMMM/yyyy":"fr" }}
               </div>
               <h3 class="tw-text-lg tw-font-semibold tw-text-gray-900 tw-mb-3 tw-line-clamp-2">{{ item.title }}</h3>
-              <p class="tw-text-gray-600 tw-text-sm tw-line-clamp-3 tw-mb-4">{{ item.excerpt }}</p>
+              <p class="tw-text-gray-600 tw-text-sm tw-line-clamp-3 tw-mb-4">{{ item.subtitle }}</p>
               <a [routerLink]="['/actualites', item.id]" class="tw-flex tw-items-center tw-text-blue-600 hover:tw-text-blue-700 tw-font-medium tw-text-sm tw-whitespace-nowrap">
                 Lire l'article <i class="ri-arrow-right-line tw-ml-2"></i>
               </a>

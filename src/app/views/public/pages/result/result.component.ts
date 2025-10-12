@@ -34,6 +34,13 @@ export class ResultComponent implements OnInit {
   title:any
   result:any
   type:any
+stats = {
+  totalSessions: 0,
+  totalRequetes: 0,
+  totalOk: 0,
+  totalNok: 0,
+  totalAccordees: 0 // correspond aux requêtes "OK"
+};
 
   constructor(
     private sessionService:SessionServiceService,
@@ -54,11 +61,11 @@ export class ResultComponent implements OnInit {
 
       this.route.paramMap.subscribe(params => {
       this.type=this.route.snapshot.paramMap.get('type')
+            this.init()
 
     })
 
     this.user=this.lsService.get(GlobalName.userName)
-    this.init()
     this.buttonsPermission = {
       show:true,
       add:true,
@@ -66,6 +73,7 @@ export class ResultComponent implements OnInit {
       delete:true
     };
   }
+
 
   init(){
     this.getAll()
@@ -76,15 +84,23 @@ export class ResultComponent implements OnInit {
  
  
   getAll(){
-    this.sessionService.results().subscribe((res:any)=>{
+    this.sessionService.results(this.type).subscribe((res:any)=>{
       this.data=res.data
-
+       this.updateStats();
       
     },
     (err:any)=>{
 
     })
   }
+
+  updateStats() {
+  this.stats.totalSessions = this.data.length;
+  this.stats.totalRequetes = this.data.reduce((sum, s) => sum + s.requetes_count, 0);
+  this.stats.totalOk = this.data.reduce((sum, s) => sum + s.requetes_ok_count, 0);
+  this.stats.totalNok = this.data.reduce((sum, s) => sum + s.requetes_nok_count, 0);
+  this.stats.totalAccordees = this.stats.totalOk; // alias sémantique
+}
 
 
 

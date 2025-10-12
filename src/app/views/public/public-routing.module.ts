@@ -44,11 +44,11 @@ const routes: Routes = [
         component:ContactComponent
       },
        {
-        path:"actualities",
+        path:"actualites",
         component:ActualityComponent
       },
       {
-        path:"actuality-details/:id",
+        path:"actualites/:id",
         component:ActualityDetailsComponent
       },
       {
