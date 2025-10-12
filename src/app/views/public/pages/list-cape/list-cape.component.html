@@ -58,19 +58,34 @@
             <th class="tw-border tw-border-gray-300 tw-px-4 tw-py-3 tw-text-left tw-text-sm tw-font-medium tw-text-gray-700">Type</th>
             <th class="tw-border tw-border-gray-300 tw-px-4 tw-py-3 tw-text-left tw-text-sm tw-font-medium tw-text-gray-700">Couverture</th>
             <th class="tw-border tw-border-gray-300 tw-px-4 tw-py-3 tw-text-left tw-text-sm tw-font-medium tw-text-gray-700">Localisation</th>
-            <th class="tw-border tw-border-gray-300 tw-px-4 tw-py-3 tw-text-left tw-text-sm tw-font-medium tw-text-gray-700">Adresse</th>
+            <th class="tw-border tw-border-gray-300 tw-px-4 tw-py-3 tw-text-left tw-text-sm tw-font-medium tw-text-gray-700">Contact</th>
 
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let cape of currentItems; let i = index" class="tw-hover:bg-gray-50">
             <td class="tw-border tw-border-gray-300 tw-px-4 tw-py-3 tw-text-sm tw-text-center">
-              <div class="tw-w-4 tw-h-4 tw-rounded-full tw-bg-blue-500 tw-flex tw-items-center tw-justify-center tw-text-white tw-text-xs tw-mx-auto">
-                {{ startIndex + i + 1 }}
-              </div>
+             {{ startIndex + i + 1 }}
             </td>
             <td class="tw-border tw-border-gray-300 tw-px-4 tw-py-3 tw-text-sm tw-text-gray-900">
               {{ cape.name }}
+            </td>
+             <td class="tw-border tw-border-gray-300 tw-px-4 tw-py-3 tw-text-sm tw-text-gray-900">
+              {{ cape.type_cape?.name }}
+            </td>
+              <td class="tw-border tw-border-gray-300 tw-px-4 tw-py-3 tw-text-sm tw-text-gray-900">
+              {{cape?.district?.cps?.name}}
+            </td>
+             <td class="tw-border tw-border-gray-300 tw-px-4 tw-py-3 tw-text-sm tw-text-gray-900">
+             <ul>
+              <li><strong>Département :</strong>{{cape?.district?.municipality?.department?.name}}</li>
+              <li><strong>Commune :</strong>{{cape?.district?.municipality?.name}}</li>
+              <li><strong>Arrondissement :</strong>{{cape?.district?.name}}</li>
+              <li><strong>Adresse :</strong>{{cape?.address}}</li>
+             </ul>
+            </td>
+              <td class="tw-border tw-border-gray-300 tw-px-4 tw-py-3 tw-text-sm tw-text-gray-900">
+              {{ cape.phone_pomoter }}
             </td>
           </tr>
         </tbody>
