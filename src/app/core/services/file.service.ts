@@ -13,8 +13,8 @@ export class FileService {
 
   constructor(private http:HttpClient) { }
 
-  getAll(type?:any){
-    return this.http.get<any[]>(`${this.url}?type=${type}`,ConfigService.httpHeader(localStorage.getItem(GlobalName.tokenName),true));
+  getAll(type?:any,is_active=1){
+    return this.http.get<any[]>(`${this.url}?type=${type}&is_active=${is_active}`,ConfigService.httpHeader(localStorage.getItem(GlobalName.tokenName),true));
   }
 
   store(ressource:any){

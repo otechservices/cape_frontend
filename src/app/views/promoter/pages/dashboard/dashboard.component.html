@@ -14,7 +14,8 @@
       class="tw-bg-white tw-rounded-xl tw-shadow-sm tw-border tw-border-gray-200 tw-p-6 hover:tw-shadow-md tw-transition-shadow tw-duration-200 tw-cursor-pointer"
       (click)="handleAction(action.action)"
     >
-      <div class="tw-flex tw-items-start tw-space-x-4">
+    <a [routerLink]="action.link">
+     <div class="tw-flex tw-items-start tw-space-x-4">
         <div class="tw-w-12 tw-h-12 tw-rounded-lg tw-flex tw-items-center tw-justify-center tw-flex-shrink-0"
              [ngClass]="action.color">
           <i class="{{ action.icon }} tw-text-white tw-text-xl"></i>
@@ -24,6 +25,8 @@
           <p class="tw-text-gray-600 tw-text-sm tw-leading-relaxed">{{ action.description }}</p>
         </div>
       </div>
+    </a>
+ 
     </div>
   </div>
 

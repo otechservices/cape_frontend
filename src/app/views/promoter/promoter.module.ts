@@ -15,6 +15,11 @@ import { InscriptionGarderieComponent } from './pages/inscription-garderie/inscr
 import { AssistanceEnligneComponent } from './pages/assistance-enligne/assistance-enligne.component';
 import { MesDossiersComponent } from './pages/mes-dossiers/mes-dossiers.component';
 import { MonProfilPromoterComponent } from './pages/mon-profil-promoter/mon-profil-promoter.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { StaffComponent } from './pages/staff/staff.component';
+import { ResidentComponent } from './pages/resident/resident.component';
+import { ReferalComponent } from './pages/referal/referal.component';
+import { ActivityReportComponent } from './pages/activity-report/activity-report.component';
 
 
 
@@ -29,6 +34,10 @@ import { MonProfilPromoterComponent } from './pages/mon-profil-promoter/mon-prof
     InscriptionCapeComponent,
     InscriptionGarderieComponent,
     AssistanceEnligneComponent,
+    StaffComponent,
+    ResidentComponent,
+    ReferalComponent,
+    ActivityReportComponent,
     MesDossiersComponent,
     MonProfilPromoterComponent
   ],
@@ -38,7 +47,8 @@ import { MonProfilPromoterComponent } from './pages/mon-profil-promoter/mon-prof
     PromoterRoutingModule,
     ReactiveFormsModule,
     FormsModule,
-    SharedModule
+    SharedModule,
+    NgbModule
   ]
 })
 export class PromoterModule { }

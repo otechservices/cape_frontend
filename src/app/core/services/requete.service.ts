@@ -14,6 +14,14 @@ export class RequeteService {
   getAll(service?:any){
     return this.http.get<any[]>(`${this.url}?service_id=${service}`);
   }
+
+
+  getForPromoter(promoter_id:any){
+    return this.http.get<any[]>(`${this.url}?promoter_id=${promoter_id}`);
+  }
+
+
+  
   getPendingValidation(){
     return this.http.get<any[]>(`${this.url}get-pending-validation/all`);
   }

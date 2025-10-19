@@ -1,8 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { PromoterLayoutComponent } from './promoter-layout/promoter-layout.component';
-import { PromoterHeaderComponent } from './promoter-layout/includes/promoter-header/promoter-header.component';
-import { PromoterSideBarComponent } from './promoter-layout/includes/promoter-side-bar/promoter-side-bar.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { InscriptionCapeComponent } from './pages/inscription-cape/inscription-cape.component';
 import { InscriptionGarderieComponent } from './pages/inscription-garderie/inscription-garderie.component';
@@ -10,10 +8,10 @@ import { MesDossiersComponent } from './pages/mes-dossiers/mes-dossiers.componen
 import { AssistanceEnligneComponent } from './pages/assistance-enligne/assistance-enligne.component';
 import { MonProfilPromoterComponent } from './pages/mon-profil-promoter/mon-profil-promoter.component';
 import { AuthGuard } from 'src/app/core/guards/auth.guard';
-import { StaffComponent } from '../admin/pages/staff/staff.component';
-import { ResidentComponent } from '../admin/pages/resident/resident.component';
-import { ReferalComponent } from '../admin/pages/referal/referal.component';
-import { ActivityReportComponent } from '../admin/pages/activity-report/activity-report.component';
+import { StaffComponent } from './pages/staff/staff.component';
+import { ResidentComponent } from './pages/resident/resident.component';
+import { ReferalComponent } from './pages/referal/referal.component';
+import { ActivityReportComponent } from './pages/activity-report/activity-report.component';
 import { StatistiqueComponent } from '../admin/pages/statistique/statistique.component';
 import { ControlComponent } from '../admin/pages/control/control.component';
 import { SearchComponent } from '../admin/pages/search/search.component';

@@ -148,7 +148,6 @@ export class InscriptionGarderieComponent {
       
         
          // this.formData.has_aggrement=false
-          this.getFiles()
           let checkInstance= this.lsService.get(`${GlobalName.reqName}-${this.user.code}`)
        if(checkInstance!=null){
             this.formData=JSON.parse(checkInstance)
@@ -296,6 +295,15 @@ export class InscriptionGarderieComponent {
 validateStep(step: number): boolean {
   switch (step) {
     case 1:
+
+     if (this.formData.get('nature_promotor_id')?.value == 1) {
+      this.formData.patchValue({  
+        name_chief: this.formData.get('name_pomoter')?.value,
+        firstname_chief: this.formData.get('firstname_pomoter')?.value,
+        phone_chief: this.formData.get('phone_pomoter')?.value,
+        email_chief: this.formData.get('email_pomoter')?.value
+      });
+    }
       // Informations promoteur
       return this.formData.get('nature_promotor_id')?.valid &&
              this.formData.get('name_pomoter')?.valid &&

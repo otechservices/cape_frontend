@@ -1,6 +1,5 @@
    <div class="tw-max-w-full tw-mx-auto p-5">
        <ng-container *ngIf="!showPreview"  class="container">
-        <ng-container *ngIf="role =='cape'">
             <div class="row mb-3">
                  <div class="tw-col-span-12">
                    <div class="tw-bg-white tw-rounded-lg tw-shadow">
@@ -129,179 +128,6 @@
                 </div>
                 <!-- end col -->
             </div>
-        </ng-container>
-        <ng-container *ngIf="role !='cape'">
-            <div class="row mb-3">
-                 <div class="tw-col-span-12">
-                   <div class="tw-bg-white tw-rounded-lg tw-shadow">
-                      <div class="card-header cape-bg-blue text-white">
-                        <h6 class="text-white">Liste des capes ayant déposé des rapports d'activité</h6>
-                      </div>
-                          <div class="tw-p-6">
-                                    <p>{{data.length}} élément(s)</p>
-                                    <div class="tw-overflow-x-auto">
-                                    <table class="tw-min-w-full tw-border tw-border-gray-200 tw-text-sm">
-                                        <thead class="tw-bg-gray-100">
-                                            <tr>
-                                                <th class="tw-w-[40px] tw-px-3 tw-py-2">#</th>
-                                                <th class="tw-px-3 tw-py-2">Type CAPE</th>
-                                                <th class="tw-px-3 tw-py-2">Dénomination</th>
-                                                <th class="tw-px-3 tw-py-2">Nombres d'enfants</th>
-                                                <th class="tw-px-3 tw-py-2">Effectif du personnel</th>
-                                    
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr *ngFor="let d of data" class="tw-border-t">
-                                                 <td class="tw-px-3 tw-py-2">
-                                                    <div class="tw-form-check tw-mb-2">
-                                                        <input
-                      type="radio"
-                      name="flexRadioDefault"
-                      id="flexRadioDefault{{d.id}}"
-                      class="tw-form-radio tw-text-blue-600"
-                      (click)="checked(d)"
-                    />
-                                                    
-                                                    </div>
-                                                </td>
-                                                 <td class="tw-px-3 tw-py-2">{{d.requete?.type_cape?.name}}</td>
-                                                 <td class="tw-px-3 tw-py-2">{{d.requete?.name}} </td>
-                                                 <td class="tw-px-3 tw-py-2">{{d.residents_count}} </td>
-                                                 <td class="tw-px-3 tw-py-2">{{d.staffs_count}} </td>
-                                            </tr>
-                                        
-                                        </tbody>
-                                    </table>
-                                    </div>
-            
-                        </div><!-- end card -->
-                    </div>
-                    <!-- end col -->
-                </div>
-                <!-- end col -->
-            </div>
-            <div class="row mb-3">
-                 <div class="tw-col-span-12">
-                   <div class="tw-bg-white tw-rounded-lg tw-shadow">
-                      <div class="card-header cape-bg-blue ">
-                        <h6 class="text-white">Rapports d'activité</h6>
-                      </div>
-                          <div class="tw-p-6">
-
-                            <div *ngIf="role == 'ministre'" class="d-flex">
-                                <button *ngIf="buttonsPermission2.ok"   (click)="setStatus(1)" type="button"  class="btn btn-outline-success btn-sm  me-3">
-                                    Valider</button>
-                                <button  *ngIf="buttonsPermission2.ok" (click)="setStatus(2)" type="button"  class="tw-border tw-border-red-500 tw-text-red-500 tw-text-sm tw-px-3 tw-py-1 tw-rounded hover:tw-bg-red-50 tw-me-3">
-                                    Rejeter</button>
-                            </div>
-                                    <p>{{activity_reports.length}} élément(s)</p>
-                                    <div class="tw-overflow-x-auto">
-                                    <table class="tw-min-w-full tw-border tw-border-gray-200 tw-text-sm">
-                                        <thead class="tw-bg-gray-100">
-                                            <tr>
-                                                <th class="tw-w-[40px] tw-px-3 tw-py-2">#</th>
-                                                <th class="tw-px-3 tw-py-2">Description</th>
-                                                <th class="tw-px-3 tw-py-2">Statut</th>
-                                                <th class="tw-px-3 tw-py-2">Transmis</th>
-                                                <th class="tw-px-3 tw-py-2">Fichier</th>
-                                    
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr *ngFor="let d of activity_reports ">
-                                                 <td class="tw-px-3 tw-py-2">
-                                                    <div class="tw-form-check tw-mb-2">
-                                                        <input (click)="checked2(d)" class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
-                                                    
-                                                    </div>
-                                                </td>
-                                                 <td class="tw-px-3 tw-py-2">{{d.description}}</td>
-                                                 <td class="tw-px-3 tw-py-2">
-                                                    <span [ngClass]="{
-                                                        'p-1 bg-secondary  text-white rounded':d.status==0,
-                                                        'p-1 bg-success  text-white rounded':d.status==1,
-                                                        'p-1 bg-danger  text-white rounded':d.status==2,
-                                                        'p-1 bg-warning  text-white rounded':d.status==3
-                                                    }">
-                                                    {{getStatus(d.status)}}
-                                                </span>
-                                                </td>
-                                                 <td class="tw-px-3 tw-py-2">
-                                                    <span [ngClass]="{
-                                                        'p-1 bg-secondary  text-white rounded':d.is_transmitted==0,
-                                                        'p-1 bg-success  text-white rounded':d.is_transmitted==1
-                                                    }">
-                                                    {{d.is_transmitted?"Oui":"Non"}}
-                                                </span>
-                                                </td>
-                                                 <td class="tw-px-3 tw-py-2">
-                                                    <div class="d-flex justify-content-between">
-                                                        <button class="btn btn-outline-primary btn-sm" (click)="showFile(d.activity_report_filename,d)">Ouvrir le rapport d'activité</button>
-                                                        <button class="btn btn-outline-primary btn-sm" (click)="showFile(d.financial_report_filename,d)">Ouvrir le rapport financier</button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        
-                                        </tbody>
-                                    </table>
-                                    </div>
-            
-                        </div><!-- end card -->
-                    </div>
-                    <!-- end col -->
-                </div>
-                <!-- end col -->
-            </div>
-            <div class="row mb-5">
-                 <div class="tw-col-span-12">
-                   <div class="tw-bg-white tw-rounded-lg tw-shadow">
-                      <div class="card-header cape-bg-blue text-white">
-                        <h6 class="text-white">Instructions sur le rapport d'activité</h6>
-                      </div>
-                          <div class="tw-p-6">
-
-                            <div *ngIf="role=='ministre' " class="d-flex justify-content-between">
-                                <button  type="button" class="tw-bg-blue-600 tw-text-white tw-text-sm tw-px-3 tw-py-1 tw-rounded hover:tw-bg-blue-700 tw-me-3" (click)="add2(addObsContent)">Ajouter une observation</button>
-
-                                    <button *ngIf="activity_report_responses.length>0"  (click)="edit2(editObsContent)" type="button"  class="tw-border tw-border-yellow-500 tw-text-yellow-500 tw-text-sm tw-px-3 tw-py-1 tw-rounded hover:tw-bg-yellow-50 tw-me-3">
-                                       Editer</button>
-                                       <button *ngIf="activity_report_responses.length>0"   (click)="deleteObs()" type="button" class="tw-border tw-border-red-500 tw-text-red-500 tw-text-sm tw-px-3 tw-py-1 tw-rounded hover:tw-bg-red-50 tw-me-3">
-                                           Supprimer</button>
-                            </div>
-                                    <p>{{activity_report_responses.length}} élément(s)</p>
-                                    <div class="tw-overflow-x-auto">
-                                    <table class="table">
-                                        <thead class="tw-bg-gray-100">
-                                            <tr>
-                                                <th class="tw-w-[40px] tw-px-3 tw-py-2">#</th>
-                                                <th class="tw-px-3 tw-py-2">Instruction</th>
-                                    
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr *ngFor="let d of activity_report_responses ">
-                                                 <td class="tw-px-3 tw-py-2">
-                                                    <div class="tw-form-check tw-mb-2">
-                                                        <input (click)="checked3(d)" class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
-                                                    
-                                                    </div>
-                                                </td>
-                                                 <td class="tw-px-3 tw-py-2">{{d.instruction}}</td>
-                                               
-                                            </tr>
-                                        
-                                        </tbody>
-                                    </table>
-                                    </div>
-            
-                        </div><!-- end card -->
-                    </div>
-                    <!-- end col -->
-                </div>
-                <!-- end col -->
-            </div>
-        </ng-container>
     
     </ng-container>
 
@@ -331,6 +157,13 @@
         </div>
         <div class="modal-body" >
             <div class="row mb-3" >
+
+                  <div class=" form-goup col-12 mb-3">
+                    <label for="">Centre <span class="text-danger ml-2">(*)</span></label>
+                   <select name="centre_id" ngModel class="form-control">
+                        <option *ngFor="let c of centres" [value]="c.id">{{c.name}}</option>
+                   </select>
+                </div>
           
                 <div class=" form-goup col-12 mb-3">
                     <label for="">Description <span class="text-danger ml-2">(*)</span></label>
@@ -363,7 +196,12 @@
         </div>
         <div class="modal-body" >
             <div class="row mb-3" >
-          
+               <div class=" form-goup col-12 mb-3">
+                    <label for="">Centre <span class="text-danger ml-2">(*)</span></label>
+                   <select name="centre_id" [(ngModel)]="selected_data.centre_id" class="form-control">
+                        <option *ngFor="let c of centres" [value]="c.id">{{c.name}}</option>
+                   </select>
+                </div>
                 <div class=" form-goup col-12 mb-3">
                     <label for="">Description <span class="text-danger ml-2">(*)</span></label>
                     <textarea name="description" class="form-control" [(ngModel)]="selected_data.description" required></textarea>
@@ -459,3 +297,16 @@
         </div>
     </form>
       </ng-template>
+
+          <ng-template #previewContent let-offcanvas id="myCanvas">
+	<div class="offcanvas-header">
+		<h4 class="offcanvas-title">Visualisation du document</h4>
+		<!-- <button type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss('Cross click')"></button> -->
+	</div>
+	<div class="offcanvas-body">
+        <object [data]="url" type="application/pdf" width="100%" height="100%"></object>
+
+	</div>
+</ng-template>
+
+    

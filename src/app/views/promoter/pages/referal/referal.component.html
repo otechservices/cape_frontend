@@ -1,0 +1,148 @@
+   <div class="tw-max-w-full tw-mx-auto p-5">
+        <div class="tw-grid tw-grid-cols-12 tw-gap-4">
+           <div class="tw-col-span-12">
+             <div class="tw-bg-white tw-rounded-lg tw-shadow">
+                
+                    <div class="tw-p-6">
+                       <div class="tw-flex tw-mb-5" *ngIf="buttonsPermission">
+                          <button *ngIf="buttonsPermission.show"  (click)="show(showContent)" type="button" class="tw-border tw-border-blue-500 tw-text-blue-500 tw-text-sm tw-px-3 tw-py-1 tw-rounded hover:tw-bg-blue-50 tw-me-3">
+                               <span>Consulter</span></button>
+      
+                      </div>
+      
+                              <p>{{data.length}} élément(s)</p>
+                              <div class="tw-overflow-x-auto">
+                              <table class="tw-min-w-full tw-border tw-border-gray-200 tw-text-sm">
+                                  <thead class="tw-bg-gray-100">
+                                      <tr>
+                                          <th class="tw-w-[40px] tw-px-3 tw-py-2">#</th>
+                                          <th class="tw-px-3 tw-py-2">Recommandations</th>
+                                          <th class="tw-px-3 tw-py-2">Contrôles effectués</th>
+                              
+                                      </tr>
+                                  </thead>
+                                  <tbody>
+                                      <tr *ngFor="let d of data" class="tw-border-t">
+                                           <td class="tw-px-3 tw-py-2">
+                                              <div class="tw-form-check tw-mb-2">
+                                                  <input
+                      type="radio"
+                      name="flexRadioDefault"
+                      id="flexRadioDefault{{d.id}}"
+                      class="tw-form-radio tw-text-blue-600"
+                      (click)="checked(d)"
+                    />
+                                              
+                                              </div>
+                                          </td>
+                                           <td class="tw-px-3 tw-py-2">{{d.libelle}}</td>
+                                           <td class="tw-px-3 tw-py-2">{{d.controls.length}}</td>
+                                 
+                                     
+                                      </tr>
+                                  
+                                  </tbody>
+                              </table>
+                              </div>
+      
+                  </div><!-- end card -->
+              </div>
+              <!-- end col -->
+          </div>
+          <!-- end col -->
+      </div>
+</div>
+
+
+
+      <ng-template #showContent let-c="close" let-d="dismiss">
+        <div class="modal-header bg-secondary">
+            <h6 class="tw-modal-title tw-text-white" id="modal-basic-title">Contrôle</h6>
+            <button type="button" class="btn-close" aria-label="Close" (click)="d('Cross click')"></button>
+          </div>
+    
+          <div class="modal-body">
+            <dl>
+              <dt><b>Libellé de la recommandation</b></dt>
+              <dd>{{selected_data2.libelle}}</dd>
+            </dl>
+            <hr>
+          
+            <dl>
+              <dt>Contrôles</dt>
+              <dd>
+                <table class="table table-sm table-bordered">
+                  <thead>
+                    <th class="tw-px-3 tw-py-2">#</th>
+                    <th class="tw-px-3 tw-py-2">Libellé</th>
+                    <th class="tw-px-3 tw-py-2">Action</th>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let c of selected_data2.controls; let i=index">
+                       <td class="tw-px-3 tw-py-2">{{i+1}}</td>
+                       <td class="tw-px-3 tw-py-2">{{c.libelle}}</td>
+                       <td class="tw-px-3 tw-py-2">
+                        <button   (click)="add2(editContent,c)" type="button" class="btn btn-outline-warning">
+                          <span>Modifier</span></button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </dd>
+            </dl>
+           
+          </div>
+    </ng-template>
+
+
+    <ng-template #addContent let-c="close" let-d="dismiss">
+      <form #addForm="ngForm" (ngSubmit)="store(addForm.value)">
+      <div class="modal-header bg-secondary">
+          <h6 class="tw-modal-title tw-text-white" id="modal-basic-title">Contrôle</h6>
+          <button type="button" class="btn-close" aria-label="Close" (click)="d('Cross click')"></button>
+        </div>
+  
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="">Avis</label>
+            <input type="text" class="form-control" name="libelle" ngModel>
+          </div>
+          <div class="form-group">
+            <label for="">Constat</label>
+            <textarea class="form-control" name="observation" ngModel></textarea>
+          </div>
+
+        </div>
+        <div class="modal-footer">
+              <div class="d-flex justify-content-end">
+                <button class="btn btn-sm btn-success">Sauvegarder <app-loading [isVisible]="loading"></app-loading></button>
+              </div>
+        </div>  
+      </form>
+  </ng-template>
+
+  <ng-template #editContent let-c="close" let-d="dismiss">
+    <form #addForm="ngForm" (ngSubmit)="update(addForm.value)">
+    <div class="modal-header bg-secondary">
+        <h6 class="tw-modal-title tw-text-white" id="modal-basic-title">Contrôle</h6>
+        <button type="button" class="btn-close" aria-label="Close" (click)="d('Cross click')"></button>
+      </div>
+
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="">Libellé</label>
+          <input type="text" class="form-control" name="libelle" [(ngModel)]="selected_data3.libelle">
+        </div>
+        <div class="form-group">
+          <label for="">Libellé</label>
+          <textarea class="form-control" name="observation" [(ngModel)]="selected_data3.observation"></textarea>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+            <div class="d-flex justify-content-end">
+              <button class="btn btn-sm btn-success">Sauvegarder <app-loading [isVisible]="loading"></app-loading></button>
+            </div>
+      </div>  
+    </form>
+</ng-template>

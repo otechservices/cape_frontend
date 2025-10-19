@@ -35,9 +35,6 @@ import { FileComponent } from './pages/file/file.component';
 import { SessionRequestComponent } from './pages/session-request/session-request.component';
 import { SessionRequestShowComponent } from './pages/session-request-show/session-request-show.component';
 import { RequestHasAgreementComponent } from './pages/request-has-agreement/request-has-agreement.component';
-import { ResidentComponent } from './pages/resident/resident.component';
-import { ReferalComponent } from './pages/referal/referal.component';
-import { StaffComponent } from './pages/staff/staff.component';
 import { FollowCapeComponent } from './pages/follow-cape/follow-cape.component';
 import { FollowCapeShowComponent } from './pages/follow-cape/follow-cape-show/follow-cape-show.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -52,13 +49,11 @@ import { TypeSanctionComponent } from './pages/type-sanction/type-sanction.compo
 import { RequetesComponent } from './pages/requetes/requetes.component';
 import { BackupsComponent } from './pages/backups/backups.component';
 import { JournalComponent } from './pages/journal/journal.component';
-import { ActivityReportComponent } from './pages/activity-report/activity-report.component';
 import { UniteAdminComponent } from './pages/unite-admin/unite-admin.component';
 import { ControlComponent } from './pages/control/control.component';
 import { SearchComponent } from './pages/search/search.component';
 import { ValidationAggrementComponent } from './pages/validation-aggrement/validation-aggrement.component';
 import { NgxSpinnerModule } from 'ngx-spinner';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NaturePromotorComponent } from './pages/nature-promotor/nature-promotor.component';
 import { TypeInfoComponent } from './pages/type-info/type-info.component';
 import { InfoComponent } from './pages/info/info.component';
@@ -72,6 +67,8 @@ import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
 import { ControlFileElementComponent } from './pages/control-file-element/control-file-element.component';
 import { SharedModule } from '../shared/shared.module';
 import { NgxToggle, NgxToggleModule } from 'ngx-toggle';
+import { ReferalComponent } from './pages/referal/referal.component';
+import { ActivityReportComponent } from './pages/activity-report/activity-report.component';
 
 
 
@@ -110,9 +107,6 @@ import { NgxToggle, NgxToggleModule } from 'ngx-toggle';
     SessionRequestComponent,
     SessionRequestShowComponent,
     RequestHasAgreementComponent,
-    ResidentComponent,
-    ReferalComponent,
-    StaffComponent,
     FollowCapeComponent,
     FollowCapeShowComponent,
     CapeComponent,
@@ -126,7 +120,6 @@ import { NgxToggle, NgxToggleModule } from 'ngx-toggle';
     RequetesComponent,
     BackupsComponent,
     JournalComponent,
-    ActivityReportComponent,
     UniteAdminComponent,
     ControlComponent,
     SearchComponent,
@@ -140,7 +133,9 @@ import { NgxToggle, NgxToggleModule } from 'ngx-toggle';
     ActualityComponent,
     TypeGarderieComponent,
     TypeSousGarderieComponent,
-    ControlFileElementComponent
+    ControlFileElementComponent,
+    ReferalComponent,
+    ActivityReportComponent
   ],
   imports: [
     CommonModule,

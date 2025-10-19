@@ -12,28 +12,34 @@ export class DashboardComponent {
       description: 'Demander une autorisation pour un Centre d\'Accueil de la Petite Enfance',
       icon: 'ri-shield-user-line',
       color: 'tw-bg-green-500',
-      action: 'inscription-cape'
+      action: 'inscription-cape',
+      link:'/promoter/inscription-cape'
     },
     {
       title: 'Inscription Garderie',
       description: 'Demander une autorisation pour une garderie',
       icon: 'ri-building-line',
       color: 'tw-bg-blue-500',
-      action: 'inscription-garderie'
+      action: 'inscription-garderie',
+      link:'/promoter/inscription-garderie'
     },
     {
       title: 'Mes Dossiers',
       description: 'Consulter le statut de vos demandes en cours',
       icon: 'ri-folder-line',
       color: 'tw-bg-orange-500',
-      action: 'mes-dossiers'
+      action: 'mes-dossiers',
+      link:'/promoter/mes-dossiers'
+
     },
     {
       title: 'Support',
       description: 'Obtenir de l\'aide ou poser une question',
       icon: 'ri-customer-service-2-line',
       color: 'tw-bg-purple-500',
-      action: 'support'
+      action: 'support',
+      link:'/promoter/assistance-en-ligne'
+
     }
   ];
 

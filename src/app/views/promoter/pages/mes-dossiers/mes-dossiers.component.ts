@@ -1,20 +1,23 @@
-import { Component } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
+import { Component, ViewChild, ViewEncapsulation } from '@angular/core';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgbOffcanvasConfig, NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { FileService } from 'src/app/core/services/file.service';
 import { RequeteService } from 'src/app/core/services/requete.service';
+import { ConfigService } from 'src/app/core/utils/config-service';
 import { LocalStorageService } from 'src/app/core/utils/local-stoarge-service';
 
 @Component({
   selector: 'app-mes-dossiers',
-
   templateUrl: './mes-dossiers.component.html',
-  styleUrl: './mes-dossiers.component.css'
+  styleUrl: './mes-dossiers.component.css',
+  encapsulation:ViewEncapsulation.None
 })
 export class MesDossiersComponent {
  dossiers: any[] = [];
+  @ViewChild('previewContent')previewContent:any
+  url:SafeResourceUrl | undefined
 
   activeTab: string = 'tous';
   dossierSelectionne: string | null = null;
@@ -134,4 +137,9 @@ export class MesDossiersComponent {
     this.dossierSelectionne = id;
   }
 
+
+    showFile(filename:any, dossier?:any){
+       this.url=this._sanitizationService.bypassSecurityTrustResourceUrl(ConfigService.toFile("docs/"+dossier?.code+"/"+filename))
+       this.offcanvasService.open(this.previewContent,{  panelClass: 'details-panel', position: 'start'  });
+    }
 }

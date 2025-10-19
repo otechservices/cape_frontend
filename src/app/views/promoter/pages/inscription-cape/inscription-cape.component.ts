@@ -150,7 +150,6 @@ export class InscriptionCapeComponent  implements OnInit{
       
         
          // this.formData.has_aggrement=false
-          this.getFiles()
           let checkInstance= this.lsService.get(`${GlobalName.reqName}-${this.user.code}`)
        if(checkInstance!=null){
             this.formData=JSON.parse(checkInstance)
@@ -299,6 +298,15 @@ export class InscriptionCapeComponent  implements OnInit{
 validateStep(step: number): boolean {
   switch (step) {
     case 1:
+
+    if (this.formData.get('nature_promotor_id')?.value == 1) {
+      this.formData.patchValue({  
+        name_chief: this.formData.get('name_pomoter')?.value,
+        firstname_chief: this.formData.get('firstname_pomoter')?.value,
+        phone_chief: this.formData.get('phone_pomoter')?.value,
+        email_chief: this.formData.get('email_pomoter')?.value
+      });
+    }
       // Informations promoteur
       return this.formData.get('nature_promotor_id')?.valid &&
              this.formData.get('name_pomoter')?.valid &&
@@ -418,7 +426,7 @@ validateStep(step: number): boolean {
       this.lsService.remove(GlobalName.reqName);
       this.is_stored = true;
             this.eService.purgeFile({init_code:this.initCode}).subscribe((res:any)=>{ },)
-      this.router.navigate(['promoter/dashboard']);
+      this.router.navigate(['promoter/mes-dossiers']);
     },
     (err: any) => {
 
@@ -454,7 +462,7 @@ validateStep(step: number): boolean {
 
   
     getFiles(){
-    this.fileService.getAll(this.type).subscribe((res:any)=>{
+    this.fileService.getAll(this.type,1).subscribe((res:any)=>{
       res.data.forEach((element:any) => this.requiredFiles.push({
         type:element.type_file?.code,
         name:element.name,
