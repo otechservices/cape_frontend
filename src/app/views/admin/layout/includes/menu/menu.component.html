@@ -1,4 +1,25 @@
-<div class="tw-w-64 tw-bg-slate-800 tw-text-white tw-min-h-screen tw-overflow-y-auto">
+<!-- BOUTON MOBILE -->
+<div class="tw-fixed tw-top-4 tw-left-4 tw-z-50 md:tw-hidden">
+  <button
+    (click)="toggleSidebar()"
+    class="tw-bg-slate-800 tw-text-white tw-p-2 tw-rounded-lg tw-shadow-md focus:tw-outline-none"
+  >
+    <i class="ri-menu-line tw-text-xl"></i>
+  </button>
+</div>
+
+<!-- OVERLAY MOBILE (fond semi-transparent quand le menu est ouvert) -->
+<div
+  *ngIf="sidebarOpen"
+  (click)="toggleSidebar()"
+  class="tw-fixed tw-inset-0 tw-bg-black tw-bg-opacity-50 tw-z-40 md:tw-hidden"
+></div>
+
+<!-- SIDEBAR -->
+<div
+  class="tw-fixed md:tw-static tw-top-0 tw-left-0 tw-h-full tw-w-64 tw-bg-slate-800 tw-text-white tw-overflow-y-auto tw-transition-transform tw-z-50"
+  [ngClass]="{ 'tw-translate-x-0': sidebarOpen, '-tw-translate-x-full': !sidebarOpen, 'md:tw-translate-x-0': true }"
+>
   <div class="tw-p-6">
     <!-- Logo + Titre -->
     <div class="tw-flex tw-items-center tw-gap-3 tw-mb-8">
@@ -23,21 +44,17 @@
                 : 'tw-text-gray-300 hover:tw-text-white hover:tw-bg-slate-700'
           "
         >
-       <div class="tw-flex tw-items-center tw-gap-3">
-        <div class="tw-w-5 tw-h-5 tw-flex tw-items-center tw-justify-center tw-flex-shrink-0">
-          <i class="{{ item?.icon }} tw-text-sm"></i>
-        </div>
-
-        <!-- Si c'est un titre -->
-        <span *ngIf="item?.isTitle" class="tw-text-sm tw-font-bold tw-text-blue-600">
-          {{ item?.title }}
-        </span>
-
-        <!-- Sinon -->
-        <span *ngIf="!item?.isTitle" class="tw-text-sm tw-font-medium">
-          {{ item?.name }}
-        </span>
-      </div>
+          <div class="tw-flex tw-items-center tw-gap-3">
+            <div class="tw-w-5 tw-h-5 tw-flex tw-items-center tw-justify-center tw-flex-shrink-0">
+              <i class="{{ item?.icon }} tw-text-sm"></i>
+            </div>
+            <span *ngIf="item?.isTitle" class="tw-text-sm tw-font-bold tw-text-blue-600">
+              {{ item?.title }}
+            </span>
+            <span *ngIf="!item?.isTitle" class="tw-text-sm tw-font-medium">
+              {{ item?.name }}
+            </span>
+          </div>
 
           <div
             *ngIf="item.children"
@@ -55,32 +72,33 @@
           *ngIf="item.children && expandedItems.includes(item.id)"
           class="tw-ml-4 tw-mt-1 tw-space-y-1"
         >
-    <ng-container *ngFor="let child of item.children">
-        <!-- Si c'est un titre -->
-        <div *ngIf="child.isTitle"
-            class="tw-w-full tw-flex tw-items-center tw-gap-3 tw-px-3 tw-py-2 tw-rounded-lg tw-text-left tw-font-semibold tw-text-gray-500 tw-uppercase">
-        <div class="tw-w-4 tw-h-4 tw-flex tw-items-center tw-justify-center tw-flex-shrink-0">
-          <i class="{{ child.icon }} tw-text-xs"></i>
-        </div>
-        <span class="tw-text-sm">{{ child.title }}</span>
-        </div>
+          <ng-container *ngFor="let child of item.children">
+            <div
+              *ngIf="child.isTitle"
+              class="tw-w-full tw-flex tw-items-center tw-gap-3 tw-px-3 tw-py-2 tw-rounded-lg tw-text-left tw-font-semibold tw-text-gray-500 tw-uppercase"
+            >
+              <div class="tw-w-4 tw-h-4 tw-flex tw-items-center tw-justify-center tw-flex-shrink-0">
+                <i class="{{ child.icon }} tw-text-xs"></i>
+              </div>
+              <span class="tw-text-sm">{{ child.title }}</span>
+            </div>
 
-        <!-- Sinon c'est un vrai bouton -->
-        <button *ngIf="!child.isTitle"
+            <button
+              *ngIf="!child.isTitle"
               (click)="handleItemClick(child)"
               class="tw-w-full tw-flex tw-items-center tw-gap-3 tw-px-3 tw-py-2 tw-rounded-lg tw-text-left tw-transition-colors tw-cursor-pointer tw-whitespace-nowrap"
               [ngClass]="
                 isActive(child.path)
                   ? 'tw-bg-blue-600 tw-text-white'
                   : 'tw-text-gray-400 hover:tw-text-white hover:tw-bg-slate-700'
-              ">
-        <div class="tw-w-4 tw-h-4 tw-flex tw-items-center tw-justify-center tw-flex-shrink-0">
-          <i class="{{ child.icon }} tw-text-xs"></i>
-        </div>
-        <span class="tw-text-sm">{{ child.name }}</span>
-        </button>
-        </ng-container>
-
+              "
+            >
+              <div class="tw-w-4 tw-h-4 tw-flex tw-items-center tw-justify-center tw-flex-shrink-0">
+                <i class="{{ child.icon }} tw-text-xs"></i>
+              </div>
+              <span class="tw-text-sm">{{ child.name }}</span>
+            </button>
+          </ng-container>
         </div>
       </div>
     </nav>

@@ -80,4 +80,14 @@ export class SessionServiceService {
     return this.http.post<any>(`${this.url}/store-requetes/all`, ressource,
      ConfigService.httpHeader(localStorage.getItem(GlobalName.tokenName),true));
   }
+
+
+    enregistrerNotes
+(ressource:any){
+    return this.http.post<any>(`${this.url}/store-requetes-notes/all`, ressource,
+     ConfigService.httpHeader(localStorage.getItem(GlobalName.tokenName),true));
+  }
+
+
+
 }

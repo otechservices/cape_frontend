@@ -142,12 +142,25 @@ export class InscriptionCapeComponent  implements OnInit{
       }
 
 
-       if ('geolocation' in navigator) {
-          navigator.geolocation.getCurrentPosition(async (position) => {
-          // this.formData.coords=`${position.coords.latitude},${position.coords.longitude}` 
-          });
+    if ('geolocation' in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const coords = `${position.coords.latitude},${position.coords.longitude}`;
+          this.formData.patchValue({ coords });
+        },
+        (error) => {
+          console.error('Erreur de géolocalisation :', error);
+          this.formData.patchValue({ coords: null });
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 10000,
+          maximumAge: 0
         }
-      
+      );
+    } else {
+      console.warn('La géolocalisation n’est pas prise en charge par ce navigateur.');
+    }
         
          // this.formData.has_aggrement=false
           let checkInstance= this.lsService.get(`${GlobalName.reqName}-${this.user.code}`)

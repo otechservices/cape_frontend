@@ -47,11 +47,22 @@
 
     <!-- Notes -->
     <div class="tw-flex tw-flex-col tw-gap-2 tw-mb-6">
-      <div>
-        <h4 class="tw-text-lg tw-font-semibold">
-          <b>Note globale Dossier :</b> {{note2.max | number:".2"}} / <b>{{note2.total}}</b>
-        </h4>
-      </div>
+     <div class="tw-mb-4">
+          <h4 class="tw-text-lg tw-font-semibold tw-flex tw-items-center tw-gap-2">
+            <span class="tw-bg-blue-600 tw-text-white tw-px-2 tw-py-1 tw-rounded">
+              Note globale Dossier :
+            </span>
+
+            <ng-container *ngIf="data.session.is_active == false; else activeNotation">
+              <span class="tw-text-gray-700">{{ data?.note | number:'1.2-2' }}</span>
+            </ng-container>
+
+            <ng-template #activeNotation>
+              <span class="tw-text-gray-700">{{ note2.max | number:'1.2-2' }}</span>
+              <span class="tw-font-bold">/ {{ note2.total }}</span>
+            </ng-template>
+          </h4>
+        </div>
       <div *ngIf="role == 'member'">
         <h4 class="tw-text-lg tw-font-semibold">
           <b>Note globale Membre :</b> {{note3.max | number:".2"}} / <b>{{note3.total}}</b>
@@ -101,42 +112,104 @@
     </div>
 
     <!-- Promoteur -->
-    <fieldset class="tw-border tw-border-gray-300 tw-rounded tw-p-4 tw-mb-5">
-      <legend class="tw-bg-gray-500 tw-text-white tw-rounded tw-px-3 tw-py-1">Information sur le promoteur</legend>
-      <div class="tw-grid tw-grid-cols-12 tw-gap-4">
-        <div class="tw-col-6"><dt>Nom</dt><dd>{{data.name_pomoter}} {{data.firstname_pomoter}}</dd></div>
-        <div class="tw-col-6"><dt>Contact</dt><dd>{{data.phone_pomoter}}</dd></div>
-        <div class="tw-col-6"><dt>Email</dt><dd>{{data.email}}</dd></div>
-        <div class="tw-col-6"><dt>Contact N° 2</dt><dd>{{data.phone}}</dd></div>
-      </div>
-    </fieldset>
+<fieldset class="tw-border tw-border-gray-300 tw-rounded tw-p-4 tw-mb-5">
+  <legend class="tw-bg-gray-500 tw-text-white tw-rounded tw-px-3 tw-py-1">
+    Informations sur le promoteur
+  </legend>
+
+  <div class="tw-flex tw-flex-wrap tw-gap-4">
+    <div class="tw-bg-gray-100 tw-p-4 tw-rounded tw-flex-1 tw-min-w-[250px]">
+      <dt class="tw-font-semibold">Nom</dt>
+      <dd>{{data.name_pomoter}} {{data.firstname_pomoter}}</dd>
+    </div>
+
+    <div class="tw-bg-gray-100 tw-p-4 tw-rounded tw-flex-1 tw-min-w-[250px]">
+      <dt class="tw-font-semibold">Contact</dt>
+      <dd>{{data.phone_pomoter}}</dd>
+    </div>
+
+    <div class="tw-bg-gray-100 tw-p-4 tw-rounded tw-flex-1 tw-min-w-[250px]">
+      <dt class="tw-font-semibold">Email</dt>
+      <dd>{{data.email}}</dd>
+    </div>
+
+    <div class="tw-bg-gray-100 tw-p-4 tw-rounded tw-flex-1 tw-min-w-[250px]">
+      <dt class="tw-font-semibold">Contact N° 2</dt>
+      <dd>{{data.phone}}</dd>
+    </div>
+  </div>
+</fieldset>
+
+
 
     <!-- Centre -->
-    <fieldset class="tw-border tw-border-gray-300 tw-rounded tw-p-4 tw-mb-5">
-      <legend class="tw-bg-gray-500 tw-text-white tw-rounded tw-px-3 tw-py-1">Information sur le centre</legend>
-      <div class="tw-grid tw-grid-cols-12 tw-gap-4">
-        <div class="tw-col-6"><dt>Type Cape</dt><dd>{{data.type_cape?.name}}</dd></div>
-        <div class="tw-col-6"><dt>Nom du centre</dt><dd>{{data.name}}</dd></div>
-        <div class="tw-col-6"><dt>Nom du directeur</dt><dd>{{data.name_chief}}</dd></div>
-        <div class="tw-col-6"><dt>Contact du directeur</dt><dd>{{data.phone_chief}}</dd></div>
-        <div class="tw-col-6"><dt>Cible</dt>
-          <dd><ul class="tw-list-disc tw-list-inside">
-            <li *ngFor="let el of getJson(data.target)">{{el.itemName}}</li>
-          </ul></dd>
-        </div>
-      </div>
-    </fieldset>
+<fieldset class="tw-border tw-border-gray-300 tw-rounded tw-p-4 tw-mb-5">
+  <legend class="tw-bg-gray-500 tw-text-white tw-rounded tw-px-3 tw-py-1">
+    Informations sur le centre
+  </legend>
+
+  <div class="tw-flex tw-flex-wrap tw-gap-4">
+    <div class="tw-bg-gray-100 tw-p-4 tw-rounded tw-flex-1 tw-min-w-[250px]">
+      <dt class="tw-font-semibold">Type Cape</dt>
+      <dd>{{data.type_cape?.name}}</dd>
+    </div>
+
+    <div class="tw-bg-gray-100 tw-p-4 tw-rounded tw-flex-1 tw-min-w-[250px]">
+      <dt class="tw-font-semibold">Nom du centre</dt>
+      <dd>{{data.name}}</dd>
+    </div>
+
+    <div class="tw-bg-gray-100 tw-p-4 tw-rounded tw-flex-1 tw-min-w-[250px]">
+      <dt class="tw-font-semibold">Nom du directeur</dt>
+      <dd>{{data.name_chief}}</dd>
+    </div>
+
+    <div class="tw-bg-gray-100 tw-p-4 tw-rounded tw-flex-1 tw-min-w-[250px]">
+      <dt class="tw-font-semibold">Contact du directeur</dt>
+      <dd>{{data.phone_chief}}</dd>
+    </div>
+
+    <div class="tw-bg-gray-100 tw-p-4 tw-rounded tw-flex-1 tw-min-w-[250px]">
+      <dt class="tw-font-semibold">Cible</dt>
+      <dd>
+        <ul class="tw-list-disc tw-list-inside">
+          <li *ngFor="let el of getJson(data.target)">{{el.itemName}}</li>
+        </ul>
+      </dd>
+    </div>
+  </div>
+</fieldset>
+
 
     <!-- Localisation -->
-    <fieldset class="tw-border tw-border-gray-300 tw-rounded tw-p-4 tw-mb-5">
-      <legend class="tw-bg-gray-500 tw-text-white tw-rounded tw-px-3 tw-py-1">Localisation</legend>
-      <div class="tw-grid tw-grid-cols-12 tw-gap-4">
-        <div class="tw-col-6"><dt>Département</dt><dd>{{data.district?.municipality?.department?.name}}</dd></div>
-        <div class="tw-col-6"><dt>Commune</dt><dd>{{data.district?.municipality?.name}}</dd></div>
-        <div class="tw-col-6"><dt>Arrondissement</dt><dd>{{data.district?.name}}</dd></div>
-        <div class="tw-col-6"><dt>Adresse</dt><dd>{{data.address}}</dd></div>
-      </div>
-    </fieldset>
+<fieldset class="tw-border tw-border-gray-300 tw-rounded tw-p-4 tw-mb-5">
+  <legend class="tw-bg-gray-500 tw-text-white tw-rounded tw-px-3 tw-py-1">
+    Localisation
+  </legend>
+
+  <div class="tw-flex tw-flex-wrap tw-gap-4">
+    <div class="tw-bg-gray-100 tw-p-4 tw-rounded tw-flex-1 tw-min-w-[250px]">
+      <dt class="tw-font-semibold">Département</dt>
+      <dd>{{data.district?.municipality?.department?.name}}</dd>
+    </div>
+
+    <div class="tw-bg-gray-100 tw-p-4 tw-rounded tw-flex-1 tw-min-w-[250px]">
+      <dt class="tw-font-semibold">Commune</dt>
+      <dd>{{data.district?.municipality?.name}}</dd>
+    </div>
+
+    <div class="tw-bg-gray-100 tw-p-4 tw-rounded tw-flex-1 tw-min-w-[250px]">
+      <dt class="tw-font-semibold">Arrondissement</dt>
+      <dd>{{data.district?.name}}</dd>
+    </div>
+
+    <div class="tw-bg-gray-100 tw-p-4 tw-rounded tw-flex-1 tw-min-w-[250px]">
+      <dt class="tw-font-semibold">Adresse</dt>
+      <dd>{{data.address}}</dd>
+    </div>
+  </div>
+</fieldset>
+
 
     <!-- Documents -->
     <div class="tw-mb-4">

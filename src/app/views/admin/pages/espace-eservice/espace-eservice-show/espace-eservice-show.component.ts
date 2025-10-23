@@ -243,8 +243,13 @@ export class EspaceEserviceShowComponent implements OnInit {
       this.data=res
       this.modalService.dismissAll()
       AppSweetAlert.simpleAlert("success","Invitation","Mail envoyé")
+      if (this.data.type_cape?.name?.toLowerCase()=="cape") {
+              this.router.navigate(['/admin/requetes/new/cape'])
 
-      this.router.navigate(['/admin/requetes/new/cape'])
+      }else{
+      this.router.navigate(['/admin/requetes/new/garderie'])
+
+      }
       this.loading=false
 
     },
@@ -266,8 +271,13 @@ export class EspaceEserviceShowComponent implements OnInit {
       AppSweetAlert.simpleAlert("success",this.data.status==6?"Validation de dossier":"Transmission",res?.message)
 
       this.data=res
-      this.router.navigate(['/admin/requetes/new/cape'])
-      this.loading=false
+if (this.data.type_cape?.name?.toLowerCase()=="cape") {
+              this.router.navigate(['/admin/requetes/new/cape'])
+
+      }else{
+      this.router.navigate(['/admin/requetes/new/garderie'])
+
+      }      this.loading=false
       this.modalService.dismissAll()
 
     },
@@ -288,8 +298,13 @@ export class EspaceEserviceShowComponent implements OnInit {
       this.loading=false
       this.data=res
       this.modalService.dismissAll()
-      this.router.navigate(['/admin/requetes/new/cape'])
-    
+if (this.data.type_cape?.name?.toLowerCase()=="cape") {
+              this.router.navigate(['/admin/requetes/new/cape'])
+
+      }else{
+      this.router.navigate(['/admin/requetes/new/garderie'])
+
+      }    
 
     },
     (err:any)=>{
@@ -307,8 +322,13 @@ export class EspaceEserviceShowComponent implements OnInit {
     this.responseService.needCorrection(value).subscribe((res:any)=>{
       AppSweetAlert.simpleAlert("success","Mise en attente",res?.message)
 
-      this.router.navigate(['/admin/requetes/new/cape'])
-        this.modalService.dismissAll()
+if (this.data.type_cape?.name?.toLowerCase()=="cape") {
+              this.router.navigate(['/admin/requetes/new/cape'])
+
+      }else{
+      this.router.navigate(['/admin/requetes/new/garderie'])
+
+      }        this.modalService.dismissAll()
         this.init()
         this.loading=false
 

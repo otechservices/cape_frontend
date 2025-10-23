@@ -28,7 +28,7 @@ export class RegisterComponent {
       email: ['', [Validators.required, Validators.email]],
       phone: ['', Validators.required],
      // typeCompte: ['particulier', Validators.required],
-      password: ['', [Validators.required, Validators.minLength(6)]],
+      password: ['', [Validators.required, Validators.minLength(8)]],
       password_confirmation: ['', Validators.required]
     }, { validator: this.passwordMatchValidator });
   }

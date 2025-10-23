@@ -16,7 +16,7 @@
 
       <form [formGroup]="loginForm" (ngSubmit)="handleSubmit()" class="tw-space-y-6">
         <div>
-          <label for="email" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 tw-mb-2">Adresse email*</label>
+          <label for="email" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 tw-mb-2">Adresse email <span class="text-danger">(*)</span></label>
           <input
             id="email"
             type="email"
@@ -27,7 +27,7 @@
         </div>
 
         <div>
-          <label for="password" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 tw-mb-2">Mot de passe*</label>
+          <label for="password" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 tw-mb-2">Mot de passe <span class="text-danger">(*)</span></label>
           <input
             id="password"
             type="password"

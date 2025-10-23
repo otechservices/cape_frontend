@@ -16,6 +16,8 @@ export class MenuComponent implements OnInit {
   menu:any[]=[]
   user:any
   role:any
+  sidebarOpen = false;
+
   constructor(
     private authService:AuthService,
     private router: Router,
@@ -90,6 +92,10 @@ export class MenuComponent implements OnInit {
       // TODO: Navigation Angular Router
     }
   }
+
+  toggleSidebar() {
+  this.sidebarOpen = !this.sidebarOpen;
+}
 
   isActive(path?: string): boolean {
     // TODO: brancher avec Router

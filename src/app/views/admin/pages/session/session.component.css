@@ -1,0 +1,18 @@
+.details-panel {
+    width: 70% !important;
+}
+
+.details-panel2 {
+    width: 50% !important;
+}
+.details-panel3 {
+    height: 90% !important;
+}
+
+.form-check-input-secondary[type=number]{
+    border: 2px solid black !important;
+}
+
+.form-check-input-danger[type=number]{
+    border: 2px solid red !important;
+}

@@ -40,6 +40,9 @@
                                     Affecter des membres à la session</button>
                                 <button  (click)="show(sessContent)" type="button" class="btn btn-outline-info btn-sm  me-3">
                                     Inscrire les dossiers à la session</button>
+
+                                <button  *ngIf="selected_data?.is_active==false"  (click)="openForNote(content)" type="button" class="btn btn-outline-info btn-sm  me-3">
+                                   Ajouter les notes de visite</button>
                     </div>
     
                             <p>{{data.length}} élément(s)</p>
@@ -96,7 +99,7 @@
     <div class="row mb-3">
          <div class="tw-col-span-12">
            <div class="tw-bg-white tw-rounded-lg tw-shadow">
-              <div class="card-header cape-bg-green">
+              <div class="card-header tw-bg-green">
                 <h6 class="text-white">Membres</h6>
               </div>
                   <div class="tw-p-6">
@@ -134,14 +137,14 @@
     <div class="row mb-3">
          <div class="tw-col-span-12">
            <div class="tw-bg-white tw-rounded-lg tw-shadow">
-              <div class="card-header cape-bg-green">
+              <div class="card-header tw-bg-green">
                 <h6 class="text-white">Dossiers inscrits</h6>
               </div>
                   <div class="tw-p-6">
                     <table class="table table-sm table-bordered">
                         <thead>
                             <th class="tw-px-3 tw-py-2">#</th>
-                            <th class="tw-px-3 tw-py-2">cape</th>
+                            <th class="tw-px-3 tw-py-2">Centre</th>
                             <th >Actions</th>
                         </thead>
                         <tbody>
@@ -371,3 +374,56 @@
             </div>
           </div>
     </ng-template>
+
+<ng-template #content let-offcanvas id="myCanvas">
+	<div class="offcanvas-header">
+		<h4 class="offcanvas-title">Insertion des notes finales</h4>
+		<button type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss('Cross click')"></button>
+	</div>
+	<div class="offcanvas-body" style="min-height: 80vh; overflow: auto;">
+       <div class="tw-p-4">
+  <h2 class="tw-text-lg tw-font-semibold tw-mb-4">Notes des requêtes de la session</h2>
+
+  <table class="tw-w-full tw-border tw-rounded-lg tw-text-sm">
+    <thead class="tw-bg-gray-100">
+      <tr>
+        <th class="tw-p-2 tw-border">Code</th>
+        <th class="tw-p-2 tw-border">Nom</th>
+        <th class="tw-p-2 tw-border">Note session (40%)</th>
+        <th class="tw-p-2 tw-border">Note terrain (60%)</th>
+        <th class="tw-p-2 tw-border">Note globale</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let req of requetesNotation">
+        <td class="tw-border tw-p-2">{{ req.code }}</td>
+        <td class="tw-border tw-p-2">{{ req.name }}</td>
+        <td class="tw-border tw-p-2 text-center">{{ req.note_session }}</td>
+        <td class="tw-border tw-p-2 text-center">
+          <input
+            type="number"
+            min="0"
+            max="100"
+            class="tw-border tw-rounded tw-w-24 tw-text-center"
+            [(ngModel)]="req.note_terrain"
+            (ngModelChange)="calculerNoteGlobale(req)"
+          />
+        </td>
+        <td class="tw-border tw-p-2 text-center">
+          <span class="tw-font-semibold">{{ req.note_finale | number: '1.0-2' }}</span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <button
+    class="tw-bg-blue-600 tw-text-white tw-rounded-lg tw-px-4 tw-py-2 tw-mt-4"
+    [disabled]="loading"
+    (click)="enregistrerNotes()"
+  >
+    {{ loading ? 'Enregistrement...' : 'Enregistrer les notes' }}
+  </button>
+</div>
+
+	</div>
+</ng-template>

@@ -28,7 +28,10 @@
                             <thead class="tw-bg-gray-100">
                                 <tr>
                                     <th class="tw-w-[40px] tw-px-3 tw-py-2">#</th>
-                                    <th class="tw-px-3 tw-py-2">Cape</th>
+                                    <th class="tw-px-3 tw-py-2">Centre</th>
+                                    <th class="tw-px-3 tw-py-2">Note session</th>
+                                    <th class="tw-px-3 tw-py-2">Note terrain</th>
+                                    <th class="tw-px-3 tw-py-2">Note finale</th>
                                     <th class="tw-px-3 tw-py-2">Décision du comité</th>
                                     <th class="tw-px-3 tw-py-2">Décision du ministre</th>
                                     <th class="tw-px-3 tw-py-2">Action</th>
@@ -55,6 +58,9 @@
                                         </!--div-->
                                     </td>
                                      <td class="tw-px-3 tw-py-2">{{d.name}}</td>
+                                     <td class="tw-px-3 tw-py-2">{{d.note}}</td>
+                                     <td class="tw-px-3 tw-py-2">{{d.note_terrain}}</td>
+                                      <td class="tw-px-3 tw-py-2">{{d.note_finale}}</td>
                                      <td class="tw-px-3 tw-py-2">
                                         <span *ngIf="d.has_agreemant==1" class="p-1 bg-warning text-white"> Accord donné sous réserve</span>
                                         <span *ngIf="d.has_agreemant==2" class="p-1 bg-success text-white"> Accord donné</span>

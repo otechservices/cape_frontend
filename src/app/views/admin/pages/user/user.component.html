@@ -90,7 +90,7 @@
 
 <ng-template #addContent let-c="close" let-d="dismiss">
     <form #addForm="ngForm" (ngSubmit)="store(addForm.value)">
-    <div class="tw-modal-header tw-bg-blue-600 tw-flex tw-justify-between tw-items-center tw-p-4">
+    <div class="tw-modal-header tw-bg-slate-800  tw-flex tw-justify-between tw-items-center tw-p-4">
       <h6 class="tw-modal-title tw-text-white" id="modal-basic-title">Enregistrer un  compte utilisateur</h6>
       <button type="button" class="btn-close" aria-label="Close" (click)="d('Cross click')"></button>
     </div>
@@ -146,7 +146,7 @@
 
   <ng-template #editContent let-c="close" let-d="dismiss">
     <form #editForm="ngForm" (ngSubmit)="update(editForm.value)">
-    <div class="tw-modal-header tw-bg-blue-600 tw-flex tw-justify-between tw-items-center tw-p-4">
+    <div class="tw-modal-header tw-bg-slate-800  tw-flex tw-justify-between tw-items-center tw-p-4">
       <h6 class="tw-modal-title tw-text-white" id="modal-basic-title">Modifier un utilisateur</h6>
       <button type="button" class="btn-close" aria-label="Close" (click)="d('Cross click')"></button>
     </div>

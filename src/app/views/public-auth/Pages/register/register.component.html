@@ -18,18 +18,18 @@
         <form [formGroup]="registerForm" (ngSubmit)="handleSubmit()" class="tw-space-y-6">
           <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-gap-6">
             <div>
-              <label for="lastname" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 tw-mb-2">Nom*</label>
+              <label for="lastname" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 tw-mb-2">Nom <span class="text-danger">(*)</span></label>
               <input
                 id="lastname"
                 type="text"
                 formControlName="lastname"
-                placeholder="Votre lastname"
+                placeholder="Votre nom"
                 class="tw-w-full tw-px-4 tw-py-3 tw-border tw-border-gray-300 tw-rounded-lg tw-focus:ring-2 tw-focus:ring-green-500 tw-focus:border-transparent tw-text-sm"
               />
             </div>
 
             <div>
-              <label for="firstname" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 tw-mb-2">Prénom*</label>
+              <label for="firstname" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 tw-mb-2">Prénom <span class="text-danger">(*)</span></label>
               <input
                 id="firstname"
                 type="text"
@@ -41,7 +41,7 @@
           </div>
 
           <div>
-            <label for="email" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 tw-mb-2">Adresse email*</label>
+            <label for="email" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 tw-mb-2">Adresse email <span class="text-danger">(*)</span></label>
             <input
               id="email"
               type="email"
@@ -52,7 +52,7 @@
           </div>
 
           <div>
-            <label for="phone" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 tw-mb-2">Numéro de téléphone*</label>
+            <label for="phone" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 tw-mb-2">Numéro de téléphone <span class="text-danger">(*)</span></label>
             <input
               id="phone"
               type="tel"
@@ -63,7 +63,7 @@
           </div>
 
           <!-- <div>
-            <label for="typeCompte" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 tw-mb-2">Type de compte*</label>
+            <label for="typeCompte" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 tw-mb-2">Type de compte <span class="text-danger">(*)</span></label>
             <select
               id="typeCompte"
               formControlName="typeCompte"
@@ -77,18 +77,18 @@
 
           <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-gap-6">
             <div>
-              <label for="password" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 tw-mb-2">Mot de passe*</label>
+              <label for="password" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 tw-mb-2">Mot de passe <span class="text-danger">(*)</span></label>
               <input
                 id="password"
                 type="password"
                 formControlName="password"
-                placeholder="Minimum 6 caractères"
+                placeholder="Minimum 8 caractères"
                 class="tw-w-full tw-px-4 tw-py-3 tw-border tw-border-gray-300 tw-rounded-lg tw-focus:ring-2 tw-focus:ring-green-500 tw-focus:border-transparent tw-text-sm"
               />
             </div>
 
             <div>
-              <label for="password_confirmation" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 tw-mb-2">Confirmer le mot de passe*</label>
+              <label for="password_confirmation" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 tw-mb-2">Confirmer le mot de passe <span class="text-danger">(*)</span></label>
               <input
                 id="password_confirmation"
                 type="password"

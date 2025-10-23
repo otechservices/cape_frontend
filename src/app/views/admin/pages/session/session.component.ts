@@ -1,7 +1,7 @@
 import { formatDate } from '@angular/common';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { NgbModalConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModalConfig, NgbModal, NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
 
 import { ToastrService } from 'ngx-toastr';
 import { Subject } from 'rxjs';
@@ -15,10 +15,23 @@ import { ConfigService } from 'src/app/core/utils/config-service';
 import { GlobalName } from 'src/app/core/utils/global-name';
 import { LocalStorageService } from 'src/app/core/utils/local-stoarge-service';
 
+
+export interface Requete {
+  id: number;
+  code: string;
+  name: string;
+  note: number; // note_session
+  note_terrain?: number;
+  note_finale?: number;
+}
+
+
+
 @Component({
   selector: 'app-session',
   templateUrl: './session.component.html',
-  styleUrls: ['./session.component.css']
+  styleUrls: ['./session.component.css'],
+  encapsulation:ViewEncapsulation.None
 })
 export class SessionComponent implements OnInit {
 
@@ -45,11 +58,16 @@ export class SessionComponent implements OnInit {
   fileInput:any
   url:SafeResourceUrl | undefined
 
+    requetesNotation: any[] = [];
+
+
   constructor(
     private sessionService:SessionServiceService,
     private memberService:MemberServiceService,
     private reqService:RequeteService,
     private toastrService:ToastrService,
+         private offcanvasService: NgbOffcanvas,
+  
       config: NgbModalConfig,
       private lsService:LocalStorageService,
       private _sanitizationService: DomSanitizer,
@@ -103,6 +121,7 @@ export class SessionComponent implements OnInit {
       this.dropdownList=[]
       this.dropdownList2=[]
       this.modalService.dismissAll()
+
       
     },
     (err:any)=>{
@@ -170,6 +189,29 @@ export class SessionComponent implements OnInit {
 
         this.toastrService.success(res.message)
         this.getAll()
+
+    },
+    (err:any)=>{
+      this.loading=false
+
+      console.log(err)
+        AppSweetAlert.simpleAlert("error","Session",err.error.message)
+    })
+  }
+
+    enregistrerNotes(){
+      this.loading=true
+
+       const payload = this.requetesNotation.map(r => ({
+      id: r.id,
+      note_terrain: r.note_terrain,
+      note_finale: r.note_finale,
+    }));
+    this.sessionService.enregistrerNotes(payload).subscribe((res:any)=>{
+      this.loading=false
+        this.offcanvasService.dismiss()
+        this.getAll()
+        AppSweetAlert.simpleAlert("success","Session","Notes de terrain enregistrées avec succès")
 
     },
     (err:any)=>{
@@ -259,6 +301,13 @@ export class SessionComponent implements OnInit {
       }
     });
 
+
+        this.requetesNotation = this.requetes.map((r: any) => ({
+          ...r,
+          note_session: r.note,
+          note_terrain: r.note_terrain || 0,
+          note_finale: r.note_finale || 0,
+        }));
    
   }
   verifyIfElementChecked(){
@@ -269,6 +318,13 @@ export class SessionComponent implements OnInit {
     }
     return true;
   }
+
+    calculerNoteGlobale(requete: any) {
+    const noteSession = requete.note_session || 0;
+    const noteTerrain = requete.note_terrain || 0;
+    requete.note_finale = (noteSession * 0.4) + (noteTerrain * 0.6);
+  }
+
 
 
   
@@ -300,6 +356,8 @@ export class SessionComponent implements OnInit {
         this.sessionService.setStatus(this.selected_data.id,value).subscribe((res:any)=>{
           this.toastrService.success(res.message)
           this.getAll()
+          this.members=[]
+          this.requetes=[]
       },
       (err:any)=>{
         console.log(err)
@@ -415,4 +473,8 @@ showFile(filename:any){
   this.showPreview=true
 // window.location=url 
 }
+
+ openForNote(content:any) {
+		this.offcanvasService.open(content,{panelClass: 'details-panel2',position: 'start'  });
+	}
 }

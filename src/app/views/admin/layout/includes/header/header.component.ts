@@ -37,13 +37,7 @@ handleLogout() {
     this.user=this.lsService.get(GlobalName.userName)
     this.role=this.user.roles[0].name
 
-    $(".nav-toggle-icon").on("click", function() {
-      $(".wrapper").toggleClass("toggled")
-    })
-  
-      $(".mobile-toggle-icon").on("click", function() {
-      $(".wrapper").addClass("toggled")
-    })
+    console.log(this.user)
   
   }
   logout(){

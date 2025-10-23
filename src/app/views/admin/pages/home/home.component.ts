@@ -12,15 +12,8 @@ import { LocalStorageService } from 'src/app/core/utils/local-stoarge-service';
 export class HomeComponent implements OnInit {
   user:any
   role:any
-  data:any
-
-   statsCards = [
-    { title: 'Recommandations en cours', value: '15', bgColor: 'tw-bg-cyan-500', textColor: 'tw-text-white', path: '/cape-recommendations' },
-    { title: 'Contrôles effectués', value: '128', bgColor: 'tw-bg-red-500', textColor: 'tw-text-white', path: '/controle-capes-autorises' },
-    { title: 'CAPE autorisés', value: '74', bgColor: 'tw-bg-green-500', textColor: 'tw-text-white', path: '/controle-capes-autorises' },
-    { title: 'CAPE inscrits', value: '45', bgColor: 'tw-bg-gray-500', textColor: 'tw-text-white', path: '/dossiers-cape-inscrire' },
-    { title: 'Dossiers à valider', value: '8', bgColor: 'tw-bg-orange-500', textColor: 'tw-text-white', path: '/a-valider' }
-  ];
+  data:any   // données récupérées depuis ton backend
+  statsCards: any[] = [];
 
   activitesRecentes = [
     { id: 1, type: 'Nouvelle demande', description: "Orphelinat Mère Brandis - Demande d'autorisation", heure: 'Il y a 2 heures', icon: 'ri-file-add-line', iconColor: 'tw-text-blue-500' },
@@ -51,10 +44,50 @@ export class HomeComponent implements OnInit {
   getAll(){
     this.dashService.getAll().subscribe((res:any)=>{
       this.data=res.data
+          this.buildDashboard();
     },
     (err:any)=>{
 
     })
+  }
+
+
+   buildDashboard() {
+    const common:any = {
+      ddasm: [
+        { title: 'Dossiers à valider', value: this.data.pending_validation, bgColor: 'tw-bg-orange-500', textColor: 'tw-text-white', path: '/admin/requetes/new' },
+        { title: 'Contrôles effectués', value: this.data.controls, bgColor: 'tw-bg-red-500', textColor: 'tw-text-white', path: '/admin/referals' },
+        { title: 'Cape visités', value: this.data.total, bgColor: 'tw-bg-blue-600', textColor: 'tw-text-white', path: '/admin/requetes/new' },
+      ],
+      dfea: [
+        { title: 'Recommandations en cours', value: this.data.referals, bgColor: 'tw-bg-cyan-500', textColor: 'tw-text-white', path: '/admin/referals' },
+        { title: 'Contrôles effectués', value: this.data.controls, bgColor: 'tw-bg-red-500', textColor: 'tw-text-white', path: '/admin/referals' },
+        { title: 'CAPE autorisés', value: this.data.authorized, bgColor: 'tw-bg-green-500', textColor: 'tw-text-white', path: '/admin/capes' },
+        { title: 'CAPE inscrits', value: this.data.registered, bgColor: 'tw-bg-gray-500', textColor: 'tw-text-white', path: '/admin/requetes' },
+        { title: 'Dossiers à valider', value: this.data.pending_validation, bgColor: 'tw-bg-orange-500', textColor: 'tw-text-white', path: '/admin/requetes/new' },
+      ],
+      cape: [
+        { title: "Nombre d'enfants", value: this.data.residents, bgColor: 'tw-bg-orange-500', textColor: 'tw-text-white', path: '/admin/requetes/new' },
+        { title: 'Recommandations en attente', value: this.data.referals, bgColor: 'tw-bg-blue-400', textColor: 'tw-text-white', path: '/admin/referals' },
+      ],
+      admin: [
+        { title: 'Nb utilisateurs', value: this.data.users, bgColor: 'tw-bg-blue-600', textColor: 'tw-text-white', path: '/admin/users' },
+        { title: 'CAPE autorisés', value: this.data.authorized, bgColor: 'tw-bg-green-500', textColor: 'tw-text-white', path: '/admin/capes' },
+        { title: 'CAPE inscrits', value: this.data.registered, bgColor: 'tw-bg-gray-500', textColor: 'tw-text-white', path: '/admin/requetes' },
+      ],
+      cps: [
+        { title: 'Recommandations en cours', value: this.data.referals, bgColor: 'tw-bg-cyan-500', textColor: 'tw-text-white', path: '/admin/referals' },
+        { title: 'Contrôles effectués', value: this.data.controls, bgColor: 'tw-bg-red-500', textColor: 'tw-text-white', path: '/admin/referals' },
+        { title: 'CAPE autorisés', value: this.data.authorized, bgColor: 'tw-bg-green-500', textColor: 'tw-text-white', path: '/admin/capes' },
+        { title: 'CAPE inscrits', value: this.data.registered, bgColor: 'tw-bg-gray-500', textColor: 'tw-text-white', path: '/admin/requetes' },
+      ],
+      member: [
+        { title: 'Dossiers inscrits', value: this.data.all, bgColor: 'tw-bg-blue-600', textColor: 'tw-text-white', path: '/admin/session-requests' },
+        { title: 'Dossiers à valider', value: this.data.treated, bgColor: 'tw-bg-green-500', textColor: 'tw-text-white', path: '/admin/session-requests' },
+      ]
+    };
+
+    this.statsCards = common[this.role] || [];
   }
 
   navigate(path: string) {
