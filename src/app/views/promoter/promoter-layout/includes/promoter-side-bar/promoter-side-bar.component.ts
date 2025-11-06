@@ -49,10 +49,15 @@ menuItems: MenuItem[] = [
 
 
   ];
-
+menuOpen = false;
   constructor(private router:Router){
 
   }
+
+
+  toggleMenu() {
+  this.menuOpen = !this.menuOpen;
+}
 
 
   goTo(id:any){
