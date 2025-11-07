@@ -8,6 +8,7 @@ import { Component, OnInit } from '@angular/core';
 export class PublicHeaderComponent implements OnInit {
   public visible:any = false;
     isLoggedIn=false
+menuOpen = false;
 
   constructor() { }
   ngOnInit(): void {
@@ -16,5 +17,7 @@ export class PublicHeaderComponent implements OnInit {
   {
     this.visible = !this.visible
   }
-
+toggleMenu() {
+  this.menuOpen = !this.menuOpen;
+}
 }

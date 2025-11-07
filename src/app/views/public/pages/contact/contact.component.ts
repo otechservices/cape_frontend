@@ -46,20 +46,22 @@ export class ContactComponent implements OnInit {
   ) {
 
      this.contactForm = this.fb.group({
-      nom: ['', Validators.required],
+      name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      telephone: [''],
+      phone: [''],
       sujet: ['', Validators.required],
-      message: ['', [Validators.required, Validators.maxLength(500)]]
+      observation: ['', [Validators.required, Validators.maxLength(500)]],
+      conditions: [false, [Validators.required]]
+
     });
 
     this.informationForm = this.fb.group({
-      nom: ['', Validators.required],
+      name: ['', Validators.required],
       prenom: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      telephone: ['', Validators.required],
+      phone: ['', Validators.required],
       sujet: ['', Validators.required],
-      message: ['', [Validators.required, Validators.maxLength(500)]]
+      observation: ['', [Validators.required, Validators.maxLength(500)]]
     });
    }
 
@@ -119,10 +121,20 @@ export class ContactComponent implements OnInit {
     this.submitStatus = null;
 
     try {
-      // Ici, ajoute ton appel API
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      this.submitStatus = 'success';
+      this.messageService.store(this.contactForm.value).subscribe((res:any)=>{
+      this.loading=false
+
+        this.toastrService.success(res.message)
+       this.submitStatus = 'success';
       this.contactForm.reset();
+    
+    },
+    (err:any)=>{
+      this.loading=false
+
+        AppSweetAlert.simpleAlert("error","Contact",err.error.message)
+    })
+     
     } catch (error) {
       this.submitStatus = 'error';
     } finally {

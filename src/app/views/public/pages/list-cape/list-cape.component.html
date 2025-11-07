@@ -206,22 +206,22 @@
         class="tw-bg-white tw-rounded-lg tw-shadow-sm tw-border tw-border-gray-200 tw-overflow-hidden"
       >
         <div class="tw-overflow-x-auto">
-          <table class="tw-w-full">
+          <table class="tw-w-full tw-border-collapse">
             <thead class="tw-bg-gray-50">
               <tr>
-                <th class="tw-px-6 tw-py-4 tw-text-left tw-text-xs tw-font-medium tw-text-gray-500 tw-uppercase tw-tracking-wider tw-w-16">
+                <th class="tw-border tw-border-gray-300 tw-px-6 tw-py-4 tw-text-left tw-text-xs tw-font-medium tw-text-gray-500 tw-uppercase tw-tracking-wider tw-w-16">
                   #
                 </th>
-                <th class="tw-px-6 tw-py-4 tw-text-left tw-text-xs tw-font-medium tw-text-gray-500 tw-uppercase tw-tracking-wider">
+                <th class="tw-border tw-border-gray-300 tw-px-6 tw-py-4 tw-text-left tw-text-xs tw-font-medium tw-text-gray-500 tw-uppercase tw-tracking-wider">
                   Dénomination
                 </th>
-                <th class="tw-px-6 tw-py-4 tw-text-left tw-text-xs tw-font-medium tw-text-gray-500 tw-uppercase tw-tracking-wider">
+                <th class="tw-border tw-border-gray-300 tw-px-6 tw-py-4 tw-text-left tw-text-xs tw-font-medium tw-text-gray-500 tw-uppercase tw-tracking-wider">
                   Type
                 </th>
-                <th class="tw-px-6 tw-py-4 tw-text-left tw-text-xs tw-font-medium tw-text-gray-500 tw-uppercase tw-tracking-wider">
+                <th class="tw-border tw-border-gray-300 tw-px-6 tw-py-4 tw-text-left tw-text-xs tw-font-medium tw-text-gray-500 tw-uppercase tw-tracking-wider">
                   Localisation
                 </th>
-                <th class="tw-px-6 tw-py-4 tw-text-left tw-text-xs tw-font-medium tw-text-gray-500 tw-uppercase tw-tracking-wider">
+                <th class="tw-border tw-border-gray-300 tw-px-6 tw-py-4 tw-text-left tw-text-xs tw-font-medium tw-text-gray-500 tw-uppercase tw-tracking-wider">
                   Contact
                 </th>
               </tr>
@@ -232,27 +232,32 @@
                 class="hover:tw-bg-gray-50"
               >
                 <td
-                  class="tw-px-6 tw-py-4 tw-whitespace-nowrap tw-text-sm tw-text-gray-900"
+                  class="tw-border tw-border-gray-300 tw-px-6 tw-py-4 tw-whitespace-nowrap tw-text-sm tw-text-gray-900"
                 >
                   {{ startIndex + i + 1 }}
                 </td>
                 <td
-                  class="tw-px-6 tw-py-4 tw-whitespace-nowrap tw-text-sm tw-font-medium tw-text-gray-900"
+                  class="tw-border tw-border-gray-300 tw-px-6 tw-py-4 tw-whitespace-nowrap tw-text-sm tw-font-medium tw-text-gray-900"
                 >
-                  {{ garderie.name }}
+                 {{ garderie?.name }}
                 </td>
                 <td
-                  class="tw-px-6 tw-py-4 tw-whitespace-nowrap tw-text-sm tw-text-gray-600"
+                  class="tw-border tw-border-gray-300 tw-px-6 tw-py-4 tw-whitespace-nowrap tw-text-sm tw-text-gray-600"
                 >
-                  {{ garderie.name_pomoter }}
+                  {{ garderie.type_cape?.name }}
                 </td>
                 <td
-                  class="tw-px-6 tw-py-4 tw-whitespace-nowrap tw-text-sm tw-text-gray-600"
+                  class="tw-border tw-border-gray-300 tw-px-6 tw-py-4 tw-whitespace-nowrap tw-text-sm tw-text-gray-600"
                 >
-                  {{ garderie.district?.name }};  {{ garderie.district?.municipality?.name }};  {{ garderie.district?.municipality?.departement?.name }}
+                   <ul>
+                    <li><strong>Département :</strong>{{garderie?.district?.municipality?.department?.name}}</li>
+                    <li><strong>Commune :</strong>{{garderie?.district?.municipality?.name}}</li>
+                    <li><strong>Arrondissement :</strong>{{garderie?.district?.name}}</li>
+                    <li><strong>Adresse :</strong>{{garderie?.address}}</li>
+                  </ul>
                 </td>
                 <td
-                  class="tw-px-6 tw-py-4 tw-whitespace-nowrap tw-text-sm tw-text-gray-600"
+                  class="tw-border tw-border-gray-300 tw-px-6 tw-py-4 tw-whitespace-nowrap tw-text-sm tw-text-gray-600"
                 >
                   {{ garderie.phone_pomoter }}
                 </td>

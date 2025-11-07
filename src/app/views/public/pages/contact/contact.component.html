@@ -15,7 +15,7 @@
     </div>
 
     <!-- Onglets -->
-    <div class="tw-flex tw-justify-center tw-mb-8">
+    <!-- <div class="tw-flex tw-justify-center tw-mb-8">
       <div class="tw-bg-white/10 tw-backdrop-blur-sm tw-rounded-full tw-p-1 tw-flex">
         <button
           (click)="setActiveTab('contact')"
@@ -32,7 +32,7 @@
           Demande d'Information
         </button>
       </div>
-    </div>
+    </div> -->
 
     <div class="tw-grid tw-grid-cols-1 lg:tw-grid-cols-2 tw-gap-12">
       <!-- Section gauche - Informations -->
@@ -48,17 +48,17 @@
             <div class="tw-text-center tw-bg-white/10 tw-rounded-lg tw-p-6">
               <i class="ri-mail-line tw-text-3xl tw-mb-4"></i>
               <h3 class="tw-font-semibold tw-mb-2">En envoyant un mail à l'adresse</h3>
-              <p class="tw-text-sm">masm.dea&#64;gouv.bj</p>
+              <p class="tw-text-sm">masm.dfea&#64;gouv.bj</p>
             </div>
             <div class="tw-text-center tw-bg-white/10 tw-rounded-lg tw-p-6">
               <i class="ri-phone-line tw-text-3xl tw-mb-4"></i>
               <h3 class="tw-font-semibold tw-mb-2">En appelant le numéro de téléphone</h3>
-              <p class="tw-text-sm">229 60 42 20 09</p>
+              <p class="tw-text-sm">+229 0121321943</p>
             </div>
             <div class="tw-text-center tw-bg-white/10 tw-rounded-lg tw-p-6">
               <i class="ri-map-pin-line tw-text-3xl tw-mb-4"></i>
               <h3 class="tw-font-semibold tw-mb-2">En vous rendant à nos bureaux</h3>
-              <p class="tw-text-sm">Ministère des Affaires Sociales</p>
+              <p class="tw-text-sm">Ministère des Affaires Sociales et la Microfinance</p>
             </div>
           </div>
         </ng-container>
@@ -100,7 +100,7 @@
 
         <!-- Carte Google Maps -->
         <div class="tw-rounded-lg tw-overflow-hidden tw-mt-8">
-          <google-map
+          <!-- <google-map
             height="500px"
             width="100%"
             [zoom]="zoom"
@@ -114,7 +114,7 @@
               [title]="marker.title"
               [options]="marker.options"
             ></map-marker>
-          </google-map>
+          </google-map> -->
         </div>
       </div>
 
@@ -129,15 +129,45 @@
           <form [formGroup]="contactForm" (ngSubmit)="handleContactSubmit()" class="tw-space-y-6">
             <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-gap-6">
               <div>
-                <label for="nom" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 tw-mb-2">Nom complet*</label>
-                <input formControlName="nom" type="text" id="nom" placeholder="Votre nom complet"
+                <label for="name" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 tw-mb-2">Nom complet*</label>
+                <input formControlName="name" type="text" id="name" placeholder="Votre name complet"
                   class="tw-w-full tw-px-4 tw-py-3 tw-border tw-border-gray-300 tw-rounded-lg tw-focus:tw-ring-2 tw-focus:tw-ring-green-500 tw-focus:tw-border-transparent tw-text-sm"/>
               </div>
+
               <div>
                 <label for="email" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 tw-mb-2">Adresse email*</label>
-                <input formControlName="email" type="email" id="email" placeholder="votre.email&#64;exemple.com"
+                <input formControlName="email" type="email" id="email" placeholder="votre.email@exemple.com"
                   class="tw-w-full tw-px-4 tw-py-3 tw-border tw-border-gray-300 tw-rounded-lg tw-focus:tw-ring-2 tw-focus:tw-ring-green-500 tw-focus:tw-border-transparent tw-text-sm"/>
               </div>
+            </div>
+
+            <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-gap-6">
+              <div>
+                <label for="phone" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 tw-mb-2">Téléphone*</label>
+                <input formControlName="phone" type="tel" id="phone" placeholder="+229 90 00 00 00"
+                  class="tw-w-full tw-px-4 tw-py-3 tw-border tw-border-gray-300 tw-rounded-lg tw-focus:tw-ring-2 tw-focus:tw-ring-green-500 tw-focus:tw-border-transparent tw-text-sm"/>
+              </div>
+
+              <!-- Sujet -->
+              <div>
+                <label for="sujet" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 tw-mb-2">Sujet*</label>
+                <input formControlName="sujet" type="text" id="sujet" placeholder="Sujet de votre message"
+                  class="tw-w-full tw-px-4 tw-py-3 tw-border tw-border-gray-300 tw-rounded-lg tw-focus:tw-ring-2 tw-focus:tw-ring-green-500 tw-focus:tw-border-transparent tw-text-sm"/>
+              </div>
+            </div>
+
+            <div>
+              <label for="observation" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 tw-mb-2">Message*</label>
+              <textarea formControlName="observation" id="observation" rows="5" placeholder="Votre message ici..."
+                class="tw-w-full tw-px-4 tw-py-3 tw-border tw-border-gray-300 tw-rounded-lg tw-focus:tw-ring-2 tw-focus:tw-ring-green-500 tw-focus:tw-border-transparent tw-text-sm"></textarea>
+            </div>
+
+            <div class="tw-flex tw-items-center tw-gap-2">
+              <input formControlName="conditions" type="checkbox" id="conditions"
+                class="tw-h-4 tw-w-4 tw-text-green-600 tw-border-gray-300 tw-rounded"/>
+              <label for="conditions" class="tw-text-sm tw-text-gray-600">
+                J’accepte les <a href="#" class="tw-text-green-600 hover:tw-underline">conditions d’utilisation</a>.
+              </label>
             </div>
 
             <button type="submit" [disabled]="isSubmitting"

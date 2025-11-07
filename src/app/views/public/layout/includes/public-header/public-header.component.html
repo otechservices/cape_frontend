@@ -1,5 +1,5 @@
-<header class="tw-fixed tw-top-0 tw-left-0 tw-right-0 tw-bg-white tw-shadow-sm tw-z-50 tw-mb-50">
-  <div class="tw-w-full tw-px-6 tw-py-4">
+<header class="tw-fixed tw-top-0 tw-left-0 tw-w-full tw-bg-white tw-shadow-sm tw-z-50">
+<div class="tw-w-full tw-px-4 tw-py-3 tw-overflow-hidden">
     <div class="tw-flex tw-items-center tw-justify-between">
       
       <!-- Logo -->
@@ -12,6 +12,14 @@
         />
         </a>
       </div>
+
+         <button 
+        (click)="toggleMenu()" 
+        class="md:tw-hidden tw-text-blue-700 tw-text-3xl tw-p-2 tw-rounded-lg hover:tw-bg-blue-50 focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-blue-500"
+      >
+        <i class="ri-menu-line"></i>
+      </button>
+
 
       <!-- Menu desktop -->
       <nav class="tw-hidden md:tw-flex tw-items-center tw-space-x-8">
@@ -82,7 +90,7 @@
       </nav>
 
       <!-- Boutons connexion -->
-      <div class="tw-flex tw-items-center tw-space-x-4">
+      <div class="tw-hidden md:tw-flex tw-items-center tw-space-x-4">
         <ng-container *ngIf="isLoggedIn; else guestLinks">
           <a routerLink="/dashboard" class="tw-bg-blue-600 hover:tw-bg-blue-700 tw-text-white tw-px-6 tw-py-2 tw-rounded-lg tw-font-medium tw-transition-colors tw-duration-200 tw-cursor-pointer tw-whitespace-nowrap">
             Mon Espace
@@ -97,11 +105,80 @@
           </a>
         </ng-template>
       </div>
-
-      <!-- Menu mobile -->
-      <button class="md:tw-hidden tw-text-gray-600 hover:tw-text-gray-900">
-        <i class="ri-menu-line tw-text-2xl"></i>
-      </button>
     </div>
   </div>
 </header>
+
+<!-- Menu mobile -->
+<aside
+  *ngIf="menuOpen"
+  class="tw-fixed tw-inset-0 tw-z-50 tw-bg-black/50 tw-flex tw-justify-end md:tw-hidden tw-overflow-x-hidden"
+  (click)="toggleMenu()"
+>
+  <div
+  class="tw-w-[16rem] tw-max-w-[80vw] tw-bg-white tw-h-full tw-shadow-lg tw-overflow-y-auto tw-p-6 tw-space-y-4 tw-animate-slideInRight"
+    (click)="$event.stopPropagation()"
+  >
+    <!-- Bouton fermer -->
+    <button
+      class="tw-absolute tw-top-4 tw-right-4 tw-text-gray-600 hover:tw-text-gray-900"
+      (click)="toggleMenu()"
+    >
+      <i class="ri-close-line tw-text-2xl"></i>
+    </button>
+
+    <!-- Logo -->
+    <div class="tw-flex tw-items-center tw-space-x-2 tw-mb-6">
+      <img
+        src="https://cape.social.gouv.bj/assets/template2/images/logo-masm.png"
+        alt="LOGO MASM"
+        class="tw-h-10"
+      />
+      <span class="tw-font-semibold tw-text-gray-800">MASM</span>
+    </div>
+
+    <!-- Liens du menu -->
+    <nav class="tw-flex tw-flex-col tw-space-y-3">
+      <a routerLink="/" class="tw-text-gray-700 hover:tw-text-blue-600">ACCUEIL</a>
+
+      <div>
+        <span class="tw-font-semibold tw-text-gray-800">PROCÉDURE D'INSCRIPTION</span>
+        <div class="tw-ml-3 tw-mt-2 tw-flex tw-flex-col tw-space-y-2">
+          <a routerLink="/details/cape" class="tw-text-gray-600 hover:tw-text-blue-600">CAPE</a>
+          <a routerLink="/details/garderie" class="tw-text-gray-600 hover:tw-text-blue-600">Garderie</a>
+        </div>
+      </div>
+
+      <div>
+        <span class="tw-font-semibold tw-text-gray-800">DÉLIBÉRATIONS</span>
+        <div class="tw-ml-3 tw-mt-2 tw-flex tw-flex-col tw-space-y-2">
+          <a routerLink="/results/cape" class="tw-text-gray-600 hover:tw-text-blue-600">CAPE</a>
+          <a routerLink="/results/garderie" class="tw-text-gray-600 hover:tw-text-blue-600">Garderie</a>
+        </div>
+      </div>
+
+      <div>
+        <span class="tw-font-semibold tw-text-gray-800">STRUCTURES AUTORISÉES</span>
+        <div class="tw-ml-3 tw-mt-2 tw-flex tw-flex-col tw-space-y-2">
+          <a routerLink="/structures/authorized/cape" class="tw-text-gray-600 hover:tw-text-blue-600">CAPE Autorisés</a>
+          <a routerLink="/structures/authorized/garderie" class="tw-text-gray-600 hover:tw-text-blue-600">Garderies Autorisées</a>
+        </div>
+      </div>
+
+      <a routerLink="/actualites" class="tw-text-gray-700 hover:tw-text-blue-600">ACTUALITÉS</a>
+      <a routerLink="/contact" class="tw-text-gray-700 hover:tw-text-blue-600">CONTACT</a>
+
+      <hr class="tw-my-4" />
+
+      <!-- Liens connexion -->
+      <ng-container *ngIf="isLoggedIn; else guestLinksMobile">
+        <a routerLink="/dashboard" class="tw-bg-blue-600 tw-text-white tw-font-medium tw-px-4 tw-py-2 tw-rounded-lg tw-text-center hover:tw-bg-blue-700">Mon Espace</a>
+      </ng-container>
+      <ng-template #guestLinksMobile>
+        <a routerLink="/public/auth/login" class="tw-text-blue-600 tw-font-medium tw-text-center">Se connecter</a>
+        <a routerLink="/public/auth/register" class="tw-bg-blue-600 tw-text-white tw-font-medium tw-px-4 tw-py-2 tw-rounded-lg tw-text-center hover:tw-bg-blue-700">S'inscrire</a>
+      </ng-template>
+    </nav>
+  </div>
+</aside>
+
