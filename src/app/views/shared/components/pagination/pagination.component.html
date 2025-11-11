@@ -1,0 +1,77 @@
+<div class="tw-flex tw-flex-col sm:tw-flex-row tw-items-center tw-justify-between tw-gap-4 tw-mt-4">
+  <!-- Informations sur les résultats -->
+  <div class="tw-text-sm tw-text-gray-600">
+    Affichage de 
+    <span class="tw-font-semibold tw-text-gray-900">{{ getStartIndex() }}</span>
+    à 
+    <span class="tw-font-semibold tw-text-gray-900">{{ getEndIndex() }}</span>
+    sur 
+    <span class="tw-font-semibold tw-text-gray-900">{{ totalItems }}</span>
+    résultat(s)
+  </div>
+
+  <!-- Sélecteur de taille de page -->
+  <div class="tw-flex tw-items-center tw-gap-2">
+    <label for="pageSize" class="tw-text-sm tw-text-gray-600">Afficher :</label>
+    <select 
+      id="pageSize"
+      [(ngModel)]="pageSize"
+      (ngModelChange)="onPageSizeChange($event)"
+      class="tw-border tw-border-gray-300 tw-rounded tw-px-2 tw-py-1 tw-text-sm focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-blue-500">
+      <option *ngFor="let size of pageSizeOptions" [value]="size">{{ size }}</option>
+    </select>
+    <span class="tw-text-sm tw-text-gray-600">par page</span>
+  </div>
+
+  <!-- Pagination -->
+  <nav *ngIf="totalPages > 1" class="tw-flex tw-items-center tw-gap-1">
+    <!-- Première page -->
+    <button
+      (click)="goToFirstPage()"
+      [disabled]="currentPage === 1"
+      class="tw-px-2 tw-py-1 tw-border tw-border-gray-300 tw-rounded tw-text-sm tw-bg-white hover:tw-bg-gray-50 disabled:tw-opacity-50 disabled:tw-cursor-not-allowed"
+      title="Première page">
+      <i class="ri-arrow-left-double-line"></i>
+    </button>
+
+    <!-- Page précédente -->
+    <button
+      (click)="goToPreviousPage()"
+      [disabled]="currentPage === 1"
+      class="tw-px-3 tw-py-1 tw-border tw-border-gray-300 tw-rounded tw-text-sm tw-bg-white hover:tw-bg-gray-50 disabled:tw-opacity-50 disabled:tw-cursor-not-allowed"
+      title="Page précédente">
+      <i class="ri-arrow-left-s-line"></i>
+    </button>
+
+    <!-- Numéros de page -->
+    <button
+      *ngFor="let page of visiblePages"
+      (click)="goToPage(page)"
+      [class.tw-bg-blue-600]="page === currentPage"
+      [class.tw-text-white]="page === currentPage"
+      [class.tw-bg-white]="page !== currentPage"
+      [class.tw-text-gray-700]="page !== currentPage"
+      class="tw-px-3 tw-py-1 tw-border tw-border-gray-300 tw-rounded tw-text-sm hover:tw-bg-gray-50 tw-min-w-[36px]">
+      {{ page }}
+    </button>
+
+    <!-- Page suivante -->
+    <button
+      (click)="goToNextPage()"
+      [disabled]="currentPage === totalPages"
+      class="tw-px-3 tw-py-1 tw-border tw-border-gray-300 tw-rounded tw-text-sm tw-bg-white hover:tw-bg-gray-50 disabled:tw-opacity-50 disabled:tw-cursor-not-allowed"
+      title="Page suivante">
+      <i class="ri-arrow-right-s-line"></i>
+    </button>
+
+    <!-- Dernière page -->
+    <button
+      (click)="goToLastPage()"
+      [disabled]="currentPage === totalPages"
+      class="tw-px-2 tw-py-1 tw-border tw-border-gray-300 tw-rounded tw-text-sm tw-bg-white hover:tw-bg-gray-50 disabled:tw-opacity-50 disabled:tw-cursor-not-allowed"
+      title="Dernière page">
+      <i class="ri-arrow-right-double-line"></i>
+    </button>
+  </nav>
+</div>
+

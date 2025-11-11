@@ -1,0 +1,16 @@
+/* Styles additionnels si nécessaire */
+button:focus {
+  outline: none;
+}
+
+/* Animation sur hover */
+button:not(:disabled):hover {
+  transition: all 0.2s ease-in-out;
+}
+
+/* Style pour les boutons désactivés */
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+

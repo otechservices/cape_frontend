@@ -33,6 +33,24 @@ export class StaffComponent implements OnInit {
   role:any
   user:any
 
+  // Pagination et recherche
+  searchTerm: string = '';
+  currentPage: number = 1;
+  pageSize: number = 10;
+  
+  // Données filtrées (pour le comptage)
+  get filteredData(): any[] {
+    if (!this.searchTerm || this.searchTerm.trim() === '') {
+      return this.data;
+    }
+    const term = this.searchTerm.toLowerCase();
+    return this.data.filter(item => 
+      Object.values(item).some(val => 
+        String(val).toLowerCase().includes(term)
+      )
+    );
+  }
+
 
   constructor(
     private staffService:StaffService,

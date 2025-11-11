@@ -35,6 +35,9 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { LoadingComponent } from 'src/app/views/shared/components/loading/loading.component';
 import { PublicFooterComponent } from '../public/layout/includes/public-footer/public-footer.component';
 import { PublicHeaderComponent } from '../public/layout/includes/public-header/public-header.component';
+import { PaginationComponent } from './components/pagination/pagination.component';
+import { SearchFilterPipe } from 'src/app/core/pipes/search-filter.pipe';
+import { PaginatePipe } from 'src/app/core/pipes/paginate.pipe';
 
 
 @NgModule({
@@ -44,7 +47,10 @@ import { PublicHeaderComponent } from '../public/layout/includes/public-header/p
         ModalComponent,
         PublicHeaderComponent,
         PublicFooterComponent,
-        LoadingComponent
+        LoadingComponent,
+        PaginationComponent,
+        SearchFilterPipe,
+        PaginatePipe
   ],
   imports: [
     CommonModule,
@@ -107,7 +113,10 @@ import { PublicHeaderComponent } from '../public/layout/includes/public-header/p
     CalendarModule,
         PublicHeaderComponent,
         PublicFooterComponent,
-        LoadingComponent
+        LoadingComponent,
+        PaginationComponent,
+        SearchFilterPipe,
+        PaginatePipe
   ],
   providers: [
     MessageService,

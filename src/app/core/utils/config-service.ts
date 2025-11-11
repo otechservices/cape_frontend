@@ -1,5 +1,10 @@
 import { HttpHeaderResponse, HttpHeaders } from '@angular/common/http';
+<<<<<<< HEAD
 import { environment } from 'src/environments/environment.prod';
+=======
+// import { environment } from 'src/environments/environment.pprod';
+import { environment } from 'src/environments/environment.dev';
+>>>>>>> origin/bo-work
 
 export const ConfigService: any = {
   apiVersion: environment.API_VERSION,
