@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { MessageService } from 'src/app/core/services/message.service';
+import { PublicService } from 'src/app/core/services/public.service';
 import { AppSweetAlert } from 'src/app/core/utils/app-sweet-alert';
 
 @Component({
@@ -41,6 +42,7 @@ export class ContactComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private messageService:MessageService,
+    private publicService:PublicService,
     private toastrService:ToastrService,
     private router:Router
   ) {
@@ -123,7 +125,7 @@ export class ContactComponent implements OnInit {
     try {
       this.messageService.store(this.contactForm.value).subscribe((res:any)=>{
       this.loading=false
-
+      
         this.toastrService.success(res.message)
        this.submitStatus = 'success';
       this.contactForm.reset();

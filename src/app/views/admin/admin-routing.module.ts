@@ -62,6 +62,7 @@ import { ActualityComponent } from './pages/actuality/actuality.component';
 import { TypeGarderieComponent } from './pages/type-garderie/type-garderie.component';
 import { TypeSousGarderieComponent } from './pages/type-sous-garderie/type-sous-garderie.component';
 import { ControlFileElementComponent } from './pages/control-file-element/control-file-element.component';
+import { AbandonComponent } from './pages/abandon/abandon.component';
 
 
 
@@ -135,6 +136,10 @@ const routes: Routes = [
       {
         path:"services",
         component:ServiceComponent
+      },
+       {
+        path:"abandons",
+        component:AbandonComponent
       },
       {
         path:"requetes",

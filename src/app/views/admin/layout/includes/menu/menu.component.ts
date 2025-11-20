@@ -4,7 +4,7 @@ import { ToastrService } from 'ngx-toastr';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { GlobalName } from 'src/app/core/utils/global-name';
 import { LocalStorageService } from 'src/app/core/utils/local-stoarge-service';
-import { AdminMenu, CapeMenu, CpsMenu, DDASMMenu, DFEAMenu, ErrorMenu, MemberMenu, MinistreMenu, ServiceMenu } from '../menu';
+import { AcaibMenu, AdminMenu, CapeMenu, CpsMenu, DDASMMenu, DFEAMenu, ErrorMenu, MemberMenu, MinistreMenu, ServiceMenu } from '../menu';
 import * as $ from 'jquery'
 
 @Component({
@@ -60,6 +60,10 @@ export class MenuComponent implements OnInit {
         break;
       case "service":
         this.menu=ServiceMenu
+
+        break;
+      case "Acaib":
+        this.menu=AcaibMenu
 
         break;
     

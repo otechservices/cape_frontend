@@ -266,6 +266,16 @@ export const MemberMenu: menu[] = [
     { id: 'member-3', isTitle:false, name:"Dossiers inscrits", route:'/admin/session-requests', hasChildren:false },
 ];
 
+
+export const AcaibMenu: menu[] = [
+    { id: 'acaib-1', isTitle:false, name:"Tableau de bord", route:'/admin/dashboard', hasChildren:false },
+    { id: 'acaib-2', isTitle:true, title:"Espace ACAIB", hasChildren:false },
+    { id: 'acaib-3', isTitle:false, name:"Liste des abandons", route:'/admin/abandons', hasChildren:false },
+];
+
+
+
+
 // ================== ServiceMenu ==================
 export const ServiceMenu: menu[] = [
     { id: 'service-1', isTitle:false, name:"Tableau de bord", route:'/admin/dashboard', hasChildren:false },
