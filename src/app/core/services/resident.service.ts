@@ -16,6 +16,13 @@ export class ResidentService {
     return this.http.get<any[]>(`${this.url}`);
   }
 
+
+
+  getAbandons(){
+    return this.http.get<any[]>(`${ConfigService.toApiUrl("residents-abandons")}`);
+  }
+
+
   store(ressource:any){
     return this.http.post<any>(`${this.url}`, ressource,
      ConfigService.httpHeader(localStorage.getItem(GlobalName.tokenName),true));
@@ -26,6 +33,19 @@ export class ResidentService {
 
     return this.http.put<any>(`${this.url}${id}/`, ressource,  ConfigService.httpHeader(localStorage.getItem(GlobalName.tokenName),true));
   }
+
+   abandon(id:any,ressource:any){
+    return this.http.post<any>(`${ConfigService.toApiUrl("residents-set-abandon")}/${id}`, ressource,  ConfigService.httpHeader(localStorage.getItem(GlobalName.tokenName),true));
+  }
+
+
+  getExport(){
+    return this.http.get<any>(`${ConfigService.toApiUrl("residents-exports")}`,  ConfigService.httpHeader(localStorage.getItem(GlobalName.tokenName),true));
+  }
+
+
+
+  
   delete(id:any){
    // ressource['method']='delete';
     return this.http.delete<any>(`${this.url}${id}`,

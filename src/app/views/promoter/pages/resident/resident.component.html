@@ -26,6 +26,10 @@
                            <button *ngIf="is_active!=null && is_active" (click)="setStatus(0)" type="button" class="tw-border tw-border-red-500 tw-text-red-500 tw-text-sm tw-px-3 tw-py-1 tw-rounded hover:tw-bg-red-50">
                               <i class="ri-close-line"></i> Désactiver
                            </button>
+
+                              <button *ngIf="buttonsPermission.edit" (click)="edit(abandonContent)" type="button" class="tw-border tw-border-yellow-500 tw-text-yellow-500 tw-text-sm tw-px-3 tw-py-1 tw-rounded hover:tw-bg-yellow-50">
+                              <i class="ri-edit-line"></i> Déclarer comme abandon
+                           </button>
                         </div>
 
                         <!-- Barre de recherche -->
@@ -64,6 +68,7 @@
                                         <th class="tw-px-3 tw-py-2 tw-text-left">Date de naissance</th>
                                         <th class="tw-px-3 tw-py-2 tw-text-left">Lieu de naissance</th>
                                         <th class="tw-px-3 tw-py-2 tw-text-left">Taille / poids</th>
+                                        <th class="tw-px-3 tw-py-2 tw-text-left">Statut</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -85,6 +90,13 @@
                                          <td class="tw-px-3 tw-py-2 tw-text-gray-600">{{d.birthdate | date:"shortDate"}}</td>
                                          <td class="tw-px-3 tw-py-2 tw-text-gray-600">{{d.birthplace}}</td>
                                          <td class="tw-px-3 tw-py-2 tw-text-gray-600">{{d.size}} / {{d.weight}}</td>
+                                         <td class="tw-px-3 tw-py-2 tw-text-gray-600">
+                                            <span class="text-success" *ngIf="d.abandon"> Abandonné</span>
+                                            <br>
+                                              <span class="text-primary" (click)="showFile(d.abandon_file)" *ngIf="d.abandon"> Voir la déclaration</span>
+
+                                            <span class="text-danger" *ngIf="!d.abandon"> Non abandonné</span>
+                                         </td>
                                     </tr>
                                     
                                     <!-- Message si aucun résultat -->
@@ -129,7 +141,13 @@
         </div>
         <div class="modal-body" >
             <div class="row mb-3" >
-          
+            <div class=" form-goup col-12 mb-3">
+                    <label for="">Centre <span class="text-danger ml-2">(*)</span></label>
+                   <select name="centre_id" ngModel class="form-control">
+                        <option *ngFor="let c of centres" [value]="c.id">{{c.name}}</option>
+                   </select>
+                </div>
+
                 <div class=" form-goup col-12 mb-3">
                     <label for="">Prénom(s) <span class="text-danger ml-2">(*)</span></label>
                     <input type="text" name="firstname" class="form-control" ngModel required>
@@ -185,6 +203,13 @@
             <div class="row mb-3">
             
                 <div class="row mb-3" >
+
+                         <div class=" form-goup col-12 mb-3">
+                    <label for="">Centre <span class="text-danger ml-2">(*)</span></label>
+                   <select name="centre_id" [(ngModel)]="selected_data.centre_id" class="form-control">
+                        <option *ngFor="let c of centres" [value]="c.id">{{c.name}}</option>
+                   </select>
+                </div>
           
                     <div class=" form-goup col-12 mb-3">
                         <label for="">Prénom(s) <span class="text-danger ml-2">(*)</span></label>
@@ -233,6 +258,29 @@
         </div>
     </form>
       </ng-template>
+
+       <ng-template #abandonContent let-c="close" let-d="dismiss">
+        <form #editForm="ngForm" (ngSubmit)="abandon()">
+        <div class="modal-header bg-secondary">
+          <h6 class="tw-modal-title tw-text-white" id="modal-basic-title">Déclaration d'abandon</h6>
+          <button type="button" class="btn-close" aria-label="Close" (click)="d('Cross click')"></button>
+        </div>
+        <div class="modal-body" >
+            <div class="row mb-3">
+            
+                <div class=" form-goup col-12 mb-3">
+                    <label for="">Charger la déclaration d'abandon <span class="text-danger ml-2">(*)</span></label>
+                    <input type="file" class="form-control" (change)="upload($event)">
+                </div>
+              
+            </div>
+           
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-outline-dark" [disabled]="editForm.invalid || loading" >Sauvegarder <app-loading [isVisible]="loading"></app-loading></button>
+        </div>
+    </form>
+      </ng-template>
     
       <ng-template #showContent let-c="close" let-d="dismiss">
         <div class="modal-header bg-secondary">
@@ -245,6 +293,22 @@
                 <table class="table table-borderless align-middle mb-0">
                     <tbody>
                       
+                         <tr >
+                            <td class="fw-medium">Centre</td>
+                            <td >{{selected_data.centre?.name}} </td>
+                          
+                        </tr>   
+                        
+                         <tr >
+                            <td class="fw-medium">Promoteur</td>
+                            <td >{{selected_data.promoter?.lastname}} {{selected_data.promoter?.firstname}} </td>
+                          
+                        </tr>   
+                         <tr >
+                            <td class="fw-medium">Promoter</td>
+                            <td >{{selected_data.weight}} </td>
+                          
+                        </tr>      
                    
                         <tr >
                             <td class="fw-medium">Prénom</td>
@@ -281,3 +345,14 @@
             </div>
           </div>
     </ng-template>
+
+        <ng-template #previewContent let-offcanvas id="myCanvas">
+	<div class="offcanvas-header">
+		<h4 class="offcanvas-title">Visualisation du document</h4>
+		<!-- <button type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss('Cross click')"></button> -->
+	</div>
+	<div class="offcanvas-body">
+        <object [data]="url" type="application/pdf" width="100%" height="100%"></object>
+
+	</div>
+</ng-template>

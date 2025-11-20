@@ -69,6 +69,7 @@ import { SharedModule } from '../shared/shared.module';
 import { NgxToggle, NgxToggleModule } from 'ngx-toggle';
 import { ReferalComponent } from './pages/referal/referal.component';
 import { ActivityReportComponent } from './pages/activity-report/activity-report.component';
+import { AbandonComponent } from './pages/abandon/abandon.component';
 
 
 
@@ -135,7 +136,8 @@ import { ActivityReportComponent } from './pages/activity-report/activity-report
     TypeSousGarderieComponent,
     ControlFileElementComponent,
     ReferalComponent,
-    ActivityReportComponent
+    ActivityReportComponent,
+    AbandonComponent
   ],
   imports: [
     CommonModule,

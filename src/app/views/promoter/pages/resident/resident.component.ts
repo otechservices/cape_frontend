@@ -1,25 +1,32 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { NgbModalConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { NgbModalConfig, NgbModal, NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
 
 import { ToastrService } from 'ngx-toastr';
 import { Subject } from 'rxjs';
+import { RequeteService } from 'src/app/core/services/requete.service';
 import { ResidentService } from 'src/app/core/services/resident.service';
 import { TargetService } from 'src/app/core/services/target.service';
 import { AppSweetAlert } from 'src/app/core/utils/app-sweet-alert';
+import { ConfigService } from 'src/app/core/utils/config-service';
 import { GlobalName } from 'src/app/core/utils/global-name';
 import { LocalStorageService } from 'src/app/core/utils/local-stoarge-service';
 
 @Component({
   selector: 'app-resident',
   templateUrl: './resident.component.html',
-  styleUrls: ['./resident.component.css']
+  styleUrls: ['./resident.component.css'],
+    encapsulation:ViewEncapsulation.None
+  
 })
 export class ResidentComponent implements OnInit {
 
 
+  url:SafeResourceUrl | undefined
+  @ViewChild('previewContent')previewContent:any
 
 
- 
+   centres:any[]=[]
 
 
   buttonsPermission :any|undefined;
@@ -30,7 +37,7 @@ export class ResidentComponent implements OnInit {
   isDtInitialized:boolean = false
   is_active=null
   loading=false
-
+fileInput:any
   role:any
   user:any
 
@@ -55,6 +62,9 @@ export class ResidentComponent implements OnInit {
   constructor(
     private residentService:ResidentService,
     private toastrService:ToastrService,
+        private requeteService:RequeteService,
+    private _sanitizationService: DomSanitizer,
+                   private offcanvasService: NgbOffcanvas,
       config: NgbModalConfig,
       private lsService:LocalStorageService,
     private modalService: NgbModal) {
@@ -76,6 +86,17 @@ export class ResidentComponent implements OnInit {
 
   init(){
     this.getAll()
+    this.getRequetes()
+  }
+
+
+    getRequetes(){
+    this.requeteService.getForPromoter(this.user?.promoter_id).subscribe((res:any)=>{
+      this.centres=res.data
+    },
+    (err:any)=>{
+
+    })
   }
 
  
@@ -92,9 +113,14 @@ export class ResidentComponent implements OnInit {
   }
 
 
+  upload(ev:any){
+    if (ev.target.files.length!=0) {
+      this.fileInput=ev.target.files[0];
+    }
+  }
+
   store(value:any){
     this.loading=true
-    value.collector_id=this.user.collector_id
     this.residentService.store(value).subscribe((res:any)=>{
       this.loading=false
 
@@ -113,6 +139,31 @@ export class ResidentComponent implements OnInit {
     this.loading=true
 
     this.residentService.update(this.selected_data.id,value).subscribe((res:any)=>{
+      this.loading=false
+
+        this.toastrService.success(res.message)
+        this.getAll()
+    },
+    (err:any)=>{
+      this.loading=false
+
+      console.log(err)
+        AppSweetAlert.simpleAlert("error","Personnel",err.error.message)
+    })
+  }
+
+  abandon(){
+    this.loading=true
+
+    if(this.fileInput==undefined){
+      this.toastrService.warning('La preuve de déclaration d\'abandon est requise')
+      return ;
+    }
+
+    let formData = new FormData()
+        formData.append('abandon_file',this.fileInput)
+
+    this.residentService.abandon(this.selected_data.id,formData).subscribe((res:any)=>{
       this.loading=false
 
         this.toastrService.success(res.message)
@@ -193,4 +244,10 @@ export class ResidentComponent implements OnInit {
   }
 
 
+
+      showFile(filename:any){
+         this.url=this._sanitizationService.bypassSecurityTrustResourceUrl(ConfigService.toFile(`docs/${filename}`))
+         console.log(this.url)  
+         this.offcanvasService.open(this.previewContent,{  panelClass: 'details-panel', position: 'start'  });
+      }
 }

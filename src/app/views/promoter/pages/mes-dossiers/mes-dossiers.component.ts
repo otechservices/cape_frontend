@@ -28,8 +28,8 @@ export class MesDossiersComponent {
         private router:Router,
         private activatedRoute:ActivatedRoute,
         private _sanitizationService: DomSanitizer,
+                 private offcanvasService: NgbOffcanvas,
         configOffCanvas: NgbOffcanvasConfig,
-         private offcanvasService: NgbOffcanvas,
          private toastrService: ToastrService,
          private fileService:FileService,
          private lsService:LocalStorageService

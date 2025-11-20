@@ -8,17 +8,35 @@
 
   <div class="tw-relative tw-z-10 tw-text-center tw-px-6  tw-max-w-6xl tw-mx-auto">
     <h1 class="tw-text-4xl md:tw-text-6xl tw-font-bold tw-text-white tw-mb-8 tw-leading-tight">
-      Plateforme de gestion des Structures de Protection de l’Enfant (CAPE et GARDERIES)
+      Plateforme de gestion des Structures de Protection de l’Enfant 
     </h1>
 
     <p class="tw-text-xl md:tw-text-2xl tw-text-white/90 tw-mb-12 tw-max-w-4xl tw-mx-auto">
       Bienvenue sur la plateforme officielle pour les demandes d'autorisation d'ouverture des garderies et CAPE au Bénin
     </p>
 
-    <!-- Cartes -->
+
+
+    <!-- Section informative -->
+    <div class="tw-mt-12 tw-bg-white/10 tw-backdrop-blur-sm tw-rounded-xl tw-p-6 tw-max-w-4xl tw-mx-auto">
+      <div class="tw-flex tw-items-center tw-justify-center tw-mb-4">
+        <i class="ri-information-line tw-text-3xl tw-text-white tw-mr-3"></i>
+        <h2 class="tw-text-xl tw-font-semibold tw-text-white">Informations importantes</h2>
+      </div>
+      <p class="tw-text-white/90 tw-text-center">
+        Toutes les demandes sont traitées selon les réglementations en vigueur. 
+        Pour toute question, n'hésitez pas à nous contacter via notre service d'assistance.
+      </p>
+    </div>
+  </div>
+</section>
+
+
+<section class="tw-py-16 tw-px-6 tw-bg-white">
+
+      <!-- Cartes -->
     <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 lg:tw-grid-cols-4 tw-gap-6 tw-max-w-5xl tw-mx-auto">
       
-      <!-- Inscription Garderie -->
       <div class="tw-bg-white/95 tw-backdrop-blur-sm tw-rounded-2xl tw-p-6 tw-shadow-xl hover:tw-shadow-2xl tw-transition-all tw-duration-300 group">
         <div class="tw-w-16 tw-h-16 tw-bg-blue-100 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-4 group-hover:tw-bg-blue-200 tw-transition-colors">
           <i class="ri-building-line tw-text-2xl tw-text-blue-600"></i>
@@ -33,7 +51,6 @@
         </button>
       </div>
 
-      <!-- Inscription CAPE -->
       <div class="tw-bg-white/95 tw-backdrop-blur-sm tw-rounded-2xl tw-p-6 tw-shadow-xl hover:tw-shadow-2xl tw-transition-all tw-duration-300 group">
         <div class="tw-w-16 tw-h-16 tw-bg-green-100 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-4 group-hover:tw-bg-green-200 tw-transition-colors">
           <i class="ri-shield-user-line tw-text-2xl tw-text-green-600"></i>
@@ -48,7 +65,6 @@
         </button>
       </div>
 
-      <!-- Suivi de dossier -->
       <div class="tw-bg-white/95 tw-backdrop-blur-sm tw-rounded-2xl tw-p-6 tw-shadow-xl hover:tw-shadow-2xl tw-transition-all tw-duration-300 group">
         <div class="tw-w-16 tw-h-16 tw-bg-orange-100 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-4 group-hover:tw-bg-orange-200 tw-transition-colors">
           <i class="ri-file-search-line tw-text-2xl tw-text-orange-600"></i>
@@ -63,7 +79,6 @@
         </button>
       </div>
 
-      <!-- Assistance -->
       <div class="tw-bg-white/95 tw-backdrop-blur-sm tw-rounded-2xl tw-p-6 tw-shadow-xl hover:tw-shadow-2xl tw-transition-all tw-duration-300 group">
         <div class="tw-w-16 tw-h-16 tw-bg-purple-100 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-4 group-hover:tw-bg-purple-200 tw-transition-colors">
           <i class="ri-customer-service-2-line tw-text-2xl tw-text-purple-600"></i>
@@ -77,20 +92,7 @@
           Contacter
         </button>
       </div>
-    </div>
-
-    <!-- Section informative -->
-    <div class="tw-mt-12 tw-bg-white/10 tw-backdrop-blur-sm tw-rounded-xl tw-p-6 tw-max-w-4xl tw-mx-auto">
-      <div class="tw-flex tw-items-center tw-justify-center tw-mb-4">
-        <i class="ri-information-line tw-text-3xl tw-text-white tw-mr-3"></i>
-        <h2 class="tw-text-xl tw-font-semibold tw-text-white">Informations importantes</h2>
-      </div>
-      <p class="tw-text-white/90 tw-text-center">
-        Toutes les demandes sont traitées selon les réglementations en vigueur. 
-        Pour toute question, n'hésitez pas à nous contacter via notre service d'assistance.
-      </p>
-    </div>
-  </div>
+    </div> 
 </section>
 <section class="tw-py-16 tw-px-6 tw-bg-gray-50">
   <div class="tw-max-w-6xl tw-mx-auto">
@@ -153,7 +155,7 @@
     </div>
 
     <!-- Bouton voir toutes -->
-    <div class="tw-text-center tw-mt-12">
+    <div class="tw-text-center tw-mt-12" *ngIf="newsItems.length>0">
       <a 
         routerLink="/actualites"
         class="tw-bg-green-600 tw-text-white tw-px-8 tw-py-3 tw-rounded-lg hover:tw-bg-green-700 tw-transition-colors tw-font-medium tw-whitespace-nowrap"
