@@ -38,6 +38,16 @@ const routes: Routes = [
         component:InscriptionGarderieComponent
       },
 
+
+       {
+        path:"inscription-cape/:code",
+        component:InscriptionCapeComponent
+      },
+        {
+        path:"inscription-garderie/:code",
+        component:InscriptionGarderieComponent
+      },
+
         {
         path:"mes-dossiers",
         component:MesDossiersComponent

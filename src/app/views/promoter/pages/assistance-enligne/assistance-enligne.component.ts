@@ -1,4 +1,14 @@
 import { Component } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
+import { Router, ActivatedRoute } from '@angular/router';
+import { NgbOffcanvas, NgbOffcanvasConfig } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrService } from 'ngx-toastr';
+import { BillingResponseService } from 'src/app/core/services/billing-response.service';
+import { BillingService } from 'src/app/core/services/billing.service';
+import { FileService } from 'src/app/core/services/file.service';
+import { TypeBillingService } from 'src/app/core/services/type-billing.service';
+import { GlobalName } from 'src/app/core/utils/global-name';
+import { LocalStorageService } from 'src/app/core/utils/local-stoarge-service';
 
 @Component({
   selector: 'app-assistance-enligne',
@@ -8,114 +18,100 @@ import { Component } from '@angular/core';
 export class AssistanceEnligneComponent {
  activeTab: 'nouveau' | 'mes-tickets' = 'nouveau';
 
-  tickets: any[] = [
-    {
-      id: 'T-2024-001',
-      sujet: 'Question sur dossier CAPE',
-      statut: 'En cours',
-      priorite: 'Normale',
-      dateCreation: '2024-01-15',
-      derniereReponse: '2024-01-16',
-      messages: [
-        {
-          id: 1,
-          auteur: 'Client',
-          message: "Bonjour, j'aimerais savoir où en est mon dossier CAPE-2024-0123. Merci.",
-          date: '2024-01-15 14:30',
-          type: 'client'
-        },
-        {
-          id: 2,
-          auteur: 'Support',
-          message: 'Bonjour, votre dossier est actuellement en cours de traitement par nos services. Nous vous tiendrons informé sous 48h.',
-          date: '2024-01-16 09:15',
-          type: 'support'
-        }
-      ]
-    },
-    {
-      id: 'T-2024-002',
-      sujet: 'Modification coordonnées',
-      statut: 'Résolu',
-      priorite: 'Faible',
-      dateCreation: '2024-01-10',
-      derniereReponse: '2024-01-12',
-      messages: [
-        {
-          id: 1,
-          auteur: 'Client',
-          message: 'Je souhaite modifier mon adresse email dans mon profil.',
-          date: '2024-01-10 16:20',
-          type: 'client'
-        },
-        {
-          id: 2,
-          auteur: 'Support',
-          message: 'Modification effectuée. Vous recevrez un email de confirmation.',
-          date: '2024-01-12 10:30',
-          type: 'support'
-        }
-      ]
-    }
-  ];
-
+  tickets: any[] = [];
+  typeBillings: any[] = []
   nouveauTicket = {
-    sujet: '',
-    categorie: '',
-    priorite: 'normale',
-    message: ''
+    object: '',
+    user_id:'',
+    type_billing_id: '',
+    priorite: 'Normale',
+    content: ''
   };
 
   ticketSelectionne: string | null = null;
   nouvelleReponse = '';
   isSubmitting = false;
+  user:any
+
+    constructor(
+        private tpService:TypeBillingService,
+        private billingService:BillingService,
+        private responseService:BillingResponseService,
+          private router:Router,
+          private activatedRoute:ActivatedRoute,
+          private _sanitizationService: DomSanitizer,
+                   private offcanvasService: NgbOffcanvas,
+          configOffCanvas: NgbOffcanvasConfig,
+           private toastrService: ToastrService,
+           private fileService:FileService,
+           private lsService:LocalStorageService
+      ) {}
+  
+      ngOnInit(){
+         this.user=this.lsService.get(GlobalName.userName)
+        
+        this.getTypeBilling()
+        this.getBillings()
+      }
+  
+  
+        getTypeBilling(){
+      this.tpService.getAll().subscribe((res:any)=>{
+        this.typeBillings=res.data
+      },
+      (err:any)=>{
+  
+      })
+    }
+
+     getBillings(){
+      this.billingService.getAll().subscribe((res:any)=>{
+        this.tickets=res.data
+      },
+      (err:any)=>{
+  
+      })
+    }
 
   async handleNouveauTicketSubmit() {
     this.isSubmitting = true;
-    await new Promise(res => setTimeout(res, 1500));
+    this.nouveauTicket.user_id=this.user?.id
+     this.billingService.store(this.nouveauTicket).subscribe((res:any)=>{
+         this.nouveauTicket = { object: '',user_id:'', type_billing_id: '', priorite: 'normale', content: '' };
+          this.isSubmitting = false;
+          this.activeTab = 'mes-tickets';
+      },
+      (err:any)=>{
+      this.isSubmitting = false;
 
-    const nouveauId = `T-${new Date().getFullYear()}-${String(this.tickets.length + 1).padStart(3, '0')}`;
-    const ticket: any = {
-      id: nouveauId,
-      sujet: this.nouveauTicket.sujet,
-      statut: 'Ouvert',
-      priorite: this.nouveauTicket.priorite === 'normale' ? 'Normale' :
-                this.nouveauTicket.priorite === 'urgente' ? 'Urgente' : 'Faible',
-      dateCreation: new Date().toISOString().split('T')[0],
-      derniereReponse: new Date().toISOString().split('T')[0],
-      messages: [{
-        id: 1,
-        auteur: 'Client',
-        message: this.nouveauTicket.message,
-        date: new Date().toLocaleString('fr-FR'),
-        type: 'client'
-      }]
-    };
-
-    this.tickets = [ticket, ...this.tickets];
-    this.nouveauTicket = { sujet: '', categorie: '', priorite: 'normale', message: '' };
-    this.isSubmitting = false;
-    this.activeTab = 'mes-tickets';
+      })  
   }
 
   async handleReponseSubmit() {
     if (!this.ticketSelectionne || !this.nouvelleReponse.trim()) return;
 
-    this.isSubmitting = true;
-    await new Promise(res => setTimeout(res, 1000));
+  this.isSubmitting = true;
+     this.billingService.storeResponse({
+      content:this.nouvelleReponse,
+      billing_id:this.ticketSelectionne,
+      sens:'in'
+     }).subscribe((res:any)=>{
+          this.nouvelleReponse = '';
+          this.isSubmitting = false;
+          this.getBillings()
 
-    this.tickets = this.tickets.map(ticket => {
+          this.tickets = this.tickets.map(ticket => {
       if (ticket.id === this.ticketSelectionne) {
         return {
           ...ticket,
           messages: [
-            ...ticket.messages,
+            ...ticket.responses,
             {
-              id: ticket.messages.length + 1,
+              id: ticket.responses.length + 1,
               auteur: 'Client',
-              message: this.nouvelleReponse,
+              content: this.nouvelleReponse,
               date: new Date().toLocaleString('fr-FR'),
-              type: 'client'
+              sens: 'in'
             }
           ],
           derniereReponse: new Date().toISOString().split('T')[0],
@@ -124,9 +120,14 @@ export class AssistanceEnligneComponent {
       }
       return ticket;
     });
+      },
+      (err:any)=>{
+      this.isSubmitting = false;
 
-    this.nouvelleReponse = '';
-    this.isSubmitting = false;
+      })  
+    
+
+  
   }
 
   getStatutColor(statut: string) {

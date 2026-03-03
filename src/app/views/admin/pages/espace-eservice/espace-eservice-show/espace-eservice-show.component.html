@@ -219,7 +219,9 @@
                      <td class="tw-px-3 tw-py-2">{{f.file.name}}</td>
                      <td class="tw-px-3 tw-py-2">
                         <h6><b>Observation</b></h6>
-                        <p>{{f.observation ?? 'En attente'}}</p>
+                        <p *ngIf="!f.is_treated">{{f.observation ?? 'En attente'}}</p>
+                        <p *ngIf="f.is_treated">{{f.observation ?? 'RAS'}}</p>
+
                         <br>
                         <h6 class="mb-3"><b>Statut</b></h6>
                         <span *ngIf="f.is_treated && f.is_valid" class="p-2 bg-success rounded text-white"> Validé</span>
@@ -250,7 +252,9 @@
                          <td class="tw-px-3 tw-py-2">{{f.file.name}}</td>
                          <td class="tw-px-3 tw-py-2">
                             <h6><b>Observation</b></h6>
-                            <p>{{f.observation ?? 'En attente'}}</p>
+                            <p *ngIf="!f.is_treated">{{f.observation ?? 'En attente'}}</p>
+                        <p *ngIf="f.is_treated">{{f.observation ?? 'RAS'}}</p>
+
                             <br>
                             <h6 class="mb-3"><b>Statut</b></h6>
                             <span *ngIf="f.is_treated && f.is_valid" class="p-2 bg-success rounded text-white"> Validé</span>
@@ -281,7 +285,9 @@
              <td class="tw-px-3 tw-py-2">{{f.file.name}}</td>
              <td class="tw-px-3 tw-py-2">
                 <h6><b>Observation</b></h6>
-                <p>{{f.observation ?? 'En attente'}}</p>
+                 <p *ngIf="!f.is_treated">{{f.observation ?? 'En attente'}}</p>
+                        <p *ngIf="f.is_treated">{{f.observation ?? 'RAS'}}</p>
+
                 <br>
                 <h6 class="mb-3"><b>Statut</b></h6>
                 <span *ngIf="f.is_treated && f.is_valid" class="p-2 bg-success rounded text-white"> Validé</span>
@@ -310,7 +316,9 @@
              <td class="tw-px-3 tw-py-2">{{f.file.name}}</td>
              <td class="tw-px-3 tw-py-2">
                 <h6><b>Observation</b></h6>
-                <p>{{f.observation ?? 'En attente'}}</p>
+                 <p *ngIf="!f.is_treated">{{f.observation ?? 'En attente'}}</p>
+                        <p *ngIf="f.is_treated">{{f.observation ?? 'RAS'}}</p>
+
                 <br>
                 <h6 class="mb-3"><b>Statut</b></h6>
                 <span *ngIf="f.is_treated && f.is_valid" class="p-2 bg-success rounded text-white"> Validé</span>
@@ -775,11 +783,7 @@
             </button>
         </div>
         <div class="modal-body">
-            <div class="form-group mb-3 mb-5">
-                <label for="">Observation</label>
-                <textarea name="observation" ngModel class="form-control"></textarea>
-            </div>
-            <div class="d-flex justify-content-between">
+           <div class="d-flex justify-content-between">
             <span>Document valide</span>
           <div class="tw-flex tw-items-center tw-gap-2">
             <span>Valide</span>
@@ -798,6 +802,11 @@
             </div>
 
             </div>
+            <div *ngIf="!isValid" class="form-group mb-3 mb-5">
+                <label for="">Observation</label>
+                <textarea name="observation"  ngModel class="form-control"></textarea>
+            </div>
+           
           
         </div>
         <div class="modal-footer">

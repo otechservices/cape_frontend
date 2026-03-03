@@ -177,6 +177,9 @@
                             <i class="fa fa-eye tw-text-blue-600 tw-cursor-pointer" (click)="open(content,i)"></i>
                             <i class="fa fa-trash tw-text-red-600 tw-cursor-pointer" (click)="removeFile(i)"></i>
                         </div>
+                         <div class="tw-my-1">
+                          <span>Voir l'ancien fichier <i class="fa fa-eye tw-text-blue-600 tw-cursor-pointer" (click)="showFile(f)"></i></span>
+                        </div>
                         </div>
                </ng-container>        
             </ng-container>
@@ -342,28 +345,28 @@
     <!-- Département -->
     <div>
       <label class="tw-block tw-font-medium">Sélectionnez un département <span class="tw-text-red-500">*</span></label>
-      <select formControlName="department_id" (change)="loadMunicipalities($event)" class="tw-form-select tw-w-full tw-rounded-lg">
-        <option selected disabled></option>
-        <option *ngFor="let d of data" [value]="d.id">{{ d.name }}</option>
-      </select>
+      <ng-select formControlName="department_id" (change)="loadMunicipalities($event)" class="tw-form-select tw-w-full tw-rounded-lg">
+        <ng-option selected disabled></ng-option>
+        <ng-option *ngFor="let d of data" [value]="d.id">{{ d.name }}</ng-option>
+      </ng-select>
     </div>
 
     <!-- Commune -->
     <div>
       <label class="tw-block tw-font-medium">Sélectionnez une commune <span class="tw-text-red-500">*</span></label>
-      <select formControlName="municipality_id" (change)="loadDistricts($event)" class="tw-form-select tw-w-full tw-rounded-lg">
-        <option selected disabled></option>
-        <option *ngFor="let d of municipalities" [value]="d.id">{{ d.name }}</option>
-      </select>
+      <ng-select formControlName="municipality_id" (change)="loadDistricts($event)" class="tw-form-select tw-w-full tw-rounded-lg">
+        <ng-option selected disabled></ng-option>
+        <ng-option *ngFor="let d of municipalities" [value]="d.id">{{ d.name }}</ng-option>
+      </ng-select>
     </div>
 
     <!-- Arrondissement -->
     <div>
       <label class="tw-block tw-font-medium">Sélectionnez un arrondissement <span class="tw-text-red-500">*</span></label>
-      <select formControlName="district_id" class="tw-form-select tw-w-full tw-rounded-lg">
-        <option selected disabled></option>
-        <option *ngFor="let d of districts" [value]="d.id">{{ d.name }}</option>
-      </select>
+      <ng-select formControlName="district_id" class="tw-form-select tw-w-full tw-rounded-lg">
+        <ng-option selected disabled></ng-option>
+        <ng-option *ngFor="let d of districts" [value]="d.id">{{ d.name }}</ng-option>
+      </ng-select>
     </div>
 
     <!-- Quartier -->
@@ -619,3 +622,14 @@
 	</div>
 </ng-template>
 
+
+    <ng-template #previewContent let-offcanvas id="myCanvas">
+	<div class="offcanvas-header">
+		<h4 class="offcanvas-title">Visualisation du document</h4>
+		<!-- <button type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss('Cross click')"></button> -->
+	</div>
+	<div class="offcanvas-body">
+        <object [data]="url" type="application/pdf" width="100%" height="100%"></object>
+
+	</div>
+</ng-template>

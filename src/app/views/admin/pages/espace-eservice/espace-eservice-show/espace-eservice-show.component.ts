@@ -32,7 +32,7 @@ export class EspaceEserviceShowComponent implements OnInit {
   loading=false
   user:any
   role:any
-  isValid=false
+  isValid=true
   constructor(
     private reqService:RequeteService,
     private toastrService:ToastrService,
@@ -358,7 +358,7 @@ if (this.data.type_cape?.name?.toLowerCase()=="cape") {
       this.loading=false
       this.fileSelected=null
       this.modalService.dismissAll()
-      this.isValid=false
+     // this.isValid=false
       this.back()
       this.init()
     

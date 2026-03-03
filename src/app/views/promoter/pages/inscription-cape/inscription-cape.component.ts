@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -16,6 +16,8 @@ import { LocalStorageService } from 'src/app/core/utils/local-stoarge-service';
 import { FileService as myFileService} from 'src/app/core/utils/file-service';
 import { GlobalName } from 'src/app/core/utils/global-name';
 import * as uuid from 'uuid';
+import { RequeteService } from 'src/app/core/services/requete.service';
+import { ConfigService } from 'src/app/core/utils/config-service';
 
 @Component({
   selector: 'app-inscription-cape',
@@ -30,6 +32,8 @@ export class InscriptionCapeComponent  implements OnInit{
   submitStatus: 'idle' | 'success' | 'error' = 'idle';
   requiredFiles:any[]=[];
   imageSrc!: string | SafeResourceUrl | undefined ;
+    @ViewChild('previewContent')previewContent:any
+  dossier:any
   type:string="cape"
   formData: FormGroup;
     fileInput2:any
@@ -74,6 +78,7 @@ export class InscriptionCapeComponent  implements OnInit{
       private npService:NaturePromotorService,
       private typeService:TypeService,
       private eService:EServiceService,
+      private reqService:RequeteService,
       private router:Router,
       private activatedRoute:ActivatedRoute,
       private _sanitizationService: DomSanitizer,
@@ -84,7 +89,7 @@ export class InscriptionCapeComponent  implements OnInit{
        private lsService:LocalStorageService
   ) {
     this.formData = this.fb.group({
-
+      code: [null],
       //Infos promoteur
       nature_promotor_id: [null, Validators.required],
       social_reason: [''],
@@ -127,18 +132,16 @@ export class InscriptionCapeComponent  implements OnInit{
   }
   ngOnInit(): void {
   
- this.user=this.lsService.get(GlobalName.userName)
-                  this.role=this.user.roles[0]?.name
+    this.user=this.lsService.get(GlobalName.userName)
+    this.role=this.user.roles[0]?.name
                     console.log(this.user)
 
-     this.token=this.activatedRoute.snapshot.paramMap.get('token')
+    this.token=this.activatedRoute.snapshot.paramMap.get('token')
     this.code=this.activatedRoute.snapshot.paramMap.get('code')
 
-    
       if(this.code!=undefined){
         this.type = this.code.split('-')[0].toLowerCase()
         console.log(this.type)
-
       }
 
 
@@ -197,6 +200,11 @@ export class InscriptionCapeComponent  implements OnInit{
               this.getTypeData()
               this.getNaturePromotors()
               this.getFiles()
+               if(this.code!=undefined){
+                  this.get()
+
+                }
+
                 }
               
               })
@@ -205,6 +213,61 @@ export class InscriptionCapeComponent  implements OnInit{
 
   }
 
+
+  get(){
+
+    this.reqService.get(this.code).subscribe((res:any)=>{
+      this.dossier=res
+      this.loadMunicipalities(res.district?.municipality?.department_id)
+      this.loadDistricts(res.district?.municipality_id)
+      this.formData.patchValue({
+        code:this.code,
+  // Infos promoteur
+  nature_promotor_id: res.nature_promotor_id,
+  social_reason: res.name,
+  head_office: res.head_office,
+  registered_phone: res.registered_phone,
+  registered_number: res.registered_number,
+  registered_date: res.registered_date,
+
+  name_pomoter: res.name_pomoter,
+  firstname_pomoter: res.firstname_pomoter,
+  email_pomoter: res.email_pomoter,
+  phone_pomoter: res.phone_pomoter,
+
+  chief_is_directeor: (res.name_pomoter == res.name_chief && res.firstname_pomoter==res.firstname_chief) ? true: false,
+  has_aggrement: res.has_aggrement,
+  has_consent: res.has_consent,
+
+  name_chief: res.name_chief,
+  firstname_chief: res.firstname_chief,
+  phone_chief: res.phone_chief,
+  email_chief: res.email_chief,
+
+  // ⚠️ Fichier : on ne peut pas patch directement un File depuis l’API
+  consentFile: null,
+
+  // Infos CAPE
+  type_cape_id: res.type_cape_id,
+  name: res.name,
+  capacity: res.capacity,
+  email: res.email,
+  phone: res.phone,
+  targets: JSON.parse(res.target) ?? [],
+
+  // Localisation
+  department_id: res.district?.municipality?.department_id,
+  municipality_id: res.district?.municipality_id,
+  district_id: res.district_id,
+  town: res.town,
+  address: res.address,
+  coords: res.coords
+});
+    },
+    (err:any)=>{
+
+    })
+  }
 
   upload2(event:any){
   this.fileInput2=event.target.files[0]
@@ -252,10 +315,10 @@ export class InscriptionCapeComponent  implements OnInit{
 }
     loadMunicipalities(event:any){
     console.log(event)
-  this.municipalities=  this.data.find((el:any)=>el.id == event.target.value).municipalities
+  this.municipalities=  this.data.find((el:any)=>el.id == event).municipalities
   }
   loadDistricts(event:any){
-  this.districts=  this.municipalities.find((el:any)=>el.id == event.target.value).districts
+  this.districts=  this.municipalities.find((el:any)=>el.id == event).districts
   }
 
 
@@ -379,7 +442,7 @@ validateStep(step: number): boolean {
   }
 
   async onSubmit() {
-    if (!this.validateStep(4)) {
+    if (!this.validateStep(4) && this.code==undefined) {
       alert('Veuillez remplir tous les champs requis.');
       return;
     }
@@ -390,13 +453,13 @@ validateStep(step: number): boolean {
 
 
       // Vérifie si l'accord est coché et ajoute le fichier correspondant
-  if (this.formData.get('has_consent')?.value && this.fileInput2) {
+  if (this.formData.get('has_consent')?.value && this.fileInput2 && this.code==undefined) {
     formData2.append("file_aggreement", this.fileInput2);
   }
 
   // Récupération des fichiers chargés
   const recupFiles = this.requiredFiles.filter((el: any) => el.isSetted === true);
-  if (recupFiles.length === 0) {
+  if (recupFiles.length === 0 && this.code==undefined) {
     this.toastrService.warning('Aucun fichier chargé');
     return;
   }
@@ -477,6 +540,7 @@ validateStep(step: number): boolean {
     getFiles(){
     this.fileService.getAll(this.type,1).subscribe((res:any)=>{
       res.data.forEach((element:any) => this.requiredFiles.push({
+        id:element.id,
         type:element.type_file?.code,
         name:element.name,
         file:"",
@@ -595,5 +659,11 @@ upload5(event:any){
       return "";
     }
   }
+
+   showFile(file:any){
+    let filename= this.dossier?.files.find((el:any)=>el.file_id==file?.id)?.filename
+         this.url=this._sanitizationService.bypassSecurityTrustResourceUrl(ConfigService.toFile("docs/"+this.dossier?.code+"/"+filename))
+         this.offcanvasService.open(this.previewContent,{  panelClass: 'details-panel', position: 'start'  });
+      }
 
 }

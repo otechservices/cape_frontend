@@ -28,21 +28,16 @@
       <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-gap-6">
         <div>
           <label class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 tw-mb-2">Sujet *</label>
-          <input type="text" [(ngModel)]="nouveauTicket.sujet" name="sujet" required
+          <input type="text" [(ngModel)]="nouveauTicket.object" name="object" required
             class="tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-lg focus:tw-ring-2 focus:tw-ring-blue-500">
         </div>
 
         <div>
           <label class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 tw-mb-2">Catégorie *</label>
-          <select [(ngModel)]="nouveauTicket.categorie" name="categorie" required
+          <select [(ngModel)]="nouveauTicket.type_billing_id" name="type_billing_id_id" required
             class="tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-lg focus:tw-ring-2 focus:tw-ring-blue-500 tw-pr-8">
-            <option value="">Sélectionner une catégorie</option>
-            <option value="dossier-cape">Dossier CAPE</option>
-            <option value="dossier-garderie">Dossier Garderie</option>
-            <option value="compte">Problème de compte</option>
-            <option value="technique">Problème technique</option>
-            <option value="information">Demande d'information</option>
-            <option value="autre">Autre</option>
+            <option selected disabled>Sélectionner une catégorie</option>
+            <option *ngFor="let tp of typeBillings" [value]="tp.id">{{tp?.name}}</option>
           </select>
         </div>
       </div>
@@ -51,7 +46,7 @@
       <div>
         <label class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 tw-mb-2">Priorité</label>
         <div class="tw-flex tw-space-x-4">
-          <label *ngFor="let option of [{value:'faible',label:'Faible'},{value:'normale',label:'Normale'},{value:'urgente',label:'Urgente'}]"
+          <label *ngFor="let option of [{value:'Faible',label:'Faible'},{value:'Normale',label:'Normale'},{value:'Urgente',label:'Urgente'}]"
             class="tw-flex tw-items-center">
             <input type="radio" [(ngModel)]="nouveauTicket.priorite" name="priorite" [value]="option.value" class="tw-mr-2">
             {{option.label}}
@@ -62,9 +57,9 @@
       <!-- Description -->
       <div>
         <label class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 tw-mb-2">Description détaillée *</label>
-        <textarea [(ngModel)]="nouveauTicket.message" name="message" required rows="6" maxlength="500"
+        <textarea [(ngModel)]="nouveauTicket.content" name="content" required rows="6" maxlength="500"
           class="tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-lg focus:tw-ring-2 focus:tw-ring-blue-500"></textarea>
-        <p class="tw-text-sm tw-text-gray-500 tw-mt-1">{{nouveauTicket.message.length}}/500 caractères</p>
+        <p class="tw-text-sm tw-text-gray-500 tw-mt-1">{{nouveauTicket.content.length}}/500 caractères</p>
       </div>
 
       <div class="tw-flex tw-justify-end">
@@ -96,7 +91,7 @@
               {{ticket.statut}}
             </span>
           </div>
-          <h4 class="tw-text-sm tw-font-medium tw-mb-1">{{ticket.sujet}}</h4>
+          <h4 class="tw-text-sm tw-font-medium tw-mb-1">{{ticket.object}}</h4>
           <div class="tw-flex tw-justify-between tw-text-xs tw-text-gray-500">
             <span>{{ticket.dateCreation}}</span>
             <span class="tw-px-2 tw-py-1 tw-rounded-full" [ngClass]="getPrioriteColor(ticket.priorite)">
@@ -112,17 +107,17 @@
           <ng-container *ngFor="let ticket of tickets">
             <ng-container *ngIf="ticket.id===ticketSelectionne">
               <div class="tw-p-6 tw-border-b">
-                <h3 class="tw-text-lg tw-font-semibold">{{ticket.sujet}}</h3>
+                <h3 class="tw-text-lg tw-font-semibold">{{ticket.object}}</h3>
                 <p class="tw-text-sm tw-text-gray-600">Ticket #{{ticket.id}}</p>
               </div>
 
               <!-- Messages -->
               <div class="tw-p-6 tw-max-h-96 tw-overflow-y-auto">
-                <div *ngFor="let message of ticket.messages" class="tw-mb-4">
-                  <div [ngClass]="message.type==='client' ? 'tw-text-right' : 'tw-text-left'">
-                    <div [ngClass]="message.type==='client' ? 'tw-bg-blue-600 tw-text-white tw-inline-block tw-p-3 tw-rounded-lg' : 'tw-bg-gray-100 tw-inline-block tw-p-3 tw-rounded-lg'">
+                <div *ngFor="let message of ticket.responses" class="tw-mb-4">
+                  <div [ngClass]="message.sens==='in' ? 'tw-text-right' : 'tw-text-left'">
+                    <div [ngClass]="message.sens==='in' ? 'tw-bg-blue-600 tw-text-white tw-inline-block tw-p-3 tw-rounded-lg' : 'tw-bg-gray-100 tw-inline-block tw-p-3 tw-rounded-lg'">
                       <strong>{{message.auteur}}</strong> <small>{{message.date}}</small>
-                      <p>{{message.message}}</p>
+                      <p>{{message.content}}</p>
                     </div>
                   </div>
                 </div>
