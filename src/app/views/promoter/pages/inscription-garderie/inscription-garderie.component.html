@@ -177,7 +177,7 @@
                             <i class="fa fa-eye tw-text-blue-600 tw-cursor-pointer" (click)="open(content,i)"></i>
                             <i class="fa fa-trash tw-text-red-600 tw-cursor-pointer" (click)="removeFile(i)"></i>
                         </div>
-                         <div class="tw-my-1">
+                         <div class="tw-my-1" *ngIf="!f.id">
                           <span>Voir l'ancien fichier <i class="fa fa-eye tw-text-blue-600 tw-cursor-pointer" (click)="showFile(f)"></i></span>
                         </div>
                         </div>

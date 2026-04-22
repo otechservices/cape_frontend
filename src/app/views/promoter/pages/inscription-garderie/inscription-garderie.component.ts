@@ -314,10 +314,10 @@ if ('geolocation' in navigator) {
 }
     loadMunicipalities(event:any){
     console.log(event)
-  this.municipalities=  this.data.find((el:any)=>el.id == event.target.value).municipalities
+  this.municipalities=  this.data.find((el:any)=>el.id == event).municipalities
   }
   loadDistricts(event:any){
-  this.districts=  this.municipalities.find((el:any)=>el.id == event.target.value).districts
+  this.districts=  this.municipalities.find((el:any)=>el.id == event).districts
   }
 
 
