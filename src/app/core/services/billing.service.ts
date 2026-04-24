@@ -32,7 +32,12 @@ export class BillingService {
   }
 
 
-    setStatus(id:any,status:any){
+    delete(id: any) {
+    return this.http.delete<any>(`${this.url}${id}`,
+      ConfigService.httpHeader(localStorage.getItem(GlobalName.tokenName), true));
+  }
+
+  setStatus(id:any,status:any){
     return this.http.get<any>(`${this.url}set-status/${id}/${status}`,
      ConfigService.httpHeader(localStorage.getItem(GlobalName.tokenName),true));
   }

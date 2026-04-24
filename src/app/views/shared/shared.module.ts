@@ -38,6 +38,7 @@ import { PublicHeaderComponent } from '../public/layout/includes/public-header/p
 import { PaginationComponent } from './components/pagination/pagination.component';
 import { SearchFilterPipe } from 'src/app/core/pipes/search-filter.pipe';
 import { PaginatePipe } from 'src/app/core/pipes/paginate.pipe';
+import { SampleSearchPipe } from 'src/app/core/pipes/sample-search.pipe';
 
 
 @NgModule({
@@ -50,7 +51,8 @@ import { PaginatePipe } from 'src/app/core/pipes/paginate.pipe';
         LoadingComponent,
         PaginationComponent,
         SearchFilterPipe,
-        PaginatePipe
+        PaginatePipe,
+        SampleSearchPipe
   ],
   imports: [
     CommonModule,
@@ -116,7 +118,8 @@ import { PaginatePipe } from 'src/app/core/pipes/paginate.pipe';
         LoadingComponent,
         PaginationComponent,
         SearchFilterPipe,
-        PaginatePipe
+        PaginatePipe,
+        SampleSearchPipe
   ],
   providers: [
     MessageService,

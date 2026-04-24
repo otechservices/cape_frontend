@@ -34,7 +34,23 @@
                                 Désactiver</button>
                     </div>
     
-                            <p>{{data.length}} élément(s)</p>
+                            <div class="tw-flex tw-items-center tw-justify-between tw-mb-3">
+                              <p class="tw-text-sm tw-text-gray-500 tw-mb-0">
+                                {{ filteredData.length }} / {{ data.length }} élément(s)
+                              </p>
+                              <div class="tw-relative tw-w-72">
+                                <span class="tw-absolute tw-inset-y-0 tw-left-0 tw-flex tw-items-center tw-pl-3 tw-text-gray-400">
+                                  <i class="bx bx-search"></i>
+                                </span>
+                                <input
+                                  type="text"
+                                  class="tw-w-full tw-pl-9 tw-pr-3 tw-py-1.5 tw-border tw-border-gray-300 tw-rounded tw-text-sm focus:tw-outline-none focus:tw-border-blue-400"
+                                  placeholder="Rechercher..."
+                                  [(ngModel)]="searchTerm"
+                                  (ngModelChange)="currentPage = 1"
+                                />
+                              </div>
+                            </div>
                             <div class="tw-overflow-x-auto">
                             <table class="tw-min-w-full tw-border tw-border-gray-200 tw-text-sm">
                                 <thead class="tw-bg-gray-100">
@@ -48,7 +64,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr *ngFor="let d of data" class="tw-border-t">
+                                    <tr *ngFor="let d of data | sampleSearch:searchTerm | paginate:currentPage:pageSize" class="tw-border-t">
                                          <td class="tw-px-3 tw-py-2">
                                             <div class="tw-form-check tw-mb-2">
                                                 <input
@@ -75,6 +91,14 @@
                             </table>
                             </div>
     
+<app-pagination
+  [totalItems]="filteredData.length"
+  [currentPage]="currentPage"
+  [pageSize]="pageSize"
+  [pageSizeOptions]="[5, 10, 25, 50]"
+  (pageChange)="currentPage = $event"
+  (pageSizeChange)="pageSize = $event; currentPage = 1">
+</app-pagination>
                 </div><!-- end card -->
             </div>
             <!-- end col -->

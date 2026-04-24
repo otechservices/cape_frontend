@@ -24,6 +24,24 @@ export class ActualityComponent implements OnInit {
   buttonsPermission :any|undefined;
   structures:any[] =[]
   data:any[] =[]
+  searchTerm: string = '';
+  currentPage: number = 1;
+  pageSize: number = 10;
+
+  get filteredData(): any[] {
+    if (!this.searchTerm || this.searchTerm.trim() === '') return this.data;
+    const term = this.searchTerm.toLowerCase().trim();
+    return this.data.filter(item => this.deepSearch(item, term));
+  }
+
+  private deepSearch(obj: any, term: string): boolean {
+    if (obj === null || obj === undefined) return false;
+    if (typeof obj === 'string') return obj.toLowerCase().includes(term);
+    if (typeof obj === 'number' || typeof obj === 'boolean') return String(obj).toLowerCase().includes(term);
+    if (Array.isArray(obj)) return obj.some(item => this.deepSearch(item, term));
+    if (typeof obj === 'object') return Object.values(obj).some(val => this.deepSearch(val, term));
+    return false;
+  }
   selected_data:any;
   modalOption:any; 
   isDtInitialized:boolean = false
