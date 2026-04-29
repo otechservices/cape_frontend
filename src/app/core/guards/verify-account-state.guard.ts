@@ -19,11 +19,10 @@ export class VerifyAccountStateGuard  {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
       let user = this.lsService.get(GlobalName.userName)
-    if ( user.first_signin) {
-          
+    if (user?.is_first_connexion) {
           this.router.navigate(['/admin/auth/activate-account']);
           return false;
-        } else  if (!user.is_active) {
+        } else if (!user?.is_active) {
           AppSweetAlert.simpleAlert("error","Compte bloqué","Veuillez contacter l'administrateur !")
 
           return false;

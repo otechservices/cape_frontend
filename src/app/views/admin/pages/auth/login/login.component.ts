@@ -47,8 +47,12 @@ authForm: FormGroup;
       this.lsService.set(GlobalName.expireIn,res.data.expires_at);
      this.authService.me().subscribe((res:any)=>{
       this.lsService.set(GlobalName.userName,res.data);
-      this.router.navigate(['/admin/dashboard'])
       this.toastr.success('Connexion réussie', 'Connexion');
+      if (res.data?.is_first_connexion) {
+        this.router.navigate(['/admin/auth/activate-account']);
+      } else {
+        this.router.navigate(['/admin/dashboard']);
+      }
      })
      
     },

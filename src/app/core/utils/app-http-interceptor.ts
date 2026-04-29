@@ -52,13 +52,19 @@ export class AppHttpInterceptor implements HttpInterceptor {
             switch (error.status) {
               case 401:
                 this.lsService.remove(GlobalName.tokenName);
-                  this.lsService.remove(GlobalName.refreshTokenName);
-                  this.lsService.remove(GlobalName.expireIn);
-                  this.lsService.remove(GlobalName.userName);
-                  this.lsService.remove(GlobalName.exercice);
-                  this.modalService.dismissAll();
-                  this.router.navigate(['/public/auth/login']);
-
+                this.lsService.remove(GlobalName.refreshTokenName);
+                this.lsService.remove(GlobalName.expireIn);
+                this.lsService.remove(GlobalName.userName);
+                this.lsService.remove(GlobalName.exercice);
+                this.modalService.dismissAll();
+                {
+                  const url = this.router.url;
+                  if (url.startsWith('/public') || url.startsWith('/promoter')) {
+                    this.router.navigate(['/public/auth/login']);
+                  } else {
+                    this.router.navigate(['/admin/auth/login']);
+                  }
+                }
                 break;
               case 403:
                 break;

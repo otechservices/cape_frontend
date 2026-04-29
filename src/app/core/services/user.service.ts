@@ -45,4 +45,9 @@ export class UserService {
     return this.http.get<any>(`${this.url}set-status/${id}/${status}`,
      ConfigService.httpHeader(localStorage.getItem(GlobalName.tokenName),true));
   }
+
+  resetPassword(id:any){
+    return this.http.post<any>(`${this.url}${id}/reset-password`, {},
+     ConfigService.httpHeader(localStorage.getItem(GlobalName.tokenName),true));
+  }
 }

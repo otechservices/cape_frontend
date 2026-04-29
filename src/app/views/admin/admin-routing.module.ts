@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from 'src/app/core/guards/auth.guard';
 import { IsAuthedGuard } from 'src/app/core/guards/is-authed.guard';
 import { IsVerifiedAccountStateGuard } from 'src/app/core/guards/is-verified-account-state.guard';
+import { VerifyAccountStateGuard } from 'src/app/core/guards/verify-account-state.guard';
 import { AuthLayoutComponent } from './layout/auth-layout/auth-layout.component';
 import { LayoutComponent } from './layout/layout.component';
 import { ActivityReportComponent } from '../promoter/pages/activity-report/activity-report.component';
@@ -71,7 +72,7 @@ const routes: Routes = [
   {
     path: '',
     component:LayoutComponent,
-    canActivate:[AuthGuard],
+    canActivate:[AuthGuard, VerifyAccountStateGuard],
     children:[
       {
         path:"dashboard",

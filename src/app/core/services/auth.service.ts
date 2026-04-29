@@ -48,19 +48,19 @@ export class AuthService {
   }
 
   sendMail(ressource:any){
-    return this.http.post<any>(`${this.url2}api/send-reset-password-link`, ressource,
+    return this.http.post<any>(`${this.url2}api/forgot-password`, ressource,
      ConfigService.httpHeader(null,true));
   }
 
 
-  
+
   update(ressource:any){
     return this.http.post<any>(`${this.url2}api/update-profile`, ressource,
      ConfigService.httpHeader(null,true));
   }
 
   recoverPassword(token:any,ressource:any){
-    return this.http.post<any>(`${this.url2}api/recovery-password/${token}`, ressource,
+    return this.http.post<any>(`${this.url2}api/recovery-password`, { ...ressource, token },
      ConfigService.httpHeader(null,true));
   }
 

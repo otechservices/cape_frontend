@@ -1,80 +1,91 @@
+<div class="tw-w-full tw-max-w-md tw-space-y-8">
 
-<div class="app-container app-theme-white body-tabs-shadow">
-    <div class="app-container">
-    <div class="h-100">
-    <div class="h-100 no-gutters row">
-    <div class="d-none d-lg-block col-lg-4">
-    <div class="slider-light">
-    <div class="slick-slider">
-    <div>
-    <div class="position-relative h-100 d-flex justify-content-center align-items-center bg-plum-plate" tabindex="-1">
-    <div class="slide-img-bg" style="background-image: url('assets/template2/images/log.webp');"></div>
-    <div class="slider-content">
-    <h3>SISEB</h3>
-    <p>
-        Système d'Information des Statistiques Environnementales du Bénin
-    </p>
+  <div class="tw-text-center">
+    <div class="tw-flex tw-justify-center tw-mb-6">
+      <img
+        src="assets/template2/images/masm.png"
+        alt="logo-masm"
+        class="tw-h-16"
+      />
     </div>
+    <h1 class="tw-text-lg tw-font-medium tw-text-teal-700 tw-leading-tight">
+      Plateforme de gestion des centres d'accueil et de protection de l'enfant en République du Bénin
+    </h1>
+  </div>
+
+  <div class="tw-bg-white tw-p-8 tw-rounded-lg tw-shadow-sm tw-border">
+
+    <div class="tw-flex tw-items-center tw-gap-3 tw-mb-6">
+      <div class="tw-w-10 tw-h-10 tw-bg-orange-100 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-shrink-0">
+        <i class="bx bx-key tw-text-orange-600 tw-text-xl"></i>
+      </div>
+      <div>
+        <h2 class="tw-text-base tw-font-semibold tw-text-gray-800">Première connexion</h2>
+        <p class="tw-text-sm tw-text-gray-500">Veuillez définir votre mot de passe personnel.</p>
+      </div>
     </div>
-    </div>
-    <div>
-    <div class="h-100 d-flex justify-content-center align-items-center bg-premium-dark" tabindex="-1">
-    <div class="position-relative slide-img-bg" style="background-image: url('assets/images/originals/citynights.jpg');"></div>
-    <div class="slider-content">
-    <h3>Scalable, Modular, Consistent</h3>
-    <p>Easily exclude the components you don't require. Lightweight, consistent
-    Bootstrap based styles across all elements and components
-    </p>
-    </div>
-    </div>
-    </div>
-    <div>
-    <div class="position-relative h-100 d-flex justify-content-center align-items-center bg-sunny-morning" tabindex="-1">
-    <div class="slide-img-bg opacity-6" style="background-image: url('assets/images/originals/citydark.jpg');"></div>
-    <div class="slider-content">
-    <h3>Complex, but lightweight</h3>
-    <p>We've included a lot of components that cover almost all use cases for any type of application.</p>
-    </div>
-    </div>
-    </div>
-    </div>
-    </div>
-    </div>
-    <div class="h-100 d-flex bg-white justify-content-center align-items-center col-md-12 col-lg-8">
-    <div class="mx-auto app-login-box col-sm-12 col-md-8 col-lg-6">
-    <div class="app-logo"></div>
-     <h4>
-    <div class="mb-3">C'est votre première connexion </div>
-    <span>Définissez votre mot de passe.</span>
-    </h4>
-    <div >
-        <form class="" #fpForm="ngForm" (ngSubmit)="changeFirstPassword(fpForm.value)">
-            <div class="form-row">
-    <div class="col-md-12">
-        <div class="position-relative form-group">
-            <label for="exampleEmail1" class="">Nouveau mot de passe</label>
-            <input name="password" id="exampleEmail1" placeholder="Mot de passe ici..." type="password" class="form-control" ngModel required>
-            </div>
-    <div class="position-relative form-group">
-    <label for="exampleEmail2" class="">Confirmer mot de passe</label>
-    <input name="confirm_password" id="exampleEmail2" placeholder="Mot de passe ici..." type="password" class="form-control" ngModel required>
-    </div>
-    </div>
-    </div>
-    <div class="mt-4 d-flex align-items-center">
-  
-    <div class="ml-auto">
-    <button class="btn btn-primary btn-lg" [disabled]="fpForm.invalid || loading" type="submit">Chnager mon mot de passe <app-loading [isVisible]="loading"></app-loading></button>
-    </div>
-    </div>
+
+    <form #fpForm="ngForm" (ngSubmit)="changeFirstPassword(fpForm.value)" class="tw-space-y-4">
+
+      <div>
+        <label class="tw-block tw-text-sm tw-text-gray-600 tw-mb-2">
+          Nouveau mot de passe <span class="tw-text-red-500">*</span>
+        </label>
+        <div class="tw-relative">
+          <div class="tw-absolute tw-inset-y-0 tw-left-0 tw-pl-3 tw-flex tw-items-center tw-pointer-events-none">
+            <i class="fas fa-lock tw-text-gray-400 tw-text-sm"></i>
+          </div>
+          <input
+            type="password"
+            name="password"
+            placeholder="Nouveau mot de passe"
+            class="tw-w-full tw-pl-10 tw-pr-3 tw-py-2 tw-border tw-border-gray-300 tw-rounded-lg tw-text-sm focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-blue-500"
+            ngModel
+            required
+            minlength="8"
+          />
+        </div>
+      </div>
+
+      <div>
+        <label class="tw-block tw-text-sm tw-text-gray-600 tw-mb-2">
+          Confirmer le mot de passe <span class="tw-text-red-500">*</span>
+        </label>
+        <div class="tw-relative">
+          <div class="tw-absolute tw-inset-y-0 tw-left-0 tw-pl-3 tw-flex tw-items-center tw-pointer-events-none">
+            <i class="fas fa-lock tw-text-gray-400 tw-text-sm"></i>
+          </div>
+          <input
+            type="password"
+            name="password_confirmation"
+            placeholder="Confirmer le mot de passe"
+            class="tw-w-full tw-pl-10 tw-pr-3 tw-py-2 tw-border tw-border-gray-300 tw-rounded-lg tw-text-sm focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-blue-500"
+            ngModel
+            required
+            minlength="8"
+          />
+        </div>
+      </div>
+
+      <button
+        type="submit"
+        [disabled]="fpForm.invalid || loading"
+        class="tw-w-full tw-bg-blue-800 hover:tw-bg-blue-900 disabled:tw-bg-gray-400 disabled:tw-cursor-not-allowed tw-text-white tw-rounded tw-px-4 tw-py-2 tw-text-sm tw-flex tw-items-center tw-justify-center tw-gap-2"
+      >
+        <ng-container *ngIf="loading">
+          <div class="tw-animate-spin tw-rounded-full tw-h-4 tw-w-4 tw-border-b-2 tw-border-white"></div>
+          <span>Enregistrement...</span>
+        </ng-container>
+        <ng-container *ngIf="!loading">
+          <span>Définir mon mot de passe</span>
+        </ng-container>
+      </button>
+
     </form>
-    </div>
-    
-   
-    </div>
-    </div>
-    </div>
-    </div>
-    </div>
-    </div>
-    
+  </div>
+
+  <div class="tw-text-center tw-text-xs tw-text-gray-500">
+    <p>© 2024 République du Bénin - Tous droits réservés</p>
+  </div>
+
+</div>

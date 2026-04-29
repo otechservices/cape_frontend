@@ -34,6 +34,8 @@
                             Activer</button>
                            <button  *ngIf="is_active!=null &&  is_active" (click)="setStatus(0)" type="button" class="tw-border tw-border-red-500 tw-text-red-500 tw-text-sm tw-px-3 tw-py-1 tw-rounded hover:tw-bg-red-50 tw-me-3">
                             Désactiver</button>
+                           <button *ngIf="selected_data" (click)="resetPassword()" type="button" class="tw-border tw-border-orange-500 tw-text-orange-500 tw-text-sm tw-px-3 tw-py-1 tw-rounded hover:tw-bg-orange-50 tw-me-3">
+                            <i class="bx bx-reset"></i> Réinitialiser mot de passe</button>
                 </div>
 
                         <div class="tw-flex tw-items-center tw-justify-between tw-mb-3">

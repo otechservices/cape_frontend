@@ -30,23 +30,17 @@ export class AccountActivationComponent implements OnInit {
   
   
     changeFirstPassword(value:any){
-
-      if (value.password != value.confirm_password) {
-        this.toastr.error('Nouveaux mots de passe non identique', 'Mot de passe oublié');
-        return ;
-      }
       this.loading=true
-      this.authService.changeFirstPassword(value).subscribe((res:any)=>{
-        this.loading=false
-        this.logout()
-        this.toastr.success('Changement de mot passe réussi', 'Première connexion');
-
-       
-      },
-      (err:any)=>{
-        this.loading=false
-        this.toastr.error('Changement de mot passe échoué', 'Première connexion');
-  
+      this.authService.changeFirstPassword(value).subscribe({
+        next: (res:any) => {
+          this.loading=false
+          this.toastr.success('Mot de passe défini avec succès', 'Première connexion');
+          this.logout()
+        },
+        error: (err:any) => {
+          this.loading=false
+          this.toastr.error(err.error?.message ?? 'Changement de mot de passe échoué', 'Première connexion');
+        }
       });
     }
 

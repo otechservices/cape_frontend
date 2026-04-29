@@ -219,7 +219,7 @@ export class UserComponent implements OnInit {
   setStatus(value:any){
 
     this.toastrService.warning("Opération en cours")
-  
+
         this.userService.setStatus(this.selected_data.id,value).subscribe((res:any)=>{
           this.toastrService.success(res.message)
           this.getAll()
@@ -228,6 +228,27 @@ export class UserComponent implements OnInit {
         console.log(err)
           AppSweetAlert.simpleAlert("error","Utilisateur",err.error.message)
       })
+  }
+
+  resetPassword(){
+    if(!this.verifyIfElementChecked()) return;
+    AppSweetAlert.confirmBox(
+      'warning',
+      'Réinitialisation du mot de passe',
+      `Réinitialiser le mot de passe de <b>${this.selected_data.name ?? this.selected_data.email}</b> ? Un nouveau mot de passe temporaire lui sera envoyé par email.`
+    ).then((result:any) => {
+      if (result.isConfirmed) {
+        this.toastrService.warning("Réinitialisation en cours...");
+        this.userService.resetPassword(this.selected_data.id).subscribe({
+          next: (res:any) => {
+            this.toastrService.success(res.message);
+          },
+          error: (err:any) => {
+            AppSweetAlert.simpleAlert("error", "Réinitialisation", err.error?.message ?? "Une erreur est survenue");
+          }
+        });
+      }
+    });
   }
 
 
