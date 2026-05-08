@@ -57,10 +57,13 @@ export class InscriptionGarderieComponent {
     loading=false
     code:any
     token:any
-    url:SafeResourceUrl | undefined 
+    url:SafeResourceUrl | undefined
     public innerWidth: any;
   service_id:any;
   is_stored=false;
+  geoLoading=false;
+  geoError:string|null=null;
+  imageSiteSrc: string | SafeResourceUrl | undefined;
   steps = [
     { number: 1, title: 'Informations promoteur', icon: 'ri-user-line' },
     { number: 2, title: 'Informations directeur', icon: 'ri-briefcase-line' },
@@ -146,25 +149,7 @@ dossier:any
       }
 
 
-if ('geolocation' in navigator) {
-  navigator.geolocation.getCurrentPosition(
-    (position) => {
-      const coords = `${position.coords.latitude},${position.coords.longitude}`;
-      this.formData.patchValue({ coords });
-    },
-    (error) => {
-      console.error('Erreur de géolocalisation :', error);
-      this.formData.patchValue({ coords: null });
-    },
-    {
-      enableHighAccuracy: true,
-      timeout: 10000,
-      maximumAge: 0
-    }
-  );
-} else {
-  console.warn('La géolocalisation n’est pas prise en charge par ce navigateur.');
-}
+    this.requestGeolocation(true);
         
          // this.formData.has_aggrement=false
           let checkInstance= this.lsService.get(`${GlobalName.reqName}-${this.user.code}`)
@@ -200,10 +185,6 @@ if ('geolocation' in navigator) {
               this.getTypeData()
               this.getNaturePromotors()
               this.getFiles()
-               if(this.code!=undefined){
-                  this.get()
-
-                }
                 }
               
               })
@@ -213,58 +194,64 @@ if ('geolocation' in navigator) {
   }
 
   get(){
-
     this.reqService.get(this.code).subscribe((res:any)=>{
       this.dossier=res
       this.loadMunicipalities(res.district?.municipality?.department_id)
       this.loadDistricts(res.district?.municipality_id)
+
+      let parsedTargets: any[] = []
+      try {
+        if (Array.isArray(res.target)) {
+          parsedTargets = res.target
+        } else if (res.target) {
+          parsedTargets = JSON.parse(res.target)
+        }
+      } catch { parsedTargets = [] }
+
       this.formData.patchValue({
-        code:this.code,
-  // Infos promoteur
-  nature_promotor_id: res.nature_promotor_id,
-  social_reason: res.name,
-  head_office: res.head_office,
-  registered_phone: res.registered_phone,
-  registered_number: res.registered_number,
-  registered_date: res.registered_date,
+        code: this.code,
+        // Infos promoteur
+        nature_promotor_id: res.nature_promotor_id,
+        social_reason: res.social_reason,
+        head_office: res.head_office,
+        registered_phone: res.registered_phone,
+        registered_number: res.registered_number,
+        registered_date: res.registered_date,
 
-  name_pomoter: res.name_pomoter,
-  firstname_pomoter: res.firstname_pomoter,
-  email_pomoter: res.email_pomoter,
-  phone_pomoter: res.phone_pomoter,
+        name_pomoter: res.name_pomoter,
+        firstname_pomoter: res.firstname_pomoter,
+        email_pomoter: res.email_pomoter,
+        phone_pomoter: res.phone_pomoter,
 
-  chief_is_directeor: (res.name_pomoter == res.name_chief && res.firstname_pomoter==res.firstname_chief) ? true: false,
-  has_aggrement: res.has_aggrement,
-  has_consent: res.has_consent,
+        chief_is_directeor: (res.name_pomoter == res.name_chief && res.firstname_pomoter == res.firstname_chief),
+        has_aggrement: res.has_agreemant == 1 || res.has_agreemant === true,
+        has_consent: res.has_consent == 1 || res.has_consent === true,
 
-  name_chief: res.name_chief,
-  firstname_chief: res.firstname_chief,
-  phone_chief: res.phone_chief,
-  email_chief: res.email_chief,
+        name_chief: res.name_chief,
+        firstname_chief: res.firstname_chief,
+        phone_chief: res.phone_chief,
+        email_chief: res.email_chief,
 
-  // ⚠️ Fichier : on ne peut pas patch directement un File depuis l’API
-  consentFile: null,
+        consentFile: null,
 
-  // Infos CAPE
-  type_cape_id: res.type_cape_id,
-  name: res.name,
-  capacity: res.capacity,
-  email: res.email,
-  phone: res.phone,
-  targets: JSON.parse(res.target) ?? [],
+        // Infos garderie
+        type_cape_id: res.type_cape_id,
+        name: res.name,
+        capacity: res.capacity,
+        email: res.email,
+        phone: res.phone,
+        targets: parsedTargets,
 
-  // Localisation
-  department_id: res.district?.municipality?.department_id,
-  municipality_id: res.district?.municipality_id,
-  district_id: res.district_id,
-  town: res.town,
-  address: res.address,
-  coords: res.coords
-});
+        // Localisation
+        department_id: res.district?.municipality?.department_id,
+        municipality_id: res.district?.municipality_id,
+        district_id: res.district_id,
+        town: res.town,
+        address: res.address,
+        coords: res.coords
+      });
     },
-    (err:any)=>{
-
-    })
+    (err:any)=>{})
   }
 
 
@@ -276,13 +263,13 @@ if ('geolocation' in navigator) {
     getDepartmentWithRelations(){
     this.departmentService.getDepartmentWithRelation().subscribe((res:any)=>{
       this.data=res.data
-      if (this.token!=undefined && this.code!=undefined) {
+      if (this.token != null && this.token != undefined && this.code != null && this.code != undefined) {
         this.eService.get(this.token,this.code).subscribe((res:any)=>{
           this.data2=res.data
           this.selectedItems= JSON.parse(this.data2.target)
-          this.municipalities=this.data.find((el:any)=>el.id ==this.data2.district.municipality.department.id).municipalities
-          this.districts=this.municipalities.find((el:any)=>el.id ==this.data2.district.municipality.id).districts
-  
+          this.municipalities=this.data.find((el:any)=>el.id ==this.data2.district.municipality.department.id)?.municipalities ?? []
+          this.districts=this.municipalities.find((el:any)=>el.id ==this.data2.district.municipality.id)?.districts ?? []
+
           res.data.files.forEach((element:any) => this.requiredFiles.push({
             name:element.file.name,
             file:element.filename,
@@ -293,31 +280,35 @@ if ('geolocation' in navigator) {
             isSetted:element.filename ?true:false
           }) );
         },
-        (err:any)=>{
-    
-        })
-      }else{
-      //  this.getFiles()
-  
+        (err:any)=>{})
+      } else {
+        if (this.code != null && this.code != undefined) {
+          this.get()
+        }
       }
     },
-    (err:any)=>{
-
-    })
+    (err:any)=>{})
   }
 
 
   upload3(event:any){
-  if(event.target.files.length>0){
-    this.fileInput3=event.target.files[0]
+    if(event.target.files.length>0){
+      this.fileInput3=event.target.files[0]
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.imageSiteSrc = this._sanitizationService.bypassSecurityTrustResourceUrl(reader.result as string);
+      };
+      reader.readAsDataURL(this.fileInput3);
+    }
   }
-}
-    loadMunicipalities(event:any){
-    console.log(event)
-  this.municipalities=  this.data.find((el:any)=>el.id == event).municipalities
+
+  loadMunicipalities(event:any){
+    const dept = this.data.find((el:any)=>el.id == event)
+    this.municipalities = dept?.municipalities ?? []
   }
   loadDistricts(event:any){
-  this.districts=  this.municipalities.find((el:any)=>el.id == event).districts
+    const mun = this.municipalities.find((el:any)=>el.id == event)
+    this.districts = mun?.districts ?? []
   }
 
 
@@ -374,8 +365,8 @@ validateStep(step: number): boolean {
   switch (step) {
     case 1:
 
-     if (this.formData.get('nature_promotor_id')?.value == 1) {
-      this.formData.patchValue({  
+    if (this.formData.get('chief_is_directeor')?.value === true) {
+      this.formData.patchValue({
         name_chief: this.formData.get('name_pomoter')?.value,
         firstname_chief: this.formData.get('firstname_pomoter')?.value,
         phone_chief: this.formData.get('phone_pomoter')?.value,
@@ -432,8 +423,23 @@ validateStep(step: number): boolean {
     if (this.validateStep(this.currentStep)) {
       this.currentStep = Math.min(this.currentStep + 1, 4);
     } else {
-      alert('Veuillez remplir tous les champs requis avant de continuer.');
+      this.markCurrentStepTouched();
+      alert('Veuillez corriger les champs invalides avant de continuer.');
     }
+  }
+
+  private markCurrentStepTouched() {
+    const fieldsByStep: { [k: number]: string[] } = {
+      1: ['nature_promotor_id', 'name_pomoter', 'firstname_pomoter', 'email_pomoter', 'phone_pomoter',
+          'social_reason', 'head_office', 'registered_phone', 'registered_number', 'registered_date'],
+      2: ['name_chief', 'firstname_chief', 'phone_chief', 'email_chief'],
+      3: ['type_cape_id', 'name', 'capacity', 'email', 'phone',
+          'department_id', 'municipality_id', 'district_id', 'town', 'address', 'coords'],
+      4: ['has_consent']
+    };
+    (fieldsByStep[this.currentStep] || []).forEach(field => {
+      this.formData.get(field)?.markAsTouched();
+    });
   }
 
   prevStep() {
@@ -523,6 +529,42 @@ validateStep(step: number): boolean {
     this.submitStatus = 'idle';
   }
 
+  requestGeolocation(silent=false) {
+    if (!('geolocation' in navigator)) {
+      if (!silent) this.geoError = 'La géolocalisation n\'est pas prise en charge par ce navigateur.';
+      return;
+    }
+    this.geoLoading = true;
+    this.geoError = null;
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const coords = `${position.coords.latitude},${position.coords.longitude}`;
+        this.formData.patchValue({ coords });
+        this.geoLoading = false;
+        this.geoError = null;
+      },
+      (error) => {
+        this.geoLoading = false;
+        if (!silent) {
+          switch (error.code) {
+            case error.PERMISSION_DENIED:
+              this.geoError = 'Accès à la localisation refusé. Veuillez l\'autoriser dans les paramètres de votre navigateur.';
+              break;
+            case error.POSITION_UNAVAILABLE:
+              this.geoError = 'Position indisponible. Vérifiez que la localisation est activée sur votre appareil.';
+              break;
+            case error.TIMEOUT:
+              this.geoError = 'La récupération de la position a expiré. Réessayez.';
+              break;
+            default:
+              this.geoError = 'Impossible de récupérer votre position.';
+          }
+        }
+      },
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+    );
+  }
+
 
     open2(content:any, fileId:any) {
     let check =this.requiredFiles.find((el:any)=>el.file_id==fileId)
@@ -610,7 +652,7 @@ validateStep(step: number): boolean {
 
 upload4(event:any){
   if(event.target.files.length>0){
-    this.fileInput3=event.target.files[0]
+    this.fileInput4=event.target.files[0]
   }
 }
 upload5(event:any){

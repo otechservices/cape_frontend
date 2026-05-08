@@ -210,6 +210,8 @@
                     class="tw-w-full tw-px-3 tw-py-2 tw-border tw-border-gray-300 tw-rounded-lg
                         focus:tw-ring-2 focus:tw-ring-blue-500 focus:tw-border-blue-500"
                     placeholder="Saisir le(s) prénom(s)" />
+                <div *ngIf="formData.get('firstname_chief')?.invalid && formData.get('firstname_chief')?.touched"
+                    class="tw-text-red-500 tw-text-sm">Prénom requis</div>
                 </div>
 
                 <div>
@@ -218,6 +220,8 @@
                     class="tw-w-full tw-px-3 tw-py-2 tw-border tw-border-gray-300 tw-rounded-lg
                         focus:tw-ring-2 focus:tw-ring-blue-500 focus:tw-border-blue-500"
                     placeholder="Numéro de téléphone" />
+                <div *ngIf="formData.get('phone_chief')?.invalid && formData.get('phone_chief')?.touched"
+                    class="tw-text-red-500 tw-text-sm">Téléphone requis</div>
                 </div>
 
                 <div>
@@ -226,6 +230,11 @@
                     class="tw-w-full tw-px-3 tw-py-2 tw-border tw-border-gray-300 tw-rounded-lg
                         focus:tw-ring-2 focus:tw-ring-blue-500 focus:tw-border-blue-500"
                     placeholder="Email du directeur" />
+                <div *ngIf="formData.get('email_chief')?.invalid && formData.get('email_chief')?.touched"
+                    class="tw-text-red-500 tw-text-sm">
+                  <span *ngIf="formData.get('email_chief')?.errors?.['required']">Email requis</span>
+                  <span *ngIf="formData.get('email_chief')?.errors?.['email']">Format d'email invalide (ex: nom&#64;domaine.com)</span>
+                </div>
                 </div>
             </div>
 
@@ -400,13 +409,34 @@
     <div>
       <label class="tw-block tw-font-medium">Image du siège</label>
       <input type="file" (change)="upload3($event)" class="tw-form-input tw-w-full tw-rounded-lg" accept="image/*">
+      <div *ngIf="imageSiteSrc" class="tw-mt-2 tw-relative tw-inline-block">
+        <img [src]="imageSiteSrc" alt="Aperçu du siège"
+          class="tw-h-40 tw-max-w-full tw-object-cover tw-rounded-lg tw-border tw-border-gray-300 tw-shadow-sm">
+        <button type="button"
+          (click)="imageSiteSrc=undefined; fileInput3=null"
+          title="Supprimer"
+          class="tw-absolute tw-top-1 tw-right-1 tw-w-6 tw-h-6 tw-rounded-full tw-bg-red-500 tw-text-white tw-text-xs tw-flex tw-items-center tw-justify-center hover:tw-bg-red-700">
+          <i class="ri-close-line"></i>
+        </button>
+      </div>
     </div>
 
     <!-- Coordonnées géographiques -->
     <div>
       <label class="tw-block tw-font-medium">Coordonnées géographiques de la zone <span class="tw-text-red-500">*</span></label>
-      <input type="text" formControlName="coords" class="tw-form-input tw-w-full tw-rounded-lg">
-      <span class="tw-text-sm tw-text-gray-500">Ex: 6.2830003,2.7388335</span>
+      <div class="tw-flex tw-gap-2 tw-items-center">
+        <input type="text" formControlName="coords" class="tw-form-input tw-flex-1 tw-rounded-lg" placeholder="Ex: 6.2830003,2.7388335">
+        <button type="button" (click)="requestGeolocation(false)"
+          [disabled]="geoLoading"
+          class="tw-flex tw-items-center tw-gap-1 tw-px-3 tw-py-2 tw-bg-blue-600 tw-text-white tw-rounded-lg hover:tw-bg-blue-700 disabled:tw-opacity-60 tw-whitespace-nowrap tw-text-sm">
+          <i [class]="geoLoading ? 'ri-loader-4-line tw-animate-spin' : 'ri-map-pin-line'"></i>
+          <span>{{ geoLoading ? 'Localisation...' : 'Ma position' }}</span>
+        </button>
+      </div>
+      <div *ngIf="geoError" class="tw-text-red-500 tw-text-sm tw-mt-1">
+        <i class="ri-error-warning-line"></i> {{ geoError }}
+      </div>
+      <span *ngIf="!geoError" class="tw-text-sm tw-text-gray-500">Cliquez sur "Ma position" si le champ est vide</span>
     </div>
 
   </div>
