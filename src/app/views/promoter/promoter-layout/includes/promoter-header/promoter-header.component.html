@@ -1,37 +1,28 @@
-<header class="tw-bg-white tw-shadow-sm tw-border-b tw-border-gray-200 tw-fixed tw-w-full tw-top-0 tw-z-50">
-  <div class="tw-px-6 tw-py-4">
-    <div class="tw-flex tw-items-center tw-justify-between">
-      
-      <!-- Logo et titre -->
-      <div class="tw-flex tw-items-center tw-space-x-4">
-        <img 
-          src="https://cape.social.gouv.bj/assets/template2/images/logo-masm.png" 
-          alt="LOGO MASM" 
-          class="tw-h-10 tw-object-contain"
-        />
-        <div class="tw-border-l tw-border-gray-300 tw-pl-4">
-          <h1 class="tw-text-lg tw-font-semibold tw-text-gray-900">Espace Client</h1>
-          <p class="tw-text-sm tw-text-gray-600">Tableau de bord personnel</p>
-        </div>
-      </div>
+<header class="tw-fixed tw-top-0 tw-right-0 tw-left-0 md:tw-left-64 tw-h-14 tw-z-30
+              tw-bg-white tw-border-b tw-border-gray-200
+              tw-flex tw-items-center tw-justify-between tw-px-6 tw-gap-4">
 
-      <!-- Profil + Déconnexion -->
-      <div class="tw-flex tw-items-center tw-space-x-4">
-        <div class="tw-flex tw-items-center tw-space-x-3">
-          <div class="tw-w-8 tw-h-8 tw-bg-blue-100 tw-rounded-full tw-flex tw-items-center tw-justify-center">
-            <i class="ri-user-line tw-text-blue-600"></i>
-          </div>
-          <span class="tw-text-sm tw-font-medium tw-text-gray-700">{{ userEmail }}</span>
-        </div>
+  <!-- Espace réservé au bouton hamburger mobile (rendu dans la sidebar) -->
+  <div class="md:tw-hidden tw-w-9"></div>
 
-        <button
-          (click)="logout()"
-          class="tw-flex tw-items-center tw-space-x-2 tw-px-4 tw-py-2 tw-text-sm tw-text-red-600 hover:tw-bg-red-50 tw-rounded-lg tw-transition-colors tw-duration-200 tw-cursor-pointer tw-whitespace-nowrap"
-        >
-          <i class="ri-logout-box-line"></i>
-          <span>Déconnexion</span>
-        </button>
-      </div>
-    </div>
+  <!-- Titre (desktop uniquement) -->
+  <div class="tw-hidden md:tw-flex tw-items-center tw-gap-2 tw-text-gray-400 tw-text-sm">
+    <i class="ri-government-line"></i>
+    <span>Plateforme de Gestion des Structures de Protection de l'Enfant</span>
   </div>
+
+  <div class="tw-flex-1 md:tw-hidden"></div>
+
+  <!-- Utilisateur -->
+  <div class="tw-flex tw-items-center tw-gap-3 tw-flex-shrink-0">
+    <div class="tw-w-8 tw-h-8 tw-bg-blue-900 tw-rounded-full
+                tw-flex tw-items-center tw-justify-center
+                tw-text-sm tw-font-bold tw-text-white tw-flex-shrink-0">
+      {{ userInitial }}
+    </div>
+    <span class="tw-text-sm tw-font-medium tw-text-gray-700 tw-hidden sm:tw-block tw-max-w-xs tw-truncate">
+      {{ userName }}
+    </span>
+  </div>
+
 </header>

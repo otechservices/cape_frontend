@@ -1,83 +1,109 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { AuthService } from 'src/app/core/services/auth.service';
+import { AppSweetAlert } from 'src/app/core/utils/app-sweet-alert';
+import { GlobalName } from 'src/app/core/utils/global-name';
+import { LocalStorageService } from 'src/app/core/utils/local-stoarge-service';
 
 @Component({
   selector: 'app-mon-profil-promoter',
   templateUrl: './mon-profil-promoter.component.html',
   styleUrl: './mon-profil-promoter.component.css'
 })
-export class MonProfilPromoterComponent {
+export class MonProfilPromoterComponent implements OnInit {
 
-isEditing = false;
-  isSaving = false;
-  //activeTab:  'informations' | 'securite' | 'notifications' = 'informations';
-activeTab:any
-  profilForm: FormGroup;
-  motDePasseForm: FormGroup;
-  notificationsForm: FormGroup;
+  activeTab: 'informations' | 'securite' = 'informations';
+  isEditing = false;
+  saving = false;
+  user: any = null;
 
-  constructor(private fb: FormBuilder) {
+  profilForm!: FormGroup;
+  passwordForm!: FormGroup;
+
+  showOld = false;
+  showNew = false;
+  showConfirm = false;
+
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private lsService: LocalStorageService,
+  ) {}
+
+  ngOnInit(): void {
+    this.user = this.lsService.get(GlobalName.userName);
+    this.buildForms();
+  }
+
+  get userInitial(): string {
+    return this.user?.name?.charAt(0)?.toUpperCase() ?? '?';
+  }
+
+  private buildForms(): void {
     this.profilForm = this.fb.group({
-      prenom: ['Marie', Validators.required],
-      nom: ['Dubois', Validators.required],
-      email: ['marie.dubois@email.com', [Validators.required, Validators.email]],
-      telephone: ['06 12 34 56 78'],
-      adresse: ['123 Rue de la République'],
-      ville: ['Lyon'],
-      codePostal: ['69000'],
-      profession: ['Directrice de crèche'],
-      organisme: ['Association Les Petits Pas']
+      firstname: [this.user?.firstname ?? '', Validators.required],
+      lastname:  [this.user?.lastname  ?? '', Validators.required],
+      email:     [this.user?.email     ?? '', [Validators.required, Validators.email]],
+      phone:     [this.user?.phone     ?? ''],
     });
 
-    this.motDePasseForm = this.fb.group({
-      ancien: ['', Validators.required],
-      nouveau: ['', [Validators.required, Validators.minLength(8)]],
-      confirmation: ['', Validators.required]
-    });
-
-    this.notificationsForm = this.fb.group({
-      email: this.fb.group({
-        dossiers: [true],
-        rappels: [true],
-        newsletter: [false]
-      }),
-      sms: this.fb.group({
-        urgences: [true],
-        confirmations: [false]
-      })
+    this.passwordForm = this.fb.group({
+      old_password:     ['', Validators.required],
+      new_password:     ['', [Validators.required, Validators.minLength(8)]],
+      confirm_password: ['', Validators.required],
     });
   }
 
-  async onProfilSubmit() {
-    if (this.profilForm.invalid) return;
-    this.isSaving = true;
-    await new Promise(res => setTimeout(res, 1500));
-    this.isSaving = false;
+  cancelEdit(): void {
     this.isEditing = false;
-    alert('Profil sauvegardé !');
+    this.profilForm.patchValue({
+      firstname: this.user?.firstname ?? '',
+      lastname:  this.user?.lastname  ?? '',
+      email:     this.user?.email     ?? '',
+      phone:     this.user?.phone     ?? '',
+    });
   }
 
-  async onMotDePasseSubmit() {
-    if (this.motDePasseForm.invalid) return;
+  saveProfile(): void {
+    if (this.profilForm.invalid) return;
+    this.saving = true;
 
-    const { nouveau, confirmation } = this.motDePasseForm.value;
-    if (nouveau !== confirmation) {
-      alert('Les mots de passe ne correspondent pas');
+    this.authService.update(this.profilForm.value).subscribe({
+      next: (res: any) => {
+        this.saving = false;
+        this.isEditing = false;
+        const updated = { ...this.user, ...this.profilForm.value,
+          name: `${this.profilForm.value.firstname} ${this.profilForm.value.lastname}` };
+        this.lsService.set(GlobalName.userName, updated);
+        this.user = updated;
+        AppSweetAlert.simpleAlert('success', 'Profil', 'Informations mises à jour avec succès.');
+      },
+      error: (err: any) => {
+        this.saving = false;
+        AppSweetAlert.simpleAlert('error', 'Profil', err?.error?.message ?? 'Une erreur est survenue.');
+      }
+    });
+  }
+
+  savePassword(): void {
+    if (this.passwordForm.invalid) return;
+    const { new_password, confirm_password } = this.passwordForm.value;
+    if (new_password !== confirm_password) {
+      AppSweetAlert.simpleAlert('warning', 'Mot de passe', 'Les mots de passe ne correspondent pas.');
       return;
     }
+    this.saving = true;
 
-    this.isSaving = true;
-    await new Promise(res => setTimeout(res, 1500));
-    this.isSaving = false;
-    this.motDePasseForm.reset();
-    alert('Mot de passe modifié avec succès');
+    this.authService.changePassword(this.passwordForm.value).subscribe({
+      next: () => {
+        this.saving = false;
+        this.passwordForm.reset();
+        AppSweetAlert.simpleAlert('success', 'Sécurité', 'Mot de passe modifié avec succès.');
+      },
+      error: (err: any) => {
+        this.saving = false;
+        AppSweetAlert.simpleAlert('error', 'Sécurité', err?.error?.message ?? 'Une erreur est survenue.');
+      }
+    });
   }
-
-  async onNotificationsSubmit() {
-    this.isSaving = true;
-    await new Promise(res => setTimeout(res, 1000));
-    this.isSaving = false;
-    alert('Préférences sauvegardées');
-  }
-
 }

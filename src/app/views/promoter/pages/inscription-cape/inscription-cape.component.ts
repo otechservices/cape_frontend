@@ -426,7 +426,7 @@ validateStep(step: number): boolean {
       this.currentStep = Math.min(this.currentStep + 1, 4);
     } else {
       this.markCurrentStepTouched();
-      alert('Veuillez corriger les champs invalides avant de continuer.');
+      AppSweetAlert.simpleAlert('warning', 'Formulaire incomplet', 'Veuillez corriger les champs invalides avant de continuer.');
     }
   }
 
@@ -450,7 +450,7 @@ validateStep(step: number): boolean {
 
   async onSubmit() {
     if (!this.validateStep(4) && this.code==undefined) {
-      alert('Veuillez remplir tous les champs requis.');
+      AppSweetAlert.simpleAlert('warning', 'Formulaire incomplet', 'Veuillez remplir tous les champs requis.');
       return;
     }
 

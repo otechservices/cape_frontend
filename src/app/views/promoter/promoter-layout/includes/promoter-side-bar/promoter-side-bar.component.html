@@ -1,69 +1,121 @@
-<button
-  class="tw-md:hidden tw-p-2 tw-rounded-lg tw-text-gray-600 hover:tw-bg-gray-100"
-  (click)="toggleMenu()"
->
-  <i class="fas fa-bars tw-text-2xl"></i>
+<!-- ===================== SIDEBAR DESKTOP ===================== -->
+<aside class="tw-fixed tw-left-0 tw-top-0 tw-w-64 tw-h-screen tw-flex tw-flex-col tw-z-40
+              tw-bg-blue-900 tw-hidden md:tw-flex">
+
+  <!-- Logo -->
+  <div class="tw-flex tw-items-center tw-gap-3 tw-px-5 tw-py-4 tw-border-b tw-border-white/10">
+    <img src="assets/template2/images/logo-masm.png" alt="MASM"
+         class="tw-h-10 tw-w-10 tw-object-contain tw-rounded tw-bg-white tw-p-1 tw-flex-shrink-0">
+    <div>
+      <div class="tw-text-white tw-font-bold tw-text-sm tw-tracking-wide">CAPE</div>
+      <div class="tw-text-blue-300 tw-text-xs">Espace Promoteur</div>
+    </div>
+  </div>
+
+  <!-- Utilisateur -->
+  <div class="tw-flex tw-items-center tw-gap-3 tw-px-5 tw-py-3 tw-border-b tw-border-white/10">
+    <div class="tw-w-9 tw-h-9 tw-rounded-full tw-flex tw-items-center tw-justify-center
+                tw-text-sm tw-font-bold tw-text-white tw-flex-shrink-0 tw-bg-blue-700">
+      {{ userInitial }}
+    </div>
+    <div class="tw-min-w-0">
+      <div class="tw-text-white tw-text-sm tw-font-medium tw-truncate">{{ userName }}</div>
+      <div class="tw-text-blue-300 tw-text-xs">Promoteur</div>
+    </div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="tw-flex-1 tw-overflow-y-auto tw-py-3 tw-px-3">
+    <button *ngFor="let item of menuItems"
+      (click)="goTo(item.id)"
+      [ngClass]="activeSection === item.id
+        ? 'tw-bg-white/10 tw-text-white tw-border-l-2 tw-border-blue-300'
+        : 'tw-text-blue-200 tw-border-l-2 tw-border-transparent hover:tw-bg-white/5 hover:tw-text-white'"
+      class="tw-w-full tw-flex tw-items-center tw-gap-3 tw-px-3 tw-py-2 tw-rounded-r
+             tw-text-sm tw-text-left tw-transition-colors tw-duration-150 tw-mb-0.5
+             tw-cursor-pointer tw-outline-none">
+      <i class="{{ item.icon }} tw-text-base tw-w-5 tw-flex-shrink-0"></i>
+      <span>{{ item.label }}</span>
+    </button>
+  </nav>
+
+  <!-- Déconnexion -->
+  <div class="tw-px-3 tw-pb-4 tw-pt-2 tw-border-t tw-border-white/10">
+    <button (click)="logout()"
+      class="tw-w-full tw-flex tw-items-center tw-gap-3 tw-px-3 tw-py-2 tw-rounded
+             tw-text-sm tw-text-left tw-text-red-300 tw-cursor-pointer tw-outline-none
+             tw-transition-colors tw-duration-150 hover:tw-bg-red-500/20 hover:tw-text-red-200">
+      <i class="ri-logout-box-line tw-text-base tw-w-5"></i>
+      <span>Déconnexion</span>
+    </button>
+  </div>
+</aside>
+
+
+<!-- ===================== BOUTON MOBILE ===================== -->
+<button class="md:tw-hidden tw-fixed tw-top-3 tw-left-4 tw-z-50
+               tw-w-9 tw-h-9 tw-bg-blue-900 tw-rounded-lg
+               tw-flex tw-items-center tw-justify-center
+               tw-text-white tw-shadow-md"
+        (click)="toggleMenu()">
+  <i class="fas fa-bars"></i>
 </button>
 
-<aside
-  class="tw-fixed tw-left-0 tw-top-20 tw-w-64 tw-h-[calc(100vh-5rem)] tw-bg-white tw-shadow-lg tw-border-r tw-border-gray-200 tw-overflow-y-auto tw-hidden md:tw-block"
->
-  <div class="tw-p-6">
-    <h2 class="tw-text-lg tw-font-semibold tw-text-gray-900 tw-mb-6">Tableau de bord</h2>
 
-    <nav class="tw-space-y-2">
-      <button
-        *ngFor="let item of menuItems"
+<!-- ===================== OVERLAY MOBILE ===================== -->
+<div *ngIf="menuOpen"
+     class="tw-fixed tw-inset-0 tw-z-50 tw-flex md:tw-hidden tw-bg-black/50"
+     (click)="toggleMenu()">
+
+  <aside class="tw-w-64 tw-h-full tw-flex tw-flex-col tw-bg-blue-900 tw-overflow-y-auto"
+         (click)="$event.stopPropagation()">
+
+    <!-- Logo -->
+    <div class="tw-flex tw-items-center tw-justify-between tw-px-5 tw-py-4 tw-border-b tw-border-white/10">
+      <div class="tw-flex tw-items-center tw-gap-3">
+        <img src="assets/template2/images/logo-masm.png" alt="MASM"
+             class="tw-h-9 tw-w-9 tw-object-contain tw-rounded tw-bg-white tw-p-1">
+        <div class="tw-text-white tw-font-bold tw-text-sm">CAPE</div>
+      </div>
+      <button (click)="toggleMenu()" class="tw-text-white/70 hover:tw-text-white">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <!-- Utilisateur -->
+    <div class="tw-flex tw-items-center tw-gap-3 tw-px-5 tw-py-3 tw-border-b tw-border-white/10">
+      <div class="tw-w-8 tw-h-8 tw-rounded-full tw-bg-blue-700 tw-flex tw-items-center
+                  tw-justify-center tw-text-sm tw-font-bold tw-text-white">
+        {{ userInitial }}
+      </div>
+      <div class="tw-min-w-0">
+        <div class="tw-text-white tw-text-sm tw-font-medium tw-truncate">{{ userName }}</div>
+        <div class="tw-text-blue-300 tw-text-xs">Promoteur</div>
+      </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="tw-flex-1 tw-py-3 tw-px-3">
+      <button *ngFor="let item of menuItems"
         (click)="goTo(item.id)"
-        [ngClass]="{
-          'tw-bg-blue-50 tw-text-blue-700 tw-border-r-2 tw-border-blue-700':
-            activeSection === item.id,
-          'tw-text-gray-700 hover:tw-bg-gray-50 hover:tw-text-gray-900':
-            activeSection !== item.id
-        }"
-        class="tw-w-full tw-flex tw-items-center tw-px-4 tw-py-3 tw-text-left tw-rounded-lg tw-transition-colors"
-      >
-        <i class="{{ item.icon }} tw-text-xl tw-mr-3 tw-w-6 tw-h-6 tw-flex tw-items-center tw-justify-center"></i>
-        <span class="tw-font-medium">{{ item.label }}</span>
+        [ngClass]="activeSection === item.id
+          ? 'tw-bg-white/10 tw-text-white tw-border-l-2 tw-border-blue-300'
+          : 'tw-text-blue-200 tw-border-l-2 tw-border-transparent'"
+        class="tw-w-full tw-flex tw-items-center tw-gap-3 tw-px-3 tw-py-2 tw-rounded-r
+               tw-text-sm tw-text-left tw-mb-0.5 tw-cursor-pointer tw-outline-none">
+        <i class="{{ item.icon }} tw-text-base tw-w-5 tw-flex-shrink-0"></i>
+        <span>{{ item.label }}</span>
       </button>
     </nav>
-  </div>
-</aside>
 
-
-<aside
-  *ngIf="menuOpen"
-  class="tw-fixed tw-inset-0 tw-bg-black/50 tw-z-50 tw-flex"
-  (click)="toggleMenu()"
->
-  <div
-    class="tw-w-64 tw-bg-white tw-h-full tw-shadow-lg tw-overflow-y-auto tw-p-6"
-    (click)="$event.stopPropagation()"
-  >
-    <button
-      class="tw-absolute tw-top-4 tw-right-4 tw-text-gray-600 hover:tw-text-gray-900"
-      (click)="toggleMenu()"
-    >
-      <i class="fas fa-times tw-text-xl"></i>
-    </button>
-
-    <h2 class="tw-text-lg tw-font-semibold tw-text-gray-900 tw-mb-6">Menu</h2>
-
-    <nav class="tw-space-y-2">
-      <button
-        *ngFor="let item of menuItems"
-        (click)="goTo(item.id); toggleMenu()"
-        [ngClass]="{
-          'tw-bg-blue-50 tw-text-blue-700 tw-border-r-2 tw-border-blue-700':
-            activeSection === item.id,
-          'tw-text-gray-700 hover:tw-bg-gray-50 hover:tw-text-gray-900':
-            activeSection !== item.id
-        }"
-        class="tw-w-full tw-flex tw-items-center tw-px-4 tw-py-3 tw-text-left tw-rounded-lg tw-transition-colors"
-      >
-        <i class="{{ item.icon }} tw-text-xl tw-mr-3"></i>
-        <span class="tw-font-medium">{{ item.label }}</span>
+    <!-- Déconnexion -->
+    <div class="tw-px-3 tw-pb-4 tw-pt-2 tw-border-t tw-border-white/10">
+      <button (click)="logout()"
+        class="tw-w-full tw-flex tw-items-center tw-gap-3 tw-px-3 tw-py-2 tw-rounded
+               tw-text-sm tw-text-red-300 tw-cursor-pointer tw-outline-none">
+        <i class="ri-logout-box-line tw-text-base tw-w-5"></i>
+        <span>Déconnexion</span>
       </button>
-    </nav>
-  </div>
-</aside>
+    </div>
+  </aside>
+</div>

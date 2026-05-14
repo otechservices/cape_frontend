@@ -55,7 +55,7 @@ export class AuthService {
 
 
   update(ressource:any){
-    return this.http.post<any>(`${this.url2}api/update-profile`, ressource,
+    return this.http.post<any>(`${this.url2}api/user-update`, ressource,
      ConfigService.httpHeader(null,true));
   }
 

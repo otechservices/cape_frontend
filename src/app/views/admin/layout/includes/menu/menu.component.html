@@ -8,7 +8,7 @@
   </button>
 </div>
 
-<!-- OVERLAY MOBILE (fond semi-transparent quand le menu est ouvert) -->
+<!-- OVERLAY MOBILE -->
 <div
   *ngIf="sidebarOpen"
   (click)="toggleSidebar()"
@@ -17,90 +17,135 @@
 
 <!-- SIDEBAR -->
 <div
-  class="tw-fixed md:tw-static tw-top-0 tw-left-0 tw-h-full tw-w-64 tw-bg-slate-800 tw-text-white tw-overflow-y-auto tw-transition-transform tw-z-50"
+  class="tw-fixed md:tw-relative tw-top-0 tw-left-0 tw-h-full tw-bg-slate-800 tw-text-white tw-overflow-hidden tw-transition-all tw-duration-300 tw-ease-in-out tw-flex-shrink-0 tw-z-50 tw-flex tw-flex-col"
+  [style.width]="collapsed ? '64px' : '256px'"
   [ngClass]="{ 'tw-translate-x-0': sidebarOpen, '-tw-translate-x-full': !sidebarOpen, 'md:tw-translate-x-0': true }"
 >
-  <div class="tw-p-6">
-    <!-- Logo + Titre -->
-    <div class="tw-flex tw-items-center tw-gap-3 tw-mb-8">
-      <div class="tw-w-8 tw-h-8 tw-bg-blue-600 tw-rounded-lg tw-flex tw-items-center tw-justify-center">
-        <i class="ri-building-line tw-text-white"></i>
+  <!-- En-tête sidebar : logo + bouton collapse -->
+  <div
+    class="tw-flex tw-items-center tw-px-3 tw-py-4 tw-border-b tw-border-slate-700 tw-flex-shrink-0"
+    [class.tw-justify-between]="!collapsed"
+    [class.tw-justify-center]="collapsed"
+  >
+    <div class="tw-flex tw-items-center tw-gap-2 tw-overflow-hidden" *ngIf="!collapsed">
+      <div class="tw-w-8 tw-h-8 tw-bg-blue-600 tw-rounded-lg tw-flex tw-items-center tw-justify-center tw-flex-shrink-0">
+        <i class="ri-building-line tw-text-white tw-text-sm"></i>
       </div>
-      <span class="tw-font-bold tw-text-xl">CAPE</span>
+      <span class="tw-font-bold tw-text-base tw-whitespace-nowrap">CAPE</span>
+    </div>
+    <div *ngIf="collapsed" class="tw-w-8 tw-h-8 tw-bg-blue-600 tw-rounded-lg tw-flex tw-items-center tw-justify-center">
+      <i class="ri-building-line tw-text-white tw-text-sm"></i>
     </div>
 
-    <!-- Navigation -->
-    <nav class="tw-space-y-1">
-      <div *ngFor="let item of menu">
-        <!-- Bouton menu principal -->
-        <button
-          (click)="handleItemClick(item)"
-          class="tw-w-full tw-flex tw-items-center tw-justify-between tw-px-3 tw-py-2 tw-rounded-lg tw-text-left tw-transition-colors tw-cursor-pointer tw-whitespace-nowrap"
-          [ngClass]="
-            item.children
-              ? 'tw-text-gray-300 hover:tw-text-white hover:tw-bg-slate-700'
-              : isActive(item.path)
-                ? 'tw-bg-blue-600 tw-text-white'
-                : 'tw-text-gray-300 hover:tw-text-white hover:tw-bg-slate-700'
-          "
-        >
-          <div class="tw-flex tw-items-center tw-gap-3">
-            <div class="tw-w-5 tw-h-5 tw-flex tw-items-center tw-justify-center tw-flex-shrink-0">
-              <i class="{{ item?.icon }} tw-text-sm"></i>
-            </div>
-            <span *ngIf="item?.isTitle" class="tw-text-sm tw-font-bold tw-text-blue-600">
-              {{ item?.title }}
-            </span>
-            <span *ngIf="!item?.isTitle" class="tw-text-sm tw-font-medium">
-              {{ item?.name }}
-            </span>
-          </div>
+    <!-- Bouton collapse desktop -->
+    <button
+      (click)="toggleCollapsed()"
+      class="tw-hidden md:tw-flex tw-items-center tw-justify-center tw-w-6 tw-h-6 tw-rounded tw-text-slate-400 hover:tw-text-white hover:tw-bg-slate-700 tw-transition-colors tw-flex-shrink-0"
+      [title]="collapsed ? 'Développer' : 'Réduire'"
+    >
+      <i class="tw-text-sm"
+         [class.ri-arrow-right-double-line]="collapsed"
+         [class.ri-arrow-left-double-line]="!collapsed"></i>
+    </button>
+  </div>
 
-          <div
-            *ngIf="item.children"
-            class="tw-w-4 tw-h-4 tw-flex tw-items-center tw-justify-center tw-flex-shrink-0"
-          >
-            <i
-              class="ri-arrow-right-s-line tw-text-xs tw-transition-transform"
-              [ngClass]="{ 'tw-rotate-90': expandedItems.includes(item.id) }"
-            ></i>
-          </div>
-        </button>
+  <!-- Navigation scrollable -->
+  <nav class="tw-flex-1 tw-overflow-y-auto tw-py-3 tw-px-2">
+    <div *ngFor="let item of menu">
 
-        <!-- Sous-menus -->
-        <div
-          *ngIf="item.children && expandedItems.includes(item.id)"
-          class="tw-ml-4 tw-mt-1 tw-space-y-1"
-        >
-          <ng-container *ngFor="let child of item.children">
-            <div
-              *ngIf="child.isTitle"
-              class="tw-w-full tw-flex tw-items-center tw-gap-3 tw-px-3 tw-py-2 tw-rounded-lg tw-text-left tw-font-semibold tw-text-gray-500 tw-uppercase"
-            >
-              <div class="tw-w-4 tw-h-4 tw-flex tw-items-center tw-justify-center tw-flex-shrink-0">
-                <i class="{{ child.icon }} tw-text-xs"></i>
-              </div>
-              <span class="tw-text-sm">{{ child.title }}</span>
-            </div>
-
-            <button
-              *ngIf="!child.isTitle"
-              (click)="handleItemClick(child)"
-              class="tw-w-full tw-flex tw-items-center tw-gap-3 tw-px-3 tw-py-2 tw-rounded-lg tw-text-left tw-transition-colors tw-cursor-pointer tw-whitespace-nowrap"
-              [ngClass]="
-                isActive(child.path)
-                  ? 'tw-bg-blue-600 tw-text-white'
-                  : 'tw-text-gray-400 hover:tw-text-white hover:tw-bg-slate-700'
-              "
-            >
-              <div class="tw-w-4 tw-h-4 tw-flex tw-items-center tw-justify-center tw-flex-shrink-0">
-                <i class="{{ child.icon }} tw-text-xs"></i>
-              </div>
-              <span class="tw-text-sm">{{ child.name }}</span>
-            </button>
-          </ng-container>
-        </div>
+      <!-- Titre de section -->
+      <div *ngIf="item.isTitle && !collapsed"
+           class="tw-mt-4 tw-mb-1 tw-px-3">
+        <span class="tw-text-xs tw-font-semibold tw-text-slate-400 tw-uppercase tw-tracking-widest">
+          {{ item.title }}
+        </span>
       </div>
-    </nav>
+      <!-- Séparateur quand collapsed -->
+      <div *ngIf="item.isTitle && collapsed" class="tw-my-2 tw-mx-2 tw-border-t tw-border-slate-700"></div>
+
+      <!-- Élément de menu -->
+      <button
+        *ngIf="!item.isTitle"
+        (click)="handleItemClick(item)"
+        [title]="collapsed ? item.name : ''"
+        class="tw-w-full tw-flex tw-items-center tw-px-3 tw-py-2.5 tw-rounded-lg tw-transition-colors tw-cursor-pointer tw-mb-0.5 tw-group"
+        [ngClass]="
+          isActive(item.route) || isAnyChildActive(item)
+            ? 'tw-bg-blue-600 tw-text-white'
+            : 'tw-text-slate-300 hover:tw-text-white hover:tw-bg-slate-700'
+        "
+      >
+        <!-- Icône -->
+        <div class="tw-flex tw-items-center tw-justify-center tw-w-5 tw-h-5 tw-flex-shrink-0">
+          <i class="{{ item.icon || 'ri-circle-line' }} tw-text-base"></i>
+        </div>
+
+        <!-- Libellé (caché quand collapsed) -->
+        <span
+          *ngIf="!collapsed"
+          class="tw-ml-3 tw-text-sm tw-font-medium tw-whitespace-nowrap tw-flex-1 tw-text-left tw-truncate"
+        >{{ item.name }}</span>
+
+        <!-- Chevron (caché quand collapsed) -->
+        <div *ngIf="item.children && !collapsed"
+             class="tw-flex tw-items-center tw-justify-center tw-w-4 tw-h-4 tw-flex-shrink-0">
+          <i
+            class="ri-arrow-right-s-line tw-text-sm tw-transition-transform tw-duration-200"
+            [class.tw-rotate-90]="expandedItems.includes(item.id)"
+          ></i>
+        </div>
+      </button>
+
+      <!-- Sous-menus -->
+      <div
+        *ngIf="item.children && expandedItems.includes(item.id) && !collapsed"
+        class="tw-ml-4 tw-mt-0.5 tw-mb-1 tw-border-l tw-border-slate-600 tw-pl-2 tw-space-y-0.5"
+      >
+        <ng-container *ngFor="let child of item.children">
+          <!-- Sous-titre -->
+          <div
+            *ngIf="child.isTitle"
+            class="tw-px-3 tw-py-1 tw-mt-2 tw-text-xs tw-font-semibold tw-text-slate-500 tw-uppercase tw-tracking-wider"
+          >{{ child.title }}</div>
+
+          <!-- Sous-item -->
+          <button
+            *ngIf="!child.isTitle"
+            (click)="handleItemClick(child)"
+            class="tw-w-full tw-flex tw-items-center tw-gap-2.5 tw-px-3 tw-py-2 tw-rounded-lg tw-transition-colors tw-cursor-pointer"
+            [ngClass]="
+              isActive(child.route)
+                ? 'tw-bg-blue-600 tw-text-white'
+                : 'tw-text-slate-400 hover:tw-text-white hover:tw-bg-slate-700'
+            "
+          >
+            <div class="tw-flex tw-items-center tw-justify-center tw-w-4 tw-h-4 tw-flex-shrink-0">
+              <i class="{{ child.icon || 'ri-arrow-right-s-line' }} tw-text-xs"></i>
+            </div>
+            <span class="tw-text-sm tw-whitespace-nowrap tw-truncate">{{ child.name }}</span>
+          </button>
+        </ng-container>
+      </div>
+
+    </div>
+  </nav>
+
+  <!-- Profil utilisateur en bas -->
+  <div class="tw-border-t tw-border-slate-700 tw-p-3 tw-flex-shrink-0">
+    <div
+      class="tw-flex tw-items-center tw-gap-3 tw-rounded-lg tw-p-2 tw-transition-colors hover:tw-bg-slate-700"
+      [class.tw-justify-center]="collapsed"
+    >
+      <div
+        class="tw-w-8 tw-h-8 tw-bg-blue-600 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-flex-shrink-0"
+        [title]="collapsed ? userName + ' (' + role + ')' : ''"
+      >
+        <span class="tw-text-white tw-text-sm tw-font-semibold">{{ userInitial }}</span>
+      </div>
+      <div *ngIf="!collapsed" class="tw-min-w-0 tw-flex-1">
+        <div class="tw-text-sm tw-font-medium tw-text-white tw-truncate">{{ userName }}</div>
+        <div class="tw-text-xs tw-text-slate-400 tw-capitalize">{{ role }}</div>
+      </div>
+    </div>
   </div>
 </div>

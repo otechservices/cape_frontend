@@ -1,120 +1,233 @@
-<div class="tw-max-w-4xl tw-mx-auto">
-  <!-- Titre -->
-  <div class="tw-mb-8">
-    <h1 class="tw-text-2xl tw-font-bold tw-text-gray-900 tw-mb-2">Mon Profil</h1>
-    <p class="tw-text-gray-600">Gérez vos informations personnelles et vos préférences</p>
+<div class="tw-max-w-2xl tw-mx-auto tw-space-y-6">
+
+  <!-- ── Titre ── -->
+  <div>
+    <h1 class="tw-text-2xl tw-font-bold tw-text-gray-900">Mon Profil</h1>
+    <p class="tw-text-gray-500 tw-text-sm tw-mt-1">Gérez vos informations personnelles et votre sécurité</p>
   </div>
 
-  <!-- Onglets -->
-  <div class="tw-border-b tw-border-gray-200 tw-mb-8">
-    <nav class="-tw-mb-px tw-flex tw-space-x-8">
-      <button
-        *ngFor="let tab of [
-          { key: 'informations', label: 'Informations personnelles', icon: 'ri-user-line' },
-          { key: 'securite', label: 'Sécurité', icon: 'ri-shield-line' },
-          { key: 'notifications', label: 'Notifications', icon: 'ri-notification-line' }
+  <!-- ── Carte avatar + identité ── -->
+  <div class="tw-bg-white tw-rounded-xl tw-border tw-border-gray-200 tw-p-6 tw-flex tw-items-center tw-gap-5">
+    <div class="tw-w-16 tw-h-16 tw-rounded-full tw-bg-blue-900 tw-flex tw-items-center tw-justify-center
+                tw-text-white tw-text-2xl tw-font-bold tw-flex-shrink-0">
+      {{ userInitial }}
+    </div>
+    <div class="tw-min-w-0">
+      <h2 class="tw-text-lg tw-font-semibold tw-text-gray-900 tw-truncate">{{ user?.name }}</h2>
+      <p class="tw-text-sm tw-text-gray-500">{{ user?.email }}</p>
+      <p *ngIf="user?.phone" class="tw-text-sm tw-text-gray-400">{{ user?.phone }}</p>
+    </div>
+  </div>
+
+  <!-- ── Onglets ── -->
+  <div class="tw-border-b tw-border-gray-200">
+    <nav class="tw-flex tw-gap-1 -tw-mb-px">
+      <button *ngFor="let tab of [
+          { key: 'informations', label: 'Informations', icon: 'ri-user-line' },
+          { key: 'securite',     label: 'Sécurité',     icon: 'ri-shield-keyhole-line' }
         ]"
-        (click)="activeTab = tab.key"
-        class="tw-py-2 tw-px-1 tw-border-b-2 tw-font-medium tw-text-sm tw-transition-colors tw-flex tw-items-center tw-space-x-2"
+        (click)="activeTab = $any(tab.key); isEditing = false"
+        class="tw-flex tw-items-center tw-gap-1.5 tw-px-4 tw-py-2.5 tw-text-sm tw-font-medium
+               tw-border-b-2 tw-transition-colors tw-cursor-pointer tw-outline-none"
         [ngClass]="activeTab === tab.key
-          ? 'tw-border-blue-500 tw-text-blue-600'
-          : 'tw-border-transparent tw-text-gray-500 hover:tw-text-gray-700 hover:tw-border-gray-300'"
-      >
+          ? 'tw-border-blue-600 tw-text-blue-600'
+          : 'tw-border-transparent tw-text-gray-500 hover:tw-text-gray-700'">
         <i [class]="tab.icon"></i>
-        <span>{{ tab.label }}</span>
+        {{ tab.label }}
       </button>
     </nav>
   </div>
 
-  <!-- Informations personnelles -->
-  <div *ngIf="activeTab === 'informations'" class="tw-bg-white tw-rounded-lg tw-shadow-sm tw-p-8">
-    <div class="tw-flex tw-items-center tw-justify-between tw-mb-6">
-      <h3 class="tw-text-lg tw-font-semibold tw-text-gray-900">Informations personnelles</h3>
-      <button *ngIf="!isEditing" (click)="isEditing = true"
-        class="tw-px-4 tw-py-2 tw-bg-blue-600 tw-text-white tw-rounded-lg hover:tw-bg-blue-700 tw-transition-colors tw-flex tw-items-center tw-space-x-2">
-        <i class="ri-edit-line"></i> <span>Modifier</span>
+  <!-- ══════════ INFORMATIONS ══════════ -->
+  <div *ngIf="activeTab === 'informations'"
+       class="tw-bg-white tw-rounded-xl tw-border tw-border-gray-200 tw-overflow-hidden">
+
+    <div class="tw-flex tw-items-center tw-justify-between tw-px-6 tw-py-4 tw-border-b tw-border-gray-100">
+      <h3 class="tw-text-sm tw-font-semibold tw-text-gray-900">Informations personnelles</h3>
+      <button *ngIf="!isEditing"
+              (click)="isEditing = true"
+              class="tw-flex tw-items-center tw-gap-1.5 tw-px-3 tw-py-1.5 tw-rounded-lg
+                     tw-bg-blue-600 tw-text-white tw-text-xs tw-font-medium
+                     hover:tw-bg-blue-700 tw-transition-colors">
+        <i class="ri-edit-line"></i> Modifier
       </button>
-      <button *ngIf="isEditing" (click)="isEditing = false"
-        class="tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-text-gray-700 tw-rounded-lg hover:tw-bg-gray-50 tw-transition-colors">
+      <button *ngIf="isEditing"
+              (click)="cancelEdit()"
+              class="tw-flex tw-items-center tw-gap-1.5 tw-px-3 tw-py-1.5 tw-rounded-lg
+                     tw-border tw-border-gray-300 tw-text-gray-600 tw-text-xs tw-font-medium
+                     hover:tw-bg-gray-50 tw-transition-colors">
         Annuler
       </button>
     </div>
 
-    <form [formGroup]="profilForm" (ngSubmit)="onProfilSubmit()" class="tw-space-y-6">
-      <!-- Exemple champ prénom -->
-      <div>
-        <label class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 tw-mb-2">Prénom *</label>
-        <input type="text" formControlName="prenom" [disabled]="!isEditing"
-          class="tw-w-full tw-px-4 tw-py-2 tw-border tw-border-gray-300 tw-rounded-lg focus:tw-ring-2 focus:tw-ring-blue-500 disabled:tw-bg-gray-50" />
+    <form [formGroup]="profilForm" (ngSubmit)="saveProfile()" class="tw-px-6 tw-py-5 tw-space-y-5">
+
+      <div class="tw-grid tw-grid-cols-1 sm:tw-grid-cols-2 tw-gap-5">
+
+        <div>
+          <label class="tw-block tw-text-xs tw-font-medium tw-text-gray-500 tw-uppercase tw-tracking-wide tw-mb-1.5">
+            Prénom <span class="tw-text-red-500">*</span>
+          </label>
+          <input type="text" formControlName="firstname"
+                 [readOnly]="!isEditing"
+                 class="tw-w-full tw-border tw-border-gray-300 tw-rounded-lg tw-px-3 tw-py-2 tw-text-sm
+                        tw-text-gray-900 tw-transition-colors tw-outline-none
+                        focus:tw-border-blue-500 focus:tw-ring-1 focus:tw-ring-blue-500"
+                 [ngClass]="!isEditing ? 'tw-bg-gray-50 tw-text-gray-500' : 'tw-bg-white'">
+        </div>
+
+        <div>
+          <label class="tw-block tw-text-xs tw-font-medium tw-text-gray-500 tw-uppercase tw-tracking-wide tw-mb-1.5">
+            Nom <span class="tw-text-red-500">*</span>
+          </label>
+          <input type="text" formControlName="lastname"
+                 [readOnly]="!isEditing"
+                 class="tw-w-full tw-border tw-border-gray-300 tw-rounded-lg tw-px-3 tw-py-2 tw-text-sm
+                        tw-text-gray-900 tw-transition-colors tw-outline-none
+                        focus:tw-border-blue-500 focus:tw-ring-1 focus:tw-ring-blue-500"
+                 [ngClass]="!isEditing ? 'tw-bg-gray-50 tw-text-gray-500' : 'tw-bg-white'">
+        </div>
+
+        <div>
+          <label class="tw-block tw-text-xs tw-font-medium tw-text-gray-500 tw-uppercase tw-tracking-wide tw-mb-1.5">
+            Adresse email <span class="tw-text-red-500">*</span>
+          </label>
+          <input type="email" formControlName="email"
+                 [readOnly]="!isEditing"
+                 class="tw-w-full tw-border tw-border-gray-300 tw-rounded-lg tw-px-3 tw-py-2 tw-text-sm
+                        tw-text-gray-900 tw-transition-colors tw-outline-none
+                        focus:tw-border-blue-500 focus:tw-ring-1 focus:tw-ring-blue-500"
+                 [ngClass]="!isEditing ? 'tw-bg-gray-50 tw-text-gray-500' : 'tw-bg-white'">
+          <p *ngIf="profilForm.get('email')?.invalid && profilForm.get('email')?.touched"
+             class="tw-text-red-500 tw-text-xs tw-mt-1">Adresse email invalide</p>
+        </div>
+
+        <div>
+          <label class="tw-block tw-text-xs tw-font-medium tw-text-gray-500 tw-uppercase tw-tracking-wide tw-mb-1.5">
+            Téléphone
+          </label>
+          <input type="tel" formControlName="phone"
+                 [readOnly]="!isEditing"
+                 class="tw-w-full tw-border tw-border-gray-300 tw-rounded-lg tw-px-3 tw-py-2 tw-text-sm
+                        tw-text-gray-900 tw-transition-colors tw-outline-none
+                        focus:tw-border-blue-500 focus:tw-ring-1 focus:tw-ring-blue-500"
+                 [ngClass]="!isEditing ? 'tw-bg-gray-50 tw-text-gray-500' : 'tw-bg-white'">
+        </div>
+
       </div>
 
-      <!-- Autres champs à reproduire comme en React -->
-      
-      <div *ngIf="isEditing" class="tw-flex tw-justify-end">
-        <button type="submit" [disabled]="isSaving"
-          class="tw-px-6 tw-py-2 tw-bg-blue-600 tw-text-white tw-rounded-lg hover:tw-bg-blue-700 disabled:tw-opacity-50 tw-transition-colors">
-          <span *ngIf="isSaving">Sauvegarde...</span>
-          <span *ngIf="!isSaving">Sauvegarder</span>
+      <div *ngIf="isEditing" class="tw-flex tw-justify-end tw-pt-2">
+        <button type="submit"
+                [disabled]="profilForm.invalid || saving"
+                class="tw-flex tw-items-center tw-gap-2 tw-px-5 tw-py-2 tw-rounded-lg
+                       tw-bg-blue-600 tw-text-white tw-text-sm tw-font-medium
+                       hover:tw-bg-blue-700 tw-transition-colors
+                       disabled:tw-opacity-50 disabled:tw-cursor-not-allowed">
+          <i *ngIf="!saving" class="ri-save-line"></i>
+          <span *ngIf="saving" class="tw-w-4 tw-h-4 tw-border-2 tw-border-white tw-border-t-transparent
+                                      tw-rounded-full tw-animate-spin tw-inline-block"></span>
+          {{ saving ? 'Enregistrement…' : 'Enregistrer les modifications' }}
         </button>
       </div>
+
     </form>
   </div>
 
-  <!-- Sécurité -->
-  <div *ngIf="activeTab === 'securite'" class="tw-bg-white tw-rounded-lg tw-shadow-sm tw-p-8">
-    <!-- Formulaire mot de passe -->
-    <form [formGroup]="motDePasseForm" (ngSubmit)="onMotDePasseSubmit()" class="tw-space-y-6">
-      <input type="password" formControlName="ancien" placeholder="Mot de passe actuel *" />
-      <input type="password" formControlName="nouveau" placeholder="Nouveau mot de passe *" />
-      <input type="password" formControlName="confirmation" placeholder="Confirmer mot de passe *" />
-      <button type="submit" [disabled]="isSaving" class="btn-primary">
-        {{ isSaving ? 'Modification...' : 'Modifier le mot de passe' }}
-      </button>
-    </form>
-  </div>
+  <!-- ══════════ SÉCURITÉ ══════════ -->
+  <div *ngIf="activeTab === 'securite'"
+       class="tw-bg-white tw-rounded-xl tw-border tw-border-gray-200 tw-overflow-hidden">
 
-  <!-- Notifications -->
-  <div *ngIf="activeTab === 'notifications'" class="tw-bg-white tw-rounded-lg tw-shadow-sm tw-p-8">
-    <form [formGroup]="notificationsForm" (ngSubmit)="onNotificationsSubmit()">
-      
-      <!-- Groupe Email -->
-      <div formGroupName="email" class="tw-mb-4">
-        <h3 class="tw-text-lg tw-font-semibold tw-mb-2">Notifications Email</h3>
-        
-        <label class="tw-block">
-          <input type="checkbox" formControlName="dossiers" />
-          Suivi des dossiers
-        </label>
+    <div class="tw-px-6 tw-py-4 tw-border-b tw-border-gray-100">
+      <h3 class="tw-text-sm tw-font-semibold tw-text-gray-900">Changer le mot de passe</h3>
+      <p class="tw-text-xs tw-text-gray-400 tw-mt-0.5">Minimum 8 caractères</p>
+    </div>
 
-        <label class="tw-block">
-          <input type="checkbox" formControlName="rappels" />
-          Rappels automatiques
-        </label>
+    <form [formGroup]="passwordForm" (ngSubmit)="savePassword()" class="tw-px-6 tw-py-5 tw-space-y-4">
 
-        <label class="tw-block">
-          <input type="checkbox" formControlName="newsletter" />
-          Newsletter
+      <!-- Mot de passe actuel -->
+      <div>
+        <label class="tw-block tw-text-xs tw-font-medium tw-text-gray-500 tw-uppercase tw-tracking-wide tw-mb-1.5">
+          Mot de passe actuel <span class="tw-text-red-500">*</span>
         </label>
+        <div class="tw-relative">
+          <input [type]="showOld ? 'text' : 'password'" formControlName="old_password"
+                 class="tw-w-full tw-border tw-border-gray-300 tw-rounded-lg tw-px-3 tw-py-2 tw-pr-10
+                        tw-text-sm tw-text-gray-900 tw-bg-white tw-outline-none
+                        focus:tw-border-blue-500 focus:tw-ring-1 focus:tw-ring-blue-500">
+          <button type="button" (click)="showOld = !showOld"
+                  class="tw-absolute tw-right-3 tw-top-1/2 -tw-translate-y-1/2 tw-text-gray-400 hover:tw-text-gray-600">
+            <i [class]="showOld ? 'ri-eye-off-line' : 'ri-eye-line'"></i>
+          </button>
+        </div>
       </div>
 
-      <!-- Groupe SMS -->
-      <div formGroupName="sms" class="tw-mb-4">
-        <h3 class="tw-text-lg tw-font-semibold tw-mb-2">Notifications SMS</h3>
-        
-        <label class="tw-block">
-          <input type="checkbox" formControlName="urgences" />
-          Urgences
+      <!-- Nouveau mot de passe -->
+      <div>
+        <label class="tw-block tw-text-xs tw-font-medium tw-text-gray-500 tw-uppercase tw-tracking-wide tw-mb-1.5">
+          Nouveau mot de passe <span class="tw-text-red-500">*</span>
         </label>
-
-        <label class="tw-block">
-          <input type="checkbox" formControlName="confirmations" />
-          Confirmations
-        </label>
+        <div class="tw-relative">
+          <input [type]="showNew ? 'text' : 'password'" formControlName="new_password"
+                 class="tw-w-full tw-border tw-border-gray-300 tw-rounded-lg tw-px-3 tw-py-2 tw-pr-10
+                        tw-text-sm tw-text-gray-900 tw-bg-white tw-outline-none
+                        focus:tw-border-blue-500 focus:tw-ring-1 focus:tw-ring-blue-500">
+          <button type="button" (click)="showNew = !showNew"
+                  class="tw-absolute tw-right-3 tw-top-1/2 -tw-translate-y-1/2 tw-text-gray-400 hover:tw-text-gray-600">
+            <i [class]="showNew ? 'ri-eye-off-line' : 'ri-eye-line'"></i>
+          </button>
+        </div>
+        <div *ngIf="passwordForm.get('new_password')?.value as pwd"
+             class="tw-mt-2 tw-flex tw-gap-1">
+          <span *ngFor="let _ of [1,2,3,4]"
+                class="tw-flex-1 tw-h-1 tw-rounded-full tw-transition-colors"
+                [ngClass]="{
+                  'tw-bg-red-400':   pwd.length >= 1  && pwd.length < 6,
+                  'tw-bg-amber-400': pwd.length >= 6  && pwd.length < 8,
+                  'tw-bg-green-400': pwd.length >= 8
+                }"></span>
+        </div>
+        <p *ngIf="passwordForm.get('new_password')?.invalid && passwordForm.get('new_password')?.touched"
+           class="tw-text-red-500 tw-text-xs tw-mt-1">Minimum 8 caractères requis</p>
       </div>
 
-      <button type="submit" [disabled]="isSaving" class="btn-primary tw-mt-4">
-        {{ isSaving ? 'Sauvegarde...' : 'Sauvegarder' }}
-      </button>
+      <!-- Confirmation -->
+      <div>
+        <label class="tw-block tw-text-xs tw-font-medium tw-text-gray-500 tw-uppercase tw-tracking-wide tw-mb-1.5">
+          Confirmer le nouveau mot de passe <span class="tw-text-red-500">*</span>
+        </label>
+        <div class="tw-relative">
+          <input [type]="showConfirm ? 'text' : 'password'" formControlName="confirm_password"
+                 class="tw-w-full tw-border tw-border-gray-300 tw-rounded-lg tw-px-3 tw-py-2 tw-pr-10
+                        tw-text-sm tw-text-gray-900 tw-bg-white tw-outline-none
+                        focus:tw-border-blue-500 focus:tw-ring-1 focus:tw-ring-blue-500"
+                 [ngClass]="passwordForm.get('confirm_password')?.value &&
+                             passwordForm.get('confirm_password')?.value !== passwordForm.get('new_password')?.value
+                             ? 'tw-border-red-400' : ''">
+          <button type="button" (click)="showConfirm = !showConfirm"
+                  class="tw-absolute tw-right-3 tw-top-1/2 -tw-translate-y-1/2 tw-text-gray-400 hover:tw-text-gray-600">
+            <i [class]="showConfirm ? 'ri-eye-off-line' : 'ri-eye-line'"></i>
+          </button>
+        </div>
+        <p *ngIf="passwordForm.get('confirm_password')?.value &&
+                  passwordForm.get('confirm_password')?.value !== passwordForm.get('new_password')?.value"
+           class="tw-text-red-500 tw-text-xs tw-mt-1">Les mots de passe ne correspondent pas</p>
+      </div>
+
+      <div class="tw-flex tw-justify-end tw-pt-2">
+        <button type="submit"
+                [disabled]="passwordForm.invalid || saving"
+                class="tw-flex tw-items-center tw-gap-2 tw-px-5 tw-py-2 tw-rounded-lg
+                       tw-bg-blue-600 tw-text-white tw-text-sm tw-font-medium
+                       hover:tw-bg-blue-700 tw-transition-colors
+                       disabled:tw-opacity-50 disabled:tw-cursor-not-allowed">
+          <i *ngIf="!saving" class="ri-lock-password-line"></i>
+          <span *ngIf="saving" class="tw-w-4 tw-h-4 tw-border-2 tw-border-white tw-border-t-transparent
+                                      tw-rounded-full tw-animate-spin tw-inline-block"></span>
+          {{ saving ? 'Enregistrement…' : 'Changer le mot de passe' }}
+        </button>
+      </div>
+
     </form>
   </div>
+
 </div>

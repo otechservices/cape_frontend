@@ -1,6 +1,10 @@
-import { Component } from '@angular/core';
-import { Router } from '@angular/router';
-
+import { Component, OnInit } from '@angular/core';
+import { NavigationEnd, Router } from '@angular/router';
+import { filter } from 'rxjs/operators';
+import { AuthService } from 'src/app/core/services/auth.service';
+import { GlobalName } from 'src/app/core/utils/global-name';
+import { LocalStorageService } from 'src/app/core/utils/local-stoarge-service';
+import { ToastrService } from 'ngx-toastr';
 
 interface MenuItem {
   id: string;
@@ -13,55 +17,75 @@ interface MenuItem {
   templateUrl: './promoter-side-bar.component.html',
   styleUrl: './promoter-side-bar.component.css'
 })
-export class PromoterSideBarComponent {
-  activeSection: string = 'dashboard';
-menuItems: MenuItem[] = [
-    { id: 'dashboard', label: 'Accueil', icon: 'ri-home-line' },
-    { id: 'inscription-cape', label: 'Inscription CAPE', icon: 'ri-file-add-line' },
-    { id: 'inscription-garderie', label: 'Inscription Garderie', icon: 'ri-building-line' },
-    { id: 'mes-dossiers', label: 'Mes Dossiers', icon: 'ri-folder-line' },
-{ id: 'staff', label: 'Personnels', icon: 'ri-user-2-line' },
-  { id: 'residents', label: 'Pensionnaires', icon: 'ri-team-line' },
-  { id: 'referals', label: 'Recommandations', icon: 'ri-book-mark-line' },
-  { id: 'activity-report', label: "Rapport d'activité", icon: 'ri-file-list-3-line' },
+export class PromoterSideBarComponent implements OnInit {
 
-  // Statistiques CAPE
-  // { id: 'statistiques/cape-inscrits/cape', label: 'CAPE inscrits', icon: 'ri-file-list-line' },
-  // { id: 'statistiques/cape-autorises/cape', label: 'CAPE autorisés', icon: 'ri-check-line' },
-  // { id: 'statistiques/controls/cape', label: 'Visites de terrain', icon: 'ri-map-pin-line' },
+  activeSection = 'dashboard';
+  menuOpen = false;
+  user: any = null;
 
-  // Statistiques Garderie
-  // { id: 'statistiques/cape-inscrits/garderie', label: 'Garderies inscrites', icon: 'ri-file-list-line' },
-  // { id: 'statistiques/cape-autorises/garderie', label: 'Garderies autorisées', icon: 'ri-check-line' },
-  // { id: 'statistiques/controls/garderie', label: 'Visites de terrain', icon: 'ri-map-pin-line' },
-
-  // Recherche CAPE
-  // { id: 'search/cape-inscrits/cape', label: 'CAPE inscrits', icon: 'ri-file-list-line' },
-  // { id: 'search/cape-autorises/cape', label: 'CAPE autorisés', icon: 'ri-check-line' },
-
-  // Recherche Garderie
-  // { id: 'search/cape-inscrits/garderie', label: 'Garderie inscrites', icon: 'ri-file-list-line' },
-  // { id: 'search/cape-autorises/garderie', label: 'Garderie autorisées', icon: 'ri-check-line' },
-
-
-    { id: 'assistance-en-ligne', label: 'Assistance en ligne', icon: 'ri-customer-service-line' },
-    { id: 'mon-profil-promoteur', label: 'Mon Profil', icon: 'ri-user-line' }
-
-
+  menuItems: MenuItem[] = [
+    { id: 'dashboard',           label: 'Accueil',              icon: 'ri-home-5-line' },
+    { id: 'inscription-cape',    label: 'Inscription CAPE',     icon: 'ri-file-add-line' },
+    { id: 'inscription-garderie',label: 'Inscription Garderie', icon: 'ri-building-line' },
+    { id: 'mes-dossiers',        label: 'Mes Dossiers',         icon: 'ri-folder-2-line' },
+    { id: 'staff',               label: 'Personnels',           icon: 'ri-user-2-line' },
+    { id: 'residents',           label: 'Pensionnaires',        icon: 'ri-team-line' },
+    { id: 'referals',            label: 'Recommandations',      icon: 'ri-bookmark-line' },
+    { id: 'activity-report',     label: "Rapport d'activité",   icon: 'ri-file-chart-line' },
+    { id: 'assistance-en-ligne', label: 'Assistance en ligne',  icon: 'ri-customer-service-2-line' },
+    { id: 'mon-profil-promoteur',label: 'Mon Profil',           icon: 'ri-user-settings-line' },
   ];
-menuOpen = false;
-  constructor(private router:Router){
 
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+    private lsService: LocalStorageService,
+    private toastr: ToastrService,
+  ) {}
+
+  ngOnInit(): void {
+    this.user = this.lsService.get(GlobalName.userName);
+    this.setActiveFromUrl(this.router.url);
+    this.router.events
+      .pipe(filter(e => e instanceof NavigationEnd))
+      .subscribe((e: any) => this.setActiveFromUrl(e.urlAfterRedirects));
   }
 
+  get userInitial(): string {
+    return this.user?.name?.charAt(0)?.toUpperCase() ?? '?';
+  }
 
-  toggleMenu() {
-  this.menuOpen = !this.menuOpen;
-}
+  get userName(): string {
+    return this.user?.name ?? 'Promoteur';
+  }
 
+  private setActiveFromUrl(url: string): void {
+    const segment = url.replace('/promoter/', '').split('/')[0].split('?')[0];
+    this.activeSection = segment || 'dashboard';
+  }
 
-  goTo(id:any){
-    this.activeSection=id
-    this.router.navigate(['/promoter/'+id])
+  goTo(id: string): void {
+    this.menuOpen = false;
+    this.router.navigate(['/promoter/' + id]);
+  }
+
+  toggleMenu(): void {
+    this.menuOpen = !this.menuOpen;
+  }
+
+  logout(): void {
+    this.authService.logout().subscribe({
+      next: () => this.clearSession(),
+      error: () => this.clearSession(),
+    });
+  }
+
+  private clearSession(): void {
+    this.lsService.remove(GlobalName.tokenName);
+    this.lsService.remove(GlobalName.refreshTokenName);
+    this.lsService.remove(GlobalName.expireIn);
+    this.lsService.remove(GlobalName.userName);
+    this.toastr.success('Déconnexion réussie');
+    this.router.navigate(['/public/auth/login']);
   }
 }

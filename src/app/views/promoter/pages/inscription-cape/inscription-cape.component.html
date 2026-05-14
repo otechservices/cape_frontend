@@ -1,688 +1,704 @@
-<div class="tw-max-w-full tw-mx-auto p-5">
-  <!-- <div class="tw-mb-8" *ngIf="submitStatus !== 'success'">
-    <h1 class="tw-text-2xl tw-font-bold tw-text-gray-900 tw-mb-2">Inscription CAPE</h1>
-    <p class="tw-text-gray-600">
-      Candidature pour l'autorisation de Centre d'Accueil de la Petite Enfance
-    </p>
-  </div> -->
+<div class="tw-max-w-3xl tw-mx-auto tw-space-y-6">
 
-  <!-- ✅ Succès -->
-  <div *ngIf="submitStatus === 'success'" class="tw-bg-white tw-rounded-lg tw-shadow-sm tw-p-8 tw-text-center">
-    <div class="tw-w-16 tw-h-16 tw-bg-green-100 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-mx-auto tw-mb-6">
-      <i class="ri-check-line tw-text-3xl tw-text-green-600"></i>
-    </div>
-    <h2 class="tw-text-2xl tw-font-bold tw-text-gray-900 tw-mb-4">Candidature envoyée avec succès !</h2>
-    <p class="tw-text-gray-600 tw-mb-6">
-      Votre candidature CAPE a été reçue. Vous recevrez une confirmation par email sous 5-7 jours ouvrables.
-    </p>
-    <button (click)="resetForm()" class="tw-bg-blue-600 tw-text-white tw-px-6 tw-py-2 tw-rounded-lg hover:tw-bg-blue-700">
-      Nouvelle candidature
-    </button>
+  <!-- ── Titre ── -->
+  <div>
+    <h1 class="tw-text-xl sm:tw-text-2xl tw-font-bold tw-text-gray-900">Inscription CAPE</h1>
+    <p class="tw-text-gray-500 tw-text-xs sm:tw-text-sm tw-mt-1">Candidature pour l'autorisation d'un Centre d'Accueil de la Petite Enfance</p>
   </div>
 
-  <!-- ✅ Formulaire -->
-  <form *ngIf="submitStatus !== 'success'" [formGroup]="formData" (ngSubmit)="onSubmit()" class="tw-bg-white tw-rounded-lg tw-shadow-sm tw-p-8">
-
-    <!-- Stepper -->
-    <div class="tw-flex tw-items-center tw-justify-between tw-mb-8">
+  <!-- ── Stepper ── -->
+  <div class="tw-bg-white tw-rounded-xl tw-border tw-border-gray-200 tw-px-3 sm:tw-px-6 tw-py-3 sm:tw-py-4">
+    <div class="tw-flex tw-items-center">
       <ng-container *ngFor="let step of steps; let i = index">
-        <div class="tw-flex tw-items-center">
-          <div class="tw-flex tw-items-center tw-justify-center tw-w-10 tw-h-10 tw-rounded-full"
-            [ngClass]="currentStep >= step.number ? 'tw-bg-blue-600 tw-text-white' : 'tw-bg-gray-200 tw-text-gray-500'">
-            <i class="{{step.icon}} tw-text-lg"></i>
+        <!-- Item étape -->
+        <div [ngClass]="i === steps.length - 1 ? 'tw-flex tw-items-center tw-flex-none' : 'tw-flex tw-items-center tw-flex-1 tw-min-w-0'">
+          <!-- Cercle -->
+          <div class="tw-flex-shrink-0 tw-flex tw-items-center tw-justify-center tw-w-7 tw-h-7 sm:tw-w-9 sm:tw-h-9 tw-rounded-full tw-transition-colors"
+               [ngClass]="currentStep > step.number
+                 ? 'tw-bg-blue-600 tw-text-white'
+                 : currentStep === step.number
+                   ? 'tw-bg-blue-600 tw-text-white tw-ring-2 sm:tw-ring-4 tw-ring-blue-100'
+                   : 'tw-bg-gray-100 tw-text-gray-400'">
+            <i *ngIf="currentStep > step.number" class="ri-check-line tw-text-xs sm:tw-text-sm tw-font-bold"></i>
+            <i *ngIf="currentStep <= step.number" [class]="step.icon + ' tw-text-xs sm:tw-text-sm'"></i>
           </div>
-          <div class="tw-ml-3">
-            <p class="tw-text-sm tw-font-medium"
-              [ngClass]="currentStep >= step.number ? 'tw-text-blue-600' : 'tw-text-gray-500'">
+          <!-- Label (masqué sur xs) -->
+          <div class="tw-ml-2 sm:tw-ml-2.5 tw-hidden sm:tw-block tw-min-w-0">
+            <p class="tw-text-xs tw-font-semibold tw-leading-tight tw-truncate"
+               [ngClass]="currentStep >= step.number ? 'tw-text-blue-600' : 'tw-text-gray-400'">
               Étape {{ step.number }}
             </p>
-            <p class="tw-text-xs"
-              [ngClass]="currentStep >= step.number ? 'tw-text-blue-600' : 'tw-text-gray-400'">
+            <p class="tw-text-xs tw-leading-tight tw-truncate"
+               [ngClass]="currentStep >= step.number ? 'tw-text-gray-700' : 'tw-text-gray-400'">
               {{ step.title }}
             </p>
           </div>
-          <div *ngIf="i < steps.length - 1" class="tw-w-16 tw-h-0.5 tw-ml-6"
-            [ngClass]="currentStep > step.number ? 'tw-bg-blue-600' : 'tw-bg-gray-200'"></div>
         </div>
+        <!-- Connecteur -->
+        <div *ngIf="i < steps.length - 1"
+             class="tw-flex-1 tw-h-0.5 tw-mx-1 sm:tw-mx-3"
+             [ngClass]="currentStep > step.number ? 'tw-bg-blue-600' : 'tw-bg-gray-200'"></div>
       </ng-container>
     </div>
+  </div>
 
-    <!-- Étape 1 -->
-    <div *ngIf="currentStep === 1" class="tw-space-y-6">
-        <h3 class="tw-text-lg tw-font-semibold tw-text-gray-900 tw-mb-6">Informations promoteur</h3>
-        <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-gap-6">
-            
-            <!-- Nature du promoteur -->
-            <div>
-            <label class="tw-block tw-font-medium">Nature du promoteur <span class="tw-text-red-500">*</span></label>
-            <select formControlName="nature_promotor_id" class="tw-w-full tw-px-3 tw-py-2 tw-border tw-border-gray-400 
-         tw-rounded-lg tw-bg-gray-50 focus:tw-ring-2 focus:tw-ring-blue-500 
-         focus:tw-border-blue-500 tw-text-gray-900">
+  <!-- ══════════ FORMULAIRE ══════════ -->
+  <form [formGroup]="formData" (ngSubmit)="onSubmit()">
+
+    <!-- ── Étape 1 : Promoteur ── -->
+    <div *ngIf="currentStep === 1" class="tw-space-y-5">
+
+      <!-- Nature -->
+      <div class="tw-bg-white tw-rounded-xl tw-border tw-border-gray-200 tw-overflow-hidden">
+        <div class="tw-px-4 sm:tw-px-6 tw-py-3 sm:tw-py-4 tw-border-b tw-border-gray-100 tw-flex tw-items-center tw-gap-2">
+          <i class="ri-user-line tw-text-blue-600"></i>
+          <h3 class="tw-text-sm tw-font-semibold tw-text-gray-900">Informations du promoteur</h3>
+        </div>
+        <div class="tw-px-4 sm:tw-px-6 tw-py-4 sm:tw-py-5 tw-space-y-4">
+
+          <div class="tw-grid tw-grid-cols-1 sm:tw-grid-cols-2 tw-gap-4">
+
+            <div class="sm:tw-col-span-2">
+              <label class="tw-block tw-text-xs tw-font-medium tw-text-gray-500 tw-uppercase tw-tracking-wide tw-mb-1.5">
+                Nature du promoteur <span class="tw-text-red-500">*</span>
+              </label>
+              <select formControlName="nature_promotor_id"
+                      class="tw-w-full tw-border tw-border-gray-300 tw-rounded-lg tw-px-3 tw-py-2 tw-text-sm tw-bg-white tw-outline-none
+                             focus:tw-border-blue-500 focus:tw-ring-1 focus:tw-ring-blue-500">
+                <option value="" disabled selected>Sélectionner…</option>
                 <option *ngFor="let d of nps" [value]="d.id">{{ d.name }}</option>
-            </select>
+              </select>
             </div>
 
-            <!-- Si personne morale -->
+            <!-- Personne morale -->
             <ng-container *ngIf="formData.get('nature_promotor_id')?.value == 2">
-            <div>
-                <label class="tw-block tw-font-medium">Dénomination <span class="tw-text-red-500">*</span></label>
-                <input type="text" formControlName="social_reason" class="tw-w-full tw-px-3 tw-py-2 tw-border tw-border-gray-400 
-         tw-rounded-lg tw-bg-gray-50 focus:tw-ring-2 focus:tw-ring-blue-500 
-         focus:tw-border-blue-500 tw-text-gray-900 tw-placeholder-gray-500">
-            </div>
-
-            <div>
-                <label class="tw-block tw-font-medium">Siège <span class="tw-text-red-500">*</span></label>
-                <input type="text" formControlName="head_office" class="tw-w-full tw-px-3 tw-py-2 tw-border tw-border-gray-400 
-         tw-rounded-lg tw-bg-gray-50 focus:tw-ring-2 focus:tw-ring-blue-500 
-         focus:tw-border-blue-500 tw-text-gray-900 tw-placeholder-gray-500">
-            </div>
-
-            <div>
-                <label class="tw-block tw-font-medium">Contact <span class="tw-text-red-500">*</span></label>
-                <input type="text" formControlName="registered_phone" class="tw-w-full tw-px-3 tw-py-2 tw-border tw-border-gray-400 
-         tw-rounded-lg tw-bg-gray-50 focus:tw-ring-2 focus:tw-ring-blue-500 
-         focus:tw-border-blue-500 tw-text-gray-900 tw-placeholder-gray-500">
-            </div>
-
-            <div>
-                <label class="tw-block tw-font-medium">N° d'enregistrement <span class="tw-text-red-500">*</span></label>
-                <input type="text" formControlName="registered_number" class="tw-w-full tw-px-3 tw-py-2 tw-border tw-border-gray-400 
-         tw-rounded-lg tw-bg-gray-50 focus:tw-ring-2 focus:tw-ring-blue-500 
-         focus:tw-border-blue-500 tw-text-gray-900 tw-placeholder-gray-500">
-            </div>
-
-            <div>
-                <label class="tw-block tw-font-medium">Date d'enregistrement <span class="tw-text-red-500">*</span></label>
-                <input type="date" formControlName="registered_date" class="tw-w-full tw-px-3 tw-py-2 tw-border tw-border-gray-400 
-         tw-rounded-lg tw-bg-gray-50 focus:tw-ring-2 focus:tw-ring-blue-500 
-         focus:tw-border-blue-500 tw-text-gray-900 tw-placeholder-gray-500">
-            </div>
-
-            <div>
-                <label class="tw-block tw-font-medium">Preuve d’enregistrement</label>
-                <input type="file" accept="application/pdf">
-            </div>
+              <div>
+                <label class="tw-block tw-text-xs tw-font-medium tw-text-gray-500 tw-uppercase tw-tracking-wide tw-mb-1.5">Dénomination <span class="tw-text-red-500">*</span></label>
+                <input type="text" formControlName="social_reason"
+                       class="tw-w-full tw-border tw-border-gray-300 tw-rounded-lg tw-px-3 tw-py-2 tw-text-sm tw-bg-white tw-outline-none focus:tw-border-blue-500 focus:tw-ring-1 focus:tw-ring-blue-500">
+              </div>
+              <div>
+                <label class="tw-block tw-text-xs tw-font-medium tw-text-gray-500 tw-uppercase tw-tracking-wide tw-mb-1.5">Siège <span class="tw-text-red-500">*</span></label>
+                <input type="text" formControlName="head_office"
+                       class="tw-w-full tw-border tw-border-gray-300 tw-rounded-lg tw-px-3 tw-py-2 tw-text-sm tw-bg-white tw-outline-none focus:tw-border-blue-500 focus:tw-ring-1 focus:tw-ring-blue-500">
+              </div>
+              <div>
+                <label class="tw-block tw-text-xs tw-font-medium tw-text-gray-500 tw-uppercase tw-tracking-wide tw-mb-1.5">Contact <span class="tw-text-red-500">*</span></label>
+                <input type="text" formControlName="registered_phone"
+                       class="tw-w-full tw-border tw-border-gray-300 tw-rounded-lg tw-px-3 tw-py-2 tw-text-sm tw-bg-white tw-outline-none focus:tw-border-blue-500 focus:tw-ring-1 focus:tw-ring-blue-500">
+              </div>
+              <div>
+                <label class="tw-block tw-text-xs tw-font-medium tw-text-gray-500 tw-uppercase tw-tracking-wide tw-mb-1.5">N° enregistrement <span class="tw-text-red-500">*</span></label>
+                <input type="text" formControlName="registered_number"
+                       class="tw-w-full tw-border tw-border-gray-300 tw-rounded-lg tw-px-3 tw-py-2 tw-text-sm tw-bg-white tw-outline-none focus:tw-border-blue-500 focus:tw-ring-1 focus:tw-ring-blue-500">
+              </div>
+              <div>
+                <label class="tw-block tw-text-xs tw-font-medium tw-text-gray-500 tw-uppercase tw-tracking-wide tw-mb-1.5">Date d'enregistrement <span class="tw-text-red-500">*</span></label>
+                <input type="date" formControlName="registered_date"
+                       class="tw-w-full tw-border tw-border-gray-300 tw-rounded-lg tw-px-3 tw-py-2 tw-text-sm tw-bg-white tw-outline-none focus:tw-border-blue-500 focus:tw-ring-1 focus:tw-ring-blue-500">
+              </div>
+              <div>
+                <label class="tw-block tw-text-xs tw-font-medium tw-text-gray-500 tw-uppercase tw-tracking-wide tw-mb-1.5">Preuve d'enregistrement (PDF)</label>
+                <input type="file" (change)="upload5($event)" accept="application/pdf"
+                       class="tw-w-full tw-text-sm tw-text-gray-500 tw-file:tw-mr-3 tw-file:tw-py-1.5 tw-file:tw-px-3 tw-file:tw-rounded-lg tw-file:tw-border-0 tw-file:tw-bg-blue-50 tw-file:tw-text-blue-600 tw-file:tw-text-xs tw-file:tw-font-medium hover:tw-file:tw-bg-blue-100">
+              </div>
             </ng-container>
 
-            <!-- Infos promoteur -->
             <div>
-            <label class="tw-block tw-font-medium">Nom <span class="tw-text-red-500">*</span></label>
-            <input type="text" formControlName="name_pomoter" class="tw-w-full tw-px-3 tw-py-2 tw-border tw-border-gray-400 
-         tw-rounded-lg tw-bg-gray-50 focus:tw-ring-2 focus:tw-ring-blue-500 
-         focus:tw-border-blue-500 tw-text-gray-900 tw-placeholder-gray-500">
+              <label class="tw-block tw-text-xs tw-font-medium tw-text-gray-500 tw-uppercase tw-tracking-wide tw-mb-1.5">Nom <span class="tw-text-red-500">*</span></label>
+              <input type="text" formControlName="name_pomoter"
+                     class="tw-w-full tw-border tw-border-gray-300 tw-rounded-lg tw-px-3 tw-py-2 tw-text-sm tw-bg-white tw-outline-none focus:tw-border-blue-500 focus:tw-ring-1 focus:tw-ring-blue-500"
+                     [ngClass]="formData.get('name_pomoter')?.invalid && formData.get('name_pomoter')?.touched ? 'tw-border-red-400' : ''">
+              <p *ngIf="formData.get('name_pomoter')?.invalid && formData.get('name_pomoter')?.touched" class="tw-text-red-500 tw-text-xs tw-mt-1">Champ requis</p>
             </div>
 
             <div>
-            <label class="tw-block tw-font-medium">Prénom(s) <span class="tw-text-red-500">*</span></label>
-            <input type="text" formControlName="firstname_pomoter" class="tw-w-full tw-px-3 tw-py-2 tw-border tw-border-gray-400 
-         tw-rounded-lg tw-bg-gray-50 focus:tw-ring-2 focus:tw-ring-blue-500 
-         focus:tw-border-blue-500 tw-text-gray-900 tw-placeholder-gray-500">
+              <label class="tw-block tw-text-xs tw-font-medium tw-text-gray-500 tw-uppercase tw-tracking-wide tw-mb-1.5">Prénom(s) <span class="tw-text-red-500">*</span></label>
+              <input type="text" formControlName="firstname_pomoter"
+                     class="tw-w-full tw-border tw-border-gray-300 tw-rounded-lg tw-px-3 tw-py-2 tw-text-sm tw-bg-white tw-outline-none focus:tw-border-blue-500 focus:tw-ring-1 focus:tw-ring-blue-500"
+                     [ngClass]="formData.get('firstname_pomoter')?.invalid && formData.get('firstname_pomoter')?.touched ? 'tw-border-red-400' : ''">
+              <p *ngIf="formData.get('firstname_pomoter')?.invalid && formData.get('firstname_pomoter')?.touched" class="tw-text-red-500 tw-text-xs tw-mt-1">Champ requis</p>
             </div>
 
             <div>
-            <label class="tw-block tw-font-medium">Email <span class="tw-text-red-500">*</span></label>
-            <input type="email" formControlName="email_pomoter" class="tw-w-full tw-px-3 tw-py-2 tw-border tw-border-gray-400 
-         tw-rounded-lg tw-bg-gray-50 focus:tw-ring-2 focus:tw-ring-blue-500 
-         focus:tw-border-blue-500 tw-text-gray-900 tw-placeholder-gray-500">
+              <label class="tw-block tw-text-xs tw-font-medium tw-text-gray-500 tw-uppercase tw-tracking-wide tw-mb-1.5">Email <span class="tw-text-red-500">*</span></label>
+              <input type="email" formControlName="email_pomoter"
+                     class="tw-w-full tw-border tw-border-gray-300 tw-rounded-lg tw-px-3 tw-py-2 tw-text-sm tw-bg-white tw-outline-none focus:tw-border-blue-500 focus:tw-ring-1 focus:tw-ring-blue-500"
+                     [ngClass]="formData.get('email_pomoter')?.invalid && formData.get('email_pomoter')?.touched ? 'tw-border-red-400' : ''">
+              <p *ngIf="formData.get('email_pomoter')?.invalid && formData.get('email_pomoter')?.touched" class="tw-text-red-500 tw-text-xs tw-mt-1">Email invalide</p>
             </div>
 
             <div>
-            <label class="tw-block tw-font-medium">Téléphone <span class="tw-text-red-500">*</span></label>
-            <input type="text" formControlName="phone_pomoter" class="tw-w-full tw-px-3 tw-py-2 tw-border tw-border-gray-400 
-         tw-rounded-lg tw-bg-gray-50 focus:tw-ring-2 focus:tw-ring-blue-500 
-         focus:tw-border-blue-500 tw-text-gray-900 tw-placeholder-gray-500">
+              <label class="tw-block tw-text-xs tw-font-medium tw-text-gray-500 tw-uppercase tw-tracking-wide tw-mb-1.5">Téléphone <span class="tw-text-red-500">*</span></label>
+              <input type="tel" formControlName="phone_pomoter"
+                     class="tw-w-full tw-border tw-border-gray-300 tw-rounded-lg tw-px-3 tw-py-2 tw-text-sm tw-bg-white tw-outline-none focus:tw-border-blue-500 focus:tw-ring-1 focus:tw-ring-blue-500"
+                     [ngClass]="formData.get('phone_pomoter')?.invalid && formData.get('phone_pomoter')?.touched ? 'tw-border-red-400' : ''">
+              <p *ngIf="formData.get('phone_pomoter')?.invalid && formData.get('phone_pomoter')?.touched" class="tw-text-red-500 tw-text-xs tw-mt-1">Champ requis</p>
             </div>
-        </div>
 
-        <div class="form-group mb-3 col-12 d-flex justify-content-between bg-gray" *ngIf="formData.get('nature_promotor_id')?.value== 1">
-          <div class="form-check">
-            <input
-              class="form-check-input"
-              type="checkbox"
-              id="chiefIsDirector"
-              required
-              formControlName="chief_is_directeor"
-              name="chief_is_directeor"
-            />
-            <label class="form-check-label" for="chiefIsDirector">
-              <strong><b>Êtes-vous le directeur du centre ?</b></strong>
-              <span class="text-danger mx-1">*</span>
+          </div>
+
+          <!-- Êtes-vous le directeur ? -->
+          <div *ngIf="formData.get('nature_promotor_id')?.value == 1"
+               class="tw-flex tw-items-center tw-gap-3 tw-bg-blue-50 tw-border tw-border-blue-100 tw-rounded-lg tw-px-4 tw-py-3 tw-mt-2">
+            <input type="checkbox" id="chiefIsDirector" formControlName="chief_is_directeor"
+                   class="tw-w-4 tw-h-4 tw-accent-blue-600 tw-cursor-pointer">
+            <label for="chiefIsDirector" class="tw-text-sm tw-text-blue-800 tw-cursor-pointer tw-select-none">
+              Je suis également le directeur du centre
             </label>
           </div>
-        </div>
 
-
-        <!-- Consentement -->
-        <div class="tw-bg-gray-50 tw-p-4 tw-rounded-lg">
-            <label class="tw-inline-flex tw-items-center">
-            <input type="checkbox" formControlName="has_consent" class="tw-mr-2">
-            <span class="tw-text-sm"><b>J'autorise la collecte de mes données personnelles</b></span>
+          <!-- Consentement -->
+          <div class="tw-flex tw-items-start tw-gap-3 tw-bg-amber-50 tw-border tw-border-amber-100 tw-rounded-lg tw-px-4 tw-py-3">
+            <input type="checkbox" id="hasConsent" formControlName="has_consent"
+                   class="tw-w-4 tw-h-4 tw-mt-0.5 tw-accent-blue-600 tw-cursor-pointer tw-flex-shrink-0">
+            <label for="hasConsent" class="tw-text-sm tw-text-amber-800 tw-cursor-pointer tw-select-none">
+              J'autorise la collecte et le traitement de mes données personnelles dans le cadre de cette demande <span class="tw-text-red-500">*</span>
             </label>
+          </div>
+
         </div>
+      </div>
 
-        <!-- Documents -->
-        <h4 class="tw-text-xl tw-font-bold tw-mt-8"><u>Documents du Promoteur</u></h4>
-        <div class="tw-grid md:tw-grid-cols-2 tw-gap-4">
-                  <ng-container  *ngFor="let f of requiredFiles; let i=index;">
-                     <ng-container *ngIf="f.type =='DP'">
-                        <div class="tw-bg-gray-50 tw-p-4 tw-rounded-lg">
-                        <h5 class="tw-font-semibold">{{ f.name }} <span *ngIf="f.isRequired" class="tw-text-red-500">*</span></h5>
-                        <p class="tw-text-sm tw-text-gray-500">{{ f.description }}</p>
-
-                        <div *ngIf="!f.isSetted">
-                            <input type="file" (change)="upload($event, i)" accept="application/pdf">
-                        </div>
-
-                        <div *ngIf="f.isSetted" class="tw-flex tw-space-x-3 tw-mt-2">
-                            <i class="fa fa-eye tw-text-blue-600 tw-cursor-pointer" (click)="open(content,i)"></i>
-                            <i class="fa fa-trash tw-text-red-600 tw-cursor-pointer" (click)="removeFile(i)"></i>
-                        </div>
-                        <div class="tw-my-1" *ngIf="!f.id">
-                          <span>Voir l'ancien fichier <i class="fa fa-eye tw-text-blue-600 tw-cursor-pointer" (click)="showFile(f)"></i></span>
-                        </div>
-                        </div>
-               </ng-container>        
-            </ng-container>
+      <!-- Documents du promoteur -->
+      <div class="tw-bg-white tw-rounded-xl tw-border tw-border-gray-200 tw-overflow-hidden">
+        <div class="tw-px-4 sm:tw-px-6 tw-py-3 sm:tw-py-4 tw-border-b tw-border-gray-100 tw-flex tw-items-center tw-gap-2">
+          <i class="ri-folder-line tw-text-blue-600"></i>
+          <h3 class="tw-text-sm tw-font-semibold tw-text-gray-900">Documents du promoteur</h3>
+          <span class="tw-ml-auto tw-text-xs tw-text-gray-400">Format PDF</span>
         </div>
-      <!-- etc : tu continues à copier/coller le contenu de React → Angular avec formControlName -->
-    </div>
-
-    <!-- Étape 2 -->
-    <div *ngIf="currentStep === 2">
-            <!-- Identification -->
-            <h4 class="tw-text-lg tw-font-semibold tw-text-blue-600"><u>Information directeur</u></h4>
-            <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-gap-6">
-
-                <div>
-                <label class="tw-block tw-font-medium">Nom <span class="tw-text-red-500">*</span></label>
-                <input type="text" formControlName="name_chief"
-                    class="tw-w-full tw-px-3 tw-py-2 tw-border tw-border-gray-300 tw-rounded-lg
-                        focus:tw-ring-2 focus:tw-ring-blue-500 focus:tw-border-blue-500" 
-                    placeholder="Saisir le nom du directeur" />
-                <div *ngIf="formData.get('name_chief')?.invalid && formData.get('name_chief')?.touched"
-                    class="tw-text-red-500 tw-text-sm">Nom requis</div>
-                </div>
-
-                <div>
-                <label class="tw-block tw-font-medium">Prénom(s) <span class="tw-text-red-500">*</span></label>
-                <input type="text" formControlName="firstname_chief"
-                    class="tw-w-full tw-px-3 tw-py-2 tw-border tw-border-gray-300 tw-rounded-lg
-                        focus:tw-ring-2 focus:tw-ring-blue-500 focus:tw-border-blue-500"
-                    placeholder="Saisir le(s) prénom(s)" />
-                <div *ngIf="formData.get('firstname_chief')?.invalid && formData.get('firstname_chief')?.touched"
-                    class="tw-text-red-500 tw-text-sm">Prénom requis</div>
-                </div>
-
-                <div>
-                <label class="tw-block tw-font-medium">Téléphone <span class="tw-text-red-500">*</span></label>
-                <input type="text" formControlName="phone_chief"
-                    class="tw-w-full tw-px-3 tw-py-2 tw-border tw-border-gray-300 tw-rounded-lg
-                        focus:tw-ring-2 focus:tw-ring-blue-500 focus:tw-border-blue-500"
-                    placeholder="Numéro de téléphone" />
-                <div *ngIf="formData.get('phone_chief')?.invalid && formData.get('phone_chief')?.touched"
-                    class="tw-text-red-500 tw-text-sm">Téléphone requis</div>
-                </div>
-
-                <div>
-                <label class="tw-block tw-font-medium">Email <span class="tw-text-red-500">*</span></label>
-                <input type="email" formControlName="email_chief"
-                    class="tw-w-full tw-px-3 tw-py-2 tw-border tw-border-gray-300 tw-rounded-lg
-                        focus:tw-ring-2 focus:tw-ring-blue-500 focus:tw-border-blue-500"
-                    placeholder="Email du directeur" />
-                <div *ngIf="formData.get('email_chief')?.invalid && formData.get('email_chief')?.touched"
-                    class="tw-text-red-500 tw-text-sm">
-                  <span *ngIf="formData.get('email_chief')?.errors?.['required']">Email requis</span>
-                  <span *ngIf="formData.get('email_chief')?.errors?.['email']">Format d'email invalide (ex: nom&#64;domaine.com)</span>
-                </div>
-                </div>
-            </div>
-
-            <!-- Consentement -->
-            <h4 class="tw-text-lg tw-font-semibold"><u>Documents de consentement</u> <span class="tw-text-red-500">*</span></h4>
-            <div>
-                <input type="file" (change)="upload4($event)" accept="application/pdf"
-                class="tw-w-full tw-px-3 tw-py-2 tw-border tw-border-gray-300 tw-rounded-lg
-                        focus:tw-ring-2 focus:tw-ring-blue-500 focus:tw-border-blue-500"/>
-            </div>
-
-            <!-- Autres documents -->
-            <h4 class="tw-text-lg tw-font-semibold"><u>Documents du Directeur</u></h4>
-            <div class="tw-grid md:tw-grid-cols-2 tw-gap-4">
-            <ng-container *ngFor="let f of requiredFiles; let i=index">
-                
-                <!-- Cas: chief_is_directeor ET fichier type DP -->
-                <div *ngIf="formData.get('chief_is_directeor')?.value  && f.type === 'DP'" 
-                    class="tw-bg-gray-50 tw-p-4 tw-rounded-lg">
-                <h5 class="tw-font-semibold">{{ f.name }}</h5>
-                <p class="tw-text-sm tw-text-gray-500">{{ f.description }}</p>
-
-                <ng-container *ngIf="!f.isSetted">
-                    <input type="file"
-                        (change)="upload($event,i)"
-                        accept="application/pdf"
-                        class="tw-w-full tw-px-4 tw-py-3 tw-border tw-border-gray-300 
-                                tw-rounded-lg tw-bg-white tw-text-gray-700
-                                hover:tw-border-blue-400 hover:tw-bg-gray-50
-                                focus:tw-ring-2 focus:tw-ring-blue-500 focus:tw-border-blue-500
-                                tw-cursor-pointer tw-shadow-sm"/>
-                </ng-container>
-
-                <ng-container *ngIf="f.isSetted">
-                    <div class="tw-flex tw-space-x-3 tw-mt-2">
-                     <i class="fa fa-eye tw-text-blue-600 tw-cursor-pointer" (click)="open(content,i)"></i>
-                            <i class="fa fa-trash tw-text-red-600 tw-cursor-pointer" (click)="removeFile(i)"></i>
+        <div class="tw-px-4 sm:tw-px-6 tw-py-4 sm:tw-py-5 tw-grid tw-grid-cols-1 sm:tw-grid-cols-2 tw-gap-4">
+          <ng-container *ngFor="let f of requiredFiles; let i = index">
+            <ng-container *ngIf="f.type === 'DP'">
+              <div class="tw-rounded-lg tw-border tw-transition-colors"
+                   [ngClass]="f.isSetted ? 'tw-border-green-200 tw-bg-green-50' : 'tw-border-gray-200 tw-bg-gray-50'">
+                <div class="tw-px-4 tw-py-3">
+                  <div class="tw-flex tw-items-start tw-justify-between tw-gap-2 tw-mb-2">
+                    <div>
+                      <p class="tw-text-sm tw-font-medium tw-text-gray-800">{{ f.name }} <span *ngIf="f.isRequired" class="tw-text-red-500">*</span></p>
+                      <p *ngIf="f.description" class="tw-text-xs tw-text-gray-500 tw-mt-0.5">{{ f.description }}</p>
                     </div>
-                </ng-container>
-                </div>
-
-                <!-- Cas: NON chief_is_directeor ET fichier type DD -->
-                <div *ngIf="!formData.get('chief_is_directeor')?.value  && f.type === 'DD'" 
-                    class="tw-bg-gray-50 tw-p-4 tw-rounded-lg">
-                <h5 class="tw-font-semibold">{{ f.name }}</h5>
-                <p class="tw-text-sm tw-text-gray-500">{{ f.description }}</p>
-
-                <ng-container *ngIf="!f.isSetted">
-                    <input type="file"
-                        (change)="upload($event,i)"
-                        accept="application/pdf"
-                        class="tw-w-full tw-px-4 tw-py-3 tw-border tw-border-gray-300 
-                                tw-rounded-lg tw-bg-white tw-text-gray-700
-                                hover:tw-border-blue-400 hover:tw-bg-gray-50
-                                focus:tw-ring-2 focus:tw-ring-blue-500 focus:tw-border-blue-500
-                                tw-cursor-pointer tw-shadow-sm"/>
-                </ng-container>
-
-                <ng-container *ngIf="f.isSetted">
-                    <div class="tw-flex tw-space-x-3 tw-mt-2">
-                    <i class="fa fa-eye tw-text-blue-600 tw-cursor-pointer" (click)="open(content,i)"></i>
-                            <i class="fa fa-trash tw-text-red-600 tw-cursor-pointer" (click)="removeFile(i)"></i>
+                    <i *ngIf="f.isSetted" class="ri-checkbox-circle-fill tw-text-green-500 tw-flex-shrink-0 tw-text-lg"></i>
+                  </div>
+                  <ng-container *ngIf="!f.isSetted">
+                    <label class="tw-flex tw-items-center tw-justify-center tw-gap-2 tw-border-2 tw-border-dashed tw-border-gray-300
+                                  tw-rounded-lg tw-py-3 tw-cursor-pointer hover:tw-border-blue-400 hover:tw-bg-blue-50 tw-transition-colors">
+                      <i class="ri-upload-cloud-line tw-text-gray-400 tw-text-lg"></i>
+                      <span class="tw-text-xs tw-text-gray-500">Choisir un fichier PDF</span>
+                      <input type="file" (change)="upload($event, i)" accept="application/pdf" class="tw-hidden">
+                    </label>
+                  </ng-container>
+                  <ng-container *ngIf="f.isSetted">
+                    <div class="tw-flex tw-items-center tw-gap-3 tw-mt-1">
+                      <span class="tw-text-xs tw-text-green-700 tw-flex-1">Fichier chargé</span>
+                      <button type="button" (click)="open(content, i)"
+                              class="tw-flex tw-items-center tw-gap-1 tw-text-xs tw-text-blue-600 hover:tw-text-blue-800">
+                        <i class="ri-eye-line"></i> Voir
+                      </button>
+                      <button type="button" (click)="removeFile(i)"
+                              class="tw-flex tw-items-center tw-gap-1 tw-text-xs tw-text-red-500 hover:tw-text-red-700">
+                        <i class="ri-delete-bin-line"></i> Retirer
+                      </button>
                     </div>
-                </ng-container>
+                  </ng-container>
+                  <div *ngIf="f.hasFilename" class="tw-mt-2">
+                    <button type="button" (click)="showFile(f)"
+                            class="tw-flex tw-items-center tw-gap-1 tw-text-xs tw-text-blue-600 hover:tw-text-blue-800">
+                      <i class="ri-file-download-line"></i> Voir l'ancien fichier
+                    </button>
+                  </div>
                 </div>
-
+              </div>
             </ng-container>
-            </div>
-
-
-
-    </div>
-
-    <!-- Étape 3 -->
-    <div *ngIf="currentStep === 3">
-      
-  <!-- Identification -->
-  <h4 class="mb-3 tw-text-blue-600"><b><u>Informations du centre</u></b></h4>
-  <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-gap-4">
-
-    <!-- Type de centre -->
-    <div>
-      <label class="tw-block tw-font-medium">Type de centre <span class="tw-text-red-500">*</span></label>
-      <select formControlName="type_cape_id" class="tw-form-select tw-w-full tw-rounded-lg">
-        <option *ngFor="let d of tds" [value]="d.id">{{ d.name }}</option>
-      </select>
-    </div>
-
-    <!-- Dénomination du centre -->
-    <div>
-      <label class="tw-block tw-font-medium">Dénomination du centre <span class="tw-text-red-500">*</span></label>
-      <input type="text" formControlName="name" class="tw-form-input tw-w-full tw-rounded-lg" autocomplete="nope">
-    </div>
-
-    <!-- Capacité -->
-    <div>
-      <label class="tw-block tw-font-medium">Capacité d'accueil du centre <span class="tw-text-red-500">*</span></label>
-      <input type="number" min="0" formControlName="capacity" class="tw-form-input tw-w-full tw-rounded-lg">
-    </div>
-
-    <!-- Email -->
-    <div>
-      <label class="tw-block tw-font-medium">Email <span class="tw-text-red-500">*</span></label>
-      <input type="email" formControlName="email" class="tw-form-input tw-w-full tw-rounded-lg" autocomplete="nope">
-    </div>
-
-    <!-- Téléphone -->
-    <div>
-      <label class="tw-block tw-font-medium">Téléphone <span class="tw-text-red-500">*</span></label>
-      <input type="text" formControlName="phone" class="tw-form-input tw-w-full tw-rounded-lg" autocomplete="nope">
-    </div>
-
-    <!-- Cibles accueillies -->
-    <div class="tw-col-span-2">
-      <label class="tw-block tw-font-medium">Cibles accueillies <span class="tw-text-red-500">*</span></label>
-      <!-- Ici tu peux intégrer ton ng-select ou angular2-multiselect -->
-      <ng-select *ngIf="dropdownList.length > 0"
-                 [items]="dropdownList"
-                 bindLabel="text"
-                 bindValue="id"
-                 [multiple]="true"
-                 formControlName="targets">
-      </ng-select>
-    </div>
-
-  </div>
-
-  <!-- Localisation -->
-  <h4 class="mb-3 tw-text-blue-600 tw-mt-6"><b><u>Localisation du centre</u></b></h4>
-  <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-gap-4">
-
-    <!-- Département -->
-    <div>
-      <label class="tw-block tw-font-medium">Sélectionnez un département <span class="tw-text-red-500">*</span></label>
-      <ng-select formControlName="department_id" (change)="loadMunicipalities($event)" class="tw-form-select tw-w-full tw-rounded-lg">
-        <ng-option selected disabled></ng-option>
-        <ng-option *ngFor="let d of data" [value]="d.id">{{ d.name }}</ng-option>
-      </ng-select>
-    </div>
-
-    <!-- Commune -->
-    <div>
-      <label class="tw-block tw-font-medium">Sélectionnez une commune <span class="tw-text-red-500">*</span></label>
-      <ng-select formControlName="municipality_id" (change)="loadDistricts($event)" class="tw-form-select tw-w-full tw-rounded-lg">
-        <ng-option selected disabled></ng-option>
-        <ng-option *ngFor="let d of municipalities" [value]="d.id">{{ d.name }}</ng-option>
-      </ng-select>
-    </div>
-
-    <!-- Arrondissement -->
-    <div>
-      <label class="tw-block tw-font-medium">Sélectionnez un arrondissement <span class="tw-text-red-500">*</span></label>
-      <ng-select formControlName="district_id" class="tw-form-select tw-w-full tw-rounded-lg">
-        <ng-option selected disabled></ng-option>
-        <ng-option *ngFor="let d of districts" [value]="d.id">{{ d.name }}</ng-option>
-      </ng-select>
-    </div>
-
-    <!-- Quartier -->
-    <div>
-      <label class="tw-block tw-font-medium">Quartier de ville / Village <span class="tw-text-red-500">*</span></label>
-      <input type="text" formControlName="town" class="tw-form-input tw-w-full tw-rounded-lg">
-    </div>
-
-    <!-- Adresse -->
-    <div>
-      <label class="tw-block tw-font-medium">Adresse <span class="tw-text-red-500">*</span></label>
-      <input type="text" formControlName="address" class="tw-form-input tw-w-full tw-rounded-lg" autocomplete="nope">
-    </div>
-
-    <!-- Image du siège -->
-    <div>
-      <label class="tw-block tw-font-medium">Image du siège</label>
-      <input type="file" (change)="upload3($event)" class="tw-form-input tw-w-full tw-rounded-lg" accept="image/*">
-      <div *ngIf="imageSiteSrc" class="tw-mt-2 tw-relative tw-inline-block">
-        <img [src]="imageSiteSrc" alt="Aperçu du siège"
-          class="tw-h-40 tw-max-w-full tw-object-cover tw-rounded-lg tw-border tw-border-gray-300 tw-shadow-sm">
-        <button type="button"
-          (click)="imageSiteSrc=undefined; fileInput3=null"
-          title="Supprimer"
-          class="tw-absolute tw-top-1 tw-right-1 tw-w-6 tw-h-6 tw-rounded-full tw-bg-red-500 tw-text-white tw-text-xs tw-flex tw-items-center tw-justify-center hover:tw-bg-red-700">
-          <i class="ri-close-line"></i>
-        </button>
-      </div>
-    </div>
-
-    <!-- Coordonnées géographiques -->
-    <div>
-      <label class="tw-block tw-font-medium">Coordonnées géographiques de la zone <span class="tw-text-red-500">*</span></label>
-      <div class="tw-flex tw-gap-2 tw-items-center">
-        <input type="text" formControlName="coords" class="tw-form-input tw-flex-1 tw-rounded-lg" placeholder="Ex: 6.2830003,2.7388335">
-        <button type="button" (click)="requestGeolocation(false)"
-          [disabled]="geoLoading"
-          class="tw-flex tw-items-center tw-gap-1 tw-px-3 tw-py-2 tw-bg-blue-600 tw-text-white tw-rounded-lg hover:tw-bg-blue-700 disabled:tw-opacity-60 tw-whitespace-nowrap tw-text-sm">
-          <i [class]="geoLoading ? 'ri-loader-4-line tw-animate-spin' : 'ri-map-pin-line'"></i>
-          <span>{{ geoLoading ? 'Localisation...' : 'Ma position' }}</span>
-        </button>
-      </div>
-      <div *ngIf="geoError" class="tw-text-red-500 tw-text-sm tw-mt-1">
-        <i class="ri-error-warning-line"></i> {{ geoError }}
-      </div>
-      <span *ngIf="!geoError" class="tw-text-sm tw-text-gray-500">Cliquez sur "Ma position" si le champ est vide</span>
-    </div>
-
-  </div>
-
-  <!-- Documents -->
-  <h4 class="mb-3 tw-mt-6"><b><u>Documents du centre (format PDF)</u></b></h4>
-  <div class="tw-grid md:tw-grid-cols-2 tw-gap-4">
-    <ng-container *ngFor="let f of requiredFiles; let i = index">
-      <ng-container *ngIf="f.type === 'DC'">
-        <div class="tw-bg-gray-50 tw-p-4 tw-rounded-lg">
-          <h5 class="tw-font-semibold">{{ f.name }} <span *ngIf="f.isRequired" class="tw-text-red-500">*</span></h5>
-          <p class="tw-text-sm tw-text-gray-500">{{ f.description }}</p>
-
-          <ng-container *ngIf="!f.isSetted">
-            <input type="file" (change)="upload($event,i)" accept="application/pdf"
-                   class="tw-w-full tw-px-3 tw-py-2 tw-border tw-border-gray-300 tw-rounded-lg
-                          focus:tw-ring-2 focus:tw-ring-blue-500 focus:tw-border-blue-500">
-          </ng-container>
-
-          <ng-container *ngIf="f.isSetted">
-            <div class="tw-flex tw-space-x-3 tw-mt-2">
-              <i class="fa fa-eye tw-text-blue-600 tw-cursor-pointer" (click)="open(content,i)"></i>
-              <i class="fa fa-trash tw-text-red-600 tw-cursor-pointer" (click)="removeFile(i)"></i>
-            </div>
           </ng-container>
         </div>
-      </ng-container>
-    </ng-container>
-  </div>
-
-
-    </div>
-
-    <!-- Étape 4 -->
-    <div *ngIf="currentStep === 4">
-        <fieldset class="tw-border tw-border-gray-300 tw-rounded-lg tw-p-4 tw-mb-6">
-  <legend class="tw-text-lg tw-font-bold tw-text-blue-600">Information sur le promoteur</legend>
-  <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 lg:tw-grid-cols-3 tw-gap-4 tw-mt-3">
-    <div class="tw-bg-gray-50 tw-p-4 tw-rounded-lg">
-      <dt class="tw-font-semibold">Nom</dt>
-      <dd class="tw-text-gray-700">{{formData.get('name_pomoter')?.value}}</dd>
-    </div>
-    <div class="tw-bg-gray-50 tw-p-4 tw-rounded-lg">
-      <dt class="tw-font-semibold">Prénom(s)</dt>
-      <dd class="tw-text-gray-700">{{formData.get('firstname_pomoter')?.value}}</dd>
-    </div>
-    <div class="tw-bg-gray-50 tw-p-4 tw-rounded-lg">
-      <dt class="tw-font-semibold">Contact</dt>
-      <dd class="tw-text-gray-700">{{formData.get('phone_pomoter')?.value}}</dd>
-    </div>
-    <div class="tw-bg-gray-50 tw-p-4 tw-rounded-lg">
-      <dt class="tw-font-semibold">Email</dt>
-      <dd class="tw-text-gray-700">{{formData.get('email')?.value}}</dd>
-    </div>
-  </div>
-</fieldset>
-
-<fieldset class="tw-border tw-border-gray-300 tw-rounded-lg tw-p-4 tw-mb-6">
-  <legend class="tw-text-lg tw-font-bold tw-text-blue-600">Information sur le directeur</legend>
-  <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 lg:tw-grid-cols-3 tw-gap-4 tw-mt-3">
-    <div class="tw-bg-gray-50 tw-p-4 tw-rounded-lg">
-      <dt class="tw-font-semibold">Nom</dt>
-      <dd class="tw-text-gray-700">{{formData.get('name_chief')?.value}}</dd>
-    </div>
-    <div class="tw-bg-gray-50 tw-p-4 tw-rounded-lg">
-      <dt class="tw-font-semibold">Prénom(s)</dt>
-      <dd class="tw-text-gray-700">{{formData.get('firstname_chief')?.value}}</dd>
-    </div>
-    <div class="tw-bg-gray-50 tw-p-4 tw-rounded-lg">
-      <dt class="tw-font-semibold">Contact</dt>
-      <dd class="tw-text-gray-700">{{formData.get('phone_chief')?.value}}</dd>
-    </div>
-    <div class="tw-bg-gray-50 tw-p-4 tw-rounded-lg">
-      <dt class="tw-font-semibold">Email</dt>
-      <dd class="tw-text-gray-700">{{formData.get('email_chief')?.value}}</dd>
-    </div>
-  </div>
-</fieldset>
-
-<fieldset class="tw-border tw-border-gray-300 tw-rounded-lg tw-p-4 tw-mb-6">
-  <legend class="tw-text-lg tw-font-bold tw-text-blue-600">Information du centre</legend>
-  <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 lg:tw-grid-cols-3 tw-gap-4 tw-mt-3">
-    <div class="tw-bg-gray-50 tw-p-4 tw-rounded-lg">
-      <dt class="tw-font-semibold">Nom</dt>
-      <dd class="tw-text-gray-700">{{formData.get('name')?.value}}</dd>
-    </div>
-    <div class="tw-bg-gray-50 tw-p-4 tw-rounded-lg">
-      <dt class="tw-font-semibold">Type</dt>
-      <dd class="tw-text-gray-700">{{getTCName(formData.get('type_cape_id')?.value)}}</dd>
-    </div>
-    <div class="tw-bg-gray-50 tw-p-4 tw-rounded-lg">
-      <dt class="tw-font-semibold">Capacité</dt>
-      <dd class="tw-text-gray-700">{{formData.get('capacity')?.value}}</dd>
-    </div>
-    <div class="tw-bg-gray-50 tw-p-4 tw-rounded-lg">
-      <dt class="tw-font-semibold">Cibles</dt>
-      <dd class="tw-text-gray-700">
-        <ul class="tw-list-disc tw-ml-5">
-          <li *ngFor="let s of formData.get('targets')?.value">{{s}}</li>
-        </ul>
-      </dd>
-    </div>
-    <div class="tw-bg-gray-50 tw-p-4 tw-rounded-lg">
-      <dt class="tw-font-semibold">Email</dt>
-      <dd class="tw-text-gray-700">{{formData.get('email')?.value}}</dd>
-    </div>
-    <div class="tw-bg-gray-50 tw-p-4 tw-rounded-lg">
-      <dt class="tw-font-semibold">Contact</dt>
-      <dd class="tw-text-gray-700">{{formData.get('phone')?.value}}</dd>
-    </div>
-  </div>
-</fieldset>
-
-<fieldset class="tw-border tw-border-gray-300 tw-rounded-lg tw-p-4 tw-mb-6">
-  <legend class="tw-text-lg tw-font-bold tw-text-blue-600">Localisation du centre</legend>
-  <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 lg:tw-grid-cols-3 tw-gap-4 tw-mt-3">
-    <div class="tw-bg-gray-50 tw-p-4 tw-rounded-lg">
-      <dt class="tw-font-semibold">Département</dt>
-      <dd class="tw-text-gray-700">{{getDepartName(formData.get('department_id')?.value)}}</dd>
-    </div>
-    <div class="tw-bg-gray-50 tw-p-4 tw-rounded-lg">
-      <dt class="tw-font-semibold">Commune</dt>
-      <dd class="tw-text-gray-700">{{getMunicipName(formData.get('municipality_id')?.value)}}</dd>
-    </div>
-    <div class="tw-bg-gray-50 tw-p-4 tw-rounded-lg">
-      <dt class="tw-font-semibold">Arrondissement</dt>
-      <dd class="tw-text-gray-700">{{getDistrictName(formData.get('district_id')?.value)}}</dd>
-    </div>
-    <div class="tw-bg-gray-50 tw-p-4 tw-rounded-lg">
-      <dt class="tw-font-semibold">Quartier de ville / Village</dt>
-      <dd class="tw-text-gray-700">{{formData.get('town')?.value}}</dd>
-    </div>
-    <div class="tw-bg-gray-50 tw-p-4 tw-rounded-lg">
-      <dt class="tw-font-semibold">Adresse</dt>
-      <dd class="tw-text-gray-700">{{formData.get('address')?.value}}</dd>
-    </div>
-    <div class="tw-bg-gray-50 tw-p-4 tw-rounded-lg">
-      <dt class="tw-font-semibold">Coordonnées géographiques</dt>
-      <dd class="tw-text-gray-700">{{formData.get('coords')?.value}}</dd>
-    </div>
-  </div>
-</fieldset>
-
-<fieldset class="tw-border tw-border-gray-300 tw-rounded-lg tw-p-4 tw-mb-6">
-  <legend class="tw-text-lg tw-font-bold tw-text-blue-600">Documents joints</legend>
-  <div class="tw-overflow-x-auto tw-mt-3">
-    <table class="tw-min-w-full tw-divide-y tw-divide-gray-200">
-      <thead class="tw-bg-gray-100">
-        <tr>
-          <th class="tw-px-4 tw-py-2 tw-text-left">#</th>
-          <th class="tw-px-4 tw-py-2 tw-text-left">Libellé</th>
-          <th class="tw-px-4 tw-py-2 tw-text-center">Fichier</th>
-        </tr>
-      </thead>
-      <tbody class="tw-bg-white tw-divide-y tw-divide-gray-200">
-        <tr>
-          <td colspan="3" class="tw-font-semibold tw-text-blue-600">Documents du promoteur</td>
-        </tr>
-        <tr *ngFor="let f of filterByType('DP'); let i=index">
-          <td class="tw-px-4 tw-py-2">{{i+1}}</td>
-          <td class="tw-px-4 tw-py-2">{{f.name}}</td>
-          <td class="tw-px-4 tw-py-2 tw-text-center">
-            <i class="fa fa-eye tw-text-blue-600 tw-cursor-pointer" (click)="open2(content,f.file_id)"></i>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="3" class="tw-font-semibold tw-text-blue-600">Documents du Directeur</td>
-        </tr>
-        <tr *ngFor="let f of filterByType('DD'); let i=index">
-          <td class="tw-px-4 tw-py-2">{{i+1}}</td>
-          <td class="tw-px-4 tw-py-2">{{f.name}}</td>
-          <td class="tw-px-4 tw-py-2 tw-text-center">
-            <i class="fa fa-eye tw-text-blue-600 tw-cursor-pointer" (click)="open2(content,f.file_id)"></i>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="3" class="tw-font-semibold tw-text-blue-600">Documents du centre</td>
-        </tr>
-        <tr *ngFor="let f of filterByType('DC'); let i=index">
-          <td class="tw-px-4 tw-py-2">{{i+1}}</td>
-          <td class="tw-px-4 tw-py-2">{{f.name}}</td>
-          <td class="tw-px-4 tw-py-2 tw-text-center">
-            <i class="fa fa-eye tw-text-blue-600 tw-cursor-pointer" (click)="open2(content,f.file_id)"></i>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="3" class="tw-font-semibold tw-text-blue-600">Documents joints</td>
-        </tr>
-        <tr *ngFor="let f of filterByType('DJ'); let i=index">
-          <td class="tw-px-4 tw-py-2">{{i+1}}</td>
-          <td class="tw-px-4 tw-py-2">{{f.name}}</td>
-          <td class="tw-px-4 tw-py-2 tw-text-center">
-            <i class="fa fa-eye tw-text-blue-600 tw-cursor-pointer" (click)="open2(content,f.file_id)"></i>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</fieldset>
-
-    </div>
-
-    <!-- Erreur -->
-    <div *ngIf="submitStatus === 'error'" class="tw-mt-6 tw-bg-red-50 tw-border tw-border-red-200 tw-rounded-lg tw-p-4">
-      <div class="tw-flex tw-items-center">
-        <i class="ri-error-warning-line tw-text-red-600 tw-text-xl tw-mr-3"></i>
-        <p class="tw-text-red-800">Une erreur s'est produite lors de l'envoi. Veuillez réessayer.</p>
       </div>
+
     </div>
 
-    <!-- Boutons navigation -->
-    <div class="tw-flex tw-justify-between tw-mt-8 tw-pt-6 tw-border-t">
+    <!-- ── Étape 2 : Directeur ── -->
+    <div *ngIf="currentStep === 2" class="tw-space-y-5">
+
+      <div class="tw-bg-white tw-rounded-xl tw-border tw-border-gray-200 tw-overflow-hidden">
+        <div class="tw-px-4 sm:tw-px-6 tw-py-3 sm:tw-py-4 tw-border-b tw-border-gray-100 tw-flex tw-items-center tw-gap-2">
+          <i class="ri-briefcase-line tw-text-blue-600"></i>
+          <h3 class="tw-text-sm tw-font-semibold tw-text-gray-900">Informations du directeur</h3>
+        </div>
+        <div class="tw-px-4 sm:tw-px-6 tw-py-4 sm:tw-py-5 tw-grid tw-grid-cols-1 sm:tw-grid-cols-2 tw-gap-4">
+
+          <div>
+            <label class="tw-block tw-text-xs tw-font-medium tw-text-gray-500 tw-uppercase tw-tracking-wide tw-mb-1.5">Nom <span class="tw-text-red-500">*</span></label>
+            <input type="text" formControlName="name_chief" placeholder="Nom du directeur"
+                   class="tw-w-full tw-border tw-border-gray-300 tw-rounded-lg tw-px-3 tw-py-2 tw-text-sm tw-bg-white tw-outline-none focus:tw-border-blue-500 focus:tw-ring-1 focus:tw-ring-blue-500"
+                   [ngClass]="formData.get('name_chief')?.invalid && formData.get('name_chief')?.touched ? 'tw-border-red-400' : ''">
+            <p *ngIf="formData.get('name_chief')?.invalid && formData.get('name_chief')?.touched" class="tw-text-red-500 tw-text-xs tw-mt-1">Champ requis</p>
+          </div>
+
+          <div>
+            <label class="tw-block tw-text-xs tw-font-medium tw-text-gray-500 tw-uppercase tw-tracking-wide tw-mb-1.5">Prénom(s) <span class="tw-text-red-500">*</span></label>
+            <input type="text" formControlName="firstname_chief" placeholder="Prénom(s)"
+                   class="tw-w-full tw-border tw-border-gray-300 tw-rounded-lg tw-px-3 tw-py-2 tw-text-sm tw-bg-white tw-outline-none focus:tw-border-blue-500 focus:tw-ring-1 focus:tw-ring-blue-500"
+                   [ngClass]="formData.get('firstname_chief')?.invalid && formData.get('firstname_chief')?.touched ? 'tw-border-red-400' : ''">
+            <p *ngIf="formData.get('firstname_chief')?.invalid && formData.get('firstname_chief')?.touched" class="tw-text-red-500 tw-text-xs tw-mt-1">Champ requis</p>
+          </div>
+
+          <div>
+            <label class="tw-block tw-text-xs tw-font-medium tw-text-gray-500 tw-uppercase tw-tracking-wide tw-mb-1.5">Téléphone <span class="tw-text-red-500">*</span></label>
+            <input type="tel" formControlName="phone_chief" placeholder="Numéro de téléphone"
+                   class="tw-w-full tw-border tw-border-gray-300 tw-rounded-lg tw-px-3 tw-py-2 tw-text-sm tw-bg-white tw-outline-none focus:tw-border-blue-500 focus:tw-ring-1 focus:tw-ring-blue-500"
+                   [ngClass]="formData.get('phone_chief')?.invalid && formData.get('phone_chief')?.touched ? 'tw-border-red-400' : ''">
+            <p *ngIf="formData.get('phone_chief')?.invalid && formData.get('phone_chief')?.touched" class="tw-text-red-500 tw-text-xs tw-mt-1">Champ requis</p>
+          </div>
+
+          <div>
+            <label class="tw-block tw-text-xs tw-font-medium tw-text-gray-500 tw-uppercase tw-tracking-wide tw-mb-1.5">Email <span class="tw-text-red-500">*</span></label>
+            <input type="email" formControlName="email_chief" placeholder="Email du directeur"
+                   class="tw-w-full tw-border tw-border-gray-300 tw-rounded-lg tw-px-3 tw-py-2 tw-text-sm tw-bg-white tw-outline-none focus:tw-border-blue-500 focus:tw-ring-1 focus:tw-ring-blue-500"
+                   [ngClass]="formData.get('email_chief')?.invalid && formData.get('email_chief')?.touched ? 'tw-border-red-400' : ''">
+            <p *ngIf="formData.get('email_chief')?.invalid && formData.get('email_chief')?.touched" class="tw-text-red-500 tw-text-xs tw-mt-1">
+              <span *ngIf="formData.get('email_chief')?.errors?.['required']">Email requis</span>
+              <span *ngIf="formData.get('email_chief')?.errors?.['email']">Format invalide (ex: nom&#64;domaine.com)</span>
+            </p>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Documents du directeur -->
+      <div class="tw-bg-white tw-rounded-xl tw-border tw-border-gray-200 tw-overflow-hidden">
+        <div class="tw-px-4 sm:tw-px-6 tw-py-3 sm:tw-py-4 tw-border-b tw-border-gray-100 tw-flex tw-items-center tw-gap-2">
+          <i class="ri-folder-user-line tw-text-blue-600"></i>
+          <h3 class="tw-text-sm tw-font-semibold tw-text-gray-900">Documents du directeur</h3>
+          <span class="tw-ml-auto tw-text-xs tw-text-gray-400">Format PDF</span>
+        </div>
+        <div class="tw-px-4 sm:tw-px-6 tw-py-4 sm:tw-py-5 tw-space-y-4">
+
+          <!-- Document de consentement -->
+          <div>
+            <label class="tw-block tw-text-xs tw-font-medium tw-text-gray-500 tw-uppercase tw-tracking-wide tw-mb-1.5">
+              Document de consentement <span class="tw-text-red-500">*</span>
+            </label>
+            <label class="tw-flex tw-items-center tw-justify-center tw-gap-2 tw-border-2 tw-border-dashed tw-border-gray-300
+                          tw-rounded-lg tw-py-3 tw-cursor-pointer hover:tw-border-blue-400 hover:tw-bg-blue-50 tw-transition-colors">
+              <i class="ri-upload-cloud-line tw-text-gray-400 tw-text-lg"></i>
+              <span class="tw-text-xs tw-text-gray-500">{{ fileInput4 ? fileInput4.name : 'Choisir un fichier PDF' }}</span>
+              <input type="file" (change)="upload4($event)" accept="application/pdf" class="tw-hidden">
+            </label>
+          </div>
+
+          <!-- Autres documents directeur -->
+          <div class="tw-grid tw-grid-cols-1 sm:tw-grid-cols-2 tw-gap-4">
+            <ng-container *ngFor="let f of requiredFiles; let i = index">
+
+              <div *ngIf="formData.get('chief_is_directeor')?.value && f.type === 'DP'"
+                   class="tw-rounded-lg tw-border tw-transition-colors"
+                   [ngClass]="f.isSetted ? 'tw-border-green-200 tw-bg-green-50' : 'tw-border-gray-200 tw-bg-gray-50'">
+                <div class="tw-px-4 tw-py-3">
+                  <div class="tw-flex tw-items-start tw-justify-between tw-gap-2 tw-mb-2">
+                    <p class="tw-text-sm tw-font-medium tw-text-gray-800">{{ f.name }}</p>
+                    <i *ngIf="f.isSetted" class="ri-checkbox-circle-fill tw-text-green-500 tw-flex-shrink-0 tw-text-lg"></i>
+                  </div>
+                  <p *ngIf="f.description" class="tw-text-xs tw-text-gray-500 tw-mb-2">{{ f.description }}</p>
+                  <label *ngIf="!f.isSetted" class="tw-flex tw-items-center tw-justify-center tw-gap-2 tw-border-2 tw-border-dashed tw-border-gray-300 tw-rounded-lg tw-py-3 tw-cursor-pointer hover:tw-border-blue-400 hover:tw-bg-blue-50 tw-transition-colors">
+                    <i class="ri-upload-cloud-line tw-text-gray-400 tw-text-lg"></i>
+                    <span class="tw-text-xs tw-text-gray-500">Choisir PDF</span>
+                    <input type="file" (change)="upload($event, i)" accept="application/pdf" class="tw-hidden">
+                  </label>
+                  <div *ngIf="f.isSetted" class="tw-flex tw-items-center tw-gap-3">
+                    <span class="tw-text-xs tw-text-green-700 tw-flex-1">Chargé</span>
+                    <button type="button" (click)="open(content, i)" class="tw-text-xs tw-text-blue-600 hover:tw-text-blue-800 tw-flex tw-items-center tw-gap-1"><i class="ri-eye-line"></i> Voir</button>
+                    <button type="button" (click)="removeFile(i)" class="tw-text-xs tw-text-red-500 hover:tw-text-red-700 tw-flex tw-items-center tw-gap-1"><i class="ri-delete-bin-line"></i> Retirer</button>
+                  </div>
+                </div>
+              </div>
+
+              <div *ngIf="!formData.get('chief_is_directeor')?.value && f.type === 'DD'"
+                   class="tw-rounded-lg tw-border tw-transition-colors"
+                   [ngClass]="f.isSetted ? 'tw-border-green-200 tw-bg-green-50' : 'tw-border-gray-200 tw-bg-gray-50'">
+                <div class="tw-px-4 tw-py-3">
+                  <div class="tw-flex tw-items-start tw-justify-between tw-gap-2 tw-mb-2">
+                    <p class="tw-text-sm tw-font-medium tw-text-gray-800">{{ f.name }}</p>
+                    <i *ngIf="f.isSetted" class="ri-checkbox-circle-fill tw-text-green-500 tw-flex-shrink-0 tw-text-lg"></i>
+                  </div>
+                  <p *ngIf="f.description" class="tw-text-xs tw-text-gray-500 tw-mb-2">{{ f.description }}</p>
+                  <label *ngIf="!f.isSetted" class="tw-flex tw-items-center tw-justify-center tw-gap-2 tw-border-2 tw-border-dashed tw-border-gray-300 tw-rounded-lg tw-py-3 tw-cursor-pointer hover:tw-border-blue-400 hover:tw-bg-blue-50 tw-transition-colors">
+                    <i class="ri-upload-cloud-line tw-text-gray-400 tw-text-lg"></i>
+                    <span class="tw-text-xs tw-text-gray-500">Choisir PDF</span>
+                    <input type="file" (change)="upload($event, i)" accept="application/pdf" class="tw-hidden">
+                  </label>
+                  <div *ngIf="f.isSetted" class="tw-flex tw-items-center tw-gap-3">
+                    <span class="tw-text-xs tw-text-green-700 tw-flex-1">Chargé</span>
+                    <button type="button" (click)="open(content, i)" class="tw-text-xs tw-text-blue-600 hover:tw-text-blue-800 tw-flex tw-items-center tw-gap-1"><i class="ri-eye-line"></i> Voir</button>
+                    <button type="button" (click)="removeFile(i)" class="tw-text-xs tw-text-red-500 hover:tw-text-red-700 tw-flex tw-items-center tw-gap-1"><i class="ri-delete-bin-line"></i> Retirer</button>
+                  </div>
+                </div>
+              </div>
+
+            </ng-container>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ── Étape 3 : Centre ── -->
+    <div *ngIf="currentStep === 3" class="tw-space-y-5">
+
+      <!-- Informations du centre -->
+      <div class="tw-bg-white tw-rounded-xl tw-border tw-border-gray-200 tw-overflow-hidden">
+        <div class="tw-px-4 sm:tw-px-6 tw-py-3 sm:tw-py-4 tw-border-b tw-border-gray-100 tw-flex tw-items-center tw-gap-2">
+          <i class="ri-building-line tw-text-blue-600"></i>
+          <h3 class="tw-text-sm tw-font-semibold tw-text-gray-900">Informations du centre</h3>
+        </div>
+        <div class="tw-px-4 sm:tw-px-6 tw-py-4 sm:tw-py-5 tw-grid tw-grid-cols-1 sm:tw-grid-cols-2 tw-gap-4">
+
+          <div>
+            <label class="tw-block tw-text-xs tw-font-medium tw-text-gray-500 tw-uppercase tw-tracking-wide tw-mb-1.5">Type de centre <span class="tw-text-red-500">*</span></label>
+            <select formControlName="type_cape_id"
+                    class="tw-w-full tw-border tw-border-gray-300 tw-rounded-lg tw-px-3 tw-py-2 tw-text-sm tw-bg-white tw-outline-none focus:tw-border-blue-500 focus:tw-ring-1 focus:tw-ring-blue-500">
+              <option value="" disabled selected>Sélectionner…</option>
+              <option *ngFor="let d of tds" [value]="d.id">{{ d.name }}</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="tw-block tw-text-xs tw-font-medium tw-text-gray-500 tw-uppercase tw-tracking-wide tw-mb-1.5">Dénomination du centre <span class="tw-text-red-500">*</span></label>
+            <input type="text" formControlName="name" autocomplete="off"
+                   class="tw-w-full tw-border tw-border-gray-300 tw-rounded-lg tw-px-3 tw-py-2 tw-text-sm tw-bg-white tw-outline-none focus:tw-border-blue-500 focus:tw-ring-1 focus:tw-ring-blue-500">
+          </div>
+
+          <div>
+            <label class="tw-block tw-text-xs tw-font-medium tw-text-gray-500 tw-uppercase tw-tracking-wide tw-mb-1.5">Capacité d'accueil <span class="tw-text-red-500">*</span></label>
+            <input type="number" min="0" formControlName="capacity"
+                   class="tw-w-full tw-border tw-border-gray-300 tw-rounded-lg tw-px-3 tw-py-2 tw-text-sm tw-bg-white tw-outline-none focus:tw-border-blue-500 focus:tw-ring-1 focus:tw-ring-blue-500">
+          </div>
+
+          <div>
+            <label class="tw-block tw-text-xs tw-font-medium tw-text-gray-500 tw-uppercase tw-tracking-wide tw-mb-1.5">Email <span class="tw-text-red-500">*</span></label>
+            <input type="email" formControlName="email" autocomplete="off"
+                   class="tw-w-full tw-border tw-border-gray-300 tw-rounded-lg tw-px-3 tw-py-2 tw-text-sm tw-bg-white tw-outline-none focus:tw-border-blue-500 focus:tw-ring-1 focus:tw-ring-blue-500">
+          </div>
+
+          <div>
+            <label class="tw-block tw-text-xs tw-font-medium tw-text-gray-500 tw-uppercase tw-tracking-wide tw-mb-1.5">Téléphone <span class="tw-text-red-500">*</span></label>
+            <input type="tel" formControlName="phone" autocomplete="off"
+                   class="tw-w-full tw-border tw-border-gray-300 tw-rounded-lg tw-px-3 tw-py-2 tw-text-sm tw-bg-white tw-outline-none focus:tw-border-blue-500 focus:tw-ring-1 focus:tw-ring-blue-500">
+          </div>
+
+          <div class="sm:tw-col-span-2">
+            <label class="tw-block tw-text-xs tw-font-medium tw-text-gray-500 tw-uppercase tw-tracking-wide tw-mb-1.5">Cibles accueillies <span class="tw-text-red-500">*</span></label>
+            <ng-select *ngIf="dropdownList.length > 0"
+                       [items]="dropdownList" bindLabel="text" bindValue="id" [multiple]="true"
+                       formControlName="targets" placeholder="Sélectionner les cibles…">
+            </ng-select>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Localisation -->
+      <div class="tw-bg-white tw-rounded-xl tw-border tw-border-gray-200 tw-overflow-hidden">
+        <div class="tw-px-4 sm:tw-px-6 tw-py-3 sm:tw-py-4 tw-border-b tw-border-gray-100 tw-flex tw-items-center tw-gap-2">
+          <i class="ri-map-pin-line tw-text-blue-600"></i>
+          <h3 class="tw-text-sm tw-font-semibold tw-text-gray-900">Localisation du centre</h3>
+        </div>
+        <div class="tw-px-4 sm:tw-px-6 tw-py-4 sm:tw-py-5 tw-grid tw-grid-cols-1 sm:tw-grid-cols-2 tw-gap-4">
+
+          <div>
+            <label class="tw-block tw-text-xs tw-font-medium tw-text-gray-500 tw-uppercase tw-tracking-wide tw-mb-1.5">Département <span class="tw-text-red-500">*</span></label>
+            <ng-select formControlName="department_id" (change)="loadMunicipalities($event)" placeholder="Sélectionner…">
+              <ng-option *ngFor="let d of data" [value]="d.id">{{ d.name }}</ng-option>
+            </ng-select>
+          </div>
+
+          <div>
+            <label class="tw-block tw-text-xs tw-font-medium tw-text-gray-500 tw-uppercase tw-tracking-wide tw-mb-1.5">Commune <span class="tw-text-red-500">*</span></label>
+            <ng-select formControlName="municipality_id" (change)="loadDistricts($event)" placeholder="Sélectionner…">
+              <ng-option *ngFor="let d of municipalities" [value]="d.id">{{ d.name }}</ng-option>
+            </ng-select>
+          </div>
+
+          <div>
+            <label class="tw-block tw-text-xs tw-font-medium tw-text-gray-500 tw-uppercase tw-tracking-wide tw-mb-1.5">Arrondissement <span class="tw-text-red-500">*</span></label>
+            <ng-select formControlName="district_id" placeholder="Sélectionner…">
+              <ng-option *ngFor="let d of districts" [value]="d.id">{{ d.name }}</ng-option>
+            </ng-select>
+          </div>
+
+          <div>
+            <label class="tw-block tw-text-xs tw-font-medium tw-text-gray-500 tw-uppercase tw-tracking-wide tw-mb-1.5">Quartier / Village <span class="tw-text-red-500">*</span></label>
+            <input type="text" formControlName="town"
+                   class="tw-w-full tw-border tw-border-gray-300 tw-rounded-lg tw-px-3 tw-py-2 tw-text-sm tw-bg-white tw-outline-none focus:tw-border-blue-500 focus:tw-ring-1 focus:tw-ring-blue-500">
+          </div>
+
+          <div>
+            <label class="tw-block tw-text-xs tw-font-medium tw-text-gray-500 tw-uppercase tw-tracking-wide tw-mb-1.5">Adresse <span class="tw-text-red-500">*</span></label>
+            <input type="text" formControlName="address" autocomplete="off"
+                   class="tw-w-full tw-border tw-border-gray-300 tw-rounded-lg tw-px-3 tw-py-2 tw-text-sm tw-bg-white tw-outline-none focus:tw-border-blue-500 focus:tw-ring-1 focus:tw-ring-blue-500">
+          </div>
+
+          <div>
+            <label class="tw-block tw-text-xs tw-font-medium tw-text-gray-500 tw-uppercase tw-tracking-wide tw-mb-1.5">Coordonnées GPS <span class="tw-text-red-500">*</span></label>
+            <div class="tw-flex tw-gap-2">
+              <input type="text" formControlName="coords" placeholder="Ex: 6.283,2.738"
+                     class="tw-flex-1 tw-border tw-border-gray-300 tw-rounded-lg tw-px-3 tw-py-2 tw-text-sm tw-bg-white tw-outline-none focus:tw-border-blue-500 focus:tw-ring-1 focus:tw-ring-blue-500">
+              <button type="button" (click)="requestGeolocation(false)" [disabled]="geoLoading"
+                      class="tw-flex tw-items-center tw-gap-1 tw-px-3 tw-py-2 tw-bg-blue-600 tw-text-white tw-rounded-lg hover:tw-bg-blue-700 disabled:tw-opacity-60 tw-text-xs tw-whitespace-nowrap tw-transition-colors">
+                <i [class]="geoLoading ? 'ri-loader-4-line tw-animate-spin' : 'ri-crosshair-2-line'"></i>
+                <span class="tw-hidden sm:tw-inline">{{ geoLoading ? 'Localisation…' : 'Ma position' }}</span>
+              </button>
+            </div>
+            <p *ngIf="geoError" class="tw-text-red-500 tw-text-xs tw-mt-1"><i class="ri-error-warning-line"></i> {{ geoError }}</p>
+            <p *ngIf="!geoError && !formData.get('coords')?.value" class="tw-text-gray-400 tw-text-xs tw-mt-1">Cliquez sur « Ma position » pour auto-remplir</p>
+          </div>
+
+          <!-- Photo du siège -->
+          <div class="sm:tw-col-span-2">
+            <label class="tw-block tw-text-xs tw-font-medium tw-text-gray-500 tw-uppercase tw-tracking-wide tw-mb-1.5">Photo du siège (optionnel)</label>
+            <label class="tw-flex tw-items-center tw-gap-2 tw-border-2 tw-border-dashed tw-border-gray-300 tw-rounded-lg tw-py-3 tw-px-4 tw-cursor-pointer hover:tw-border-blue-400 hover:tw-bg-blue-50 tw-transition-colors">
+              <i class="ri-image-line tw-text-gray-400 tw-text-lg"></i>
+              <span class="tw-text-xs tw-text-gray-500">{{ fileInput3 ? fileInput3.name : 'Choisir une image…' }}</span>
+              <input type="file" (change)="upload3($event)" accept="image/*" class="tw-hidden">
+            </label>
+            <div *ngIf="imageSiteSrc" class="tw-mt-2 tw-relative tw-inline-block">
+              <img [src]="imageSiteSrc" alt="Aperçu" class="tw-h-32 tw-max-w-xs tw-object-cover tw-rounded-lg tw-border tw-border-gray-200">
+              <button type="button" (click)="imageSiteSrc=undefined; fileInput3=null"
+                      class="tw-absolute tw-top-1 tw-right-1 tw-w-6 tw-h-6 tw-rounded-full tw-bg-red-500 tw-text-white tw-text-xs tw-flex tw-items-center tw-justify-center hover:tw-bg-red-600">
+                <i class="ri-close-line"></i>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Documents du centre -->
+      <div class="tw-bg-white tw-rounded-xl tw-border tw-border-gray-200 tw-overflow-hidden">
+        <div class="tw-px-4 sm:tw-px-6 tw-py-3 sm:tw-py-4 tw-border-b tw-border-gray-100 tw-flex tw-items-center tw-gap-2">
+          <i class="ri-folder-2-line tw-text-blue-600"></i>
+          <h3 class="tw-text-sm tw-font-semibold tw-text-gray-900">Documents du centre</h3>
+          <span class="tw-ml-auto tw-text-xs tw-text-gray-400">Format PDF</span>
+        </div>
+        <div class="tw-px-4 sm:tw-px-6 tw-py-4 sm:tw-py-5 tw-grid tw-grid-cols-1 sm:tw-grid-cols-2 tw-gap-4">
+          <ng-container *ngFor="let f of requiredFiles; let i = index">
+            <ng-container *ngIf="f.type === 'DC'">
+              <div class="tw-rounded-lg tw-border tw-transition-colors"
+                   [ngClass]="f.isSetted ? 'tw-border-green-200 tw-bg-green-50' : 'tw-border-gray-200 tw-bg-gray-50'">
+                <div class="tw-px-4 tw-py-3">
+                  <div class="tw-flex tw-items-start tw-justify-between tw-gap-2 tw-mb-2">
+                    <div>
+                      <p class="tw-text-sm tw-font-medium tw-text-gray-800">{{ f.name }} <span *ngIf="f.isRequired" class="tw-text-red-500">*</span></p>
+                      <p *ngIf="f.description" class="tw-text-xs tw-text-gray-500 tw-mt-0.5">{{ f.description }}</p>
+                    </div>
+                    <i *ngIf="f.isSetted" class="ri-checkbox-circle-fill tw-text-green-500 tw-flex-shrink-0 tw-text-lg"></i>
+                  </div>
+                  <label *ngIf="!f.isSetted" class="tw-flex tw-items-center tw-justify-center tw-gap-2 tw-border-2 tw-border-dashed tw-border-gray-300 tw-rounded-lg tw-py-3 tw-cursor-pointer hover:tw-border-blue-400 hover:tw-bg-blue-50 tw-transition-colors">
+                    <i class="ri-upload-cloud-line tw-text-gray-400 tw-text-lg"></i>
+                    <span class="tw-text-xs tw-text-gray-500">Choisir un fichier PDF</span>
+                    <input type="file" (change)="upload($event, i)" accept="application/pdf" class="tw-hidden">
+                  </label>
+                  <div *ngIf="f.isSetted" class="tw-flex tw-items-center tw-gap-3 tw-mt-1">
+                    <span class="tw-text-xs tw-text-green-700 tw-flex-1">Fichier chargé</span>
+                    <button type="button" (click)="open(content, i)" class="tw-flex tw-items-center tw-gap-1 tw-text-xs tw-text-blue-600 hover:tw-text-blue-800"><i class="ri-eye-line"></i> Voir</button>
+                    <button type="button" (click)="removeFile(i)" class="tw-flex tw-items-center tw-gap-1 tw-text-xs tw-text-red-500 hover:tw-text-red-700"><i class="ri-delete-bin-line"></i> Retirer</button>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+          </ng-container>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ── Étape 4 : Récapitulatif ── -->
+    <div *ngIf="currentStep === 4" class="tw-space-y-5">
+
+      <!-- Promoteur -->
+      <div class="tw-bg-white tw-rounded-xl tw-border tw-border-gray-200 tw-overflow-hidden">
+        <div class="tw-px-4 sm:tw-px-6 tw-py-3 sm:tw-py-4 tw-border-b tw-border-gray-100 tw-flex tw-items-center tw-gap-2">
+          <i class="ri-user-line tw-text-blue-600"></i>
+          <h3 class="tw-text-sm tw-font-semibold tw-text-gray-900">Promoteur</h3>
+        </div>
+        <div class="tw-px-4 sm:tw-px-6 tw-py-4 sm:tw-py-5 tw-grid tw-grid-cols-1 sm:tw-grid-cols-2 lg:tw-grid-cols-3 tw-gap-4">
+          <div *ngFor="let item of [
+            {label:'Nom',    value: formData.get('name_pomoter')?.value},
+            {label:'Prénom', value: formData.get('firstname_pomoter')?.value},
+            {label:'Email',  value: formData.get('email_pomoter')?.value},
+            {label:'Tél.',   value: formData.get('phone_pomoter')?.value}
+          ]">
+            <p class="tw-text-xs tw-font-medium tw-text-gray-500 tw-uppercase tw-tracking-wide">{{ item.label }}</p>
+            <p class="tw-text-sm tw-text-gray-900 tw-mt-0.5">{{ item.value || '—' }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Directeur -->
+      <div class="tw-bg-white tw-rounded-xl tw-border tw-border-gray-200 tw-overflow-hidden">
+        <div class="tw-px-4 sm:tw-px-6 tw-py-3 sm:tw-py-4 tw-border-b tw-border-gray-100 tw-flex tw-items-center tw-gap-2">
+          <i class="ri-briefcase-line tw-text-blue-600"></i>
+          <h3 class="tw-text-sm tw-font-semibold tw-text-gray-900">Directeur</h3>
+        </div>
+        <div class="tw-px-4 sm:tw-px-6 tw-py-4 sm:tw-py-5 tw-grid tw-grid-cols-1 sm:tw-grid-cols-2 lg:tw-grid-cols-3 tw-gap-4">
+          <div *ngFor="let item of [
+            {label:'Nom',    value: formData.get('name_chief')?.value},
+            {label:'Prénom', value: formData.get('firstname_chief')?.value},
+            {label:'Email',  value: formData.get('email_chief')?.value},
+            {label:'Tél.',   value: formData.get('phone_chief')?.value}
+          ]">
+            <p class="tw-text-xs tw-font-medium tw-text-gray-500 tw-uppercase tw-tracking-wide">{{ item.label }}</p>
+            <p class="tw-text-sm tw-text-gray-900 tw-mt-0.5">{{ item.value || '—' }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Centre -->
+      <div class="tw-bg-white tw-rounded-xl tw-border tw-border-gray-200 tw-overflow-hidden">
+        <div class="tw-px-4 sm:tw-px-6 tw-py-3 sm:tw-py-4 tw-border-b tw-border-gray-100 tw-flex tw-items-center tw-gap-2">
+          <i class="ri-building-line tw-text-blue-600"></i>
+          <h3 class="tw-text-sm tw-font-semibold tw-text-gray-900">Centre</h3>
+        </div>
+        <div class="tw-px-4 sm:tw-px-6 tw-py-4 sm:tw-py-5 tw-grid tw-grid-cols-1 sm:tw-grid-cols-2 lg:tw-grid-cols-3 tw-gap-4">
+          <div>
+            <p class="tw-text-xs tw-font-medium tw-text-gray-500 tw-uppercase tw-tracking-wide">Dénomination</p>
+            <p class="tw-text-sm tw-text-gray-900 tw-mt-0.5">{{ formData.get('name')?.value || '—' }}</p>
+          </div>
+          <div>
+            <p class="tw-text-xs tw-font-medium tw-text-gray-500 tw-uppercase tw-tracking-wide">Type</p>
+            <p class="tw-text-sm tw-text-gray-900 tw-mt-0.5">{{ getTCName(formData.get('type_cape_id')?.value) || '—' }}</p>
+          </div>
+          <div>
+            <p class="tw-text-xs tw-font-medium tw-text-gray-500 tw-uppercase tw-tracking-wide">Capacité</p>
+            <p class="tw-text-sm tw-text-gray-900 tw-mt-0.5">{{ formData.get('capacity')?.value ?? '—' }}</p>
+          </div>
+          <div>
+            <p class="tw-text-xs tw-font-medium tw-text-gray-500 tw-uppercase tw-tracking-wide">Email</p>
+            <p class="tw-text-sm tw-text-gray-900 tw-mt-0.5">{{ formData.get('email')?.value || '—' }}</p>
+          </div>
+          <div>
+            <p class="tw-text-xs tw-font-medium tw-text-gray-500 tw-uppercase tw-tracking-wide">Téléphone</p>
+            <p class="tw-text-sm tw-text-gray-900 tw-mt-0.5">{{ formData.get('phone')?.value || '—' }}</p>
+          </div>
+          <div>
+            <p class="tw-text-xs tw-font-medium tw-text-gray-500 tw-uppercase tw-tracking-wide">Cibles</p>
+            <p class="tw-text-sm tw-text-gray-900 tw-mt-0.5">{{ (formData.get('targets')?.value || []).join(', ') || '—' }}</p>
+          </div>
+          <div>
+            <p class="tw-text-xs tw-font-medium tw-text-gray-500 tw-uppercase tw-tracking-wide">Département</p>
+            <p class="tw-text-sm tw-text-gray-900 tw-mt-0.5">{{ getDepartName(formData.get('department_id')?.value) || '—' }}</p>
+          </div>
+          <div>
+            <p class="tw-text-xs tw-font-medium tw-text-gray-500 tw-uppercase tw-tracking-wide">Commune</p>
+            <p class="tw-text-sm tw-text-gray-900 tw-mt-0.5">{{ getMunicipName(formData.get('municipality_id')?.value) || '—' }}</p>
+          </div>
+          <div>
+            <p class="tw-text-xs tw-font-medium tw-text-gray-500 tw-uppercase tw-tracking-wide">Arrondissement</p>
+            <p class="tw-text-sm tw-text-gray-900 tw-mt-0.5">{{ getDistrictName(formData.get('district_id')?.value) || '—' }}</p>
+          </div>
+          <div>
+            <p class="tw-text-xs tw-font-medium tw-text-gray-500 tw-uppercase tw-tracking-wide">Adresse</p>
+            <p class="tw-text-sm tw-text-gray-900 tw-mt-0.5">{{ formData.get('address')?.value || '—' }}</p>
+          </div>
+          <div>
+            <p class="tw-text-xs tw-font-medium tw-text-gray-500 tw-uppercase tw-tracking-wide">Coordonnées GPS</p>
+            <p class="tw-text-sm tw-text-gray-900 tw-mt-0.5 tw-font-mono">{{ formData.get('coords')?.value || '—' }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Documents joints -->
+      <div class="tw-bg-white tw-rounded-xl tw-border tw-border-gray-200 tw-overflow-hidden">
+        <div class="tw-px-4 sm:tw-px-6 tw-py-3 sm:tw-py-4 tw-border-b tw-border-gray-100 tw-flex tw-items-center tw-gap-2">
+          <i class="ri-attachment-line tw-text-blue-600"></i>
+          <h3 class="tw-text-sm tw-font-semibold tw-text-gray-900">Documents joints</h3>
+        </div>
+        <div class="tw-px-4 sm:tw-px-6 tw-py-4">
+          <ng-container *ngFor="let group of [
+            {type: 'DP', label: 'Promoteur'},
+            {type: 'DD', label: 'Directeur'},
+            {type: 'DC', label: 'Centre'},
+            {type: 'DJ', label: 'Complémentaires'}
+          ]">
+            <ng-container *ngIf="filterByType(group.type).length > 0">
+              <p class="tw-text-xs tw-font-semibold tw-text-blue-600 tw-uppercase tw-tracking-wide tw-mt-3 tw-mb-2">{{ group.label }}</p>
+              <div class="tw-space-y-1">
+                <div *ngFor="let f of filterByType(group.type); let i = index"
+                     class="tw-flex tw-items-center tw-justify-between tw-px-3 tw-py-2 tw-rounded-lg tw-bg-gray-50">
+                  <div class="tw-flex tw-items-center tw-gap-2">
+                    <i class="ri-file-pdf-line tw-text-red-500 tw-text-base"></i>
+                    <span class="tw-text-sm tw-text-gray-700">{{ f.name }}</span>
+                  </div>
+                  <button type="button" (click)="open2(content, f.file_id)"
+                          class="tw-flex tw-items-center tw-gap-1 tw-text-xs tw-text-blue-600 hover:tw-text-blue-800">
+                    <i class="ri-eye-line"></i> Voir
+                  </button>
+                </div>
+              </div>
+            </ng-container>
+          </ng-container>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ── Navigation ── -->
+    <div class="tw-flex tw-items-center tw-justify-between tw-mt-6 tw-pt-5 tw-border-t tw-border-gray-200 tw-gap-2">
+
       <button type="button" (click)="prevStep()" [disabled]="currentStep === 1"
-        class="tw-px-6 tw-py-2 tw-border tw-rounded-lg">Précédent</button>
+              class="tw-flex tw-items-center tw-gap-1.5 tw-px-3 sm:tw-px-5 tw-py-2 tw-rounded-lg tw-border tw-border-gray-300
+                     tw-text-gray-600 tw-text-sm tw-font-medium hover:tw-bg-gray-50 tw-transition-colors
+                     disabled:tw-opacity-40 disabled:tw-cursor-not-allowed">
+        <i class="ri-arrow-left-line"></i>
+        <span class="tw-hidden sm:tw-inline">Précédent</span>
+      </button>
+
+      <span class="tw-text-xs tw-text-gray-400 tw-hidden sm:tw-block tw-flex-1 tw-text-center">
+        Étape {{ currentStep }} / {{ steps.length }}
+      </span>
 
       <button *ngIf="currentStep < 4" type="button" (click)="nextStep()"
-        class="tw-px-6 tw-py-2 tw-bg-blue-600 tw-text-white tw-rounded-lg">Suivant</button>
-
-      <button *ngIf="currentStep === 4" type="submit" [disabled]="isSubmitting"
-        class="tw-px-6 tw-py-2 tw-bg-green-600 tw-text-white tw-rounded-lg">
-        {{ isSubmitting ? 'Envoi en cours...' : 'Soumettre' }}
+              class="tw-flex tw-items-center tw-gap-1.5 tw-px-3 sm:tw-px-5 tw-py-2 tw-rounded-lg
+                     tw-bg-blue-600 tw-text-white tw-text-sm tw-font-medium hover:tw-bg-blue-700 tw-transition-colors">
+        <span class="sm:tw-hidden">Suite</span>
+        <span class="tw-hidden sm:tw-inline">Suivant</span>
+        <i class="ri-arrow-right-line"></i>
       </button>
+
+      <button *ngIf="currentStep === 4" type="submit" [disabled]="loading"
+              class="tw-flex tw-items-center tw-gap-2 tw-px-4 sm:tw-px-6 tw-py-2 tw-rounded-lg
+                     tw-bg-green-600 tw-text-white tw-text-sm tw-font-medium hover:tw-bg-green-700 tw-transition-colors
+                     disabled:tw-opacity-50 disabled:tw-cursor-not-allowed">
+        <i *ngIf="!loading" class="ri-send-plane-line"></i>
+        <span *ngIf="loading" class="tw-w-4 tw-h-4 tw-border-2 tw-border-white tw-border-t-transparent tw-rounded-full tw-animate-spin tw-inline-block"></span>
+        <span class="sm:tw-hidden">{{ loading ? 'Envoi…' : 'Soumettre' }}</span>
+        <span class="tw-hidden sm:tw-inline">{{ loading ? 'Envoi en cours…' : 'Soumettre le dossier' }}</span>
+      </button>
+
     </div>
+
   </form>
+
 </div>
 
-<ng-template #content let-offcanvas id="myCanvas">
-	<div class="offcanvas-header">
-		<h4 class="offcanvas-title">Visualisation du document</h4>
-		<button type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss('Cross click')"></button>
-	</div>
-	<div class="offcanvas-body">
-        <object [data]="imageSrc" type="application/pdf" width="100%" height="600px"></object>
-
-	</div>
+<!-- Offcanvas : prévisualisation fichier en cours de saisie -->
+<ng-template #content let-offcanvas>
+  <div class="offcanvas-header">
+    <h4 class="offcanvas-title">Visualisation du document</h4>
+    <button type="button" class="btn-close" (click)="offcanvas.dismiss()"></button>
+  </div>
+  <div class="offcanvas-body">
+    <object [data]="imageSrc" type="application/pdf" width="100%" height="600px"></object>
+  </div>
 </ng-template>
 
-    <ng-template #previewContent let-offcanvas id="myCanvas">
-	<div class="offcanvas-header">
-		<h4 class="offcanvas-title">Visualisation du document</h4>
-		<!-- <button type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss('Cross click')"></button> -->
-	</div>
-	<div class="offcanvas-body">
-        <object [data]="url" type="application/pdf" width="100%" height="100%"></object>
-
-	</div>
+<!-- Offcanvas : prévisualisation fichier existant -->
+<ng-template #previewContent let-offcanvas>
+  <div class="offcanvas-header">
+    <h4 class="offcanvas-title">Visualisation du document</h4>
+    <button type="button" class="btn-close" (click)="offcanvas.dismiss()"></button>
+  </div>
+  <div class="offcanvas-body">
+    <object [data]="url" type="application/pdf" width="100%" height="100%"></object>
+  </div>
 </ng-template>
-
-

@@ -1,860 +1,1059 @@
-<div class="page-breadcrumb d-none d-sm-flex align-items-center mb-5">
-    <div class="breadcrumb-title pe-3">CAPE </div>
-    <div class="ps-3">
-      <nav aria-label="breadcrumb">
-        <ol class="breadcrumb mb-0 p-0">
-          <li class="breadcrumb-item"><a routerLink="/admin/dashboard"><i class="bx bx-home-alt"></i></a>
-          </li>
-          <li class="breadcrumb-item active" aria-current="page">Détails de la demande </li>
-        </ol>
-      </nav>
+<ng-container *ngIf="data">
+
+  <!-- ── Page header ────────────────────────────────────────────── -->
+  <div class="tw-bg-white tw-rounded-xl tw-shadow-sm tw-border tw-border-gray-200 tw-mb-6">
+    <div class="tw-px-5 tw-py-4 tw-flex tw-flex-wrap tw-items-center tw-justify-between tw-gap-4">
+
+      <!-- Left: back + title + status badge -->
+      <div class="tw-flex tw-items-center tw-gap-4 tw-min-w-0">
+        <a routerLink="/admin/requetes/new"
+           class="tw-flex tw-items-center tw-justify-center tw-w-8 tw-h-8 tw-rounded-lg tw-bg-gray-100 tw-text-gray-600 hover:tw-bg-gray-200 tw-transition-colors tw-flex-shrink-0">
+          <i class="ri-arrow-left-s-line tw-text-lg"></i>
+        </a>
+        <div class="tw-min-w-0">
+          <div class="tw-flex tw-items-center tw-gap-2 tw-flex-wrap">
+            <h2 class="tw-text-base tw-font-semibold tw-text-gray-900">Dossier {{data?.code}}</h2>
+            <span class="tw-inline-flex tw-items-center tw-px-2.5 tw-py-0.5 tw-rounded-full tw-text-xs tw-font-medium"
+                  [ngClass]="getStatusClass(data?.status)">
+              {{ getText(data?.status) }}
+            </span>
+          </div>
+          <p class="tw-text-xs tw-text-gray-500 tw-mt-0.5">Soumis le {{data?.created_at | date:"dd/MM/yyyy"}}</p>
+        </div>
+      </div>
+
+      <!-- Right: action buttons -->
+      <div class="tw-flex tw-flex-wrap tw-gap-2">
+
+        <button [disabled]="loading" (click)="add(backContent)"
+          *ngIf="(data.status==5 || data.status==6) && role!='cps'"
+          class="tw-inline-flex tw-items-center tw-gap-1.5 tw-px-3 tw-py-1.5 tw-rounded-lg tw-text-sm tw-font-medium tw-bg-gray-100 tw-text-gray-700 hover:tw-bg-gray-200 tw-transition-colors disabled:tw-opacity-50 disabled:tw-cursor-not-allowed">
+          <i class="ri-arrow-go-back-line"></i>
+          Retourner pour correction
+          <app-loading [isVisible]="loading"></app-loading>
+        </button>
+
+        <button [disabled]="loading" (click)="add(resp)"
+          *ngIf="data.status==6"
+          class="tw-inline-flex tw-items-center tw-gap-1.5 tw-px-3 tw-py-1.5 tw-rounded-lg tw-text-sm tw-font-medium tw-bg-green-600 tw-text-white hover:tw-bg-green-700 tw-transition-colors disabled:tw-opacity-50 disabled:tw-cursor-not-allowed">
+          <i class="ri-check-double-line"></i>
+          Dossier recevable pour inscription
+          <app-loading [isVisible]="loading"></app-loading>
+        </button>
+
+        <button [disabled]="loading" (click)="add(resp)"
+          *ngIf="data.status==5 || data.affectation.sens==-1"
+          class="tw-inline-flex tw-items-center tw-gap-1.5 tw-px-3 tw-py-1.5 tw-rounded-lg tw-text-sm tw-font-medium tw-bg-blue-600 tw-text-white hover:tw-bg-blue-700 tw-transition-colors disabled:tw-opacity-50 disabled:tw-cursor-not-allowed">
+          <i class="ri-send-plane-line"></i>
+          Transmettre
+          <app-loading [isVisible]="loading"></app-loading>
+        </button>
+
+        <button [disabled]="loading" (click)="add(finishContent1)"
+          *ngIf="data.status==4 && !data.has_cps_file"
+          class="tw-inline-flex tw-items-center tw-gap-1.5 tw-px-3 tw-py-1.5 tw-rounded-lg tw-text-sm tw-font-medium tw-border tw-border-blue-300 tw-text-blue-700 hover:tw-bg-blue-50 tw-transition-colors disabled:tw-opacity-50 disabled:tw-cursor-not-allowed">
+          <i class="ri-file-add-line"></i>
+          Ajouter le rapport social
+          <app-loading [isVisible]="loading"></app-loading>
+        </button>
+
+        <button [disabled]="loading" (click)="add(finishContent2)"
+          *ngIf="data.status==4 && !data.has_physical_deposit"
+          class="tw-inline-flex tw-items-center tw-gap-1.5 tw-px-3 tw-py-1.5 tw-rounded-lg tw-text-sm tw-font-medium tw-border tw-border-blue-300 tw-text-blue-700 hover:tw-bg-blue-50 tw-transition-colors disabled:tw-opacity-50 disabled:tw-cursor-not-allowed">
+          <i class="ri-inbox-archive-line"></i>
+          Délivrer fiche de dépôt physique
+          <app-loading [isVisible]="loading"></app-loading>
+        </button>
+
+        <button [disabled]="loading" (click)="openPendingModal(pendingContent)"
+          *ngIf="data.status==0 || data.status==3"
+          class="tw-inline-flex tw-items-center tw-gap-1.5 tw-px-3 tw-py-1.5 tw-rounded-lg tw-text-sm tw-font-medium tw-border tw-border-yellow-300 tw-text-yellow-700 hover:tw-bg-yellow-50 tw-transition-colors disabled:tw-opacity-50 disabled:tw-cursor-not-allowed">
+          <i class="ri-pause-circle-line"></i>
+          Mettre en attente
+          <app-loading [isVisible]="loading"></app-loading>
+        </button>
+
+        <button [disabled]="loading" (click)="add(inviteContent)"
+          *ngIf="data.status==0 || data.status==3"
+          class="tw-inline-flex tw-items-center tw-gap-1.5 tw-px-3 tw-py-1.5 tw-rounded-lg tw-text-sm tw-font-medium tw-border tw-border-green-300 tw-text-green-700 hover:tw-bg-green-50 tw-transition-colors disabled:tw-opacity-50 disabled:tw-cursor-not-allowed">
+          <i class="ri-mail-send-line"></i>
+          Inviter pour dépôt physique
+          <app-loading [isVisible]="loading"></app-loading>
+        </button>
+
+      </div>
     </div>
   </div>
 
-
-  <ng-container *ngIf="data"  >
- <!-- Boutons d'action -->
-  <div class="tw-flex tw-justify-end tw-mb-6" *ngIf="data">
-    <div class="tw-flex tw-space-x-2 tw-flex-wrap">
-      <a routerLink="/admin/requetes/new" class="tw-bg-gray-800 tw-text-white tw-px-3 tw-py-1 tw-rounded tw-text-sm hover:tw-bg-gray-700">Retourner à la liste</a>
-
-      <button [disabled]="loading" (click)="add(backContent)" *ngIf="(data.status ==5 || data.status ==6) && role !='cps'" class="tw-bg-gray-600 tw-text-white tw-px-3 tw-py-1 tw-rounded tw-text-sm hover:tw-bg-gray-500">
-        Retourner pour correction <app-loading [isVisible]="loading"></app-loading>
-      </button>
-
-      <button [disabled]="loading" (click)="add(resp)" *ngIf="data.status==6" class="tw-bg-green-600 tw-text-white tw-px-3 tw-py-1 tw-rounded tw-text-sm hover:tw-bg-green-500">
-        Dossier recevable pour inscription <app-loading [isVisible]="loading"></app-loading>
-      </button>
-
-      <button [disabled]="loading" (click)="add(resp)" *ngIf="data.status==5 || data.affectation.sens==-1" class="tw-bg-blue-600 tw-text-white tw-px-3 tw-py-1 tw-rounded tw-text-sm hover:tw-bg-blue-500">
-        Transmettre <app-loading [isVisible]="loading"></app-loading>
-      </button>
-
-      <button [disabled]="loading" (click)="add(finishContent1)" *ngIf="data.status==4 && !data.has_cps_file" class="tw-border tw-border-blue-600 tw-text-blue-600 tw-px-3 tw-py-1 tw-rounded tw-text-sm hover:tw-bg-blue-50">
-        Ajouter le rapport de l'enquête sociale <app-loading [isVisible]="loading"></app-loading>
-      </button>
-
-      <button [disabled]="loading" (click)="add(finishContent2)" *ngIf="data.status==4 && !data.has_physical_deposit" class="tw-border tw-border-blue-600 tw-text-blue-600 tw-px-3 tw-py-1 tw-rounded tw-text-sm hover:tw-bg-blue-50">
-        Délivrer fiche de dépôt physique <app-loading [isVisible]="loading"></app-loading>
-      </button>
-
-      <button [disabled]="loading" (click)="add(pendingContent)" *ngIf="data.status==0 || data.status==3" class="tw-border tw-border-yellow-400 tw-text-yellow-500 tw-px-3 tw-py-1 tw-rounded tw-text-sm hover:tw-bg-yellow-50">
-        Mettre en attente <app-loading [isVisible]="loading"></app-loading>
-      </button>
-
-      <button [disabled]="loading" (click)="add(inviteContent)" *ngIf="data.status==0 || data.status==3" class="tw-border tw-border-green-500 tw-text-green-600 tw-px-3 tw-py-1 tw-rounded tw-text-sm hover:tw-bg-green-50">
-        Inviter pour dépôt de dossier physique <app-loading [isVisible]="loading"></app-loading>
-      </button>
+  <!-- ── Correction alert ───────────────────────────────────────── -->
+  <div *ngIf="data.affectation.sens==-1"
+       class="tw-bg-amber-50 tw-border tw-border-amber-200 tw-rounded-xl tw-p-4 tw-mb-6 tw-flex tw-gap-3">
+    <i class="ri-error-warning-line tw-text-amber-500 tw-text-xl tw-flex-shrink-0 tw-mt-0.5"></i>
+    <div>
+      <p class="tw-text-sm tw-font-semibold tw-text-amber-800 tw-mb-1">Correction demandée</p>
+      <p class="tw-text-sm tw-text-amber-700">{{data.affectation.instruction}}</p>
     </div>
   </div>
 
-  <!-- Contenu principal -->
-  <div class="tw-container tw-mx-auto tw-px-4">
+  <!-- ── Content cards ──────────────────────────────────────────── -->
+  <div class="tw-space-y-6">
 
-    <h2 class="tw-text-2xl tw-font-semibold tw-mb-4">Dossier soumis le: {{data?.created_at | date:"shortDate"}}</h2>
+    <!-- Card: Informations du demandeur -->
+    <div class="tw-bg-white tw-rounded-xl tw-shadow-sm tw-border tw-border-gray-200">
+      <div class="tw-px-5 tw-py-3.5 tw-border-b tw-border-gray-100 tw-flex tw-items-center tw-gap-2">
+        <i class="ri-user-3-line tw-text-blue-600"></i>
+        <h3 class="tw-text-sm tw-font-semibold tw-text-gray-800">Informations du demandeur</h3>
+      </div>
+      <div class="tw-p-5 tw-space-y-5">
 
-    <!-- Correction demandée -->
-    <div class="tw-bg-yellow-50 tw-border-l-4 tw-border-yellow-400 tw-p-4 tw-rounded tw-mb-4" *ngIf="data.affectation.sens==-1">
-      <h4 class="tw-font-semibold tw-mb-2"><i class="fa fa-chevron-right tw-mr-2"></i>Correction demandée</h4>
-      <p>{{data.affectation.instruction}}</p>
+        <!-- Nature promoteur -->
+        <div>
+          <p class="tw-text-xs tw-font-medium tw-text-gray-500 tw-uppercase tw-tracking-wide tw-mb-1">Nature du promoteur</p>
+          <p class="tw-text-sm tw-font-medium tw-text-gray-900">{{data?.nature_promotor?.name}}</p>
+        </div>
+
+        <!-- Personne morale -->
+        <ng-container *ngIf="data?.nature_promotor?.name.includes('morale')">
+          <div class="tw-border-t tw-border-gray-100 tw-pt-5">
+            <p class="tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide tw-mb-3">Personne morale</p>
+            <dl class="tw-grid tw-grid-cols-1 sm:tw-grid-cols-2 lg:tw-grid-cols-3 tw-gap-4">
+              <div>
+                <dt class="tw-text-xs tw-text-gray-500">Dénomination</dt>
+                <dd class="tw-text-sm tw-font-medium tw-text-gray-900 tw-mt-0.5">{{data?.social_reason}}</dd>
+              </div>
+              <div>
+                <dt class="tw-text-xs tw-text-gray-500">N° enregistrement</dt>
+                <dd class="tw-text-sm tw-font-medium tw-text-gray-900 tw-mt-0.5">{{data?.registered_number}}</dd>
+              </div>
+              <div>
+                <dt class="tw-text-xs tw-text-gray-500">Date d'enregistrement</dt>
+                <dd class="tw-text-sm tw-font-medium tw-text-gray-900 tw-mt-0.5">{{data?.registered_date | date:"dd/MM/yyyy"}}</dd>
+              </div>
+              <div>
+                <dt class="tw-text-xs tw-text-gray-500">Contact</dt>
+                <dd class="tw-text-sm tw-font-medium tw-text-gray-900 tw-mt-0.5">{{data?.registered_phone}}</dd>
+              </div>
+              <div>
+                <dt class="tw-text-xs tw-text-gray-500">Siège</dt>
+                <dd class="tw-text-sm tw-font-medium tw-text-gray-900 tw-mt-0.5">{{data?.head_office}}</dd>
+              </div>
+              <div>
+                <dt class="tw-text-xs tw-text-gray-500">Preuve d'enregistrement</dt>
+                <dd class="tw-mt-0.5">
+                  <button (click)="showFile2(data?.registered_proof)"
+                    class="tw-inline-flex tw-items-center tw-gap-1.5 tw-px-3 tw-py-1.5 tw-rounded-lg tw-text-xs tw-font-medium tw-bg-slate-700 tw-text-white hover:tw-bg-slate-800 tw-transition-colors">
+                    <i class="ri-eye-line"></i> Voir document
+                  </button>
+                </dd>
+              </div>
+            </dl>
+          </div>
+        </ng-container>
+
+        <!-- Promoteur / Représentant légal -->
+        <div class="tw-border-t tw-border-gray-100 tw-pt-5">
+          <p class="tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide tw-mb-3">
+            {{ data?.nature_promotor?.name.includes('morale') ? 'Représentant légal' : 'Promoteur' }}
+          </p>
+          <dl class="tw-grid tw-grid-cols-1 sm:tw-grid-cols-2 lg:tw-grid-cols-4 tw-gap-4">
+            <div>
+              <dt class="tw-text-xs tw-text-gray-500">Nom</dt>
+              <dd class="tw-text-sm tw-font-medium tw-text-gray-900 tw-mt-0.5">{{data.name_pomoter}}</dd>
+            </div>
+            <div>
+              <dt class="tw-text-xs tw-text-gray-500">Prénom(s)</dt>
+              <dd class="tw-text-sm tw-font-medium tw-text-gray-900 tw-mt-0.5">{{data.firstname_pomoter}}</dd>
+            </div>
+            <div>
+              <dt class="tw-text-xs tw-text-gray-500">Email</dt>
+              <dd class="tw-text-sm tw-font-medium tw-text-gray-900 tw-mt-0.5">{{data.email_pomoter}}</dd>
+            </div>
+            <div>
+              <dt class="tw-text-xs tw-text-gray-500">Contact</dt>
+              <dd class="tw-text-sm tw-font-medium tw-text-gray-900 tw-mt-0.5">{{data.phone_pomoter}}</dd>
+            </div>
+          </dl>
+        </div>
+
+      </div>
     </div>
 
-    <!-- Identification -->
-    <div class="tw-mb-4">
-      <h4 class="tw-font-semibold tw-mb-2"><i class="fa fa-chevron-right tw-mr-2"></i>Identification</h4>
-      <h6><strong>Nature promoteur :</strong> {{data?.nature_promotor?.name}}</h6>
+    <!-- Card: Centre et Localisation -->
+    <div class="tw-bg-white tw-rounded-xl tw-shadow-sm tw-border tw-border-gray-200">
+      <div class="tw-px-5 tw-py-3.5 tw-border-b tw-border-gray-100 tw-flex tw-items-center tw-gap-2">
+        <i class="ri-building-line tw-text-blue-600"></i>
+        <h3 class="tw-text-sm tw-font-semibold tw-text-gray-800">Centre et Localisation</h3>
+      </div>
+      <div class="tw-p-5 tw-space-y-5">
+
+        <!-- Centre -->
+        <div>
+          <p class="tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide tw-mb-3">Informations sur le centre</p>
+          <dl class="tw-grid tw-grid-cols-1 sm:tw-grid-cols-2 lg:tw-grid-cols-3 tw-gap-4">
+            <div *ngIf="data.service?.name?.toLowerCase().includes('cape')">
+              <dt class="tw-text-xs tw-text-gray-500">Type Centre</dt>
+              <dd class="tw-text-sm tw-font-medium tw-text-gray-900 tw-mt-0.5">{{data.type_cape?.name ?? data.type_garderie?.name}}</dd>
+            </div>
+            <div *ngIf="data.service?.name?.toLowerCase().includes('garderie')">
+              <dt class="tw-text-xs tw-text-gray-500">Type Garderie</dt>
+              <dd class="tw-text-sm tw-font-medium tw-text-gray-900 tw-mt-0.5">
+                <span *ngFor="let el of data.requete_type_garderies; let last=last">
+                  {{el.type_garderie?.name}}<ng-container *ngIf="!last">, </ng-container>
+                </span>
+              </dd>
+            </div>
+            <div>
+              <dt class="tw-text-xs tw-text-gray-500">Nom du centre</dt>
+              <dd class="tw-text-sm tw-font-medium tw-text-gray-900 tw-mt-0.5">{{data.name}}</dd>
+            </div>
+            <div>
+              <dt class="tw-text-xs tw-text-gray-500">Email</dt>
+              <dd class="tw-text-sm tw-font-medium tw-text-gray-900 tw-mt-0.5">{{data.email}}</dd>
+            </div>
+            <div>
+              <dt class="tw-text-xs tw-text-gray-500">Contact</dt>
+              <dd class="tw-text-sm tw-font-medium tw-text-gray-900 tw-mt-0.5">{{data.phone}}</dd>
+            </div>
+          </dl>
+        </div>
+
+        <!-- Localisation -->
+        <div class="tw-border-t tw-border-gray-100 tw-pt-5">
+          <p class="tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide tw-mb-3">Localisation</p>
+          <dl class="tw-grid tw-grid-cols-1 sm:tw-grid-cols-2 lg:tw-grid-cols-3 tw-gap-4">
+            <div>
+              <dt class="tw-text-xs tw-text-gray-500">Département</dt>
+              <dd class="tw-text-sm tw-font-medium tw-text-gray-900 tw-mt-0.5">{{data.district?.municipality?.department?.name}}</dd>
+            </div>
+            <div>
+              <dt class="tw-text-xs tw-text-gray-500">Commune</dt>
+              <dd class="tw-text-sm tw-font-medium tw-text-gray-900 tw-mt-0.5">{{data.district?.municipality?.name}}</dd>
+            </div>
+            <div>
+              <dt class="tw-text-xs tw-text-gray-500">Arrondissement</dt>
+              <dd class="tw-text-sm tw-font-medium tw-text-gray-900 tw-mt-0.5">{{data.district?.name}}</dd>
+            </div>
+            <div>
+              <dt class="tw-text-xs tw-text-gray-500">Quartier / Village</dt>
+              <dd class="tw-text-sm tw-font-medium tw-text-gray-900 tw-mt-0.5">{{data.town}}</dd>
+            </div>
+            <div>
+              <dt class="tw-text-xs tw-text-gray-500">Adresse</dt>
+              <dd class="tw-text-sm tw-font-medium tw-text-gray-900 tw-mt-0.5">{{data.address}}</dd>
+            </div>
+            <div>
+              <dt class="tw-text-xs tw-text-gray-500">Image de la zone</dt>
+              <dd class="tw-mt-0.5">
+                <a *ngIf="data.zone_file" [href]="getZoneFile(data.zone_file)" target="_blank">
+                  <img [src]="getZoneFile(data.zone_file)"
+                       class="tw-h-20 tw-rounded-lg tw-cursor-pointer tw-border tw-border-gray-200 hover:tw-opacity-80 tw-transition-opacity"
+                       alt="Image de la zone">
+                </a>
+                <span *ngIf="!data.zone_file" class="tw-text-xs tw-text-gray-400 tw-italic">Aucune image</span>
+              </dd>
+            </div>
+          </dl>
+        </div>
+
+      </div>
     </div>
 
-    <!-- Personne morale -->
-    <fieldset *ngIf="data?.nature_promotor?.name.includes('morale')" class="tw-border tw-border-gray-200 tw-rounded tw-p-4 tw-mb-4">
-      <legend class="tw-bg-gray-600 tw-text-white tw-px-2 tw-rounded">Information sur la personne morale</legend>
-      <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-gap-4 tw-mt-2">
-        <dl>
-          <dt class="tw-font-medium">Dénomination</dt>
-          <dd>{{data?.social_reason}}</dd>
-        </dl>
-        <dl>
-          <dt class="tw-font-medium">N° enregistrement</dt>
-          <dd>{{data?.registered_number}}</dd>
-        </dl>
-        <dl>
-          <dt class="tw-font-medium">Date d'enregistrement</dt>
-          <dd>{{data?.registered_date | date:"dd-MM-yyyy"}}</dd>
-        </dl>
-        <dl>
-          <dt class="tw-font-medium">Contact</dt>
-          <dd>{{data?.registered_phone}}</dd>
-        </dl>
-        <dl>
-          <dt class="tw-font-medium">Siège</dt>
-          <dd>{{data?.head_office}}</dd>
-        </dl>
-        <dl>
-          <dt class="tw-font-medium">Preuve de l'enregistrement</dt>
-          <dd>
-            <button (click)="showFile2(data?.registered_proof)" class="tw-bg-gray-800 tw-text-white tw-px-2 tw-py-1 tw-rounded tw-text-sm hover:tw-bg-gray-700">Voir document</button>
-          </dd>
-        </dl>
+    <!-- Card: Documents soumis -->
+    <div class="tw-bg-white tw-rounded-xl tw-shadow-sm tw-border tw-border-gray-200">
+      <div class="tw-px-5 tw-py-3.5 tw-border-b tw-border-gray-100 tw-flex tw-items-center tw-gap-2">
+        <i class="ri-file-list-3-line tw-text-blue-600"></i>
+        <h3 class="tw-text-sm tw-font-semibold tw-text-gray-800">Documents joints à la soumission</h3>
       </div>
-    </fieldset>
-
-    <!-- Promoteur / représentant légal -->
-    <fieldset class="tw-border tw-border-gray-200 tw-rounded tw-p-4 tw-mb-4">
-      <legend class="tw-bg-gray-600 tw-text-white tw-px-2 tw-rounded">
-        {{data?.nature_promotor?.name.includes('morale')?'Information sur le représentant légal' :'Information sur le promoteur'}}
-      </legend>
-      <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-gap-4 tw-mt-2">
-        <dl>
-          <dt class="tw-font-medium">Nom</dt>
-          <dd>{{data.name_pomoter}}</dd>
-        </dl>
-        <dl>
-          <dt class="tw-font-medium">Prénom(s)</dt>
-          <dd>{{data.firstname_pomoter}}</dd>
-        </dl>
-        <dl>
-          <dt class="tw-font-medium">Email</dt>
-          <dd>{{data.email_pomoter}}</dd>
-        </dl>
-        <dl>
-          <dt class="tw-font-medium">Contact</dt>
-          <dd>{{data.phone_pomoter}}</dd>
-        </dl>
-      </div>
-    </fieldset>
-
-    <!-- Centre et localisation -->
-    <fieldset class="tw-border tw-border-gray-200 tw-rounded tw-p-4 tw-mb-4">
-      <legend class="tw-bg-gray-600 tw-text-white tw-px-2 tw-rounded">Information sur le centre</legend>
-      <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-gap-4 tw-mt-2">
-        <dl *ngIf="data.service?.name?.toLowerCase().includes('cape')">
-          <dt class="tw-font-medium">Type Centre</dt>
-          <dd>{{data.type_cape?.name ?? data.type_garderie?.name}}</dd>
-        </dl>
-        <dl *ngIf="data.service?.name?.toLowerCase().includes('garderie')">
-          <dt class="tw-font-medium">Type Garderie</dt>
-          <dd>
-            <ul class="tw-list-disc tw-pl-5">
-              <li *ngFor="let el of data.requete_type_garderies">{{el.type_garderie?.name}}</li>
-            </ul>
-          </dd>
-        </dl>
-        <dl>
-          <dt class="tw-font-medium">Nom du centre</dt>
-          <dd>{{data.name}}</dd>
-        </dl>
-        <dl>
-          <dt class="tw-font-medium">Email</dt>
-          <dd>{{data.email}}</dd>
-        </dl>
-        <dl>
-          <dt class="tw-font-medium">Contact</dt>
-          <dd>{{data.phone}}</dd>
-        </dl>
-      </div>
-
-      <hr class="tw-my-4">
-
-      <legend class="tw-bg-gray-600 tw-text-white tw-px-2 tw-rounded">Localisation</legend>
-      <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-gap-4 tw-mt-2">
-        <dl>
-          <dt class="tw-font-medium">Département</dt>
-          <dd>{{data.district?.municipality?.department?.name}}</dd>
-        </dl>
-        <dl>
-          <dt class="tw-font-medium">Commune</dt>
-          <dd>{{data.district?.municipality?.name}}</dd>
-        </dl>
-        <dl>
-          <dt class="tw-font-medium">Arrondissement</dt>
-          <dd>{{data.district?.name}}</dd>
-        </dl>
-        <dl>
-          <dt class="tw-font-medium">Quartier / Village</dt>
-          <dd>{{data.town}}</dd>
-        </dl>
-        <dl>
-          <dt class="tw-font-medium">Adresse</dt>
-          <dd>{{data.address}}</dd>
-        </dl>
-        <dl>
-          <dt class="tw-font-medium">Image de la zone</dt>
-          <dd *ngIf="data.zone_file">
-            <a [href]="getZoneFile(data.zone_file)" target="_blank">
-              <img [src]="getZoneFile(data.zone_file)" class="tw-h-24 tw-rounded tw-cursor-pointer" alt="Image de la zone">
-            </a>
-            <p class="tw-text-sm tw-text-gray-500">Cliquez sur l'image pour agrandir</p>
-          </dd>
-          <dd *ngIf="!data.zone_file" class="tw-text-gray-500">Aucune image enregistrée</dd>
-        </dl>
-      </div>
-    </fieldset>
-
-
-    <div class="mb-3">
-        <h4> <i class="fa fa-chevron-right fw-bold me-3"></i>  <u>Documents joints à la soumission</u>  </h4>
-    </div>
-    <div class="tw-overflow-x-auto">
-        <table class="table table-bordered">
-            <thead>
-                <th style="width: 5%;"><i class="fa fa-check"></i></th>
-                <th style="width: 5%;">#</th>
-                <th class="tw-px-3 tw-py-2">Référence</th>
-                <th class="tw-px-3 tw-py-2">Observation / Statut</th>
-                <th class="tw-px-3 tw-py-2">Action</th>
-            </thead>
-            <tbody>
-                <tr>
-                    <td colspan="5"><h6 class="bg-secondary text-white">Document du Promoteur  {{data.pomoter_is_director?'/ Directeur':''}}</h6></td>
-                </tr>
-              <ng-container *ngFor="let f of data.files; let i=index">
-
-                <tr *ngIf="f.file.type_file.code =='DP'">
-                     <td class="tw-px-3 tw-py-2">
-                        <div class="form-check">
-                            <input class="form-check-input bg-success" type="checkbox" disabled [checked]="f.is_treated">
-                          </div>
-                    </td>
-                     <td class="tw-px-3 tw-py-2">{{i+1}}</td>
-                     <td class="tw-px-3 tw-py-2">{{f.file.name}}</td>
-                     <td class="tw-px-3 tw-py-2">
-                        <h6><b>Observation</b></h6>
-                        <p *ngIf="!f.is_treated">{{f.observation ?? 'En attente'}}</p>
-                        <p *ngIf="f.is_treated">{{f.observation ?? 'RAS'}}</p>
-
-                        <br>
-                        <h6 class="mb-3"><b>Statut</b></h6>
-                        <span *ngIf="f.is_treated && f.is_valid" class="p-2 bg-success rounded text-white"> Validé</span>
-                        <span *ngIf="f.is_treated && !f.is_valid" class="p-2 bg-danger rounded text-white"> Non Validé</span>
-                    </td>
-                    <td class="">
-                       <div class="d-flex justify-content-center h-100">
-                        <button (click)="showFile(f.filename,f)" class="btn btn-sm btn-dark align-self-center">Voir document</button>
-
-                       </div>
-                    </td>
-                </tr>
-            </ng-container>
-            <tr>
-                <td colspan="5"><h6 class="bg-secondary text-white">Document du Directeur</h6></td>
+      <div class="tw-overflow-x-auto">
+        <table class="tw-w-full tw-text-sm">
+          <thead>
+            <tr class="tw-bg-gray-50 tw-border-b tw-border-gray-200">
+              <th class="tw-w-10 tw-px-4 tw-py-2.5"></th>
+              <th class="tw-px-4 tw-py-2.5 tw-text-left tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide">Document</th>
+              <th class="tw-px-4 tw-py-2.5 tw-text-left tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide">Statut / Observation</th>
+              <th class="tw-px-4 tw-py-2.5 tw-text-left tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide tw-w-28">Action</th>
             </tr>
-            
-            <ng-container *ngIf="!data.pomoter_is_director">
-                <ng-container *ngFor="let f of data.files; let i=index" >
-                    <tr *ngIf="f.file.type_file.code =='DD'">
+          </thead>
+          <tbody>
 
-                         <td class="tw-px-3 tw-py-2">
-                            <div class="form-check">
-                                <input class="form-check-input bg-success" type="checkbox" disabled [checked]="f.is_treated">
-                              </div>
-                        </td>
-                         <td class="tw-px-3 tw-py-2">{{i+1}}</td>
-                         <td class="tw-px-3 tw-py-2">{{f.file.name}}</td>
-                         <td class="tw-px-3 tw-py-2">
-                            <h6><b>Observation</b></h6>
-                            <p *ngIf="!f.is_treated">{{f.observation ?? 'En attente'}}</p>
-                        <p *ngIf="f.is_treated">{{f.observation ?? 'RAS'}}</p>
-
-                            <br>
-                            <h6 class="mb-3"><b>Statut</b></h6>
-                            <span *ngIf="f.is_treated && f.is_valid" class="p-2 bg-success rounded text-white"> Validé</span>
-                            <span *ngIf="f.is_treated && !f.is_valid" class="p-2 bg-danger rounded text-white"> Non Validé</span>
-                        </td>
-                         <td class="tw-px-3 tw-py-2">
-                            <div class="d-flex justify-content-center h-100">
-
-                            <button (click)="showFile(f.filename,f)" class="btn btn-sm btn-dark">Voir document</button>
-                        </div>
-
-                        </td>
-                    </tr>
-                </ng-container>
+            <!-- ── Documents du Promoteur ── -->
+            <tr class="tw-bg-slate-50">
+              <td colspan="4" class="tw-px-4 tw-py-2 tw-text-xs tw-font-semibold tw-text-slate-600 tw-uppercase tw-tracking-wide tw-border-l-4 tw-border-slate-400">
+                Document du Promoteur {{data.pomoter_is_director ? '/ Directeur' : ''}}
+              </td>
+            </tr>
+            <ng-container *ngFor="let f of data.files">
+              <tr *ngIf="f.file.type_file.code=='DP'" class="tw-border-t tw-border-gray-100 hover:tw-bg-gray-50">
+                <td class="tw-px-4 tw-py-3 tw-text-center">
+                  <i *ngIf="f.is_treated && f.is_valid" class="ri-checkbox-circle-fill tw-text-green-500 tw-text-base"></i>
+                  <i *ngIf="f.is_treated && !f.is_valid" class="ri-close-circle-fill tw-text-red-500 tw-text-base"></i>
+                  <i *ngIf="!f.is_treated" class="ri-time-line tw-text-gray-400 tw-text-base"></i>
+                </td>
+                <td class="tw-px-4 tw-py-3 tw-text-gray-800 tw-font-medium">{{f.file.name}}</td>
+                <td class="tw-px-4 tw-py-3">
+                  <div class="tw-flex tw-flex-col tw-gap-1">
+                    <span *ngIf="f.is_treated && f.is_valid" class="tw-inline-flex tw-items-center tw-gap-1 tw-px-2 tw-py-0.5 tw-rounded-full tw-text-xs tw-font-medium tw-bg-green-100 tw-text-green-700 tw-self-start">
+                      <i class="ri-check-line"></i> Validé
+                    </span>
+                    <span *ngIf="f.is_treated && !f.is_valid" class="tw-inline-flex tw-items-center tw-gap-1 tw-px-2 tw-py-0.5 tw-rounded-full tw-text-xs tw-font-medium tw-bg-red-100 tw-text-red-700 tw-self-start">
+                      <i class="ri-close-line"></i> Non validé
+                    </span>
+                    <span *ngIf="!f.is_treated" class="tw-inline-flex tw-items-center tw-gap-1 tw-px-2 tw-py-0.5 tw-rounded-full tw-text-xs tw-font-medium tw-bg-gray-100 tw-text-gray-600 tw-self-start">
+                      <i class="ri-time-line"></i> En attente
+                    </span>
+                    <span *ngIf="f.observation" class="tw-text-xs tw-text-gray-500 tw-italic">{{f.observation}}</span>
+                  </div>
+                </td>
+                <td class="tw-px-4 tw-py-3">
+                  <button (click)="showFile(f.filename, f)"
+                    class="tw-inline-flex tw-items-center tw-gap-1.5 tw-px-3 tw-py-1.5 tw-rounded-lg tw-text-xs tw-font-medium tw-bg-slate-700 tw-text-white hover:tw-bg-slate-800 tw-transition-colors">
+                    <i class="ri-eye-line"></i> Voir
+                  </button>
+                </td>
+              </tr>
             </ng-container>
-         
-        <tr>
-            <td colspan="5"><h6 class="bg-secondary text-white">Document du Centre</h6></td>
-        </tr>
-      <ng-container *ngFor="let f of data.files; let i=index">
-        <tr *ngIf="f.file.type_file.code =='DC'">
-             <td class="tw-px-3 tw-py-2">
-                <div class="form-check">
-                    <input class="form-check-input bg-success" type="checkbox" disabled [checked]="f.is_treated">
-                  </div>
-            </td>
-             <td class="tw-px-3 tw-py-2">{{i+1}}</td>
-             <td class="tw-px-3 tw-py-2">{{f.file.name}}</td>
-             <td class="tw-px-3 tw-py-2">
-                <h6><b>Observation</b></h6>
-                 <p *ngIf="!f.is_treated">{{f.observation ?? 'En attente'}}</p>
-                        <p *ngIf="f.is_treated">{{f.observation ?? 'RAS'}}</p>
 
-                <br>
-                <h6 class="mb-3"><b>Statut</b></h6>
-                <span *ngIf="f.is_treated && f.is_valid" class="p-2 bg-success rounded text-white"> Validé</span>
-                <span *ngIf="f.is_treated && !f.is_valid" class="p-2 bg-danger rounded text-white"> Non Validé</span>
-            </td>
-             <td class="tw-px-3 tw-py-2">
-                <div class="d-flex justify-content-center h-100">
-
-                <button (click)="showFile(f.filename,f)" class="btn btn-sm btn-dark">Voir document</button>
-            </div>
-
-            </td>
-        </tr>
-    </ng-container>
-        <tr>
-            <td colspan="5"><h6 class="bg-secondary text-white">Autre document</h6></td>
-        </tr>
-      <ng-container *ngFor="let f of data.files; let i=index">
-        <tr *ngIf="f.file.type_file.code =='DJ'">
-             <td class="tw-px-3 tw-py-2">
-                <div class="form-check">
-                    <input class="form-check-input bg-success" type="checkbox" disabled [checked]="f.is_treated">
-                  </div>
-            </td>
-             <td class="tw-px-3 tw-py-2">{{i+1}}</td>
-             <td class="tw-px-3 tw-py-2">{{f.file.name}}</td>
-             <td class="tw-px-3 tw-py-2">
-                <h6><b>Observation</b></h6>
-                 <p *ngIf="!f.is_treated">{{f.observation ?? 'En attente'}}</p>
-                        <p *ngIf="f.is_treated">{{f.observation ?? 'RAS'}}</p>
-
-                <br>
-                <h6 class="mb-3"><b>Statut</b></h6>
-                <span *ngIf="f.is_treated && f.is_valid" class="p-2 bg-success rounded text-white"> Validé</span>
-                <span *ngIf="f.is_treated && !f.is_valid" class="p-2 bg-danger rounded text-white"> Non Validé</span>
-            </td>
-             <td class="tw-px-3 tw-py-2">
-                <div class="d-flex justify-content-center h-100">
-
-                <button (click)="showFile(f.filename,f)" class="btn btn-sm btn-dark">Voir document</button>
-            </div>
-
-             </td>
-        </tr>
-    </ng-container>
-            </tbody>
-        </table>
-    </div>
-
-    <div class="mb-3">
-        <h4> <i class="fa fa-chevron-right fw-bold me-3"></i>  <u>Documents délivrés par l'administration</u>  </h4>
-    </div>
-    <div class="tw-overflow-x-auto">
-        <table class="table table-bordered">
-            <thead>
-                <th style="width: 5%;">#</th>
-                <th class="tw-px-3 tw-py-2">Référence</th>
-                <th class="tw-px-3 tw-py-2">Action</th>
-            </thead>
-            <tbody>
-                <tr *ngFor="let f of data.files2; let i=index">
-                     <td class="tw-px-3 tw-py-2">{{i+1}}</td>
-                     <td class="tw-px-3 tw-py-2">{{f.reference}}</td>
-                     <td class="tw-px-3 tw-py-2">
-                        <button (click)="showFile(f.filename)" class="btn btn-sm btn-dark">Voir document</button>
-                    </td>
+            <!-- ── Documents du Directeur ── -->
+            <tr class="tw-bg-slate-50">
+              <td colspan="4" class="tw-px-4 tw-py-2 tw-text-xs tw-font-semibold tw-text-slate-600 tw-uppercase tw-tracking-wide tw-border-l-4 tw-border-slate-400">
+                Document du Directeur
+              </td>
+            </tr>
+            <ng-container *ngIf="!data.pomoter_is_director">
+              <ng-container *ngFor="let f of data.files">
+                <tr *ngIf="f.file.type_file.code=='DD'" class="tw-border-t tw-border-gray-100 hover:tw-bg-gray-50">
+                  <td class="tw-px-4 tw-py-3 tw-text-center">
+                    <i *ngIf="f.is_treated && f.is_valid" class="ri-checkbox-circle-fill tw-text-green-500 tw-text-base"></i>
+                    <i *ngIf="f.is_treated && !f.is_valid" class="ri-close-circle-fill tw-text-red-500 tw-text-base"></i>
+                    <i *ngIf="!f.is_treated" class="ri-time-line tw-text-gray-400 tw-text-base"></i>
+                  </td>
+                  <td class="tw-px-4 tw-py-3 tw-text-gray-800 tw-font-medium">{{f.file.name}}</td>
+                  <td class="tw-px-4 tw-py-3">
+                    <div class="tw-flex tw-flex-col tw-gap-1">
+                      <span *ngIf="f.is_treated && f.is_valid" class="tw-inline-flex tw-items-center tw-gap-1 tw-px-2 tw-py-0.5 tw-rounded-full tw-text-xs tw-font-medium tw-bg-green-100 tw-text-green-700 tw-self-start">
+                        <i class="ri-check-line"></i> Validé
+                      </span>
+                      <span *ngIf="f.is_treated && !f.is_valid" class="tw-inline-flex tw-items-center tw-gap-1 tw-px-2 tw-py-0.5 tw-rounded-full tw-text-xs tw-font-medium tw-bg-red-100 tw-text-red-700 tw-self-start">
+                        <i class="ri-close-line"></i> Non validé
+                      </span>
+                      <span *ngIf="!f.is_treated" class="tw-inline-flex tw-items-center tw-gap-1 tw-px-2 tw-py-0.5 tw-rounded-full tw-text-xs tw-font-medium tw-bg-gray-100 tw-text-gray-600 tw-self-start">
+                        <i class="ri-time-line"></i> En attente
+                      </span>
+                      <span *ngIf="f.observation" class="tw-text-xs tw-text-gray-500 tw-italic">{{f.observation}}</span>
+                    </div>
+                  </td>
+                  <td class="tw-px-4 tw-py-3">
+                    <button (click)="showFile(f.filename, f)"
+                      class="tw-inline-flex tw-items-center tw-gap-1.5 tw-px-3 tw-py-1.5 tw-rounded-lg tw-text-xs tw-font-medium tw-bg-slate-700 tw-text-white hover:tw-bg-slate-800 tw-transition-colors">
+                      <i class="ri-eye-line"></i> Voir
+                    </button>
+                  </td>
                 </tr>
-            </tbody>
+              </ng-container>
+            </ng-container>
+
+            <!-- ── Documents du Centre ── -->
+            <tr class="tw-bg-slate-50">
+              <td colspan="4" class="tw-px-4 tw-py-2 tw-text-xs tw-font-semibold tw-text-slate-600 tw-uppercase tw-tracking-wide tw-border-l-4 tw-border-slate-400">
+                Document du Centre
+              </td>
+            </tr>
+            <ng-container *ngFor="let f of data.files">
+              <tr *ngIf="f.file.type_file.code=='DC'" class="tw-border-t tw-border-gray-100 hover:tw-bg-gray-50">
+                <td class="tw-px-4 tw-py-3 tw-text-center">
+                  <i *ngIf="f.is_treated && f.is_valid" class="ri-checkbox-circle-fill tw-text-green-500 tw-text-base"></i>
+                  <i *ngIf="f.is_treated && !f.is_valid" class="ri-close-circle-fill tw-text-red-500 tw-text-base"></i>
+                  <i *ngIf="!f.is_treated" class="ri-time-line tw-text-gray-400 tw-text-base"></i>
+                </td>
+                <td class="tw-px-4 tw-py-3 tw-text-gray-800 tw-font-medium">{{f.file.name}}</td>
+                <td class="tw-px-4 tw-py-3">
+                  <div class="tw-flex tw-flex-col tw-gap-1">
+                    <span *ngIf="f.is_treated && f.is_valid" class="tw-inline-flex tw-items-center tw-gap-1 tw-px-2 tw-py-0.5 tw-rounded-full tw-text-xs tw-font-medium tw-bg-green-100 tw-text-green-700 tw-self-start">
+                      <i class="ri-check-line"></i> Validé
+                    </span>
+                    <span *ngIf="f.is_treated && !f.is_valid" class="tw-inline-flex tw-items-center tw-gap-1 tw-px-2 tw-py-0.5 tw-rounded-full tw-text-xs tw-font-medium tw-bg-red-100 tw-text-red-700 tw-self-start">
+                      <i class="ri-close-line"></i> Non validé
+                    </span>
+                    <span *ngIf="!f.is_treated" class="tw-inline-flex tw-items-center tw-gap-1 tw-px-2 tw-py-0.5 tw-rounded-full tw-text-xs tw-font-medium tw-bg-gray-100 tw-text-gray-600 tw-self-start">
+                      <i class="ri-time-line"></i> En attente
+                    </span>
+                    <span *ngIf="f.observation" class="tw-text-xs tw-text-gray-500 tw-italic">{{f.observation}}</span>
+                  </div>
+                </td>
+                <td class="tw-px-4 tw-py-3">
+                  <button (click)="showFile(f.filename, f)"
+                    class="tw-inline-flex tw-items-center tw-gap-1.5 tw-px-3 tw-py-1.5 tw-rounded-lg tw-text-xs tw-font-medium tw-bg-slate-700 tw-text-white hover:tw-bg-slate-800 tw-transition-colors">
+                    <i class="ri-eye-line"></i> Voir
+                  </button>
+                </td>
+              </tr>
+            </ng-container>
+
+            <!-- ── Autre document ── -->
+            <tr class="tw-bg-slate-50">
+              <td colspan="4" class="tw-px-4 tw-py-2 tw-text-xs tw-font-semibold tw-text-slate-600 tw-uppercase tw-tracking-wide tw-border-l-4 tw-border-slate-400">
+                Autre document
+              </td>
+            </tr>
+            <ng-container *ngFor="let f of data.files">
+              <tr *ngIf="f.file.type_file.code=='DJ'" class="tw-border-t tw-border-gray-100 hover:tw-bg-gray-50">
+                <td class="tw-px-4 tw-py-3 tw-text-center">
+                  <i *ngIf="f.is_treated && f.is_valid" class="ri-checkbox-circle-fill tw-text-green-500 tw-text-base"></i>
+                  <i *ngIf="f.is_treated && !f.is_valid" class="ri-close-circle-fill tw-text-red-500 tw-text-base"></i>
+                  <i *ngIf="!f.is_treated" class="ri-time-line tw-text-gray-400 tw-text-base"></i>
+                </td>
+                <td class="tw-px-4 tw-py-3 tw-text-gray-800 tw-font-medium">{{f.file.name}}</td>
+                <td class="tw-px-4 tw-py-3">
+                  <div class="tw-flex tw-flex-col tw-gap-1">
+                    <span *ngIf="f.is_treated && f.is_valid" class="tw-inline-flex tw-items-center tw-gap-1 tw-px-2 tw-py-0.5 tw-rounded-full tw-text-xs tw-font-medium tw-bg-green-100 tw-text-green-700 tw-self-start">
+                      <i class="ri-check-line"></i> Validé
+                    </span>
+                    <span *ngIf="f.is_treated && !f.is_valid" class="tw-inline-flex tw-items-center tw-gap-1 tw-px-2 tw-py-0.5 tw-rounded-full tw-text-xs tw-font-medium tw-bg-red-100 tw-text-red-700 tw-self-start">
+                      <i class="ri-close-line"></i> Non validé
+                    </span>
+                    <span *ngIf="!f.is_treated" class="tw-inline-flex tw-items-center tw-gap-1 tw-px-2 tw-py-0.5 tw-rounded-full tw-text-xs tw-font-medium tw-bg-gray-100 tw-text-gray-600 tw-self-start">
+                      <i class="ri-time-line"></i> En attente
+                    </span>
+                    <span *ngIf="f.observation" class="tw-text-xs tw-text-gray-500 tw-italic">{{f.observation}}</span>
+                  </div>
+                </td>
+                <td class="tw-px-4 tw-py-3">
+                  <button (click)="showFile(f.filename, f)"
+                    class="tw-inline-flex tw-items-center tw-gap-1.5 tw-px-3 tw-py-1.5 tw-rounded-lg tw-text-xs tw-font-medium tw-bg-slate-700 tw-text-white hover:tw-bg-slate-800 tw-transition-colors">
+                    <i class="ri-eye-line"></i> Voir
+                  </button>
+                </td>
+              </tr>
+            </ng-container>
+
+          </tbody>
         </table>
+      </div>
     </div>
 
- <div class="tw-mb-3">
-  <h4 class="tw-flex tw-justify-between"> 
-    <div class="tw-flex tw-items-center">
-      <i class="fa fa-chevron-right tw-font-bold tw-mr-3"></i>  
-      <u>Rapport social</u>
-    </div>
-    
-    <button 
-      (click)="add(finishContent1M)"  
-      *ngIf="data.has_cps_file && data.status==4"  
-      class="tw-bg-yellow-500 tw-text-white tw-text-sm tw-px-3 tw-py-1 tw-rounded tw-shadow hover:tw-bg-yellow-600"
-    >
-      Modifier
-    </button>
-  </h4>
-</div>
-
-<div *ngIf="data.has_cps_file">
-  <div class="tw-grid tw-grid-cols-12 tw-gap-4">
-    <div class="tw-col-span-6">
-      <dl>
-        <dt class="tw-font-semibold">Nom de l'enquêteur</dt>
-        <dd>{{data.social_investigator_name}}</dd>
-      </dl>
-    </div>
-
-    <div class="tw-col-span-6">
-      <dl>
-        <dt class="tw-font-semibold">Observation sur l'enquête</dt>
-        <dd>{{data.social_investigator_observation}}</dd>
-      </dl>
-    </div>
-
-    <div class="tw-col-span-6">
-      <dl>
-        <dt class="tw-font-semibold">Date de l'enquête</dt>
-        <dd>{{data.social_investigator_date | date:"shortDate"}}</dd>
-      </dl>
+    <!-- Card: Documents administratifs -->
+    <div class="tw-bg-white tw-rounded-xl tw-shadow-sm tw-border tw-border-gray-200">
+      <div class="tw-px-5 tw-py-3.5 tw-border-b tw-border-gray-100 tw-flex tw-items-center tw-gap-2">
+        <i class="ri-file-shield-2-line tw-text-blue-600"></i>
+        <h3 class="tw-text-sm tw-font-semibold tw-text-gray-800">Documents délivrés par l'administration</h3>
+      </div>
+      <div class="tw-overflow-x-auto">
+        <table class="tw-w-full tw-text-sm">
+          <thead>
+            <tr class="tw-bg-gray-50 tw-border-b tw-border-gray-200">
+              <th class="tw-w-10 tw-px-4 tw-py-2.5 tw-text-left tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide">#</th>
+              <th class="tw-px-4 tw-py-2.5 tw-text-left tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide">Référence</th>
+              <th class="tw-px-4 tw-py-2.5 tw-text-left tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide tw-w-28">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let f of data.files2; let i=index" class="tw-border-t tw-border-gray-100 hover:tw-bg-gray-50">
+              <td class="tw-px-4 tw-py-3 tw-text-gray-500 tw-tabular-nums">{{i+1}}</td>
+              <td class="tw-px-4 tw-py-3 tw-text-gray-800 tw-font-medium">{{f.reference}}</td>
+              <td class="tw-px-4 tw-py-3">
+                <button (click)="showFile(f.filename)"
+                  class="tw-inline-flex tw-items-center tw-gap-1.5 tw-px-3 tw-py-1.5 tw-rounded-lg tw-text-xs tw-font-medium tw-bg-slate-700 tw-text-white hover:tw-bg-slate-800 tw-transition-colors">
+                  <i class="ri-eye-line"></i> Voir
+                </button>
+              </td>
+            </tr>
+            <tr *ngIf="!data.files2 || data.files2.length===0">
+              <td colspan="3" class="tw-px-4 tw-py-8 tw-text-center tw-text-sm tw-text-gray-400 tw-italic">Aucun document administratif</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
 
-    <div class="tw-col-span-6">
-      <dl>
-        <dt class="tw-font-semibold">Fiche de l'enquête sociale</dt>
-        <dd>
-          <button 
-            (click)="showFileCpsFile()"  
-            class="tw-bg-gray-800 tw-text-white tw-text-sm tw-px-3 tw-py-1 tw-rounded hover:tw-bg-gray-900"
-          >
-            Voir document
-          </button>
-        </dd>
-      </dl>
-    </div>
-  </div>
-</div>
-
-<div *ngIf="!data.has_cps_file">
-  <p class="tw-text-center">Rapport social non disponible</p>
-</div>
-
-<div class="tw-mb-3">
-  <h4 class="tw-flex tw-justify-between"> 
-    <div class="tw-flex tw-items-center">
-      <i class="fa fa-chevron-right tw-font-bold tw-mr-3"></i>  
-      <u>Dépôt physique</u>
-    </div>
-    
-    <button 
-      (click)="add(finishContent2M)"  
-      *ngIf="data.has_physical_deposit && data.status==4"  
-      class="tw-bg-yellow-500 tw-text-white tw-text-sm tw-px-3 tw-py-1 tw-rounded tw-shadow hover:tw-bg-yellow-600"
-    >
-      Modifier
-    </button>
-  </h4>
-</div>
-
-
-    <div class="" *ngIf="data.has_physical_deposit">
-       <div class="tw-grid tw-grid-cols-12 tw-gap-4">
-  <div class="tw-col-span-6">
-    <dl>
-      <dt>Nom du déposant</dt>
-      <dd>{{data.name_depositor}}</dd>
-    </dl>
-  </div>
-
-  <div class="tw-col-span-6">
-    <dl>
-      <dt>Contact du déposant</dt>
-      <dd>{{data.phone_depositor}}</dd>
-    </dl>
-  </div>
-
-  <div class="tw-col-span-6">
-    <dl>
-      <dt>Observation du déposant</dt>
-      <dd>{{data.observation_depositor}}</dd>
-    </dl>
-  </div>
-
-  <div class="tw-col-span-6">
-    <dl>
-      <dt>Date du déposant</dt>
-      <dd>{{data.date_depositor | date:"shortDate"}}</dd>
-    </dl>
-  </div>
-
-  <div class="tw-col-span-6">
-    <dl>
-      <dt>Prototype du récépissé de dépôt</dt>
-      <dd>
-        <button (click)="showFileRecepisseFile()" class="btn btn-sm btn-dark">Voir document</button>
-      </dd>
-    </dl>
-  </div>
-</div>
-
-    </div>
-    <div class="" *ngIf="!data.has_physical_deposit">
-        <p class="text-center">Dépôt physique non disponible</p>
-    </div>
-    <div class="mb-3">
-        <h4 class=" d-flex justify-content-between">
-            <div class="">
-                <i class="fa fa-chevron-right fw-bold me-3"></i>  <u>Réponses intervenants</u> 
+    <!-- Card: Rapport social -->
+    <div class="tw-bg-white tw-rounded-xl tw-shadow-sm tw-border tw-border-gray-200">
+      <div class="tw-px-5 tw-py-3.5 tw-border-b tw-border-gray-100 tw-flex tw-items-center tw-justify-between">
+        <div class="tw-flex tw-items-center tw-gap-2">
+          <i class="ri-survey-line tw-text-blue-600"></i>
+          <h3 class="tw-text-sm tw-font-semibold tw-text-gray-800">Rapport social</h3>
+        </div>
+        <button *ngIf="data.has_cps_file && data.status==4" (click)="add(finishContent1M)"
+          class="tw-inline-flex tw-items-center tw-gap-1.5 tw-px-3 tw-py-1.5 tw-rounded-lg tw-text-xs tw-font-medium tw-bg-amber-100 tw-text-amber-700 hover:tw-bg-amber-200 tw-transition-colors">
+          <i class="ri-edit-line"></i> Modifier
+        </button>
+      </div>
+      <div class="tw-p-5">
+        <ng-container *ngIf="data.has_cps_file; else noRapport">
+          <dl class="tw-grid tw-grid-cols-1 sm:tw-grid-cols-2 tw-gap-4">
+            <div>
+              <dt class="tw-text-xs tw-text-gray-500">Nom de l'enquêteur</dt>
+              <dd class="tw-text-sm tw-font-medium tw-text-gray-900 tw-mt-0.5">{{data.social_investigator_name}}</dd>
             </div>
-        </h4>
-    </div>
-    <div class="div mb-5">
-        <ul class="list-unstyled">
-            <li *ngFor="let r of data.reponses"> <p> <i class="fa fa-arrow-right text-warning me-3"></i> {{r.observation}} | <span><strong>{{r.user?.name}}</strong></span></p></li>
-        </ul>
-    </div>
-  </div>
- 
-  </ng-container>
-
-
-  
-
-    <ng-template #previewContent let-offcanvas id="myCanvas">
-	<div class="offcanvas-header">
-		<h4 class="offcanvas-title">Visualisation du document</h4>
-		<!-- <button type="button" class="btn-close" aria-label="Close" (click)="offcanvas.dismiss('Cross click')"></button> -->
-	</div>
-	<div class="offcanvas-body">
-          <div class="d-flex justify-content-around">
-                <button class="btn btn-dark mb-3 btn-sm" (click)="back()">Fermer le visualiseur</button>
-             
-                <button *ngIf="fileSelected && !fileSelected.is_treated && data.status<4" class="btn btn-primary mb-3 btn-sm" (click)="add(fileTreatmentContent)">Enregistrer les observations</button>
-                <button *ngIf="fileSelected && fileSelected.is_treated && data.status<4" class="btn btn-warning mb-3 btn-sm" (click)="add(fileTreatmentEditContent)">Modifier les observations</button>
-                <!--button  *ngIf="!showResponseFilePreview"  class="btn btn-success mb-3 " [disabled]="!activeobsPanel"  (click)="openWindow(contentTemplateAmendement)">Faire des observations</!--button-->
-        
+            <div>
+              <dt class="tw-text-xs tw-text-gray-500">Date de l'enquête</dt>
+              <dd class="tw-text-sm tw-font-medium tw-text-gray-900 tw-mt-0.5">{{data.social_investigator_date | date:"dd/MM/yyyy"}}</dd>
             </div>
-        <object [data]="url" type="application/pdf" width="100%" height="100%"></object>
+            <div>
+              <dt class="tw-text-xs tw-text-gray-500">Observation</dt>
+              <dd class="tw-text-sm tw-text-gray-700 tw-mt-0.5">{{data.social_investigator_observation}}</dd>
+            </div>
+            <div>
+              <dt class="tw-text-xs tw-text-gray-500">Fiche d'enquête sociale</dt>
+              <dd class="tw-mt-0.5">
+                <button (click)="showFileCpsFile()"
+                  class="tw-inline-flex tw-items-center tw-gap-1.5 tw-px-3 tw-py-1.5 tw-rounded-lg tw-text-xs tw-font-medium tw-bg-slate-700 tw-text-white hover:tw-bg-slate-800 tw-transition-colors">
+                  <i class="ri-eye-line"></i> Voir document
+                </button>
+              </dd>
+            </div>
+          </dl>
+        </ng-container>
+        <ng-template #noRapport>
+          <p class="tw-text-sm tw-text-gray-400 tw-italic tw-text-center tw-py-4">Rapport social non disponible</p>
+        </ng-template>
+      </div>
+    </div>
 
-	</div>
+    <!-- Card: Dépôt physique -->
+    <div class="tw-bg-white tw-rounded-xl tw-shadow-sm tw-border tw-border-gray-200">
+      <div class="tw-px-5 tw-py-3.5 tw-border-b tw-border-gray-100 tw-flex tw-items-center tw-justify-between">
+        <div class="tw-flex tw-items-center tw-gap-2">
+          <i class="ri-inbox-archive-line tw-text-blue-600"></i>
+          <h3 class="tw-text-sm tw-font-semibold tw-text-gray-800">Dépôt physique</h3>
+        </div>
+        <button *ngIf="data.has_physical_deposit && data.status==4" (click)="add(finishContent2M)"
+          class="tw-inline-flex tw-items-center tw-gap-1.5 tw-px-3 tw-py-1.5 tw-rounded-lg tw-text-xs tw-font-medium tw-bg-amber-100 tw-text-amber-700 hover:tw-bg-amber-200 tw-transition-colors">
+          <i class="ri-edit-line"></i> Modifier
+        </button>
+      </div>
+      <div class="tw-p-5">
+        <ng-container *ngIf="data.has_physical_deposit; else noDepot">
+          <dl class="tw-grid tw-grid-cols-1 sm:tw-grid-cols-2 tw-gap-4">
+            <div>
+              <dt class="tw-text-xs tw-text-gray-500">Nom du déposant</dt>
+              <dd class="tw-text-sm tw-font-medium tw-text-gray-900 tw-mt-0.5">{{data.name_depositor}}</dd>
+            </div>
+            <div>
+              <dt class="tw-text-xs tw-text-gray-500">Contact</dt>
+              <dd class="tw-text-sm tw-font-medium tw-text-gray-900 tw-mt-0.5">{{data.phone_depositor}}</dd>
+            </div>
+            <div>
+              <dt class="tw-text-xs tw-text-gray-500">Date de dépôt</dt>
+              <dd class="tw-text-sm tw-font-medium tw-text-gray-900 tw-mt-0.5">{{data.date_depositor | date:"dd/MM/yyyy"}}</dd>
+            </div>
+            <div>
+              <dt class="tw-text-xs tw-text-gray-500">Observation</dt>
+              <dd class="tw-text-sm tw-text-gray-700 tw-mt-0.5">{{data.observation_depositor}}</dd>
+            </div>
+            <div>
+              <dt class="tw-text-xs tw-text-gray-500">Récépissé de dépôt</dt>
+              <dd class="tw-mt-0.5">
+                <button (click)="showFileRecepisseFile()"
+                  class="tw-inline-flex tw-items-center tw-gap-1.5 tw-px-3 tw-py-1.5 tw-rounded-lg tw-text-xs tw-font-medium tw-bg-slate-700 tw-text-white hover:tw-bg-slate-800 tw-transition-colors">
+                  <i class="ri-eye-line"></i> Voir document
+                </button>
+              </dd>
+            </div>
+          </dl>
+        </ng-container>
+        <ng-template #noDepot>
+          <p class="tw-text-sm tw-text-gray-400 tw-italic tw-text-center tw-py-4">Dépôt physique non disponible</p>
+        </ng-template>
+      </div>
+    </div>
+
+    <!-- Card: Réponses intervenants -->
+    <div class="tw-bg-white tw-rounded-xl tw-shadow-sm tw-border tw-border-gray-200">
+      <div class="tw-px-5 tw-py-3.5 tw-border-b tw-border-gray-100 tw-flex tw-items-center tw-gap-2">
+        <i class="ri-message-3-line tw-text-blue-600"></i>
+        <h3 class="tw-text-sm tw-font-semibold tw-text-gray-800">Réponses intervenants</h3>
+      </div>
+      <div class="tw-p-5">
+        <ng-container *ngIf="data.reponses && data.reponses.length > 0; else noReponses">
+          <div class="tw-flex tw-flex-col tw-gap-3">
+            <div *ngFor="let r of data.reponses" class="tw-rounded-lg tw-border tw-overflow-hidden tw-shadow-sm">
+              <div class="tw-flex tw-justify-between tw-items-center tw-px-4 tw-py-2"
+                   [ngClass]="{
+                     'tw-bg-amber-50 tw-border-b tw-border-amber-200': r.hasPermission == null,
+                     'tw-bg-red-50 tw-border-b tw-border-red-200':     r.hasPermission == 0,
+                     'tw-bg-green-50 tw-border-b tw-border-green-200': r.hasPermission == 1
+                   }">
+                <div class="tw-flex tw-items-center tw-gap-2">
+                  <i class="tw-text-base"
+                     [ngClass]="{
+                       'ri-time-line tw-text-amber-500':             r.hasPermission == null,
+                       'ri-close-circle-line tw-text-red-500':       r.hasPermission == 0,
+                       'ri-checkbox-circle-line tw-text-green-600':  r.hasPermission == 1
+                     }"></i>
+                  <span class="tw-font-semibold tw-text-sm"
+                        [ngClass]="{
+                          'tw-text-amber-700': r.hasPermission == null,
+                          'tw-text-red-700':   r.hasPermission == 0,
+                          'tw-text-green-700': r.hasPermission == 1
+                        }">
+                    <ng-container *ngIf="r.hasPermission == null">Mise en attente</ng-container>
+                    <ng-container *ngIf="r.hasPermission == 0">Dossier rejeté</ng-container>
+                    <ng-container *ngIf="r.hasPermission == 1">Dossier validé</ng-container>
+                  </span>
+                </div>
+                <div class="tw-text-xs tw-text-gray-500 tw-flex tw-items-center tw-gap-2">
+                  <span><i class="ri-user-line tw-mr-1"></i>{{r.user?.name}}</span>
+                  <span class="tw-text-gray-300">|</span>
+                  <span><i class="ri-calendar-line tw-mr-1"></i>{{r.created_at | date:'dd/MM/yyyy à HH:mm'}}</span>
+                </div>
+              </div>
+              <div class="tw-bg-white tw-px-4 tw-py-3">
+                <div class="ql-editor tw-p-0 tw-min-h-0" [innerHTML]="r.observation"></div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+        <ng-template #noReponses>
+          <p class="tw-text-sm tw-text-gray-400 tw-italic tw-text-center tw-py-4">Aucune réponse enregistrée.</p>
+        </ng-template>
+      </div>
+    </div>
+
+  </div>
+</ng-container>
+
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!--  OFF-CANVAS — Visualisation de document                         -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<ng-template #previewContent let-offcanvas id="myCanvas">
+  <div class="offcanvas-header tw-bg-slate-800 tw-text-white tw-px-4 tw-py-3 tw-flex tw-items-center tw-justify-between">
+    <h5 class="tw-text-sm tw-font-semibold tw-m-0">Visualisation du document</h5>
+  </div>
+  <div class="offcanvas-body tw-p-0 tw-flex tw-flex-col tw-h-full">
+    <div class="tw-flex tw-gap-2 tw-px-4 tw-py-3 tw-border-b tw-border-gray-200 tw-flex-shrink-0">
+      <button (click)="back()"
+        class="tw-inline-flex tw-items-center tw-gap-1.5 tw-px-3 tw-py-1.5 tw-rounded-lg tw-text-sm tw-font-medium tw-bg-gray-100 tw-text-gray-700 hover:tw-bg-gray-200 tw-transition-colors">
+        <i class="ri-close-line"></i> Fermer
+      </button>
+      <button *ngIf="fileSelected && !fileSelected.is_treated && data.status<4"
+        (click)="add(fileTreatmentContent)"
+        class="tw-inline-flex tw-items-center tw-gap-1.5 tw-px-3 tw-py-1.5 tw-rounded-lg tw-text-sm tw-font-medium tw-bg-blue-600 tw-text-white hover:tw-bg-blue-700 tw-transition-colors">
+        <i class="ri-edit-2-line"></i> Enregistrer les observations
+      </button>
+      <button *ngIf="fileSelected && fileSelected.is_treated && data.status<4"
+        (click)="add(fileTreatmentEditContent)"
+        class="tw-inline-flex tw-items-center tw-gap-1.5 tw-px-3 tw-py-1.5 tw-rounded-lg tw-text-sm tw-font-medium tw-bg-amber-500 tw-text-white hover:tw-bg-amber-600 tw-transition-colors">
+        <i class="ri-edit-line"></i> Modifier les observations
+      </button>
+    </div>
+    <object [data]="url" type="application/pdf" width="100%" height="100%" class="tw-flex-1"></object>
+  </div>
 </ng-template>
 
-    
-    <ng-template #finishContent1 let-c="close" let-d="dismiss">
-        <form #addSusp="ngForm" (ngSubmit)="finishStore1(addSusp.value)">
-    
-      <div class="tw-modal-header tw-bg-slate-800  tw-flex tw-justify-between tw-items-center tw-p-4">
-            <h6 class="tw-modal-title tw-text-white" id="modal-basic-title">Rapport social</h6>
-            <button type="button" class="tw-btn tw-btn-dark tw-text-white tw-px-2 tw-py-1 tw-rounded" (click)="d('Cross click')">
-                <i class="fa fa-times"></i>
-            </button>
-            </div>
 
-        <div class="modal-body">
-            <div class="form-group mb-3">
-                <label for="">Nom de l'enquêteur</label>
-                <input type="text" class="form-control" name="social_investigator_name" [(ngModel)]="data.social_investigator_name">
-            </div>
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!--  MODALS                                                          -->
+<!-- ════════════════════════════════════════════════════════════════ -->
 
-            <div class="form-group mb-3">
-                <label for="">Date de l'enquête</label>
-                <input type="datetime-local" class="form-control" name="social_investigator_date" ngModel>
-            </div>
-            <div class="form-group mb-3">
-                <label for="">Observation</label>
-                <textarea class="form-control" name="social_investigator_observation" ngModel></textarea>
-            </div>
-            <div class="form-group mb-3">
-                <label for="">Charger la fiche de contrôle</label>
-                <input type="file" class="form-control" (change)="upload($event)">
-            </div>
-        </div>
-        <div class="modal-footer">
-            <button type="submit" class="btn btn-primary" [disabled]="addSusp.invalid || loading">Sauvegarder </button>
-        </div>
-    </form>
-    
-      </ng-template>
+<!-- Rapport social — Ajouter -->
+<ng-template #finishContent1 let-c="close" let-d="dismiss">
+  <form #addSusp="ngForm" (ngSubmit)="finishStore1(addSusp.value)">
+    <div class="tw-bg-slate-800 tw-text-white tw-px-4 tw-py-3 tw-flex tw-items-center tw-justify-between">
+      <h6 class="tw-text-sm tw-font-semibold tw-m-0">Rapport social</h6>
+      <button type="button" (click)="d('Cross click')"
+        class="tw-flex tw-items-center tw-justify-center tw-w-6 tw-h-6 tw-rounded tw-text-slate-300 hover:tw-text-white hover:tw-bg-slate-700 tw-transition-colors">
+        <i class="ri-close-line"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group mb-3">
+        <label>Nom de l'enquêteur</label>
+        <input type="text" class="form-control" name="social_investigator_name" [(ngModel)]="data.social_investigator_name">
+      </div>
+      <div class="form-group mb-3">
+        <label>Date de l'enquête</label>
+        <input type="datetime-local" class="form-control" name="social_investigator_date" ngModel>
+      </div>
+      <div class="form-group mb-3">
+        <label>Observation</label>
+        <textarea class="form-control" name="social_investigator_observation" ngModel></textarea>
+      </div>
+      <div class="form-group mb-3">
+        <label>Charger la fiche de contrôle</label>
+        <input type="file" class="form-control" (change)="upload($event)">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" (click)="d('Cross click')"
+        class="tw-inline-flex tw-items-center tw-px-4 tw-py-2 tw-rounded-lg tw-text-sm tw-font-medium tw-bg-gray-100 tw-text-gray-700 hover:tw-bg-gray-200 tw-transition-colors">
+        Annuler
+      </button>
+      <button type="submit" [disabled]="addSusp.invalid || loading"
+        class="tw-inline-flex tw-items-center tw-px-4 tw-py-2 tw-rounded-lg tw-text-sm tw-font-medium tw-bg-blue-600 tw-text-white hover:tw-bg-blue-700 tw-transition-colors disabled:tw-opacity-50 disabled:tw-cursor-not-allowed">
+        Sauvegarder
+      </button>
+    </div>
+  </form>
+</ng-template>
 
-      <ng-template #resp let-c="close" let-d="dismiss">
-        <form #addSusp="ngForm" (ngSubmit)="transUp(addSusp.value)">
-    
-        <div class="tw-modal-header tw-bg-slate-800  tw-flex tw-justify-between tw-items-center tw-p-4">
-          <h6 class="tw-modal-title tw-text-white" id="modal-basic-title">Rapport final</h6>
-           <button type="button" class="tw-btn tw-btn-dark tw-text-white tw-px-2 tw-py-1 tw-rounded" (click)="d('Cross click')">
-                <i class="fa fa-times"></i>
-            </button>
-        </div>
-        <div class="modal-body">
-     
-            <div class="form-group mb-3">
-                <label for="">Note de rapport final</label>
-                <textarea class="form-control" name="observation" ngModel></textarea>
-            </div>
-           
-        </div>
-        <div class="modal-footer">
-            <button type="submit" class="btn btn-primary" [disabled]="addSusp.invalid || loading">Sauvegarder </button>
-        </div>
-    </form>
-    
-      </ng-template>
+<!-- Rapport social — Modifier -->
+<ng-template #finishContent1M let-c="close" let-d="dismiss">
+  <form #addSusp="ngForm" (ngSubmit)="finishStore1(addSusp.value)">
+    <div class="tw-bg-amber-600 tw-text-white tw-px-4 tw-py-3 tw-flex tw-items-center tw-justify-between">
+      <h6 class="tw-text-sm tw-font-semibold tw-m-0">Rapport social — Modification</h6>
+      <button type="button" (click)="d('Cross click')"
+        class="tw-flex tw-items-center tw-justify-center tw-w-6 tw-h-6 tw-rounded tw-text-amber-200 hover:tw-text-white hover:tw-bg-amber-700 tw-transition-colors">
+        <i class="ri-close-line"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group mb-3">
+        <label>Nom de l'enquêteur</label>
+        <input type="text" class="form-control" name="social_investigator_name" [(ngModel)]="data.social_investigator_name">
+      </div>
+      <div class="form-group mb-3">
+        <label>Date de l'enquête</label>
+        <input type="datetime-local" class="form-control" name="social_investigator_date" [(ngModel)]="data.social_investigator_date">
+      </div>
+      <div class="form-group mb-3">
+        <label>Observation</label>
+        <textarea class="form-control" name="social_investigator_observation" [(ngModel)]="data.social_investigator_observation"></textarea>
+      </div>
+      <div class="form-group mb-3">
+        <label>Charger la fiche de contrôle</label>
+        <input type="file" class="form-control" (change)="upload($event)">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" (click)="d('Cross click')"
+        class="tw-inline-flex tw-items-center tw-px-4 tw-py-2 tw-rounded-lg tw-text-sm tw-font-medium tw-bg-gray-100 tw-text-gray-700 hover:tw-bg-gray-200 tw-transition-colors">
+        Annuler
+      </button>
+      <button type="submit" [disabled]="addSusp.invalid || loading"
+        class="tw-inline-flex tw-items-center tw-px-4 tw-py-2 tw-rounded-lg tw-text-sm tw-font-medium tw-bg-blue-600 tw-text-white hover:tw-bg-blue-700 tw-transition-colors disabled:tw-opacity-50 disabled:tw-cursor-not-allowed">
+        Sauvegarder
+      </button>
+    </div>
+  </form>
+</ng-template>
 
+<!-- Dépôt physique — Ajouter -->
+<ng-template #finishContent2 let-c="close" let-d="dismiss">
+  <form #addDep="ngForm" (ngSubmit)="finishStore2(addDep.value)">
+    <div class="tw-bg-slate-800 tw-text-white tw-px-4 tw-py-3 tw-flex tw-items-center tw-justify-between">
+      <h6 class="tw-text-sm tw-font-semibold tw-m-0">Dépôt physique</h6>
+      <button type="button" (click)="d('Cross click')"
+        class="tw-flex tw-items-center tw-justify-center tw-w-6 tw-h-6 tw-rounded tw-text-slate-300 hover:tw-text-white hover:tw-bg-slate-700 tw-transition-colors">
+        <i class="ri-close-line"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group mb-3">
+        <label>Nom déposant</label>
+        <input type="text" class="form-control" name="name_depositor" ngModel>
+      </div>
+      <div class="form-group mb-3">
+        <label>Contact déposant</label>
+        <input type="text" class="form-control" name="phone_depositor" ngModel>
+      </div>
+      <div class="form-group mb-3">
+        <label>Date de dépôt</label>
+        <input type="date" class="form-control" name="date_depositor" ngModel>
+      </div>
+      <div class="form-group mb-3">
+        <label>Observation</label>
+        <textarea class="form-control" name="observation_depositor" ngModel></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" (click)="d('Cross click')"
+        class="tw-inline-flex tw-items-center tw-px-4 tw-py-2 tw-rounded-lg tw-text-sm tw-font-medium tw-bg-gray-100 tw-text-gray-700 hover:tw-bg-gray-200 tw-transition-colors">
+        Annuler
+      </button>
+      <button type="submit" [disabled]="addDep.invalid || loading"
+        class="tw-inline-flex tw-items-center tw-px-4 tw-py-2 tw-rounded-lg tw-text-sm tw-font-medium tw-bg-blue-600 tw-text-white hover:tw-bg-blue-700 tw-transition-colors disabled:tw-opacity-50 disabled:tw-cursor-not-allowed">
+        Sauvegarder
+      </button>
+    </div>
+  </form>
+</ng-template>
 
-      <ng-template #finishContent1M let-c="close" let-d="dismiss">
-        <form #addSusp="ngForm" (ngSubmit)="finishStore1(addSusp.value)">
-    
-        <div class="tw-modal-header tw-bg-slate-800  tw-flex tw-justify-between tw-items-center tw-p-4">
-          <h6 class="tw-modal-title tw-text-white" id="modal-basic-title">Rapport social  </h6>
-           <button type="button" class="tw-btn tw-btn-dark tw-text-white tw-px-2 tw-py-1 tw-rounded" (click)="d('Cross click')">
-                <i class="fa fa-times"></i>
-            </button>
-        </div>
-        <div class="modal-body">
-            <div class="form-group mb-3">
-                <label for="">Nom de l'enquêteur</label>
-                <input type="text" class="form-control" name="social_investigator_name" [(ngModel)]="data.social_investigator_name">
-            </div>
+<!-- Dépôt physique — Modifier -->
+<ng-template #finishContent2M let-c="close" let-d="dismiss">
+  <form #addDep="ngForm" (ngSubmit)="finishStore2(addDep.value)">
+    <div class="tw-bg-amber-600 tw-text-white tw-px-4 tw-py-3 tw-flex tw-items-center tw-justify-between">
+      <h6 class="tw-text-sm tw-font-semibold tw-m-0">Dépôt physique — Modification</h6>
+      <button type="button" (click)="d('Cross click')"
+        class="tw-flex tw-items-center tw-justify-center tw-w-6 tw-h-6 tw-rounded tw-text-amber-200 hover:tw-text-white hover:tw-bg-amber-700 tw-transition-colors">
+        <i class="ri-close-line"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group mb-3">
+        <label>Nom déposant</label>
+        <input type="text" class="form-control" name="name_depositor" [(ngModel)]="data.name_depositor">
+      </div>
+      <div class="form-group mb-3">
+        <label>Contact déposant</label>
+        <input type="text" class="form-control" name="phone_depositor" [(ngModel)]="data.phone_depositor">
+      </div>
+      <div class="form-group mb-3">
+        <label>Date de dépôt</label>
+        <input type="date" class="form-control" name="date_depositor" [(ngModel)]="data.date_depositor">
+      </div>
+      <div class="form-group mb-3">
+        <label>Observation</label>
+        <textarea class="form-control" name="observation_depositor" [(ngModel)]="data.observation_depositor"></textarea>
+      </div>
+      <div class="form-group mb-3" *ngIf="is_signed">
+        <label>Charger le récépissé délivré et signé</label>
+        <input type="file" class="form-control" (change)="upload2($event)">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" (click)="d('Cross click')"
+        class="tw-inline-flex tw-items-center tw-px-4 tw-py-2 tw-rounded-lg tw-text-sm tw-font-medium tw-bg-gray-100 tw-text-gray-700 hover:tw-bg-gray-200 tw-transition-colors">
+        Annuler
+      </button>
+      <button type="submit" [disabled]="addDep.invalid || loading"
+        class="tw-inline-flex tw-items-center tw-px-4 tw-py-2 tw-rounded-lg tw-text-sm tw-font-medium tw-bg-blue-600 tw-text-white hover:tw-bg-blue-700 tw-transition-colors disabled:tw-opacity-50 disabled:tw-cursor-not-allowed">
+        Sauvegarder
+      </button>
+    </div>
+  </form>
+</ng-template>
 
-            <div class="form-group mb-3">
-                <label for="">Date de l'enquête</label>
-                <input type="datetime-local" class="form-control" name="social_investigator_date" [(ngModel)]="data.social_investigator_date">
-            </div>
-            <div class="form-group mb-3">
-                <label for="">Observation</label>
-                <textarea  class="form-control" name="social_investigator_observation" [(ngModel)]="data.social_investigator_observation"></textarea>
-            </div>
-            <div class="form-group mb-3">
-                <label for="">Charger la fiche de contrôle</label>
-                <input type="file" class="form-control" (change)="upload($event)">
-            </div>
-        </div>
-        <div class="modal-footer">
-            <button type="submit" class="btn btn-primary" [disabled]="addSusp.invalid || loading">Sauvegarder </button>
-        </div>
-    </form>
-    
-      </ng-template>
-    <ng-template #finishContent2 let-c="close" let-d="dismiss">
-        <form #addDep="ngForm" (ngSubmit)="finishStore2(addDep.value)">
-    
-        <div class="tw-modal-header tw-bg-slate-800  tw-flex tw-justify-between tw-items-center tw-p-4">
-          <h6 class="tw-modal-title tw-text-white" id="modal-basic-title">Dépôt physique</h6>
-           <button type="button" class="tw-btn tw-btn-dark tw-text-white tw-px-2 tw-py-1 tw-rounded" (click)="d('Cross click')">
-                <i class="fa fa-times"></i>
-            </button>
-        </div>
-        <div class="modal-body">
-            <div class="form-group mb-3">
-                <label for="">Nom déposant</label>
-                <input type="text" class="form-control" name="name_depositor" ngModel>
-            </div>
+<!-- Rapport final / Transmettre -->
+<ng-template #resp let-c="close" let-d="dismiss">
+  <form #addSusp="ngForm" (ngSubmit)="transUp(addSusp.value)">
+    <div class="tw-bg-slate-800 tw-text-white tw-px-4 tw-py-3 tw-flex tw-items-center tw-justify-between">
+      <h6 class="tw-text-sm tw-font-semibold tw-m-0">Rapport final</h6>
+      <button type="button" (click)="d('Cross click')"
+        class="tw-flex tw-items-center tw-justify-center tw-w-6 tw-h-6 tw-rounded tw-text-slate-300 hover:tw-text-white hover:tw-bg-slate-700 tw-transition-colors">
+        <i class="ri-close-line"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group mb-3">
+        <label>Note de rapport final</label>
+        <textarea class="form-control" name="observation" ngModel></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" (click)="d('Cross click')"
+        class="tw-inline-flex tw-items-center tw-px-4 tw-py-2 tw-rounded-lg tw-text-sm tw-font-medium tw-bg-gray-100 tw-text-gray-700 hover:tw-bg-gray-200 tw-transition-colors">
+        Annuler
+      </button>
+      <button type="submit" [disabled]="addSusp.invalid || loading"
+        class="tw-inline-flex tw-items-center tw-px-4 tw-py-2 tw-rounded-lg tw-text-sm tw-font-medium tw-bg-blue-600 tw-text-white hover:tw-bg-blue-700 tw-transition-colors disabled:tw-opacity-50 disabled:tw-cursor-not-allowed">
+        Sauvegarder
+      </button>
+    </div>
+  </form>
+</ng-template>
 
-            <div class="form-group mb-3">
-                <label for="">Contact déposant</label>
-                <input type="text" class="form-control" name="phone_depositor" ngModel>
-            </div>
-          
-            <div class="form-group mb-3">
-                <label for="">Date de dépôt</label>
-                <input type="date" class="form-control" name="date_depositor" ngModel>
-            </div>
-            <div class="form-group mb-3">
-                <label for="">Observation</label>
-                <textarea class="form-control" name="observation_depositor" ngModel></textarea>
-            </div>
-        </div>
-        <div class="modal-footer">
-            <button type="submit" class="btn btn-primary" [disabled]="addDep.invalid || loading">Sauvegarder </button>
-        </div>
-    </form>
-    
-      </ng-template>
-    <ng-template #finishContent2M let-c="close" let-d="dismiss">
-        <form #addDep="ngForm" (ngSubmit)="finishStore2(addDep.value)">
-    
-        <div class="tw-modal-header tw-bg-slate-800  tw-flex tw-justify-between tw-items-center tw-p-4">
-          <h6 class="tw-modal-title tw-text-white" id="modal-basic-title">Dépôt physique</h6>
-           <button type="button" class="tw-btn tw-btn-dark tw-text-white tw-px-2 tw-py-1 tw-rounded" (click)="d('Cross click')">
-                <i class="fa fa-times"></i>
-            </button>
-        </div>
-        <div class="modal-body">
-            <div class="form-group mb-3">
-                <label for="">Nom déposant</label>
-                <input type="text" class="form-control" name="name_depositor" [(ngModel)]="data.name_depositor">
-            </div>
+<!-- Mise en attente -->
+<ng-template #pendingContent let-c="close" let-d="dismiss">
+  <div class="tw-bg-slate-800 tw-text-white tw-px-4 tw-py-3 tw-flex tw-items-center tw-justify-between">
+    <div class="tw-flex tw-items-center tw-gap-2">
+      <i class="ri-pause-circle-line tw-text-amber-400"></i>
+      <h6 class="tw-text-sm tw-font-semibold tw-m-0">Mise en attente — Motif</h6>
+    </div>
+    <button type="button" (click)="d('Cross click')"
+      class="tw-flex tw-items-center tw-justify-center tw-w-6 tw-h-6 tw-rounded tw-text-slate-300 hover:tw-text-white hover:tw-bg-slate-700 tw-transition-colors">
+      <i class="ri-close-line"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <ng-container *ngIf="data.files && data.files.length > 0">
+      <div class="tw-bg-amber-50 tw-border tw-border-amber-200 tw-rounded-lg tw-p-3 tw-mb-4">
+        <p class="tw-text-xs tw-font-semibold tw-text-amber-800 tw-mb-2">
+          <i class="ri-error-warning-line tw-mr-1"></i> Récapitulatif des observations par document
+        </p>
+        <table class="tw-w-full tw-text-xs">
+          <thead>
+            <tr class="tw-bg-amber-100">
+              <th class="tw-px-2 tw-py-1.5 tw-text-left tw-font-semibold tw-text-amber-800">Document</th>
+              <th class="tw-px-2 tw-py-1.5 tw-text-left tw-font-semibold tw-text-amber-800 tw-w-28">Statut</th>
+              <th class="tw-px-2 tw-py-1.5 tw-text-left tw-font-semibold tw-text-amber-800">Observation</th>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngFor="let f of data.files">
+              <tr *ngIf="f.is_treated" class="tw-border-t tw-border-amber-100">
+                <td class="tw-px-2 tw-py-1.5">{{f.file?.name}}</td>
+                <td class="tw-px-2 tw-py-1.5">
+                  <span *ngIf="f.is_valid" class="tw-inline-flex tw-px-1.5 tw-py-0.5 tw-rounded-full tw-text-xs tw-bg-green-100 tw-text-green-700 tw-font-medium">Conforme</span>
+                  <span *ngIf="!f.is_valid" class="tw-inline-flex tw-px-1.5 tw-py-0.5 tw-rounded-full tw-text-xs tw-bg-red-100 tw-text-red-700 tw-font-medium">Non conforme</span>
+                </td>
+                <td class="tw-px-2 tw-py-1.5 tw-text-gray-600">{{f.observation ?? '—'}}</td>
+              </tr>
+              <tr *ngIf="!f.is_treated" class="tw-border-t tw-border-amber-100">
+                <td class="tw-px-2 tw-py-1.5">{{f.file?.name}}</td>
+                <td class="tw-px-2 tw-py-1.5">
+                  <span class="tw-inline-flex tw-px-1.5 tw-py-0.5 tw-rounded-full tw-text-xs tw-bg-gray-100 tw-text-gray-600 tw-font-medium">Non traité</span>
+                </td>
+                <td class="tw-px-2 tw-py-1.5 tw-text-gray-400">—</td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+    </ng-container>
+    <div class="form-group mb-2">
+      <label class="fw-semibold mb-1">Motif de suspension <span class="text-danger">*</span></label>
+      <quill-editor
+        [(ngModel)]="pendingObservation"
+        [ngModelOptions]="{standalone: true}"
+        [styles]="{minHeight: '200px'}"
+        placeholder="Rédigez le motif de mise en attente...">
+      </quill-editor>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" (click)="d('Cross click')"
+      class="tw-inline-flex tw-items-center tw-px-4 tw-py-2 tw-rounded-lg tw-text-sm tw-font-medium tw-bg-gray-100 tw-text-gray-700 hover:tw-bg-gray-200 tw-transition-colors">
+      Annuler
+    </button>
+    <button type="button" [disabled]="!pendingObservation || loading" (click)="storePending()"
+      class="tw-inline-flex tw-items-center tw-gap-1.5 tw-px-4 tw-py-2 tw-rounded-lg tw-text-sm tw-font-medium tw-bg-amber-500 tw-text-white hover:tw-bg-amber-600 tw-transition-colors disabled:tw-opacity-50 disabled:tw-cursor-not-allowed">
+      <app-loading [isVisible]="loading"></app-loading>
+      Mettre en attente
+    </button>
+  </div>
+</ng-template>
 
-            <div class="form-group mb-3">
-                <label for="">Contact déposant</label>
-                <input type="text" class="form-control" name="phone_depositor" [(ngModel)]="data.phone_depositor">
-            </div>
-          
-            <div class="form-group mb-3">
-                <label for="">Date de dépôt</label>
-                <input type="date" class="form-control" name="date_depositor" [(ngModel)]="data.date_depositor">
-            </div>
-            <div class="form-group mb-3">
-                <label for="">Observation</label>
-                <textarea class="form-control" name="observation_depositor" [(ngModel)]="data.observation_depositor"></textarea>
-            </div>
-            <div class="form-group mb-3 d-flex justify-content-between">
-                <label for="">Je dispose déjà du récépissé signé</label>
-                <!-- <ng-toggle
-                
-                [values]="{
-                    unchecked: false,
-                    checked:true
-                }"
-                    name="is_signed" [(ngModel)]="is_signed"
-                    [color]="{
-                        unchecked: '#939da2',
-                        checked: '#0f0'
-                    }"
-                    ></ng-toggle> -->
-            </div>
+<!-- Invitation au dépôt physique -->
+<ng-template #inviteContent let-c="close" let-d="dismiss">
+  <form #addInvite="ngForm" (ngSubmit)="inviteStore(addInvite.value)">
+    <div class="tw-bg-slate-800 tw-text-white tw-px-4 tw-py-3 tw-flex tw-items-center tw-justify-between">
+      <h6 class="tw-text-sm tw-font-semibold tw-m-0">Invitation au dépôt physique</h6>
+      <button type="button" (click)="d('Cross click')"
+        class="tw-flex tw-items-center tw-justify-center tw-w-6 tw-h-6 tw-rounded tw-text-slate-300 hover:tw-text-white hover:tw-bg-slate-700 tw-transition-colors">
+        <i class="ri-close-line"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group mb-5">
+        <label>Date de passage</label>
+        <input type="date" name="date_meeting" required ngModel class="form-control">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" (click)="d('Cross click')"
+        class="tw-inline-flex tw-items-center tw-px-4 tw-py-2 tw-rounded-lg tw-text-sm tw-font-medium tw-bg-gray-100 tw-text-gray-700 hover:tw-bg-gray-200 tw-transition-colors">
+        Annuler
+      </button>
+      <button type="submit" [disabled]="addInvite.invalid || loading"
+        class="tw-inline-flex tw-items-center tw-px-4 tw-py-2 tw-rounded-lg tw-text-sm tw-font-medium tw-bg-blue-600 tw-text-white hover:tw-bg-blue-700 tw-transition-colors disabled:tw-opacity-50 disabled:tw-cursor-not-allowed">
+        Envoyer le mail
+      </button>
+    </div>
+  </form>
+</ng-template>
 
-            <div class="form-group mb-3" *ngIf="is_signed">
-                <label for="">Charger le récépissé délivrée et signé</label>
-                <input type="file" class="form-control" (change)="upload2($event)">
-            </div>
+<!-- Retourner le dossier -->
+<ng-template #backContent let-c="close" let-d="dismiss">
+  <form #addSusp="ngForm" (ngSubmit)="transDown(addSusp.value)">
+    <div class="tw-bg-slate-800 tw-text-white tw-px-4 tw-py-3 tw-flex tw-items-center tw-justify-between">
+      <h6 class="tw-text-sm tw-font-semibold tw-m-0">Retourner le dossier</h6>
+      <button type="button" (click)="d('Cross click')"
+        class="tw-flex tw-items-center tw-justify-center tw-w-6 tw-h-6 tw-rounded tw-text-slate-300 hover:tw-text-white hover:tw-bg-slate-700 tw-transition-colors">
+        <i class="ri-close-line"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group mb-5">
+        <label>Correction à apporter</label>
+        <textarea name="motif" ngModel class="form-control"></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" (click)="d('Cross click')"
+        class="tw-inline-flex tw-items-center tw-px-4 tw-py-2 tw-rounded-lg tw-text-sm tw-font-medium tw-bg-gray-100 tw-text-gray-700 hover:tw-bg-gray-200 tw-transition-colors">
+        Annuler
+      </button>
+      <button type="submit" [disabled]="addSusp.invalid || loading"
+        class="tw-inline-flex tw-items-center tw-px-4 tw-py-2 tw-rounded-lg tw-text-sm tw-font-medium tw-bg-blue-600 tw-text-white hover:tw-bg-blue-700 tw-transition-colors disabled:tw-opacity-50 disabled:tw-cursor-not-allowed">
+        Sauvegarder
+      </button>
+    </div>
+  </form>
+</ng-template>
 
+<!-- Analyse du fichier — Enregistrer -->
+<ng-template #fileTreatmentContent let-c="close" let-d="dismiss">
+  <form #fileT="ngForm" (ngSubmit)="setFileTreatment(fileT.value)">
+    <div class="tw-bg-slate-800 tw-text-white tw-px-4 tw-py-3 tw-flex tw-items-center tw-justify-between">
+      <h6 class="tw-text-sm tw-font-semibold tw-m-0">Enregistrer l'analyse du fichier</h6>
+      <button type="button" (click)="d('Cross click')"
+        class="tw-flex tw-items-center tw-justify-center tw-w-6 tw-h-6 tw-rounded tw-text-slate-300 hover:tw-text-white hover:tw-bg-slate-700 tw-transition-colors">
+        <i class="ri-close-line"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="tw-flex tw-items-center tw-justify-between tw-mb-4">
+        <span class="tw-text-sm tw-font-medium tw-text-gray-700">Document valide</span>
+        <div class="tw-flex tw-items-center tw-gap-2">
+          <span class="tw-text-sm tw-text-gray-600">Valide</span>
+          <label class="tw-relative tw-inline-flex tw-items-center tw-cursor-pointer">
+            <input type="checkbox" name="isValid" [(ngModel)]="isValid" class="tw-sr-only" />
+            <div class="tw-w-11 tw-h-6 tw-rounded-full tw-transition-colors tw-duration-300"
+                 [ngClass]="isValid ? 'tw-bg-green-500' : 'tw-bg-gray-300'"
+                 (click)="toggleValid()"></div>
+            <div class="tw-absolute tw-left-0.5 tw-top-0.5 tw-w-5 tw-h-5 tw-bg-white tw-rounded-full tw-shadow-md tw-transform tw-transition-transform tw-duration-300"
+                 [ngStyle]="{ transform: isValid ? 'translateX(100%)' : 'translateX(0)' }"></div>
+          </label>
+        </div>
+      </div>
+      <div *ngIf="!isValid" class="form-group mb-3">
+        <label>Observation</label>
+        <textarea name="observation" ngModel class="form-control"></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" (click)="d('Cross click')"
+        class="tw-inline-flex tw-items-center tw-px-4 tw-py-2 tw-rounded-lg tw-text-sm tw-font-medium tw-bg-gray-100 tw-text-gray-700 hover:tw-bg-gray-200 tw-transition-colors">
+        Annuler
+      </button>
+      <button type="submit" [disabled]="fileT.invalid || loading"
+        class="tw-inline-flex tw-items-center tw-px-4 tw-py-2 tw-rounded-lg tw-text-sm tw-font-medium tw-bg-blue-600 tw-text-white hover:tw-bg-blue-700 tw-transition-colors disabled:tw-opacity-50 disabled:tw-cursor-not-allowed">
+        Sauvegarder
+      </button>
+    </div>
+  </form>
+</ng-template>
 
-            
+<!-- Analyse du fichier — Modifier -->
+<ng-template #fileTreatmentEditContent let-c="close" let-d="dismiss">
+  <form #fileT="ngForm" (ngSubmit)="setFileTreatment(fileT.value)">
+    <div class="tw-bg-amber-600 tw-text-white tw-px-4 tw-py-3 tw-flex tw-items-center tw-justify-between">
+      <h6 class="tw-text-sm tw-font-semibold tw-m-0">Modifier l'analyse du fichier</h6>
+      <button type="button" (click)="d('Cross click')"
+        class="tw-flex tw-items-center tw-justify-center tw-w-6 tw-h-6 tw-rounded tw-text-amber-200 hover:tw-text-white hover:tw-bg-amber-700 tw-transition-colors">
+        <i class="ri-close-line"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group mb-3">
+        <label>Observation</label>
+        <textarea name="observation" [(ngModel)]="fileSelected.observation" class="form-control"></textarea>
+      </div>
+      <div class="tw-flex tw-items-center tw-justify-between">
+        <span class="tw-text-sm tw-font-medium tw-text-gray-700">Document valide</span>
+        <div class="tw-flex tw-items-center tw-gap-2">
+          <span class="tw-text-sm tw-text-gray-600">Valide</span>
+          <label class="tw-relative tw-inline-flex tw-items-center tw-cursor-pointer">
+            <input type="checkbox" name="isValid" [(ngModel)]="isValid" class="tw-sr-only" />
+            <div class="tw-w-11 tw-h-6 tw-rounded-full tw-transition-colors tw-duration-300"
+                 [ngClass]="isValid ? 'tw-bg-green-500' : 'tw-bg-gray-300'"
+                 (click)="toggleValid()"></div>
+            <div class="tw-absolute tw-left-0.5 tw-top-0.5 tw-w-5 tw-h-5 tw-bg-white tw-rounded-full tw-shadow-md tw-transform tw-transition-transform tw-duration-300"
+                 [ngStyle]="{ transform: isValid ? 'translateX(100%)' : 'translateX(0)' }"></div>
+          </label>
         </div>
-        <div class="modal-footer">
-            <button type="submit" class="btn btn-primary" [disabled]="addDep.invalid || loading">Sauvegarder </button>
-        </div>
-    </form>
-    
-      </ng-template>
-    <ng-template #pendingContent let-c="close" let-d="dismiss">
-        <form #addSusp="ngForm" (ngSubmit)="storePending(addSusp.value)">
-    
-        <div class="tw-modal-header tw-bg-slate-800  tw-flex tw-justify-between tw-items-center tw-p-4">
-          <h6 class="modal-title text-white " id="modal-basic-title">Motif de mise en attente</h6>
-           <button type="button" class="tw-btn tw-btn-dark tw-text-white tw-px-2 tw-py-1 tw-rounded" (click)="d('Cross click')">
-                <i class="fa fa-times"></i>
-            </button>
-        </div>
-        <div class="modal-body">
-            <div class="form-group mb-3 mb-5">
-                <label for="">Motif</label>
-                <textarea name="observation" ngModel class="form-control"></textarea>
-            </div>
-        </div>
-        <div class="modal-footer">
-            <button type="submit" class="btn btn-primary" [disabled]="addSusp.invalid || loading">Sauvegarder </button>
-        </div>
-    </form>
-    
-      </ng-template>
-    <ng-template #inviteContent let-c="close" let-d="dismiss">
-        <form #addInvite="ngForm" (ngSubmit)="inviteStore(addInvite.value)">
-    
-        <div class="tw-modal-header tw-bg-slate-800  tw-flex tw-justify-between tw-items-center tw-p-4">
-          <h6 class="modal-title text-white " id="modal-basic-title">Invitation au dépôt physique</h6>
-           <button type="button" class="tw-btn tw-btn-dark tw-text-white tw-px-2 tw-py-1 tw-rounded" (click)="d('Cross click')">
-                <i class="fa fa-times"></i>
-            </button>
-        </div>
-        <div class="modal-body">
-            <div class="form-group mb-3 mb-5">
-                <label for="">Date de passage</label>
-                <input type="date" name="date_meeting"  required ngModel class="form-control">
-            </div>
-        </div>
-        <div class="modal-footer">
-            <button type="submit" class="btn btn-primary" [disabled]="addInvite.invalid || loading">Envoyer le mail </button>
-        </div>
-    </form>
-    
-      </ng-template>
-    
-    <ng-template #backContent let-c="close" let-d="dismiss">
-        <form #addSusp="ngForm" (ngSubmit)="transDown(addSusp.value)">
-    
-        <div class="tw-modal-header tw-bg-slate-800  tw-flex tw-justify-between tw-items-center tw-p-4">
-          <h6 class="modal-title text-white " id="modal-basic-title">Retourner le dossier</h6>
-           <button type="button" class="tw-btn tw-btn-dark tw-text-white tw-px-2 tw-py-1 tw-rounded" (click)="d('Cross click')">
-                <i class="fa fa-times"></i>
-            </button>
-        </div>
-        <div class="modal-body">
-            <div class="form-group mb-3 mb-5">
-                <label for="">Correction à apporter</label>
-                <textarea name="motif" ngModel class="form-control"></textarea>
-            </div>
-        </div>
-        <div class="modal-footer">
-            <button type="submit" class="btn btn-primary" [disabled]="addSusp.invalid || loading">Sauvegarder </button>
-        </div>
-    </form>
-    
-      </ng-template>
-    
-    <ng-template #fileTreatmentContent let-c="close" let-d="dismiss">
-        <form #fileT="ngForm" (ngSubmit)="setFileTreatment(fileT.value)">
-    
-        <div class="tw-modal-header tw-bg-slate-800  tw-flex tw-justify-between tw-items-center tw-p-4">
-          <h6 class="modal-title text-white " id="modal-basic-title">Enregistrer l'analyse du fichier</h6>
-           <button type="button" class="tw-btn tw-btn-dark tw-text-white tw-px-2 tw-py-1 tw-rounded" (click)="d('Cross click')">
-                <i class="fa fa-times"></i>
-            </button>
-        </div>
-        <div class="modal-body">
-           <div class="d-flex justify-content-between">
-            <span>Document valide</span>
-          <div class="tw-flex tw-items-center tw-gap-2">
-            <span>Valide</span>
-            <label class="tw-relative tw-inline-flex tw-items-center tw-cursor-pointer">
-                <input type="checkbox" name="isValid" [(ngModel)]="isValid" class="tw-sr-only" />
-                <div
-                class="tw-w-11 tw-h-6 tw-bg-gray-300 tw-rounded-full tw-transition-colors tw-duration-300"
-                [ngClass]="isValid ? 'tw-bg-green-500' : 'tw-bg-gray-300'"
-                 (click)="toggleValid()"
-                ></div>
-                <div
-                class="tw-absolute tw-left-0.5 tw-top-0.5 tw-w-5 tw-h-5 tw-bg-white tw-rounded-full tw-shadow-md tw-transform tw-transition-transform tw-duration-300"
-                [ngStyle]="{ transform: isValid ? 'translateX(100%)' : 'translateX(0)' }"
-                ></div>
-            </label>
-            </div>
-
-            </div>
-            <div *ngIf="!isValid" class="form-group mb-3 mb-5">
-                <label for="">Observation</label>
-                <textarea name="observation"  ngModel class="form-control"></textarea>
-            </div>
-           
-          
-        </div>
-        <div class="modal-footer">
-            <button type="submit" class="btn btn-primary" [disabled]="fileT.invalid || loading">Sauvegarder </button>
-        </div>
-    </form>
-    
-      </ng-template>
-    <ng-template #fileTreatmentEditContent let-c="close" let-d="dismiss">
-        <form #fileT="ngForm" (ngSubmit)="setFileTreatment(fileT.value)">
-    
-        <div class="tw-modal-header tw-bg-yellow-600 tw-flex tw-justify-between tw-items-center tw-p-4">
-          <h6 class="modal-title text-white " id="modal-basic-title">Modifier l'analyse du fichier</h6>
-           <button type="button" class="tw-btn tw-btn-dark tw-text-white tw-px-2 tw-py-1 tw-rounded" (click)="d('Cross click')">
-                <i class="fa fa-times"></i>
-            </button>
-        </div>
-        <div class="modal-body">
-            <div class="form-group mb-3 mb-5">
-                <label for="">Observation</label>
-                <textarea name="observation" [(ngModel)]="fileSelected.observation" class="form-control"></textarea>
-            </div>
-            <div class="d-flex justify-content-between">
-            <span>Document valide</span>
-
-              <div class="tw-flex tw-items-center tw-gap-2">
-            <span>Valide</span>
-            <label class="tw-relative tw-inline-flex tw-items-center tw-cursor-pointer">
-                <input type="checkbox" name="isValid" [(ngModel)]="isValid" class="tw-sr-only" />
-                <div
-                class="tw-w-11 tw-h-6 tw-bg-gray-300 tw-rounded-full tw-transition-colors tw-duration-300"
-                [ngClass]="isValid ? 'tw-bg-green-500' : 'tw-bg-gray-300'"
-                 (click)="toggleValid()"
-                ></div>
-                <div
-                class="tw-absolute tw-left-0.5 tw-top-0.5 tw-w-5 tw-h-5 tw-bg-white tw-rounded-full tw-shadow-md tw-transform tw-transition-transform tw-duration-300"
-                [ngStyle]="{ transform: isValid ? 'translateX(100%)' : 'translateX(0)' }"
-                ></div>
-            </label>
-            </div>
-           
-            </div>
-          
-        </div>
-        <div class="modal-footer">
-            <button type="submit" class="btn btn-primary" [disabled]="fileT.invalid || loading">Sauvegarder </button>
-        </div>
-    </form>
-    
-      </ng-template>
-    
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" (click)="d('Cross click')"
+        class="tw-inline-flex tw-items-center tw-px-4 tw-py-2 tw-rounded-lg tw-text-sm tw-font-medium tw-bg-gray-100 tw-text-gray-700 hover:tw-bg-gray-200 tw-transition-colors">
+        Annuler
+      </button>
+      <button type="submit" [disabled]="fileT.invalid || loading"
+        class="tw-inline-flex tw-items-center tw-px-4 tw-py-2 tw-rounded-lg tw-text-sm tw-font-medium tw-bg-blue-600 tw-text-white hover:tw-bg-blue-700 tw-transition-colors disabled:tw-opacity-50 disabled:tw-cursor-not-allowed">
+        Sauvegarder
+      </button>
+    </div>
+  </form>
+</ng-template>

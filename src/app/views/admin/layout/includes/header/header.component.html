@@ -1,78 +1,78 @@
-<div class="tw-bg-white tw-border-b tw-border-gray-200 tw-px-6 tw-py-4">
-  <div class="tw-flex tw-items-center tw-justify-between">
-    <!-- Titre -->
-    <div class="tw-flex tw-items-center tw-gap-4">
-      <h1 class="tw-text-xl tw-font-semibold tw-text-gray-900">
-        Tableau de bord
+<div class="tw-bg-white tw-border-b tw-border-gray-200 tw-px-5 tw-py-3 tw-flex-shrink-0">
+  <div class="tw-flex tw-items-center tw-justify-between tw-gap-4">
+
+    <!-- Titre de la page courante -->
+    <div class="tw-flex tw-items-center tw-gap-2 tw-min-w-0">
+      <h1 class="tw-text-lg tw-font-semibold tw-text-gray-900 tw-truncate">
+        {{ pageTitle }}
       </h1>
     </div>
 
-    <!-- Barre recherche + actions -->
-    <div class="tw-flex tw-items-center tw-gap-4">
-      <!-- Recherche -->
-      <div class="tw-w-80">
-        <div class="tw-relative">
-          <i class="ri-search-line tw-absolute tw-left-3 tw-top-1/2 -tw-translate-y-1/2 tw-text-gray-400"></i>
-          <input
-            type="text"
-            placeholder="Rechercher un centre, rapport..."
-            [(ngModel)]="searchQuery"
-            class="tw-w-full tw-pl-10 tw-pr-3 tw-py-2 tw-border tw-border-gray-300 tw-rounded-lg focus:tw-outline-none focus:tw-ring-1 focus:tw-ring-blue-500"
-          />
-        </div>
-      </div>
+    <!-- Actions à droite -->
+    <div class="tw-flex tw-items-center tw-gap-2">
 
-      <!-- Notifications + User menu -->
-      <div class="tw-flex tw-items-center tw-gap-2">
-        <!-- Notifications -->
+      <!-- Notifications -->
+      <button
+        class="tw-flex tw-items-center tw-justify-center tw-w-9 tw-h-9 tw-rounded-lg hover:tw-bg-gray-100 tw-transition-colors tw-text-gray-500 hover:tw-text-gray-700"
+        title="Notifications"
+      >
+        <i class="ri-notification-3-line tw-text-lg"></i>
+      </button>
+
+      <!-- Menu utilisateur -->
+      <div class="tw-relative user-menu-wrapper">
         <button
-          class="tw-flex tw-items-center tw-justify-center tw-w-8 tw-h-8 tw-rounded-lg hover:tw-bg-gray-100"
+          (click)="toggleUserMenu()"
+          class="tw-flex tw-items-center tw-gap-2 tw-px-3 tw-py-2 tw-rounded-lg hover:tw-bg-gray-100 tw-transition-colors tw-cursor-pointer"
         >
-          <i class="ri-notification-line"></i>
+          <div class="tw-w-8 tw-h-8 tw-bg-blue-600 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-flex-shrink-0">
+            <span class="tw-text-white tw-text-sm tw-font-semibold">
+              {{ (user?.lastname || user?.firstname)?.charAt(0)?.toUpperCase() }}
+            </span>
+          </div>
+          <div class="tw-hidden sm:tw-block tw-text-left">
+            <div class="tw-text-sm tw-font-medium tw-text-gray-800 tw-leading-tight">
+              {{ user?.lastname }} {{ user?.firstname }}
+            </div>
+            <div class="tw-text-xs tw-text-gray-500 tw-capitalize">{{ role }}</div>
+          </div>
+          <i
+            class="ri-arrow-down-s-line tw-text-gray-400 tw-text-sm tw-transition-transform tw-duration-200"
+            [class.tw-rotate-180]="showUserMenu"
+          ></i>
         </button>
 
-        <!-- Menu utilisateur -->
-        <div class="tw-relative">
-          <button
-            (click)="toggleUserMenu()"
-            class="tw-flex tw-items-center tw-gap-2 tw-px-3 tw-py-2 tw-rounded-lg hover:tw-bg-gray-100 tw-transition-colors tw-cursor-pointer"
-          >
-           <div
-              class="tw-w-8 tw-h-8 tw-bg-blue-600 tw-rounded-full tw-flex tw-items-center tw-justify-center"
-            >
-              <span class="tw-text-white tw-text-sm tw-font-medium">
-                {{ (user?.lastname || user?.firstname)?.charAt(0)?.toUpperCase() }}
-              </span>
+        <!-- Dropdown -->
+        <div
+          *ngIf="showUserMenu"
+          class="tw-absolute tw-right-0 tw-mt-1 tw-w-48 tw-bg-white tw-rounded-lg tw-shadow-lg tw-border tw-border-gray-200 tw-py-1 tw-z-50"
+        >
+          <div class="tw-px-4 tw-py-2 tw-border-b tw-border-gray-100">
+            <div class="tw-text-sm tw-font-medium tw-text-gray-900 tw-truncate">
+              {{ user?.lastname }} {{ user?.firstname }}
             </div>
-            <span class="tw-text-sm tw-font-medium tw-text-gray-700">{{user?.lastname}} {{user?.firstname}} ({{role}})</span>
-            <div class="tw-w-4 tw-h-4 tw-flex tw-items-center tw-justify-center">
-              <i class="ri-arrow-down-s-line tw-text-xs tw-text-gray-500"></i>
-            </div>
-          </button>
-
-          <!-- Dropdown -->
-          <div
-            *ngIf="showUserMenu"
-            class="tw-absolute tw-right-0 tw-mt-2 tw-w-48 tw-bg-white tw-rounded-lg tw-shadow-lg tw-border tw-border-gray-200 tw-py-2 tw-z-50"
-          >
-            <button
-              class="tw-w-full tw-px-4 tw-py-2 tw-text-left tw-text-sm tw-text-gray-700 hover:tw-bg-gray-100 tw-cursor-pointer"
-            >
-              Profil
-            </button>
-            <button
-              class="tw-w-full tw-px-4 tw-py-2 tw-text-left tw-text-sm tw-text-gray-700 hover:tw-bg-gray-100 tw-cursor-pointer"
-            >
-              Paramètres
-            </button>
-            <hr class="tw-my-2" />
-            <button
-              (click)="logout()"
-              class="tw-w-full tw-px-4 tw-py-2 tw-text-left tw-text-sm tw-text-gray-700 hover:tw-bg-gray-100 tw-cursor-pointer"
-            >
-              Déconnexion
-            </button>
+            <div class="tw-text-xs tw-text-gray-500 tw-capitalize">{{ role }}</div>
           </div>
+          <button
+            class="tw-w-full tw-flex tw-items-center tw-gap-2 tw-px-4 tw-py-2 tw-text-sm tw-text-gray-700 hover:tw-bg-gray-50 tw-cursor-pointer tw-transition-colors"
+          >
+            <i class="ri-user-line tw-text-gray-400"></i>
+            Profil
+          </button>
+          <button
+            class="tw-w-full tw-flex tw-items-center tw-gap-2 tw-px-4 tw-py-2 tw-text-sm tw-text-gray-700 hover:tw-bg-gray-50 tw-cursor-pointer tw-transition-colors"
+          >
+            <i class="ri-settings-3-line tw-text-gray-400"></i>
+            Paramètres
+          </button>
+          <div class="tw-border-t tw-border-gray-100 tw-my-1"></div>
+          <button
+            (click)="logout()"
+            class="tw-w-full tw-flex tw-items-center tw-gap-2 tw-px-4 tw-py-2 tw-text-sm tw-text-red-600 hover:tw-bg-red-50 tw-cursor-pointer tw-transition-colors"
+          >
+            <i class="ri-logout-box-r-line"></i>
+            Déconnexion
+          </button>
         </div>
       </div>
     </div>

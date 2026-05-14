@@ -1,278 +1,262 @@
-    <!--breadcrumb-->
-    <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-5">
-        <div class="breadcrumb-title pe-3">CAPE </div>
-        <div class="ps-3">
-          <nav aria-label="breadcrumb">
-            <ol class="breadcrumb mb-0 p-0">
-              <li class="breadcrumb-item"><a routerLink="/admin/dashboard"><i class="bx bx-home-alt"></i></a>
-              </li>
-              <li class="breadcrumb-item active" aria-current="page">Liste des sanctions</li>
-            </ol>
-          </nav>
-        </div>
-        <div class="ms-auto">
+<div *ngIf="!showPreview">
+  <div class="tw-bg-white tw-rounded-xl tw-shadow-sm tw-border tw-border-gray-200">
+    <div class="tw-flex tw-flex-wrap tw-items-center tw-gap-2 tw-px-5 tw-py-4 tw-border-b tw-border-gray-100">
+      <div class="tw-flex tw-flex-wrap tw-items-center tw-gap-2" *ngIf="buttonsPermission">
+        <button type="button"
+          class="tw-inline-flex tw-items-center tw-gap-1.5 tw-px-3 tw-py-1.5 tw-rounded-lg tw-text-sm tw-font-medium tw-bg-blue-600 tw-text-white hover:tw-bg-blue-700 tw-transition-colors"
+          (click)="add(addContent)">
+          <i class="ri-add-line"></i> Ajouter une sanction
+        </button>
+
+        <button *ngIf="buttonsPermission.show" (click)="show(showContent)" type="button"
+          [disabled]="!selected_data"
+          class="tw-inline-flex tw-items-center tw-gap-1.5 tw-px-3 tw-py-1.5 tw-rounded-lg tw-text-sm tw-font-medium tw-transition-colors"
+          [ngClass]="selected_data ? 'tw-border tw-border-blue-500 tw-text-blue-600 hover:tw-bg-blue-50' : 'tw-bg-gray-100 tw-text-gray-400 tw-cursor-not-allowed'">
+          <i class="ri-eye-line"></i> Consulter
+        </button>
+
+        <button *ngIf="buttonsPermission.edit" (click)="edit(editContent)" type="button"
+          [disabled]="!selected_data"
+          class="tw-inline-flex tw-items-center tw-gap-1.5 tw-px-3 tw-py-1.5 tw-rounded-lg tw-text-sm tw-font-medium tw-transition-colors"
+          [ngClass]="selected_data ? 'tw-border tw-border-yellow-500 tw-text-yellow-600 hover:tw-bg-yellow-50' : 'tw-bg-gray-100 tw-text-gray-400 tw-cursor-not-allowed'">
+          <i class="ri-pencil-line"></i> Editer
+        </button>
+
+        <button *ngIf="buttonsPermission.delete" (click)="delete()" type="button"
+          [disabled]="!selected_data"
+          class="tw-inline-flex tw-items-center tw-gap-1.5 tw-px-3 tw-py-1.5 tw-rounded-lg tw-text-sm tw-font-medium tw-transition-colors"
+          [ngClass]="selected_data ? 'tw-border tw-border-red-500 tw-text-red-600 hover:tw-bg-red-50' : 'tw-bg-gray-100 tw-text-gray-400 tw-cursor-not-allowed'">
+          <i class="ri-delete-bin-line"></i> Supprimer
+        </button>
+
+        <button *ngIf="is_active!=null && !is_active" (click)="setStatus(1)" type="button"
+          class="tw-inline-flex tw-items-center tw-gap-1.5 tw-px-3 tw-py-1.5 tw-rounded-lg tw-text-sm tw-font-medium tw-border tw-border-green-500 tw-text-green-600 hover:tw-bg-green-50 tw-transition-colors">
+          Clôturer
+        </button>
+      </div>
+
+      <div class="tw-ml-auto tw-flex tw-items-center tw-gap-3">
+        <span class="tw-text-sm tw-text-gray-500">{{ filteredData.length }} / {{ data.length }} élément(s)</span>
+        <div class="tw-relative">
+          <span class="tw-absolute tw-inset-y-0 tw-left-0 tw-flex tw-items-center tw-pl-3 tw-text-gray-400">
+            <i class="bx bx-search"></i>
+          </span>
+          <input type="text"
+            class="tw-pl-9 tw-pr-3 tw-py-1.5 tw-border tw-border-gray-300 tw-rounded-lg tw-text-sm focus:tw-outline-none focus:tw-border-blue-400 tw-w-64"
+            placeholder="Rechercher..."
+            [(ngModel)]="searchTerm"
+            (ngModelChange)="currentPage = 1" />
         </div>
       </div>
-  
-      <div class="row" *ngIf="!showPreview">
-         <div class="tw-col-span-12">
-           <div class="tw-bg-white tw-rounded-lg tw-shadow">
-              
-                <div class="card-body" >
-                     <div class="tw-flex tw-mb-5" *ngIf="buttonsPermission">
-                      <button type="button" class="tw-bg-blue-600 tw-text-white tw-text-sm tw-px-3 tw-py-1 tw-rounded hover:tw-bg-blue-700 tw-me-3" (click)="add(addContent)">Ajouter une sanction</button>
-
-                        <button *ngIf="buttonsPermission.show"  (click)="show(showContent)" type="button" class="tw-border tw-border-blue-500 tw-text-blue-500 tw-text-sm tw-px-3 tw-py-1 tw-rounded hover:tw-bg-blue-50 tw-me-3">
-                             <span>Consulter</span></button>
-                        <button *ngIf="buttonsPermission.edit" (click)="edit(editContent)" type="button"  class="tw-border tw-border-yellow-500 tw-text-yellow-500 tw-text-sm tw-px-3 tw-py-1 tw-rounded hover:tw-bg-yellow-50 tw-me-3">
-                           Editer</button>
-                        <button *ngIf="buttonsPermission.delete" (click)="delete()" type="button" class="tw-border tw-border-red-500 tw-text-red-500 tw-text-sm tw-px-3 tw-py-1 tw-rounded hover:tw-bg-red-50 tw-me-3">
-                             Supprimer</button>
-                             <button *ngIf="is_active!=null && !is_active" (click)="setStatus(1)" type="button" class="btn btn-outline-success btn-sm  me-3">
-                              Clôtuer</button>
-                             <!--button  *ngIf="is_active!=null &&  is_active" (click)="setStatus(0)" type="button" class="tw-border tw-border-red-500 tw-text-red-500 tw-text-sm tw-px-3 tw-py-1 tw-rounded hover:tw-bg-red-50 tw-me-3">
-                              Désactiver</!--button-->
-                    </div>
-    
-                            <div class="tw-flex tw-items-center tw-justify-between tw-mb-3">
-                              <p class="tw-text-sm tw-text-gray-500 tw-mb-0">
-                                {{ filteredData.length }} / {{ data.length }} élément(s)
-                              </p>
-                              <div class="tw-relative tw-w-72">
-                                <span class="tw-absolute tw-inset-y-0 tw-left-0 tw-flex tw-items-center tw-pl-3 tw-text-gray-400">
-                                  <i class="bx bx-search"></i>
-                                </span>
-                                <input
-                                  type="text"
-                                  class="tw-w-full tw-pl-9 tw-pr-3 tw-py-1.5 tw-border tw-border-gray-300 tw-rounded tw-text-sm focus:tw-outline-none focus:tw-border-blue-400"
-                                  placeholder="Rechercher..."
-                                  [(ngModel)]="searchTerm"
-                                  (ngModelChange)="currentPage = 1"
-                                />
-                              </div>
-                            </div>
-                            <div class="tw-overflow-x-auto">
-                            <table class="tw-min-w-full tw-border tw-border-gray-200 tw-text-sm">
-                                <thead class="tw-bg-gray-100">
-                                    <tr>
-                                        <th class="tw-w-[40px] tw-px-3 tw-py-2">#</th>
-                                        <th class="tw-px-3 tw-py-2">Type de sanction</th>
-                                        <th class="tw-px-3 tw-py-2">Instruction</th>
-                                        <th class="tw-px-3 tw-py-2">Décision de fermeture</th>
-                                        <th class="tw-px-3 tw-py-2">Délai de clôture</th>
-                                        <th class="tw-px-3 tw-py-2">Statut de la sanction</th>
-
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr *ngFor="let d of data | sampleSearch:searchTerm | paginate:currentPage:pageSize" class="tw-border-t">
-                                         <td class="tw-px-3 tw-py-2">
-                                            <div class="tw-form-check tw-mb-2">
-                                                <input
-                      type="radio"
-                      name="flexRadioDefault"
-                      id="flexRadioDefault{{d.id}}"
-                      class="tw-form-radio tw-text-blue-600"
-                      (click)="checked(d)"
-                    />
-                                            
-                                            </div>
-                                        </td>
-                                         <td class="tw-px-3 tw-py-2">{{d.type_sanction.name}}</td>
-                                         <td class="tw-px-3 tw-py-2">{{d.description}}</td>
-                                         <td class="tw-px-3 tw-py-2">
-                                          <span *ngIf="d.decret_filename != undefined">
-                                            <button  (click)="showFile(d.decret_filename,d.cape.requete.code)" class="btn btn-sm btn-outline-success">Ouvrir</button></span>
-                                          <span *ngIf="d.decret_filename == undefined">Non défini</span>
-                                        </td>
-                                         <td class="tw-px-3 tw-py-2">
-                                          <span *ngIf="d.closed_date != undefined">{{d.closed_date | date:"shortDate"}}</span>
-                                          <span *ngIf="d.closed_date == undefined">Non défini</span>
-                                        </td>
-                                         <td class="tw-px-3 tw-py-2">
-                                          <span *ngIf="d.status" class="bg-success p-1 rounded text-white">Clôturée</span>
-                                          <span *ngIf="!d.status" class="bg-danger p-1 rounded text-white">En cours</span>
-                                 
-                                        </td>
-                               
-                                   
-                                    </tr>
-                                
-                                </tbody>
-                            </table>
-                            </div>
-    
-<app-pagination
-  [totalItems]="filteredData.length"
-  [currentPage]="currentPage"
-  [pageSize]="pageSize"
-  [pageSizeOptions]="[5, 10, 25, 50]"
-  (pageChange)="currentPage = $event"
-  (pageSizeChange)="pageSize = $event; currentPage = 1">
-</app-pagination>
-                </div><!-- end card -->
-
-                  <div class="tw-p-6">
-
-                </div>
-            </div>
-            <!-- end col -->
-        </div>
-        <!-- end col -->
     </div>
-      <ng-container *ngIf="showPreview"  class="container">
-            <div class="d-flex justify-content-around">
-                <button class="btn btn-dark mb-3 " (click)="back()">Fermer le visualiseur</button>
-                <!--button  *ngIf="!showResponseFilePreview"  class="btn btn-success mb-3 " [disabled]="!activeobsPanel"  (click)="openWindow(contentTemplateAmendement)">Faire des observations</!--button-->
-        
-            </div>
+
+    <div class="tw-overflow-x-auto">
+      <table class="tw-min-w-full">
+        <thead>
+          <tr class="tw-bg-gray-50 tw-border-b tw-border-gray-200">
+            <th class="tw-w-10 tw-px-2 tw-py-3"></th>
+            <th class="tw-px-4 tw-py-3 tw-text-left tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide">Type de sanction</th>
+            <th class="tw-px-4 tw-py-3 tw-text-left tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide">Instruction</th>
+            <th class="tw-px-4 tw-py-3 tw-text-left tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide">Décision de fermeture</th>
+            <th class="tw-px-4 tw-py-3 tw-text-left tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide">Délai de clôture</th>
+            <th class="tw-px-4 tw-py-3 tw-text-left tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide">Statut de la sanction</th>
+          </tr>
+        </thead>
+        <tbody class="tw-divide-y tw-divide-gray-100">
+          <tr *ngFor="let d of data | sampleSearch:searchTerm | paginate:currentPage:pageSize"
+            (click)="checked(d)"
+            class="tw-cursor-pointer tw-transition-colors"
+            [ngClass]="selected_data?.id === d.id ? 'tw-bg-blue-50 hover:tw-bg-blue-100' : 'hover:tw-bg-gray-50'">
+            <td class="tw-px-2 tw-py-3">
+              <div class="tw-w-4 tw-h-4 tw-rounded-full tw-border-2 tw-flex tw-items-center tw-justify-center tw-flex-shrink-0"
+                [ngClass]="selected_data?.id === d.id ? 'tw-border-blue-600 tw-bg-blue-600' : 'tw-border-gray-300 tw-bg-white'">
+                <div *ngIf="selected_data?.id === d.id" class="tw-w-1.5 tw-h-1.5 tw-rounded-full tw-bg-white"></div>
+              </div>
+            </td>
+            <td class="tw-px-4 tw-py-3 tw-text-gray-900">{{d.type_sanction.name}}</td>
+            <td class="tw-px-4 tw-py-3 tw-text-gray-600">{{d.description}}</td>
+            <td class="tw-px-4 tw-py-3">
+              <span *ngIf="d.decret_filename != undefined">
+                <button (click)="showFile(d.decret_filename,d.cape.requete.code)"
+                  class="tw-inline-flex tw-items-center tw-gap-1 tw-px-2.5 tw-py-1 tw-rounded-lg tw-text-xs tw-font-medium tw-border tw-border-blue-500 tw-text-blue-600 hover:tw-bg-blue-50 tw-transition-colors">
+                  Ouvrir
+                </button>
+              </span>
+              <span *ngIf="d.decret_filename == undefined" class="tw-text-gray-400 tw-text-sm">Non défini</span>
+            </td>
+            <td class="tw-px-4 tw-py-3 tw-text-gray-600">
+              <span *ngIf="d.closed_date != undefined">{{d.closed_date | date:"shortDate"}}</span>
+              <span *ngIf="d.closed_date == undefined" class="tw-text-gray-400 tw-text-sm">Non défini</span>
+            </td>
+            <td class="tw-px-4 tw-py-3">
+              <span *ngIf="d.status"
+                class="tw-inline-flex tw-items-center tw-px-2 tw-py-0.5 tw-rounded-full tw-text-xs tw-font-medium tw-bg-gray-100 tw-text-gray-600">
+                Clôturée
+              </span>
+              <span *ngIf="!d.status"
+                class="tw-inline-flex tw-items-center tw-px-2 tw-py-0.5 tw-rounded-full tw-text-xs tw-font-medium tw-bg-orange-100 tw-text-orange-700">
+                En cours
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="tw-border-t tw-border-gray-100 tw-px-5 tw-py-3">
+      <app-pagination
+        [totalItems]="filteredData.length"
+        [currentPage]="currentPage"
+        [pageSize]="pageSize"
+        [pageSizeOptions]="[5, 10, 25, 50]"
+        (pageChange)="currentPage = $event"
+        (pageSizeChange)="pageSize = $event; currentPage = 1">
+      </app-pagination>
+    </div>
+  </div>
+</div>
+
+<ng-container *ngIf="showPreview" class="container">
+  <div class="d-flex justify-content-around">
+    <button class="btn btn-dark mb-3" (click)="back()">Fermer le visualiseur</button>
+  </div>
+  <object [data]="url" type="application/pdf" width="100%" height="600px"></object>
+</ng-container>
 
 
-         
-            <object [data]="url" type="application/pdf" width="100%" height="600px"></object>
-    </ng-container>
-  
-    <ng-template #addContent let-c="close" let-d="dismiss">
-        <form #addForm="ngForm" (ngSubmit)="store(addForm.value)">
-        <div class="modal-header bg-secondary">
-          <h6 class="tw-modal-title tw-text-white" id="modal-basic-title">Enregistrer une sanction</h6>
-          <button type="button" class="btn-close" aria-label="Close" (click)="d('Cross click')"></button>
+<ng-template #addContent let-c="close" let-d="dismiss">
+  <form #addForm="ngForm" (ngSubmit)="store(addForm.value)">
+    <div class="modal-header tw-bg-slate-800 tw-text-white">
+      <h6 class="modal-title tw-font-semibold">Enregistrer une sanction</h6>
+      <button type="button" (click)="d('Cross click')" class="tw-text-white hover:tw-text-gray-200">
+        <i class="ri-close-line tw-text-lg"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="row mb-3">
+        <div class="form-group col-12 mb-3">
+          <label>Type de sanction <span class="text-danger ml-2">(*)</span></label>
+          <select name="type_sanction_id" class="form-control" ngModel required>
+            <option *ngFor="let t of ts" [value]="t.id">{{t.name}}</option>
+          </select>
         </div>
-        <div class="modal-body" >
-            <div class="row mb-3" >
-              <div class=" form-goup col-12 mb-3">
-                <label for="">Type de sanction <span class="text-danger ml-2">(*)</span></label>
-                <select name="type_sanction_id" class="form-control" ngModel required>
-                    <option *ngFor="let t of ts" [value]="t.id">{{t.name}}</option>
-                </select>
-              </div>
-                <div class=" form-goup col-12 mb-3">
-                    <label for="">Instruction <span class="text-danger ml-2">(*)</span></label>
-                      <textarea name="description" class="form-control" ngModel required></textarea>
-                </div>
-
-                <hr>
-                <div class=" form-goup col-12 mb-3">
-                  <label for="">Décision de fermeture </label>
-                  <input type="file" class="form-control" (change)="upload($event)" >
-              </div>
-                <div class=" form-goup col-12 mb-3">
-                  <label for="">Délai de fermeture</label>
-                  <input type="date" name="closed_date" class="form-control" ngModel >
-              </div>
-
-              <hr>
-           
-              <div class=" form-goup col-12 mb-3">
-                <label for="">Cape <span class="text-danger ml-2">(*)</span></label>
-                <select name="cape_id" class="form-control" ngModel required>
-                    <option *ngFor="let cape of capes" [value]="cape.cape.id">{{cape.name}}</option>
-                </select>
-              </div>
-    
-            </div>
-           
+        <div class="form-group col-12 mb-3">
+          <label>Instruction <span class="text-danger ml-2">(*)</span></label>
+          <textarea name="description" class="form-control" ngModel required></textarea>
         </div>
-        <div class="modal-footer">
-          <button type="submit" class="btn btn-outline-dark" [disabled]="addForm.invalid"  >Enregistrer <app-loading [isVisible]="loading"></app-loading></button>
+        <hr>
+        <div class="form-group col-12 mb-3">
+          <label>Décision de fermeture</label>
+          <input type="file" class="form-control" (change)="upload($event)">
         </div>
-    </form>
-      </ng-template>
-    
-      <ng-template #editContent let-c="close" let-d="dismiss">
-        <form #editForm="ngForm" (ngSubmit)="update(editForm.value)">
-        <div class="modal-header bg-secondary">
-          <h6 class="tw-modal-title tw-text-white" id="modal-basic-title">Modifier une sanction</h6>
-          <button type="button" class="btn-close" aria-label="Close" (click)="d('Cross click')"></button>
+        <div class="form-group col-12 mb-3">
+          <label>Délai de fermeture</label>
+          <input type="date" name="closed_date" class="form-control" ngModel>
         </div>
-        <div class="modal-body" >
-          <div class="row mb-3" >
-            <div class=" form-goup col-12 mb-3">
-              <label for="">Type de sanction <span class="text-danger ml-2">(*)</span></label>
-              <select name="type_sanction_id" class="form-control" [(ngModel)]="selected_data.type_sanction_id" required>
-                  <option *ngFor="let t of ts" [value]="t.id">{{t.name}}</option>
-              </select>
-            </div>
-              <div class=" form-goup col-12 mb-3">
-                  <label for="">Instruction <span class="text-danger ml-2">(*)</span></label>
-                    <textarea name="description" class="form-control" [(ngModel)]="selected_data.description" required></textarea>
-              </div>
-
-              <hr>
-              <div class=" form-goup col-12 mb-3">
-                <label for="">Décision de fermeture </label>
-                <input type="file" class="form-control" (change)="upload($event)" >
-            </div>
-              <div class=" form-goup col-12 mb-3">
-                <label for="">Délai de fermeture</label>
-                <input type="date" name="closed_date" class="form-control" [(ngModel)]="selected_data.closed_date" >
-            </div>
-
-            <hr>
-         
-            <div class=" form-goup col-12 mb-3">
-              <label for="">Cape <span class="text-danger ml-2">(*)</span></label>
-              <select name="cape_id" class="form-control" [(ngModel)]="selected_data.cape_id" required>
-                  <option *ngFor="let cape of capes" [value]="cape.cape.id">{{cape.name}}</option>
-              </select>
-            </div>
-  
-          </div>
-         
+        <hr>
+        <div class="form-group col-12 mb-3">
+          <label>Cape <span class="text-danger ml-2">(*)</span></label>
+          <select name="cape_id" class="form-control" ngModel required>
+            <option *ngFor="let cape of capes" [value]="cape.cape.id">{{cape.name}}</option>
+          </select>
+        </div>
       </div>
-        <div class="modal-footer">
-          <button type="submit" class="btn btn-outline-dark" [disabled]="editForm.invalid" >Sauvegarder <app-loading [isVisible]="loading"></app-loading></button>
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-outline-dark" [disabled]="addForm.invalid">Enregistrer <app-loading [isVisible]="loading"></app-loading></button>
+    </div>
+  </form>
+</ng-template>
+
+<ng-template #editContent let-c="close" let-d="dismiss">
+  <form #editForm="ngForm" (ngSubmit)="update(editForm.value)">
+    <div class="modal-header tw-bg-slate-800 tw-text-white">
+      <h6 class="modal-title tw-font-semibold">Modifier une sanction</h6>
+      <button type="button" (click)="d('Cross click')" class="tw-text-white hover:tw-text-gray-200">
+        <i class="ri-close-line tw-text-lg"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="row mb-3">
+        <div class="form-group col-12 mb-3">
+          <label>Type de sanction <span class="text-danger ml-2">(*)</span></label>
+          <select name="type_sanction_id" class="form-control" [(ngModel)]="selected_data.type_sanction_id" required>
+            <option *ngFor="let t of ts" [value]="t.id">{{t.name}}</option>
+          </select>
         </div>
-    </form>
-      </ng-template>
-    
-      <ng-template #showContent let-c="close" let-d="dismiss">
-        <div class="modal-header bg-secondary">
-            <h6 class="tw-modal-title tw-text-white" id="modal-basic-title">Détails des informations</h6>
-            <button type="button" class="btn-close" aria-label="Close" (click)="d('Cross click')"></button>
-          </div>
-    
-          <div class="modal-body">
-            <div class="tw-overflow-x-auto table-card">
-                <table class="table table-borderless align-middle mb-0">
-                    <tbody>
-                      
-                   
-                        <tr >
-                            <td class="fw-medium">Type sanction</td>
-                            <td >{{selected_data.type_sanction.name}} </td>
-                          
-                        </tr>
-                        <tr >
-                            <td class="fw-medium">Description</td>
-                            <td >{{selected_data.description}} </td>
-                          
-                        </tr>
-                        <tr *ngIf="selected_data.decret_filename">
-                            <td class="fw-medium">Decret de fermeture</td>
-                            <td > <button  (click)="showFile(selected_data.decret_filename,selected_data.cape.requete.code)" class="btn btn-sm btn-outline-success">Ouvrir</button></td>
-                          
-                        </tr>
-                        <tr *ngIf="selected_data.closed_date">
-                            <td class="fw-medium">Date de fermutre</td>
-                            <td >{{selected_data.closed_date | date:"shortDate"}} </td>
-                          
-                        </tr>
-                        <tr >
-                            <td class="fw-medium">Statut</td>
-                            <td >
-                              <span *ngIf="d.is_active" class="bg-success p-1 rounded text-white">Clôturée</span>
-                              <span *ngIf="!d.is_active" class="bg-danger p-1 rounded text-white">En cours</span>
-                     
-                            </td>
-                          
-                        </tr>
-                   
-                   
-                
-                   
-                    </tbody>
-                </table>
-            </div>
-          </div>
-    </ng-template>
+        <div class="form-group col-12 mb-3">
+          <label>Instruction <span class="text-danger ml-2">(*)</span></label>
+          <textarea name="description" class="form-control" [(ngModel)]="selected_data.description" required></textarea>
+        </div>
+        <hr>
+        <div class="form-group col-12 mb-3">
+          <label>Décision de fermeture</label>
+          <input type="file" class="form-control" (change)="upload($event)">
+        </div>
+        <div class="form-group col-12 mb-3">
+          <label>Délai de fermeture</label>
+          <input type="date" name="closed_date" class="form-control" [(ngModel)]="selected_data.closed_date">
+        </div>
+        <hr>
+        <div class="form-group col-12 mb-3">
+          <label>Cape <span class="text-danger ml-2">(*)</span></label>
+          <select name="cape_id" class="form-control" [(ngModel)]="selected_data.cape_id" required>
+            <option *ngFor="let cape of capes" [value]="cape.cape.id">{{cape.name}}</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-outline-dark" [disabled]="editForm.invalid">Sauvegarder <app-loading [isVisible]="loading"></app-loading></button>
+    </div>
+  </form>
+</ng-template>
+
+<ng-template #showContent let-c="close" let-d="dismiss">
+  <div class="modal-header tw-bg-slate-800 tw-text-white">
+    <h6 class="modal-title tw-font-semibold">Détails des informations</h6>
+    <button type="button" (click)="d('Cross click')" class="tw-text-white hover:tw-text-gray-200">
+      <i class="ri-close-line tw-text-lg"></i>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="tw-overflow-x-auto table-card">
+      <table class="table table-borderless align-middle mb-0">
+        <tbody>
+          <tr>
+            <td class="fw-medium">Type sanction</td>
+            <td>{{selected_data.type_sanction.name}}</td>
+          </tr>
+          <tr>
+            <td class="fw-medium">Description</td>
+            <td>{{selected_data.description}}</td>
+          </tr>
+          <tr *ngIf="selected_data.decret_filename">
+            <td class="fw-medium">Décret de fermeture</td>
+            <td>
+              <button (click)="showFile(selected_data.decret_filename,selected_data.cape.requete.code)"
+                class="btn btn-sm btn-outline-success">Ouvrir</button>
+            </td>
+          </tr>
+          <tr *ngIf="selected_data.closed_date">
+            <td class="fw-medium">Date de fermeture</td>
+            <td>{{selected_data.closed_date | date:"shortDate"}}</td>
+          </tr>
+          <tr>
+            <td class="fw-medium">Statut</td>
+            <td>
+              <span *ngIf="selected_data.status"
+                class="tw-inline-flex tw-items-center tw-px-2 tw-py-0.5 tw-rounded-full tw-text-xs tw-font-medium tw-bg-gray-100 tw-text-gray-600">
+                Clôturée
+              </span>
+              <span *ngIf="!selected_data.status"
+                class="tw-inline-flex tw-items-center tw-px-2 tw-py-0.5 tw-rounded-full tw-text-xs tw-font-medium tw-bg-orange-100 tw-text-orange-700">
+                En cours
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</ng-template>

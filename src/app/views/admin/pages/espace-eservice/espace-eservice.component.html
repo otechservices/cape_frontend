@@ -1,231 +1,270 @@
-    <!--breadcrumb-->
-    <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-5">
-        <div class="breadcrumb-title pe-3">CAPE </div>
-        <div class="ps-3">
-          <nav aria-label="breadcrumb">
-            <ol class="breadcrumb mb-0 p-0">
-              <li class="breadcrumb-item"><a routerLink="/admin/dashboard"><i class="bx bx-home-alt"></i></a>
-              </li>
-              <li class="breadcrumb-item active" aria-current="page">Liste des demandes d'autorisation</li>
-            </ol>
-          </nav>
-        </div>
-      </div>
-  
-      <div class="tw-grid tw-grid-cols-12 tw-gap-4">
-         <div class="tw-col-span-12">
-           <div class="tw-bg-white tw-rounded-lg tw-shadow">
-              
-                <div class="mb-3">
-                    <button *ngIf="state!=undefined" (click)="goToShow()" class="btn btn-sm btn-primary mx-1">Consulter</button>
-                    <button  *ngIf="role == 'dfea' "   (click)="delete()" class="btn btn-sm btn-danger mx-1">Retirer l'enregistrement</button>
-                    <button *ngIf="state==undefined" (click)="add(parcoursContent)" class="btn btn-sm btn-primary mx-1">Voir Parcours</button>
-                </div>
-                  <div class="tw-p-6">
-    
-                            <div class="tw-flex tw-items-center tw-justify-between tw-mb-3">
-                              <p class="tw-text-sm tw-text-gray-500 tw-mb-0">
-                                {{ filteredData.length }} / {{ data.length }} élément(s)
-                              </p>
-                              <div class="tw-relative tw-w-72">
-                                <span class="tw-absolute tw-inset-y-0 tw-left-0 tw-flex tw-items-center tw-pl-3 tw-text-gray-400">
-                                  <i class="bx bx-search"></i>
-                                </span>
-                                <input
-                                  type="text"
-                                  class="tw-w-full tw-pl-9 tw-pr-3 tw-py-1.5 tw-border tw-border-gray-300 tw-rounded tw-text-sm focus:tw-outline-none focus:tw-border-blue-400"
-                                  placeholder="Rechercher..."
-                                  [(ngModel)]="searchTerm"
-                                  (ngModelChange)="currentPage = 1"
-                                />
-                              </div>
-                            </div>
-                         <ng-container *ngIf="type=='cape'">
-                            <div class="tw-overflow-x-auto">
-                                <table class="tw-min-w-full tw-border tw-border-gray-200 tw-text-sm">
-                                    <thead class="tw-bg-gray-100">
-                                        <tr>
-                                            <th style="width: 10px;"> # </th>
-                                            <th style="width: 10px;"><i class="fa fa-check"></i></th>
-                                            <th class="tw-px-3 tw-py-2">Date d'inscription</th>
-                                            <th *ngIf="role != 'cps'">Cps</th>
-                                            <th class="tw-px-3 tw-py-2">Type Centre</th>
-                                            <th class="tw-px-3 tw-py-2">Libellé Centre</th>
-                                            <th *ngIf="state != undefined">Statut</th>
-                                            <th *ngIf="state == undefined">Dernière étape</th>
-                                            <th class="tw-px-3 tw-py-2">Nom promoteur</th>
-                                            <th class="tw-px-3 tw-py-2">Cible</th>
-                                            <th class="tw-px-3 tw-py-2">Adresse</th>
-                                            <th class="tw-px-3 tw-py-2">email</th>
-                                            <th class="tw-px-3 tw-py-2">phone</th>
-                                
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr *ngFor="let d of data | sampleSearch:searchTerm | paginate:currentPage:pageSize" class="tw-border-t">
-                                             <td class="tw-px-3 tw-py-2"></td>
-                                             <td class="tw-px-3 tw-py-2">
-                                                <div class="tw-form-check tw-mb-2">
-                                                    <input
-                      type="radio"
-                      name="flexRadioDefault"
-                      id="flexRadioDefault{{d.id}}"
-                      class="tw-form-radio tw-text-blue-600"
-                      (click)="checked(d)"
-                    />
-                                                
-                                                </div>
-                                            </td>
-                                             <td class="tw-px-3 tw-py-2">{{d.created_at | date:"shortDate"}}</td>
-                                            <td *ngIf="role != 'cps'">{{d.district?.cps?.name}}</td>
-                                             <td class="tw-px-3 tw-py-2">{{d.type_cape?.name ?? d.type_garderie?.name }}</td>
-                                             <td class="tw-px-3 tw-py-2">{{d.name}}</td>
-                                            <td  *ngIf="state !=undefined">
-                                                <span class="p-1 rounded bg-{{getColor(d.status)}} text-white">{{getText(d.status)}} </span>
-                                            </td>
-                                            <td *ngIf="state ==undefined">
-                                                {{d.last_parcours?.libelle}}
-                                            </td>
-                                             <td class="tw-px-3 tw-py-2">{{d.name_pomoter}} {{d.firstname_pomoter}}</td>
-                                             <td class="tw-px-3 tw-py-2">
-                                                <ul>
-                                                    <li *ngFor="let el of getJson(d.target)">{{el}}</li>
-                                                </ul>
-                                            </td>
-                                             <td class="tw-px-3 tw-py-2">{{d.address}}</td>
-                                             <td class="tw-px-3 tw-py-2">{{d.email}}</td>
-                                             <td class="tw-px-3 tw-py-2">{{d.phone}}</td>
-                                        
-                                            
-                                        </tr>
-                                    
-                                    </tbody>
-                                </table>
-                                </div>
-                         </ng-container>
-                         <ng-container *ngIf="type=='garderie'">
-                            <div class="tw-overflow-x-auto">
-                                <table class="tw-min-w-full tw-border tw-border-gray-200 tw-text-sm">
-                                    <thead class="tw-bg-gray-100">
-                                        <tr>
-                                            <th style="width: 10px;"> # </th>
-                                            <th style="width: 10px;"><i class="fa fa-check"></i></th>
-                                            <th class="tw-px-3 tw-py-2">Date d'inscription</th>
-                                            <th *ngIf="role != 'cps'">Cps</th>
-                                            <th class="tw-px-3 tw-py-2">Type Garderie</th>
-                                            <th class="tw-px-3 tw-py-2">Libellé Centre</th>
-                                            <th *ngIf="state != undefined">Statut</th>
-                                            <th *ngIf="state == undefined">Dernière étape</th>
-                                            <th class="tw-px-3 tw-py-2">Nom promoteur</th>
-                                            <th class="tw-px-3 tw-py-2">Adresse</th>
-                                            <th class="tw-px-3 tw-py-2">email</th>
-                                            <th class="tw-px-3 tw-py-2">phone</th>
-                                
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr *ngFor="let d of data | sampleSearch:searchTerm | paginate:currentPage:pageSize" class="tw-border-t">
-                                             <td class="tw-px-3 tw-py-2"></td>
-                                             <td class="tw-px-3 tw-py-2">
-                                                <div class="tw-form-check tw-mb-2">
-                                                    <input
-                      type="radio"
-                      name="flexRadioDefault"
-                      id="flexRadioDefault{{d.id}}"
-                      class="tw-form-radio tw-text-blue-600"
-                      (click)="checked(d)"
-                    />
-                                                
-                                                </div>
-                                            </td>
-                                             <td class="tw-px-3 tw-py-2">{{d.created_at | date:"shortDate"}}</td>
-                                            <td *ngIf="role != 'cps'">{{d.district?.cps?.name}}</td>
-                                             <td class="tw-px-3 tw-py-2">
-                                                <ul>
-                                                    <li *ngFor="let el of d.requete_type_garderies">{{el.type_garderie?.name}}</li>
-                                                </ul>
-                                            </td>
-                                             <td class="tw-px-3 tw-py-2">{{d.name}}</td>
-                                            <td  *ngIf="state !=undefined">
-                                                <span class="p-1 rounded bg-{{getColor(d.status)}} text-white">{{getText(d.status)}} </span>
-                                            </td>
-                                            <td *ngIf="state ==undefined">
-                                                {{d.last_parcours?.libelle}}
-                                            </td>
-                                             <td class="tw-px-3 tw-py-2">{{d.name_pomoter}} {{d.firstname_pomoter}}</td>
-                                            
-                                             <td class="tw-px-3 tw-py-2">{{d.address}}</td>
-                                             <td class="tw-px-3 tw-py-2">{{d.email}}</td>
-                                             <td class="tw-px-3 tw-py-2">{{d.phone}}</td>
-                                        
-                                            
-                                        </tr>
-                                    
-                                    </tbody>
-                                </table>
-                                </div>
-                         </ng-container>
-                        <app-pagination
-                          [totalItems]="filteredData.length"
-                          [currentPage]="currentPage"
-                          [pageSize]="pageSize"
-                          [pageSizeOptions]="[5, 10, 25, 50]"
-                          (pageChange)="currentPage = $event"
-                          (pageSizeChange)="pageSize = $event; currentPage = 1">
-                        </app-pagination>
-    
-                </div><!-- end card -->
-            </div>
-            <!-- end col -->
-        </div>
-        <!-- end col -->
+<div class="tw-bg-white tw-rounded-xl tw-shadow-sm tw-border tw-border-gray-200">
+
+  <!-- Toolbar -->
+  <div class="tw-flex tw-items-center tw-gap-2 tw-px-5 tw-py-4 tw-border-b tw-border-gray-100">
+
+    <button
+      *ngIf="state != undefined"
+      (click)="goToShow()"
+      [disabled]="!selected_data"
+      class="tw-inline-flex tw-items-center tw-gap-1.5 tw-px-3 tw-py-1.5 tw-rounded-lg tw-text-sm tw-font-medium tw-transition-colors"
+      [ngClass]="selected_data
+        ? 'tw-bg-blue-600 tw-text-white hover:tw-bg-blue-700'
+        : 'tw-bg-gray-100 tw-text-gray-400 tw-cursor-not-allowed'"
+    >
+      <i class="ri-eye-line"></i>
+      Consulter
+    </button>
+
+    <button
+      *ngIf="role === 'dfea'"
+      (click)="delete()"
+      [disabled]="!selected_data"
+      class="tw-inline-flex tw-items-center tw-gap-1.5 tw-px-3 tw-py-1.5 tw-rounded-lg tw-text-sm tw-font-medium tw-transition-colors"
+      [ngClass]="selected_data
+        ? 'tw-bg-red-600 tw-text-white hover:tw-bg-red-700'
+        : 'tw-bg-gray-100 tw-text-gray-400 tw-cursor-not-allowed'"
+    >
+      <i class="ri-delete-bin-line"></i>
+      Retirer
+    </button>
+
+    <button
+      *ngIf="state == undefined"
+      (click)="add(parcoursContent)"
+      [disabled]="!selected_data"
+      class="tw-inline-flex tw-items-center tw-gap-1.5 tw-px-3 tw-py-1.5 tw-rounded-lg tw-text-sm tw-font-medium tw-transition-colors"
+      [ngClass]="selected_data
+        ? 'tw-bg-slate-700 tw-text-white hover:tw-bg-slate-800'
+        : 'tw-bg-gray-100 tw-text-gray-400 tw-cursor-not-allowed'"
+    >
+      <i class="ri-route-line"></i>
+      Voir Parcours
+    </button>
+
+    <!-- Espaceur -->
+    <div class="tw-flex-1"></div>
+
+    <!-- Compteur + Recherche -->
+    <span class="tw-text-sm tw-text-gray-500">
+      {{ filteredData.length }} / {{ data.length }}
+    </span>
+    <div class="tw-relative">
+      <i class="ri-search-line tw-absolute tw-left-3 tw-top-1/2 -tw-translate-y-1/2 tw-text-gray-400 tw-text-sm"></i>
+      <input
+        type="text"
+        class="tw-pl-9 tw-pr-3 tw-py-1.5 tw-w-64 tw-border tw-border-gray-300 tw-rounded-lg tw-text-sm focus:tw-outline-none focus:tw-ring-1 focus:tw-ring-blue-500 focus:tw-border-blue-500"
+        placeholder="Rechercher..."
+        [(ngModel)]="searchTerm"
+        (ngModelChange)="currentPage = 1"
+      />
     </div>
-    
+  </div>
 
-    <ng-template #parcoursContent let-c="close" let-d="dismiss">
-    
-        <div class="modal-header bg-secondary">
-          <h6 class="text-white">Parcours demande</h6>
-           <button type="button" class="tw-btn tw-btn-dark tw-text-white tw-px-2 tw-py-1 tw-rounded" (click)="d('Cross click')">
-                <i class="fa fa-times"></i>
-            </button>
-        </div>
-        <div class="modal-body">
-           <table class="table">
-            <thead> 
-                <th class="tw-px-3 tw-py-2">#</th>
-                <th class="tw-px-3 tw-py-2">Libellé</th>
-                <th class="tw-px-3 tw-py-2">Date et heure</th>
-                <th class="tw-px-3 tw-py-2">Séjour (jrs)</th>
-                <th class="tw-px-3 tw-py-2">Auteur</th>
-            </thead>
-            <tbody>
-                <tr *ngFor="let p of parcours; let i=index">
-                     <td class="tw-px-3 tw-py-2">{{i+1}}</td>
-                     <td class="tw-px-3 tw-py-2">{{p.libelle}}</td>
-                     <td class="tw-px-3 tw-py-2">{{p.created_at | date:"dd-MM-yyyy hh:mm:ss"}}</td>
-                     <td class="tw-px-3 tw-py-2">{{p.delay}}</td>
-                     <td class="tw-px-3 tw-py-2">{{p.user == null ?"CAPE": p.user?.firstname??"Prénom(s)" +" "+ p.user?.lastname?? "Nom"}}</td>
-                </tr>
-            </tbody>
-           </table>
-        </div>
+  <!-- Corps de la table -->
+  <div class="tw-overflow-x-auto">
 
-      </ng-template>
-      
+    <!-- Indicateur de chargement -->
+    <div *ngIf="loading" class="tw-flex tw-items-center tw-justify-center tw-py-16 tw-text-gray-400">
+      <i class="ri-loader-4-line tw-animate-spin tw-text-2xl tw-mr-2"></i>
+      <span class="tw-text-sm">Chargement des données...</span>
+    </div>
+
+    <!-- État vide -->
+    <div *ngIf="!loading && data.length === 0" class="tw-flex tw-flex-col tw-items-center tw-justify-center tw-py-16 tw-text-gray-400">
+      <i class="ri-inbox-line tw-text-4xl tw-mb-2"></i>
+      <p class="tw-text-sm tw-font-medium tw-text-gray-500">Aucune demande à traiter</p>
+      <p class="tw-text-xs tw-text-gray-400">Les nouvelles demandes apparaîtront ici</p>
+    </div>
+
+    <!-- Tableau CAPE -->
+    <table *ngIf="!loading && data.length > 0 && type === 'cape'" class="tw-min-w-full tw-text-sm">
+      <thead>
+        <tr class="tw-bg-gray-50 tw-border-b tw-border-gray-200">
+          <th class="tw-w-10 tw-px-4 tw-py-3 tw-text-left tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide">#</th>
+          <th class="tw-w-10 tw-px-2 tw-py-3"></th>
+          <th class="tw-px-4 tw-py-3 tw-text-left tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide">Date</th>
+          <th *ngIf="role !== 'cps'" class="tw-px-4 tw-py-3 tw-text-left tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide">CPS</th>
+          <th class="tw-px-4 tw-py-3 tw-text-left tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide">Type</th>
+          <th class="tw-px-4 tw-py-3 tw-text-left tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide">Centre</th>
+          <th class="tw-px-4 tw-py-3 tw-text-left tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide">Promoteur</th>
+          <th class="tw-px-4 tw-py-3 tw-text-left tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide">Cible(s)</th>
+          <th class="tw-px-4 tw-py-3 tw-text-left tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide">Adresse</th>
+          <th class="tw-px-4 tw-py-3 tw-text-left tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide">Contact</th>
+          <th *ngIf="state != undefined" class="tw-px-4 tw-py-3 tw-text-left tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide">Statut</th>
+          <th *ngIf="state == undefined" class="tw-px-4 tw-py-3 tw-text-left tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide">Dernière étape</th>
+        </tr>
+      </thead>
+      <tbody class="tw-divide-y tw-divide-gray-100">
+        <tr
+          *ngFor="let d of data | sampleSearch:searchTerm | paginate:currentPage:pageSize; let i = index"
+          (click)="checked(d)"
+          class="tw-cursor-pointer tw-transition-colors"
+          [ngClass]="selected_data?.id === d.id
+            ? 'tw-bg-blue-50 hover:tw-bg-blue-100'
+            : 'hover:tw-bg-gray-50'"
+        >
+          <td class="tw-px-4 tw-py-3 tw-text-gray-500 tw-font-mono tw-text-xs">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+          <td class="tw-px-2 tw-py-3">
+            <div class="tw-w-4 tw-h-4 tw-rounded-full tw-border-2 tw-flex tw-items-center tw-justify-center tw-transition-all tw-flex-shrink-0"
+                 [ngClass]="selected_data?.id === d.id
+                   ? 'tw-border-blue-600 tw-bg-blue-600'
+                   : 'tw-border-gray-300 tw-bg-white'">
+              <div *ngIf="selected_data?.id === d.id" class="tw-w-1.5 tw-h-1.5 tw-rounded-full tw-bg-white"></div>
+            </div>
+          </td>
+          <td class="tw-px-4 tw-py-3 tw-text-gray-600 tw-whitespace-nowrap">{{ d.created_at | date:'dd/MM/yyyy' }}</td>
+          <td *ngIf="role !== 'cps'" class="tw-px-4 tw-py-3 tw-text-gray-700">{{ d.district?.cps?.name ?? '—' }}</td>
+          <td class="tw-px-4 tw-py-3">
+            <span class="tw-inline-flex tw-items-center tw-px-2 tw-py-0.5 tw-rounded-md tw-text-xs tw-font-medium tw-bg-blue-50 tw-text-blue-700">
+              {{ d.type_cape?.name ?? d.type_garderie?.name ?? '—' }}
+            </span>
+          </td>
+          <td class="tw-px-4 tw-py-3 tw-font-medium tw-text-gray-900">{{ d.name }}</td>
+          <td class="tw-px-4 tw-py-3 tw-text-gray-700 tw-whitespace-nowrap">{{ d.name_pomoter }} {{ d.firstname_pomoter }}</td>
+          <td class="tw-px-4 tw-py-3">
+            <div class="tw-flex tw-flex-wrap tw-gap-1">
+              <span
+                *ngFor="let el of getJson(d.target)"
+                class="tw-inline-flex tw-items-center tw-px-1.5 tw-py-0.5 tw-rounded tw-text-xs tw-bg-slate-100 tw-text-slate-600"
+              >{{ el }}</span>
+              <span *ngIf="getJson(d.target).length === 0" class="tw-text-gray-400">—</span>
+            </div>
+          </td>
+          <td class="tw-px-4 tw-py-3 tw-text-gray-600 tw-max-w-[160px] tw-truncate" [title]="d.address">{{ d.address ?? '—' }}</td>
+          <td class="tw-px-4 tw-py-3">
+            <div class="tw-text-gray-700 tw-text-xs">{{ d.email }}</div>
+            <div class="tw-text-gray-500 tw-text-xs">{{ d.phone }}</div>
+          </td>
+          <td *ngIf="state != undefined" class="tw-px-4 tw-py-3">
+            <span class="tw-inline-flex tw-items-center tw-px-2 tw-py-0.5 tw-rounded-full tw-text-xs tw-font-medium {{ getStatusClass(d.status) }}">
+              {{ getText(d.status) }}
+            </span>
+          </td>
+          <td *ngIf="state == undefined" class="tw-px-4 tw-py-3 tw-text-gray-600 tw-text-xs">
+            {{ d.last_parcours?.libelle ?? '—' }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Tableau GARDERIE -->
+    <table *ngIf="!loading && data.length > 0 && type === 'garderie'" class="tw-min-w-full tw-text-sm">
+      <thead>
+        <tr class="tw-bg-gray-50 tw-border-b tw-border-gray-200">
+          <th class="tw-w-10 tw-px-4 tw-py-3 tw-text-left tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide">#</th>
+          <th class="tw-w-10 tw-px-2 tw-py-3"></th>
+          <th class="tw-px-4 tw-py-3 tw-text-left tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide">Date</th>
+          <th *ngIf="role !== 'cps'" class="tw-px-4 tw-py-3 tw-text-left tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide">CPS</th>
+          <th class="tw-px-4 tw-py-3 tw-text-left tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide">Type Garderie</th>
+          <th class="tw-px-4 tw-py-3 tw-text-left tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide">Centre</th>
+          <th class="tw-px-4 tw-py-3 tw-text-left tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide">Promoteur</th>
+          <th class="tw-px-4 tw-py-3 tw-text-left tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide">Adresse</th>
+          <th class="tw-px-4 tw-py-3 tw-text-left tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide">Contact</th>
+          <th *ngIf="state != undefined" class="tw-px-4 tw-py-3 tw-text-left tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide">Statut</th>
+          <th *ngIf="state == undefined" class="tw-px-4 tw-py-3 tw-text-left tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide">Dernière étape</th>
+        </tr>
+      </thead>
+      <tbody class="tw-divide-y tw-divide-gray-100">
+        <tr
+          *ngFor="let d of data | sampleSearch:searchTerm | paginate:currentPage:pageSize; let i = index"
+          (click)="checked(d)"
+          class="tw-cursor-pointer tw-transition-colors"
+          [ngClass]="selected_data?.id === d.id
+            ? 'tw-bg-blue-50 hover:tw-bg-blue-100'
+            : 'hover:tw-bg-gray-50'"
+        >
+          <td class="tw-px-4 tw-py-3 tw-text-gray-500 tw-font-mono tw-text-xs">{{ (currentPage - 1) * pageSize + i + 1 }}</td>
+          <td class="tw-px-2 tw-py-3">
+            <div class="tw-w-4 tw-h-4 tw-rounded-full tw-border-2 tw-flex tw-items-center tw-justify-center tw-transition-all tw-flex-shrink-0"
+                 [ngClass]="selected_data?.id === d.id
+                   ? 'tw-border-blue-600 tw-bg-blue-600'
+                   : 'tw-border-gray-300 tw-bg-white'">
+              <div *ngIf="selected_data?.id === d.id" class="tw-w-1.5 tw-h-1.5 tw-rounded-full tw-bg-white"></div>
+            </div>
+          </td>
+          <td class="tw-px-4 tw-py-3 tw-text-gray-600 tw-whitespace-nowrap">{{ d.created_at | date:'dd/MM/yyyy' }}</td>
+          <td *ngIf="role !== 'cps'" class="tw-px-4 tw-py-3 tw-text-gray-700">{{ d.district?.cps?.name ?? '—' }}</td>
+          <td class="tw-px-4 tw-py-3">
+            <div class="tw-flex tw-flex-wrap tw-gap-1">
+              <span
+                *ngFor="let el of d.requete_type_garderies"
+                class="tw-inline-flex tw-items-center tw-px-2 tw-py-0.5 tw-rounded-md tw-text-xs tw-font-medium tw-bg-blue-50 tw-text-blue-700"
+              >{{ el.type_garderie?.name }}</span>
+            </div>
+          </td>
+          <td class="tw-px-4 tw-py-3 tw-font-medium tw-text-gray-900">{{ d.name }}</td>
+          <td class="tw-px-4 tw-py-3 tw-text-gray-700 tw-whitespace-nowrap">{{ d.name_pomoter }} {{ d.firstname_pomoter }}</td>
+          <td class="tw-px-4 tw-py-3 tw-text-gray-600 tw-max-w-[160px] tw-truncate" [title]="d.address">{{ d.address ?? '—' }}</td>
+          <td class="tw-px-4 tw-py-3">
+            <div class="tw-text-gray-700 tw-text-xs">{{ d.email }}</div>
+            <div class="tw-text-gray-500 tw-text-xs">{{ d.phone }}</div>
+          </td>
+          <td *ngIf="state != undefined" class="tw-px-4 tw-py-3">
+            <span class="tw-inline-flex tw-items-center tw-px-2 tw-py-0.5 tw-rounded-full tw-text-xs tw-font-medium {{ getStatusClass(d.status) }}">
+              {{ getText(d.status) }}
+            </span>
+          </td>
+          <td *ngIf="state == undefined" class="tw-px-4 tw-py-3 tw-text-gray-600 tw-text-xs">
+            {{ d.last_parcours?.libelle ?? '—' }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+
+  <!-- Pagination -->
+  <div *ngIf="!loading && data.length > 0" class="tw-border-t tw-border-gray-100 tw-px-5 tw-py-3">
+    <app-pagination
+      [totalItems]="filteredData.length"
+      [currentPage]="currentPage"
+      [pageSize]="pageSize"
+      [pageSizeOptions]="[5, 10, 25, 50]"
+      (pageChange)="currentPage = $event"
+      (pageSizeChange)="pageSize = $event; currentPage = 1">
+    </app-pagination>
+  </div>
+
+</div>
 
 
-
-    <ng-template #parcoursContent let-c="close" let-d="dismiss">
-    
-        <div class="modal-header bg-secondary">
-          <h6 class="text-white">Cibles</h6>
-           <button type="button" class="tw-btn tw-btn-dark tw-text-white tw-px-2 tw-py-1 tw-rounded" (click)="d('Cross click')">
-                <i class="fa fa-times"></i>
-            </button>
-        </div>
-        <div class="modal-body">
-        
-        </div>
-
-      </ng-template>
+<!-- Modal : Parcours de la demande -->
+<ng-template #parcoursContent let-c="close" let-d="dismiss">
+  <div class="modal-header tw-bg-slate-800 tw-text-white">
+    <h6 class="modal-title tw-font-semibold">
+      <i class="ri-route-line tw-mr-2"></i>Parcours de la demande
+    </h6>
+    <button type="button" (click)="d('Cross click')" class="tw-text-white hover:tw-text-gray-200 tw-transition-colors">
+      <i class="ri-close-line tw-text-lg"></i>
+    </button>
+  </div>
+  <div class="modal-body tw-p-0">
+    <div *ngIf="parcours.length === 0" class="tw-flex tw-flex-col tw-items-center tw-justify-center tw-py-10 tw-text-gray-400">
+      <i class="ri-inbox-line tw-text-3xl tw-mb-2"></i>
+      <p class="tw-text-sm">Aucun parcours enregistré</p>
+    </div>
+    <table *ngIf="parcours.length > 0" class="tw-min-w-full tw-text-sm">
+      <thead>
+        <tr class="tw-bg-gray-50 tw-border-b tw-border-gray-200">
+          <th class="tw-px-4 tw-py-3 tw-text-left tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide">#</th>
+          <th class="tw-px-4 tw-py-3 tw-text-left tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide">Étape</th>
+          <th class="tw-px-4 tw-py-3 tw-text-left tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide">Date et heure</th>
+          <th class="tw-px-4 tw-py-3 tw-text-left tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide">Séjour (jrs)</th>
+          <th class="tw-px-4 tw-py-3 tw-text-left tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide">Auteur</th>
+        </tr>
+      </thead>
+      <tbody class="tw-divide-y tw-divide-gray-100">
+        <tr *ngFor="let p of parcours; let i = index" class="hover:tw-bg-gray-50">
+          <td class="tw-px-4 tw-py-3 tw-text-gray-500 tw-font-mono tw-text-xs">{{ i + 1 }}</td>
+          <td class="tw-px-4 tw-py-3 tw-font-medium tw-text-gray-900">{{ p.libelle }}</td>
+          <td class="tw-px-4 tw-py-3 tw-text-gray-600 tw-whitespace-nowrap">{{ p.created_at | date:'dd/MM/yyyy HH:mm' }}</td>
+          <td class="tw-px-4 tw-py-3 tw-text-gray-600">{{ p.delay }}</td>
+          <td class="tw-px-4 tw-py-3 tw-text-gray-700">
+            {{ p.user == null ? 'CAPE' : (p.user?.firstname ?? '') + ' ' + (p.user?.lastname ?? '') }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</ng-template>

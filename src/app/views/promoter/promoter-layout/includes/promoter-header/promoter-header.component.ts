@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from 'src/app/core/services/auth.service';
@@ -10,48 +10,26 @@ import { LocalStorageService } from 'src/app/core/utils/local-stoarge-service';
   templateUrl: './promoter-header.component.html',
   styleUrl: './promoter-header.component.css'
 })
-export class PromoterHeaderComponent {
-  userEmail: string | null = null;
+export class PromoterHeaderComponent implements OnInit {
 
-  constructor(private router: Router,    
-    private authService:AuthService,
-        private lsService:LocalStorageService,
-            private toastr:ToastrService,
-        
-    
+  user: any = null;
+
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+    private lsService: LocalStorageService,
+    private toastr: ToastrService,
   ) {}
 
   ngOnInit(): void {
-    this.userEmail = localStorage.getItem('userEmail');
+    this.user = this.lsService.get(GlobalName.userName);
   }
 
-  handleLogout(): void {
-    localStorage.removeItem('isLoggedIn');
-    localStorage.removeItem('userEmail');
-    this.router.navigate(['/']); // Redirection vers la page d’accueil
+  get userInitial(): string {
+    return this.user?.name?.charAt(0)?.toUpperCase() ?? '?';
   }
 
-
-    logout(){
-      this.authService.logout().subscribe((res:any)=>{
-        this.lsService.remove(GlobalName.tokenName)
-        this.lsService.remove(GlobalName.refreshTokenName)
-        this.lsService.remove(GlobalName.expireIn)
-        this.lsService.remove(GlobalName.userName)
-        this.lsService.remove(GlobalName.exercice)
-        this.router.navigate(['/public/auth/login'])
-        this.toastr.success('Déconnexion réussie', 'Connexion');
-      }),
-      ((err:any)=>{
-        console.log(err)
-        this.lsService.remove(GlobalName.tokenName)
-        this.lsService.remove(GlobalName.refreshTokenName)
-        this.lsService.remove(GlobalName.expireIn)
-        this.lsService.remove(GlobalName.userName)
-        this.lsService.remove(GlobalName.exercice)
-        this.router.navigate(['/public/auth/login'])
-        this.toastr.success('Déconnexion échouée', 'Connexion');
-  
-      });
-    }
+  get userName(): string {
+    return this.user?.name ?? '';
+  }
 }

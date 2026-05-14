@@ -1,18 +1,16 @@
-
 <div class="tw-min-h-screen tw-bg-gray-50">
-  <!-- Header -->
- <app-promoter-header></app-promoter-header>
-  
 
-  <!-- Sidebar -->
-   <app-promoter-side-bar>
-</app-promoter-side-bar>
+  <!-- Header (top bar, fixed) -->
+  <app-promoter-header></app-promoter-header>
 
-  <!-- Main content -->
-  <main class="tw-ml-64 tw-pt-20 tw-p-8">
+  <!-- Sidebar (fixed, full height) -->
+  <app-promoter-side-bar></app-promoter-side-bar>
+
+  <!-- Contenu principal : marge gauche pour la sidebar, padding-top pour le header -->
+  <main class="md:tw-ml-64 tw-pt-14 tw-p-6 lg:tw-p-8">
     <div class="tw-max-w-6xl tw-mx-auto">
-  <router-outlet></router-outlet>
-
+      <router-outlet></router-outlet>
     </div>
   </main>
+
 </div>

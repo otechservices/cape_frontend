@@ -1,85 +1,60 @@
-<div class="page-breadcrumb d-none d-sm-flex align-items-center mb-5">
-    <div class="breadcrumb-title pe-3">CAPE </div>
-    <div class="ps-3">
-      <nav aria-label="breadcrumb">
-        <ol class="breadcrumb mb-0 p-0">
-          <li class="breadcrumb-item"><a routerLink="/admin/dashboard"><i class="bx bx-home-alt"></i></a>
-          </li>
-          <li class="breadcrumb-item active" aria-current="page">Liste des dossiers incrists</li>
-        </ol>
-      </nav>
+<div class="tw-bg-white tw-rounded-xl tw-shadow-sm tw-border tw-border-gray-200">
+  <div class="tw-flex tw-items-center tw-gap-3 tw-px-5 tw-py-4 tw-border-b tw-border-gray-100">
+    <div class="tw-ml-auto tw-flex tw-items-center tw-gap-3">
+      <span class="tw-text-sm tw-text-gray-500">{{ filteredData.length }} / {{ data.length }} élément(s)</span>
+      <div class="tw-relative">
+        <span class="tw-absolute tw-inset-y-0 tw-left-0 tw-flex tw-items-center tw-pl-3 tw-text-gray-400">
+          <i class="bx bx-search"></i>
+        </span>
+        <input type="text"
+          class="tw-pl-9 tw-pr-3 tw-py-1.5 tw-border tw-border-gray-300 tw-rounded-lg tw-text-sm focus:tw-outline-none focus:tw-border-blue-400 tw-w-64"
+          placeholder="Rechercher..."
+          [(ngModel)]="searchTerm"
+          (ngModelChange)="currentPage = 1" />
+      </div>
     </div>
   </div>
 
+  <div class="tw-overflow-x-auto">
+    <table class="tw-min-w-full">
+      <thead>
+        <tr class="tw-bg-gray-50 tw-border-b tw-border-gray-200">
+          <th class="tw-w-10 tw-px-2 tw-py-3"></th>
+          <th class="tw-px-4 tw-py-3 tw-text-left tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide">CAPE</th>
+          <th class="tw-px-4 tw-py-3 tw-text-left tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide">Action</th>
+        </tr>
+      </thead>
+      <tbody class="tw-divide-y tw-divide-gray-100">
+        <tr *ngFor="let d of data | sampleSearch:searchTerm | paginate:currentPage:pageSize"
+          (click)="checked(d)"
+          class="tw-cursor-pointer tw-transition-colors"
+          [ngClass]="selected_data?.id === d.id ? 'tw-bg-blue-50 hover:tw-bg-blue-100' : 'hover:tw-bg-gray-50'">
+          <td class="tw-px-2 tw-py-3">
+            <div class="tw-w-4 tw-h-4 tw-rounded-full tw-border-2 tw-flex tw-items-center tw-justify-center tw-flex-shrink-0"
+              [ngClass]="selected_data?.id === d.id ? 'tw-border-blue-600 tw-bg-blue-600' : 'tw-border-gray-300 tw-bg-white'">
+              <div *ngIf="selected_data?.id === d.id" class="tw-w-1.5 tw-h-1.5 tw-rounded-full tw-bg-white"></div>
+            </div>
+          </td>
+          <td class="tw-px-4 tw-py-3 tw-text-gray-900">{{d.name}}</td>
+          <td class="tw-px-4 tw-py-3">
+            <a class="tw-inline-flex tw-items-center tw-gap-1 tw-px-2.5 tw-py-1 tw-rounded-lg tw-text-xs tw-font-medium tw-bg-blue-600 tw-text-white hover:tw-bg-blue-700"
+              [routerLink]="'/admin/session-request-show/'+ d.code">
+              <i class="ri-folder-open-line"></i> Ouvrir le dossier
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 
-  <div class="tw-grid tw-grid-cols-12 tw-gap-4">
-     <div class="tw-col-span-12">
-       <div class="tw-bg-white tw-rounded-lg tw-shadow">
-          
-              <div class="tw-p-6">
-
-                        <div class="tw-flex tw-items-center tw-justify-between tw-mb-3">
-                          <p class="tw-text-sm tw-text-gray-500 tw-mb-0">
-                            {{ filteredData.length }} / {{ data.length }} élément(s)
-                          </p>
-                          <div class="tw-relative tw-w-72">
-                            <span class="tw-absolute tw-inset-y-0 tw-left-0 tw-flex tw-items-center tw-pl-3 tw-text-gray-400">
-                              <i class="bx bx-search"></i>
-                            </span>
-                            <input
-                              type="text"
-                              class="tw-w-full tw-pl-9 tw-pr-3 tw-py-1.5 tw-border tw-border-gray-300 tw-rounded tw-text-sm focus:tw-outline-none focus:tw-border-blue-400"
-                              placeholder="Rechercher..."
-                              [(ngModel)]="searchTerm"
-                              (ngModelChange)="currentPage = 1"
-                            />
-                          </div>
-                        </div>
-                        <div class="tw-overflow-x-auto">
-                        <table class="tw-min-w-full tw-border tw-border-gray-200 tw-text-sm">
-                            <thead class="tw-bg-gray-100">
-                                <tr>
-                                    <th class="tw-w-[40px] tw-px-3 tw-py-2">#</th>
-                                    <th class="tw-px-3 tw-py-2">CAPE</th>
-                                    <th class="tw-px-3 tw-py-2">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let d of data | sampleSearch:searchTerm | paginate:currentPage:pageSize" class="tw-border-t">
-                                     <td class="tw-px-3 tw-py-2">
-                                        <div class="tw-form-check tw-mb-2">
-                                            <input
-                      type="radio"
-                      name="flexRadioDefault"
-                      id="flexRadioDefault{{d.id}}"
-                      class="tw-form-radio tw-text-blue-600"
-                      (click)="checked(d)"
-                    />
-                                        
-                                        </div>
-                                    </td>
-                                     <td class="tw-px-3 tw-py-2">{{d.name}}</td>
-                                     <td class="tw-px-3 tw-py-2">
-                                        <a class="btn btn-sm btn-primary" [routerLink]="'/admin/session-request-show/'+ d.code">Ouvrir le dossier </a>
-                                    </td>
-                               
-                                </tr>
-                            
-                            </tbody>
-                        </table>
-                        </div>
-
-<app-pagination
-  [totalItems]="filteredData.length"
-  [currentPage]="currentPage"
-  [pageSize]="pageSize"
-  [pageSizeOptions]="[5, 10, 25, 50]"
-  (pageChange)="currentPage = $event"
-  (pageSizeChange)="pageSize = $event; currentPage = 1">
-</app-pagination>
-            </div><!-- end card -->
-        </div>
-        <!-- end col -->
-    </div>
-    <!-- end col -->
+  <div class="tw-border-t tw-border-gray-100 tw-px-5 tw-py-3">
+    <app-pagination
+      [totalItems]="filteredData.length"
+      [currentPage]="currentPage"
+      [pageSize]="pageSize"
+      [pageSizeOptions]="[5, 10, 25, 50]"
+      (pageChange)="currentPage = $event"
+      (pageSizeChange)="pageSize = $event; currentPage = 1">
+    </app-pagination>
+  </div>
 </div>

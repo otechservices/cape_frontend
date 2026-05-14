@@ -1,351 +1,339 @@
-    <!--breadcrumb-->
-    <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-5">
-        <div class="breadcrumb-title pe-3">CAPE </div>
-        <div class="ps-3">
-          <nav aria-label="breadcrumb">
-            <ol class="breadcrumb mb-0 p-0">
-              <li class="breadcrumb-item"><a routerLink="/admin/dashboard"><i class="bx bx-home-alt"></i></a>
-              </li>
-              <li class="breadcrumb-item active" aria-current="page">Contrôle des capes autorisés</li>
-            </ol>
-          </nav>
-        </div>
+<!-- CAPE list table -->
+<div class="tw-bg-white tw-rounded-xl tw-shadow-sm tw-border tw-border-gray-200 tw-mb-4">
+  <div class="tw-flex tw-items-center tw-gap-3 tw-px-5 tw-py-4 tw-border-b tw-border-gray-100">
+    <h6 class="tw-text-sm tw-font-semibold tw-text-gray-700 tw-mb-0">Liste des CAPE autorisés</h6>
+    <div class="tw-ml-auto tw-flex tw-items-center tw-gap-3">
+      <span class="tw-text-sm tw-text-gray-500">{{ filteredData.length }} / {{ data.length }} élément(s)</span>
+      <div class="tw-relative">
+        <span class="tw-absolute tw-inset-y-0 tw-left-0 tw-flex tw-items-center tw-pl-3 tw-text-gray-400">
+          <i class="bx bx-search"></i>
+        </span>
+        <input type="text"
+          class="tw-pl-9 tw-pr-3 tw-py-1.5 tw-border tw-border-gray-300 tw-rounded-lg tw-text-sm focus:tw-outline-none focus:tw-border-blue-400 tw-w-64"
+          placeholder="Rechercher..."
+          [(ngModel)]="searchTerm"
+          (ngModelChange)="currentPage = 1" />
       </div>
-        <div class="row mb-5">
-           <div class="tw-col-span-12">
-             <div class="tw-bg-white tw-rounded-lg tw-shadow">
-                <div class="card-header cape-bg-blue">
-                  <h6 class="text-white">Liste des CAPE autorisés</h6>
-                </div>
-                    <div class="tw-p-6">
-      
-                              <div class="tw-flex tw-items-center tw-justify-between tw-mb-3">
-                                <p class="tw-text-sm tw-text-gray-500 tw-mb-0">
-                                  {{ filteredData.length }} / {{ data.length }} élément(s)
-                                </p>
-                                <div class="tw-relative tw-w-72">
-                                  <span class="tw-absolute tw-inset-y-0 tw-left-0 tw-flex tw-items-center tw-pl-3 tw-text-gray-400">
-                                    <i class="bx bx-search"></i>
-                                  </span>
-                                  <input
-                                    type="text"
-                                    class="tw-w-full tw-pl-9 tw-pr-3 tw-py-1.5 tw-border tw-border-gray-300 tw-rounded tw-text-sm focus:tw-outline-none focus:tw-border-blue-400"
-                                    placeholder="Rechercher..."
-                                    [(ngModel)]="searchTerm"
-                                    (ngModelChange)="currentPage = 1"
-                                  />
-                                </div>
-                              </div>
-                              <div class="tw-overflow-x-auto">
-                              <table class="tw-min-w-full tw-border tw-border-gray-200 tw-text-sm">
-                                  <thead class="tw-bg-gray-100">
-                                      <tr>
-                                          <th class="tw-w-[40px] tw-px-3 tw-py-2">#</th>
-                                          <th class="tw-px-3 tw-py-2">Type Cape</th>
-                                          <th class="tw-px-3 tw-py-2">Libellé</th>
-                                          <th class="tw-px-3 tw-py-2">Action</th>
-                              
-                                      </tr>
-                                  </thead>
-                                  <tbody>
-                                      <tr *ngFor="let d of data | sampleSearch:searchTerm | paginate:currentPage:pageSize; let i= index ">
-                                         <td class="tw-px-3 tw-py-2">
-                                          <div class="tw-form-check tw-mb-2">
-                                              <input
-                      type="radio"
-                      name="flexRadioDefault"
-                      id="flexRadioDefault{{d.id}}"
-                      class="tw-form-radio tw-text-blue-600"
-                      (click)="checked(d)"
-                    />
-                                          
-                                          </div>
-                                      </td>                   
-                                        <td class="tw-px-3 tw-py-2">{{d.requete.type_cape?.name}}</td>
-                                           <td class="tw-px-3 tw-py-2">{{d.requete.name}}</td>
-                                           <td class="tw-px-3 tw-py-2">
-                                            <a [routerLink]="'/admin/follow-cape-show/'+d.id" type="button" class="btn btn-outline-primary btn-sm">
-                                                <span>Consulter le centre</span>
-                                            </a>
-                                          </td>
-                                 
-                                     
-                                      </tr>
-                                  
-                                  </tbody>
-                              </table>
-                              </div>
-                              <app-pagination
-                                [totalItems]="filteredData.length"
-                                [currentPage]="currentPage"
-                                [pageSize]="pageSize"
-                                [pageSizeOptions]="[5, 10, 25, 50]"
-                                (pageChange)="currentPage = $event"
-                                (pageSizeChange)="pageSize = $event; currentPage = 1">
-                              </app-pagination>
-                  </div><!-- end card -->
-              </div>
-              <!-- end col -->
-          </div>
-          <!-- end col -->
-      </div>
-
-
-
-      <div class="tw-grid tw-grid-cols-12 tw-gap-4">
-         <div class="tw-col-span-12">
-           <div class="tw-bg-white tw-rounded-lg tw-shadow">
-                <div class="card-header cape-bg-blue">
-                  <h6 class="text-white">Liste des visites de terrain</h6>
-                </div>
-                  <div class="tw-p-6">
-                <ng-container *ngIf="data != undefined">
-                    <ul ngbNav #nav="ngbNav" class="nav-tabs">
-                      <li ngbNavItem>
-                        <a ngbNavLink>Contrôles effectués</a>
-                        <ng-template ngbNavContent>
-                          <div class="tw-overflow-x-auto">
-                            <table class="table">
-                                <thead class="tw-bg-gray-100">
-                                    <tr>
-                                        <th class="tw-px-3 tw-py-2">Type Contrôle</th>
-                                        <th class="tw-px-3 tw-py-2">Chef de file</th>
-                                        <th class="tw-px-3 tw-py-2">Observation</th>
-                                        <th class="tw-px-3 tw-py-2">Date de contrôle</th>
-                                        <th class="tw-px-3 tw-py-2">Membre de la visite</th>
-
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr *ngFor="let d of controls; let i= index ">
-                                    
-                                       <td class="tw-px-3 tw-py-2">{{d.type_control?.name}}</td>
-                                         <td class="tw-px-3 tw-py-2">{{d.chief_name}}</td>
-                                         <td class="tw-px-3 tw-py-2">{{d.observation}}</td>
-                                         <td class="tw-px-3 tw-py-2">{{d.date_control | date :"dd-MM-yyyy"}}</td>
-                                         <td class="tw-px-3 tw-py-2">
-                                          <ol>
-                                            <li *ngFor="let m of getMembers(d.members)">{{m.name}}</li>
-                                          </ol>
-                                        </td>
-                                    </tr>
-                                
-                                </tbody>
-                            </table>
-                            </div>
-                        </ng-template>
-                      </li>
-                      <li ngbNavItem>
-                        <a ngbNavLink>Mes enregistrements</a>
-                        <ng-template ngbNavContent>
-                          <div class="d-flex">
-                            <button type="button" class="tw-bg-blue-600 tw-text-white tw-text-sm tw-px-3 tw-py-1 tw-rounded hover:tw-bg-blue-700 tw-me-3" (click)="add(addContent)">Enregistrer une visite de terrain</button>
-      
-                            <button *ngIf="buttonsPermission.edit" (click)="edit(editContent)" type="button"  class="tw-border tw-border-yellow-500 tw-text-yellow-500 tw-text-sm tw-px-3 tw-py-1 tw-rounded hover:tw-bg-yellow-50 tw-me-3">
-                               Editer</button>
-                            <button *ngIf="buttonsPermission.delete" (click)="delete()" type="button" class="tw-border tw-border-red-500 tw-text-red-500 tw-text-sm tw-px-3 tw-py-1 tw-rounded hover:tw-bg-red-50 tw-me-3">
-                                 Supprimer</button>
-                                 <button *ngIf="is_active!=null && !is_active" (click)="setStatus(1)" type="button" class="btn btn-outline-success btn-sm  me-3">
-                                    Activer</button>
-                                   <button  *ngIf="is_active!=null &&  is_active" (click)="setStatus(0)" type="button" class="tw-border tw-border-red-500 tw-text-red-500 tw-text-sm tw-px-3 tw-py-1 tw-rounded hover:tw-bg-red-50 tw-me-3">
-                                    Désactiver</button>
-      
-                                    <button type="button" class="tw-bg-blue-600 tw-text-white tw-text-sm tw-px-3 tw-py-1 tw-rounded hover:tw-bg-blue-700 tw-me-3" (click)="transUp()">Transmettre</button>
-      
-                          </div>
-                                  <p>{{myControls.length}} élément(s)</p>
-                                  <div class="tw-overflow-x-auto">
-                                  <table class="table">
-                                      <thead class="tw-bg-gray-100">
-                                          <tr>
-                                              <th class="tw-w-[40px] tw-px-3 tw-py-2">#</th>
-                                              <th class="tw-px-3 tw-py-2">Type Contrôle</th>
-                                              <th class="tw-px-3 tw-py-2">Chef de file</th>
-                                              <th class="tw-px-3 tw-py-2">Observation</th>
-                                              <th class="tw-px-3 tw-py-2">Date de contrôle</th>
-                                              <th class="tw-px-3 tw-py-2">Membre de la visite</th>
-                                              <th class="tw-px-3 tw-py-2">Etat</th>
-                                          </tr>
-                                      </thead>
-                                      <tbody>
-                                          <tr *ngFor="let d of myControls; let i= index ">
-                                             <td class="tw-px-3 tw-py-2">
-                                              <div class="tw-form-check tw-mb-2">
-                                                  <input (click)="checked2(d)" class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
-                                              
-                                              </div>
-                                          </td>       
-                                             <td class="tw-px-3 tw-py-2">{{d.type_control?.name}}</td>
-                                               <td class="tw-px-3 tw-py-2">{{d.chief_name}}</td>
-                                               <td class="tw-px-3 tw-py-2">{{d.observation}}</td>
-                                               <td class="tw-px-3 tw-py-2">{{d.date_control | date :"dd-MM-yyyy"}}</td>
-                                               <td class="tw-px-3 tw-py-2">
-                                                <ol>
-                                                  <li *ngFor="let m of getMembers(d.members)">{{m.name}}</li>
-                                                </ol>
-                                              </td>
-                                               <td class="tw-px-3 tw-py-2">
-                                                <span class="bg-secondary py-1 px-2 rounded text-white" *ngIf="d.transmissions_count <= 1">Non transmis</span>
-                                                <span class="bg-success py-1 px-2 rounded text-white" *ngIf="d.transmissions_count >1">Transmis</span>
-                                              </td>
-                                          </tr>
-                                      
-                                      </tbody>
-                                  </table>
-                                  </div>
-                        </ng-template>
-                      </li>
-                       <li ngbNavItem *ngIf="role != 'cps'">
-                        <a ngbNavLink>A transmettre</a>
-                        <ng-template ngbNavContent>
-                          <div class="d-flex">
-                
-      
-                                    <button type="button" class="tw-bg-blue-600 tw-text-white tw-text-sm tw-px-3 tw-py-1 tw-rounded hover:tw-bg-blue-700 tw-me-3" (click)="transUp()">Transmettre</button>
-      
-                          </div>
-                                  <p>{{transmittedControls.length}} élément(s)</p>
-                                  <div class="tw-overflow-x-auto">
-                                  <table class="table">
-                                      <thead class="tw-bg-gray-100">
-                                          <tr>
-                                              <th class="tw-w-[40px] tw-px-3 tw-py-2">#</th>
-                                              <th class="tw-px-3 tw-py-2">Type Contrôle</th>
-                                              <th class="tw-px-3 tw-py-2">Chef de file</th>
-                                              <th class="tw-px-3 tw-py-2">Observation</th>
-                                              <th class="tw-px-3 tw-py-2">Date de contrôle</th>
-                                              <th class="tw-px-3 tw-py-2">Membre de la visite</th>
-      
-                                          </tr>
-                                      </thead>
-                                      <tbody>
-                                          <tr *ngFor="let d of transmittedControls; let i= index ">
-                                             <td class="tw-px-3 tw-py-2">
-                                              <div class="tw-form-check tw-mb-2">
-                                                  <input (click)="checked2(d)" class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
-                                              
-                                              </div>
-                                          </td>       
-                                             <td class="tw-px-3 tw-py-2">{{d.type_control?.name}}</td>
-                                               <td class="tw-px-3 tw-py-2">{{d.chief_name}}</td>
-                                               <td class="tw-px-3 tw-py-2">{{d.observation}}</td>
-                                               <td class="tw-px-3 tw-py-2">{{d.date_control | date :"dd-MM-yyyy"}}</td>
-                                               <td class="tw-px-3 tw-py-2">
-                                                <ol>
-                                                  <li *ngFor="let m of getMembers(d.members)">{{m.name}}</li>
-                                                </ol>
-                                              </td>
-                                          </tr>
-                                      
-                                      </tbody>
-                                  </table>
-                                  </div>
-                        </ng-template>
-                      </li>
-                  </ul>
-                  <div [ngbNavOutlet]="nav" class="mt-2"></div>
-
-                </ng-container>
-                  
-    
-                </div><!-- end card -->
-            </div>
-            <!-- end col -->
-        </div>
-        <!-- end col -->
     </div>
+  </div>
 
-    <ng-template #addContent let-c="close" let-d="dismiss">
-      <form #addForm="ngForm" (ngSubmit)="store(addForm.value)">
-      <div class="modal-header bg-secondary">
-        <h6 class="tw-modal-title tw-text-white" id="modal-basic-title">Enregistrer une visite de terrain</h6>
-        <button type="button" class="btn-close" aria-label="Close" (click)="d('Cross click')"></button>
-      </div>
-      <div class="modal-body" >
-          <div class="row mb-3" >
-        
-              <div class=" form-goup col-12 mb-3">
-                  <label for="">Type de contrôle <span class="text-danger ml-2">(*)</span></label>
-                  <select name="type_control_id" class="form-control" ngModel required>
-                    <option *ngFor="let tf of tcs" [value]="tf.id">{{tf.name}}</option>
-                  </select>
-              </div>
-           
-              <div class=" form-goup col-12 mb-3">
-                <label for="">Date de contrôle <span class="text-danger ml-2">(*)</span></label>
-                <input type="date" name="date_control" class="form-control" ngModel required>
+  <div class="tw-overflow-x-auto">
+    <table class="tw-min-w-full">
+      <thead>
+        <tr class="tw-bg-gray-50 tw-border-b tw-border-gray-200">
+          <th class="tw-w-10 tw-px-2 tw-py-3"></th>
+          <th class="tw-px-4 tw-py-3 tw-text-left tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide">Type Cape</th>
+          <th class="tw-px-4 tw-py-3 tw-text-left tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide">Libellé</th>
+          <th class="tw-px-4 tw-py-3 tw-text-left tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide">Action</th>
+        </tr>
+      </thead>
+      <tbody class="tw-divide-y tw-divide-gray-100">
+        <tr *ngFor="let d of data | sampleSearch:searchTerm | paginate:currentPage:pageSize; let i = index"
+          (click)="checked(d)"
+          class="tw-cursor-pointer tw-transition-colors"
+          [ngClass]="selected_data?.id === d.id ? 'tw-bg-blue-50 hover:tw-bg-blue-100' : 'hover:tw-bg-gray-50'">
+          <td class="tw-px-2 tw-py-3">
+            <div class="tw-w-4 tw-h-4 tw-rounded-full tw-border-2 tw-flex tw-items-center tw-justify-center tw-flex-shrink-0"
+              [ngClass]="selected_data?.id === d.id ? 'tw-border-blue-600 tw-bg-blue-600' : 'tw-border-gray-300 tw-bg-white'">
+              <div *ngIf="selected_data?.id === d.id" class="tw-w-1.5 tw-h-1.5 tw-rounded-full tw-bg-white"></div>
             </div>
-              
-            <div class=" form-goup col-12 mb-3">
-              <label for="">observation <span class="text-danger ml-2">(*)</span></label>
-              <textarea name="observation" class="form-control" ngModel></textarea>
-          </div>
-          <hr>
-          <div class=" form-goup col-12 mb-3">
-            <label for="">Chef de file <span class="text-danger ml-2">(*)</span></label>
-            <input type="text" name="chief_name" class="form-control" ngModel required>
+          </td>
+          <td class="tw-px-4 tw-py-3 tw-text-gray-600">{{d.requete.type_cape?.name}}</td>
+          <td class="tw-px-4 tw-py-3 tw-text-gray-900">{{d.requete.name}}</td>
+          <td class="tw-px-4 tw-py-3">
+            <a [routerLink]="'/admin/follow-cape-show/'+d.id" type="button"
+              class="tw-inline-flex tw-items-center tw-gap-1 tw-px-2.5 tw-py-1 tw-rounded-lg tw-text-xs tw-font-medium tw-bg-blue-600 tw-text-white hover:tw-bg-blue-700">
+              <i class="ri-eye-line"></i> Consulter le centre
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="tw-border-t tw-border-gray-100 tw-px-5 tw-py-3">
+    <app-pagination
+      [totalItems]="filteredData.length"
+      [currentPage]="currentPage"
+      [pageSize]="pageSize"
+      [pageSizeOptions]="[5, 10, 25, 50]"
+      (pageChange)="currentPage = $event"
+      (pageSizeChange)="pageSize = $event; currentPage = 1">
+    </app-pagination>
+  </div>
+</div>
+
+
+<!-- Field visits tabs -->
+<div class="tw-bg-white tw-rounded-xl tw-shadow-sm tw-border tw-border-gray-200">
+  <div class="tw-px-5 tw-py-4 tw-border-b tw-border-gray-100">
+    <h6 class="tw-text-sm tw-font-semibold tw-text-gray-700 tw-mb-0">Liste des visites de terrain</h6>
+  </div>
+  <div class="tw-p-5">
+    <ng-container *ngIf="data != undefined">
+      <ul ngbNav #nav="ngbNav" class="nav-tabs">
+        <li ngbNavItem>
+          <a ngbNavLink>Contrôles effectués</a>
+          <ng-template ngbNavContent>
+            <div class="tw-overflow-x-auto tw-mt-3">
+              <table class="tw-min-w-full">
+                <thead>
+                  <tr class="tw-bg-gray-50 tw-border-b tw-border-gray-200">
+                    <th class="tw-px-4 tw-py-3 tw-text-left tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide">Type Contrôle</th>
+                    <th class="tw-px-4 tw-py-3 tw-text-left tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide">Chef de file</th>
+                    <th class="tw-px-4 tw-py-3 tw-text-left tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide">Observation</th>
+                    <th class="tw-px-4 tw-py-3 tw-text-left tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide">Date de contrôle</th>
+                    <th class="tw-px-4 tw-py-3 tw-text-left tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide">Membres de la visite</th>
+                  </tr>
+                </thead>
+                <tbody class="tw-divide-y tw-divide-gray-100">
+                  <tr *ngFor="let d of controls; let i = index" class="hover:tw-bg-gray-50 tw-transition-colors">
+                    <td class="tw-px-4 tw-py-3 tw-text-gray-900">{{d.type_control?.name}}</td>
+                    <td class="tw-px-4 tw-py-3 tw-text-gray-600">{{d.chief_name}}</td>
+                    <td class="tw-px-4 tw-py-3 tw-text-gray-600">{{d.observation}}</td>
+                    <td class="tw-px-4 tw-py-3 tw-text-gray-600">{{d.date_control | date:"dd-MM-yyyy"}}</td>
+                    <td class="tw-px-4 tw-py-3 tw-text-gray-600">
+                      <ol>
+                        <li *ngFor="let m of getMembers(d.members)">{{m.name}}</li>
+                      </ol>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </ng-template>
+        </li>
+        <li ngbNavItem>
+          <a ngbNavLink>Mes enregistrements</a>
+          <ng-template ngbNavContent>
+            <div class="tw-flex tw-flex-wrap tw-gap-2 tw-mt-3 tw-mb-3">
+              <button type="button"
+                class="tw-inline-flex tw-items-center tw-gap-1.5 tw-px-3 tw-py-1.5 tw-rounded-lg tw-text-sm tw-font-medium tw-bg-blue-600 tw-text-white hover:tw-bg-blue-700 tw-transition-colors"
+                (click)="add(addContent)">
+                <i class="ri-add-line"></i> Enregistrer une visite de terrain
+              </button>
+              <button *ngIf="buttonsPermission.edit" (click)="edit(editContent)" type="button"
+                [disabled]="!selected_data2"
+                class="tw-inline-flex tw-items-center tw-gap-1.5 tw-px-3 tw-py-1.5 tw-rounded-lg tw-text-sm tw-font-medium tw-transition-colors"
+                [ngClass]="selected_data2 ? 'tw-border tw-border-yellow-500 tw-text-yellow-600 hover:tw-bg-yellow-50' : 'tw-bg-gray-100 tw-text-gray-400 tw-cursor-not-allowed'">
+                <i class="ri-pencil-line"></i> Editer
+              </button>
+              <button *ngIf="buttonsPermission.delete" (click)="delete()" type="button"
+                [disabled]="!selected_data2"
+                class="tw-inline-flex tw-items-center tw-gap-1.5 tw-px-3 tw-py-1.5 tw-rounded-lg tw-text-sm tw-font-medium tw-transition-colors"
+                [ngClass]="selected_data2 ? 'tw-border tw-border-red-500 tw-text-red-600 hover:tw-bg-red-50' : 'tw-bg-gray-100 tw-text-gray-400 tw-cursor-not-allowed'">
+                <i class="ri-delete-bin-line"></i> Supprimer
+              </button>
+              <button *ngIf="is_active!=null && !is_active" (click)="setStatus(1)" type="button"
+                class="tw-inline-flex tw-items-center tw-gap-1.5 tw-px-3 tw-py-1.5 tw-rounded-lg tw-text-sm tw-font-medium tw-border tw-border-green-500 tw-text-green-600 hover:tw-bg-green-50 tw-transition-colors">
+                Activer
+              </button>
+              <button *ngIf="is_active!=null && is_active" (click)="setStatus(0)" type="button"
+                class="tw-inline-flex tw-items-center tw-gap-1.5 tw-px-3 tw-py-1.5 tw-rounded-lg tw-text-sm tw-font-medium tw-border tw-border-orange-400 tw-text-orange-600 hover:tw-bg-orange-50 tw-transition-colors">
+                Désactiver
+              </button>
+              <button type="button"
+                class="tw-inline-flex tw-items-center tw-gap-1.5 tw-px-3 tw-py-1.5 tw-rounded-lg tw-text-sm tw-font-medium tw-bg-blue-600 tw-text-white hover:tw-bg-blue-700 tw-transition-colors"
+                (click)="transUp()">
+                Transmettre
+              </button>
+            </div>
+            <p class="tw-text-sm tw-text-gray-500 tw-mb-2">{{myControls.length}} élément(s)</p>
+            <div class="tw-overflow-x-auto">
+              <table class="tw-min-w-full">
+                <thead>
+                  <tr class="tw-bg-gray-50 tw-border-b tw-border-gray-200">
+                    <th class="tw-w-10 tw-px-2 tw-py-3"></th>
+                    <th class="tw-px-4 tw-py-3 tw-text-left tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide">Type Contrôle</th>
+                    <th class="tw-px-4 tw-py-3 tw-text-left tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide">Chef de file</th>
+                    <th class="tw-px-4 tw-py-3 tw-text-left tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide">Observation</th>
+                    <th class="tw-px-4 tw-py-3 tw-text-left tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide">Date de contrôle</th>
+                    <th class="tw-px-4 tw-py-3 tw-text-left tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide">Membres</th>
+                    <th class="tw-px-4 tw-py-3 tw-text-left tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide">Etat</th>
+                  </tr>
+                </thead>
+                <tbody class="tw-divide-y tw-divide-gray-100">
+                  <tr *ngFor="let d of myControls; let i = index"
+                    (click)="checked2(d)"
+                    class="tw-cursor-pointer tw-transition-colors"
+                    [ngClass]="selected_data2?.id === d.id ? 'tw-bg-blue-50 hover:tw-bg-blue-100' : 'hover:tw-bg-gray-50'">
+                    <td class="tw-px-2 tw-py-3">
+                      <div class="tw-w-4 tw-h-4 tw-rounded-full tw-border-2 tw-flex tw-items-center tw-justify-center tw-flex-shrink-0"
+                        [ngClass]="selected_data2?.id === d.id ? 'tw-border-blue-600 tw-bg-blue-600' : 'tw-border-gray-300 tw-bg-white'">
+                        <div *ngIf="selected_data2?.id === d.id" class="tw-w-1.5 tw-h-1.5 tw-rounded-full tw-bg-white"></div>
+                      </div>
+                    </td>
+                    <td class="tw-px-4 tw-py-3 tw-text-gray-900">{{d.type_control?.name}}</td>
+                    <td class="tw-px-4 tw-py-3 tw-text-gray-600">{{d.chief_name}}</td>
+                    <td class="tw-px-4 tw-py-3 tw-text-gray-600">{{d.observation}}</td>
+                    <td class="tw-px-4 tw-py-3 tw-text-gray-600">{{d.date_control | date:"dd-MM-yyyy"}}</td>
+                    <td class="tw-px-4 tw-py-3 tw-text-gray-600">
+                      <ol>
+                        <li *ngFor="let m of getMembers(d.members)">{{m.name}}</li>
+                      </ol>
+                    </td>
+                    <td class="tw-px-4 tw-py-3">
+                      <span *ngIf="d.transmissions_count <= 1"
+                        class="tw-inline-flex tw-items-center tw-px-2 tw-py-0.5 tw-rounded-full tw-text-xs tw-font-medium tw-bg-gray-100 tw-text-gray-600">
+                        Non transmis
+                      </span>
+                      <span *ngIf="d.transmissions_count > 1"
+                        class="tw-inline-flex tw-items-center tw-px-2 tw-py-0.5 tw-rounded-full tw-text-xs tw-font-medium tw-bg-green-100 tw-text-green-700">
+                        Transmis
+                      </span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </ng-template>
+        </li>
+        <li ngbNavItem *ngIf="role != 'cps'">
+          <a ngbNavLink>A transmettre</a>
+          <ng-template ngbNavContent>
+            <div class="tw-flex tw-gap-2 tw-mt-3 tw-mb-3">
+              <button type="button"
+                class="tw-inline-flex tw-items-center tw-gap-1.5 tw-px-3 tw-py-1.5 tw-rounded-lg tw-text-sm tw-font-medium tw-bg-blue-600 tw-text-white hover:tw-bg-blue-700 tw-transition-colors"
+                (click)="transUp()">
+                Transmettre
+              </button>
+            </div>
+            <p class="tw-text-sm tw-text-gray-500 tw-mb-2">{{transmittedControls.length}} élément(s)</p>
+            <div class="tw-overflow-x-auto">
+              <table class="tw-min-w-full">
+                <thead>
+                  <tr class="tw-bg-gray-50 tw-border-b tw-border-gray-200">
+                    <th class="tw-w-10 tw-px-2 tw-py-3"></th>
+                    <th class="tw-px-4 tw-py-3 tw-text-left tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide">Type Contrôle</th>
+                    <th class="tw-px-4 tw-py-3 tw-text-left tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide">Chef de file</th>
+                    <th class="tw-px-4 tw-py-3 tw-text-left tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide">Observation</th>
+                    <th class="tw-px-4 tw-py-3 tw-text-left tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide">Date de contrôle</th>
+                    <th class="tw-px-4 tw-py-3 tw-text-left tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide">Membres</th>
+                  </tr>
+                </thead>
+                <tbody class="tw-divide-y tw-divide-gray-100">
+                  <tr *ngFor="let d of transmittedControls; let i = index"
+                    (click)="checked2(d)"
+                    class="tw-cursor-pointer tw-transition-colors"
+                    [ngClass]="selected_data2?.id === d.id ? 'tw-bg-blue-50 hover:tw-bg-blue-100' : 'hover:tw-bg-gray-50'">
+                    <td class="tw-px-2 tw-py-3">
+                      <div class="tw-w-4 tw-h-4 tw-rounded-full tw-border-2 tw-flex tw-items-center tw-justify-center tw-flex-shrink-0"
+                        [ngClass]="selected_data2?.id === d.id ? 'tw-border-blue-600 tw-bg-blue-600' : 'tw-border-gray-300 tw-bg-white'">
+                        <div *ngIf="selected_data2?.id === d.id" class="tw-w-1.5 tw-h-1.5 tw-rounded-full tw-bg-white"></div>
+                      </div>
+                    </td>
+                    <td class="tw-px-4 tw-py-3 tw-text-gray-900">{{d.type_control?.name}}</td>
+                    <td class="tw-px-4 tw-py-3 tw-text-gray-600">{{d.chief_name}}</td>
+                    <td class="tw-px-4 tw-py-3 tw-text-gray-600">{{d.observation}}</td>
+                    <td class="tw-px-4 tw-py-3 tw-text-gray-600">{{d.date_control | date:"dd-MM-yyyy"}}</td>
+                    <td class="tw-px-4 tw-py-3 tw-text-gray-600">
+                      <ol>
+                        <li *ngFor="let m of getMembers(d.members)">{{m.name}}</li>
+                      </ol>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </ng-template>
+        </li>
+      </ul>
+      <div [ngbNavOutlet]="nav" class="mt-2"></div>
+    </ng-container>
+  </div>
+</div>
+
+
+<ng-template #addContent let-c="close" let-d="dismiss">
+  <form #addForm="ngForm" (ngSubmit)="store(addForm.value)">
+    <div class="modal-header tw-bg-slate-800 tw-text-white">
+      <h6 class="modal-title tw-font-semibold">Enregistrer une visite de terrain</h6>
+      <button type="button" (click)="d('Cross click')" class="tw-text-white hover:tw-text-gray-200">
+        <i class="ri-close-line tw-text-lg"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="row mb-3">
+        <div class="form-group col-12 mb-3">
+          <label>Type de contrôle <span class="text-danger ml-2">(*)</span></label>
+          <select name="type_control_id" class="form-control" ngModel required>
+            <option *ngFor="let tf of tcs" [value]="tf.id">{{tf.name}}</option>
+          </select>
+        </div>
+        <div class="form-group col-12 mb-3">
+          <label>Date de contrôle <span class="text-danger ml-2">(*)</span></label>
+          <input type="date" name="date_control" class="form-control" ngModel required>
+        </div>
+        <div class="form-group col-12 mb-3">
+          <label>Observation <span class="text-danger ml-2">(*)</span></label>
+          <textarea name="observation" class="form-control" ngModel></textarea>
+        </div>
+        <hr>
+        <div class="form-group col-12 mb-3">
+          <label>Chef de file <span class="text-danger ml-2">(*)</span></label>
+          <input type="text" name="chief_name" class="form-control" ngModel required>
         </div>
         <h6>Liste des membres</h6>
-          <ol>
-            <li *ngFor="let m of members">{{m.name}}</li>
-          </ol>
+        <ol>
+          <li *ngFor="let m of members">{{m.name}}</li>
+        </ol>
         <form #refForm="ngForm" (ngSubmit)="onAdd(refForm.value,refForm)">
-        <div class="input-group mb-3">
-         <input type="text" class="form-control" name="member_name" required ngModel>
-         <button [disabled]="refForm.invalid" class="btn btn-sm btn-outline-secondary" type="submit" id="button-addon2">Ajouter un membre de la délégation</button>
-       </div>
-     </form>
+          <div class="input-group mb-3">
+            <input type="text" class="form-control" name="member_name" required ngModel>
+            <button [disabled]="refForm.invalid" class="btn btn-sm btn-outline-secondary" type="submit">Ajouter un membre de la délégation</button>
           </div>
-         
+        </form>
       </div>
-      <div class="modal-footer">
-        <button type="submit" class="btn btn-outline-dark" [disabled]="addForm.invalid"  >Enregistrer <app-loading [isVisible]="loading"></app-loading></button>
-      </div>
-  </form>
-    </ng-template>
-  
-    <ng-template #editContent let-c="close" let-d="dismiss">
-      <form #editForm="ngForm" (ngSubmit)="update(editForm.value)">
-      <div class="modal-header">
-        <h6 class="tw-modal-title tw-text-white" id="modal-basic-title">Modifier une visite de terrain</h6>
-        <button type="button" class="btn-close" aria-label="Close" (click)="d('Cross click')"></button>
-      </div>
-      <div class="modal-body" >
-          <div class="row mb-3">
-            <div class=" form-goup col-12 mb-3">
-              <label for="">Type de contrôle <span class="text-danger ml-2">(*)</span></label>
-              <select name="type_control_id" class="form-control" [(ngModel)]="selected_data2.type_control_id" required>
-                <option *ngFor="let tf of tcs" [value]="tf.id">{{tf.name}}</option>
-              </select>
-          </div>
-          <div class=" form-goup col-12 mb-3">
-            <label for="">observation <span class="text-danger ml-2">(*)</span></label>
-            <input type="text" name="observation" class="form-control" [(ngModel)]="selected_data2.observation" >
-        </div>
-        <div class=" form-goup col-12 mb-3">
-          <label for="">Date de contrôle <span class="text-danger ml-2">(*)</span></label>
-          <input type="date" name="date_control" class="form-control" [(ngModel)]="selected_data2.date_control" required>
-      </div>
-      <hr>
-      <div class=" form-goup col-12 mb-3">
-        <label for="">Chef de file <span class="text-danger ml-2">(*)</span></label>
-        <input type="text" name="chief_name" class="form-control" ngModel required>
     </div>
-    <h6>Liste des membres</h6>
-      <ol>
-        <li *ngFor="let m of members;let i=index">{{m.name}} <span class="ms-3" (click)="removeMember(i)"> <i class="fa fa-times"></i> </span></li>
-      </ol>
-    <form #refForm="ngForm" (ngSubmit)="onAdd(refForm.value,refForm)">
-    <div class="input-group mb-3">
-     <input type="text" class="form-control" name="member_name" required ngModel>
-     <button [disabled]="refForm.invalid" class="btn btn-sm btn-outline-secondary" type="submit" id="button-addon2">Ajouter un membre de la délégation</button>
-   </div>
- </form>
-          </div>
-         
-      </div>
-      <div class="modal-footer">
-        <button type="submit" class="btn btn-outline-dark" [disabled]="editForm.invalid" >Sauvegarder <app-loading [isVisible]="loading"></app-loading></button>
-      </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-outline-dark" [disabled]="addForm.invalid">Enregistrer <app-loading [isVisible]="loading"></app-loading></button>
+    </div>
   </form>
-    </ng-template>
+</ng-template>
+
+<ng-template #editContent let-c="close" let-d="dismiss">
+  <form #editForm="ngForm" (ngSubmit)="update(editForm.value)">
+    <div class="modal-header tw-bg-slate-800 tw-text-white">
+      <h6 class="modal-title tw-font-semibold">Modifier une visite de terrain</h6>
+      <button type="button" (click)="d('Cross click')" class="tw-text-white hover:tw-text-gray-200">
+        <i class="ri-close-line tw-text-lg"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="row mb-3">
+        <div class="form-group col-12 mb-3">
+          <label>Type de contrôle <span class="text-danger ml-2">(*)</span></label>
+          <select name="type_control_id" class="form-control" [(ngModel)]="selected_data2.type_control_id" required>
+            <option *ngFor="let tf of tcs" [value]="tf.id">{{tf.name}}</option>
+          </select>
+        </div>
+        <div class="form-group col-12 mb-3">
+          <label>Observation <span class="text-danger ml-2">(*)</span></label>
+          <input type="text" name="observation" class="form-control" [(ngModel)]="selected_data2.observation">
+        </div>
+        <div class="form-group col-12 mb-3">
+          <label>Date de contrôle <span class="text-danger ml-2">(*)</span></label>
+          <input type="date" name="date_control" class="form-control" [(ngModel)]="selected_data2.date_control" required>
+        </div>
+        <hr>
+        <div class="form-group col-12 mb-3">
+          <label>Chef de file <span class="text-danger ml-2">(*)</span></label>
+          <input type="text" name="chief_name" class="form-control" ngModel required>
+        </div>
+        <h6>Liste des membres</h6>
+        <ol>
+          <li *ngFor="let m of members; let i=index">{{m.name}} <span class="ms-3" (click)="removeMember(i)"><i class="fa fa-times"></i></span></li>
+        </ol>
+        <form #refForm="ngForm" (ngSubmit)="onAdd(refForm.value,refForm)">
+          <div class="input-group mb-3">
+            <input type="text" class="form-control" name="member_name" required ngModel>
+            <button [disabled]="refForm.invalid" class="btn btn-sm btn-outline-secondary" type="submit">Ajouter un membre de la délégation</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-outline-dark" [disabled]="editForm.invalid">Sauvegarder <app-loading [isVisible]="loading"></app-loading></button>
+    </div>
+  </form>
+</ng-template>
