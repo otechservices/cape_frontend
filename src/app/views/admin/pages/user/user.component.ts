@@ -180,7 +180,7 @@ export class UserComponent implements OnInit {
   checked(el?:any){
     this.selected_data=el;
 
-    this.selected_role=el.roles[0].name
+    this.selected_role=el?.roles?.[0]?.name
     this.is_active=el.is_active
   }
   verifyIfElementChecked(){

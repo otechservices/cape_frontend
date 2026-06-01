@@ -181,7 +181,7 @@
         </div>
         <div class="form-goup col-12 mb-3">
           <label for="">Rôle <span class="text-danger ml-2">(*)</span></label>
-          <select name="role" class="form-control" [(ngModel)]="selected_data.roles[0].name">
+          <select name="role" class="form-control" [(ngModel)]="selected_role">
             <option *ngFor="let s of roles" [value]="s.name">{{s.name}}</option>
           </select>
         </div>
@@ -234,7 +234,7 @@
           </tr>
           <tr>
             <td class="fw-medium">Rôle</td>
-            <td>{{selected_data.roles[0].name}}</td>
+            <td>{{selected_data?.roles?.[0]?.name}}</td>
           </tr>
         </tbody>
       </table>
