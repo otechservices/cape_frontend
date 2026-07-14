@@ -25,6 +25,38 @@ export class RequeteService {
   getPendingValidation(){
     return this.http.get<any[]>(`${this.url}get-pending-validation/all`);
   }
+
+  /** Construit la query string à partir des filtres non vides. */
+  private toQuery(filters:any):string{
+    const params = new URLSearchParams();
+    Object.keys(filters || {}).forEach(key => {
+      const value = filters[key];
+      if (value !== null && value !== undefined && value !== '') {
+        params.set(key, value);
+      }
+    });
+    return params.toString();
+  }
+
+  /** Aperçu de la liste filtrée. */
+  searchRequetes(filters:any){
+    return this.http.get<any>(`${this.url}search/all?${this.toQuery(filters)}`,
+      ConfigService.httpHeader(localStorage.getItem(GlobalName.tokenName),true));
+  }
+
+  /** Export Excel de la liste filtrée (mêmes filtres que l'aperçu). */
+  exportRequetes(filters:any){
+    const header = ConfigService.httpHeader(localStorage.getItem(GlobalName.tokenName),true);
+    return this.http.get(`${this.url}search/export?${this.toQuery(filters)}`,
+      { headers: header.headers, responseType: 'blob' });
+  }
+
+  /** Rattache un dossier à un autre arrondissement (donc à un autre CPS). */
+  transferDistrict(requete_id:any, district_id:any, motif?:string){
+    return this.http.post<any>(`${this.url}transfer-district`,
+      { requete_id, district_id, motif },
+      ConfigService.httpHeader(localStorage.getItem(GlobalName.tokenName),true));
+  }
   getByInstance(state:any,service?:any){
     return this.http.get<any[]>(`${this.url}get-by-instance/${state}?service_id=${service}`);
   }

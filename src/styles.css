@@ -22,6 +22,18 @@
 /* NgSelect */
 @import "@ng-select/ng-select/themes/default.theme.css";
 
+/*
+ * Les ng-select des formulaires utilisent [appendTo]="body" : leur menu est
+ * rendu à la racine du document pour échapper à l'overflow et au contexte
+ * d'empilement des panneaux. Il doit donc passer au-dessus du reste, y compris
+ * des modals Bootstrap (z-index 1055).
+ */
+.ng-dropdown-panel.ng-select-bottom,
+.ng-dropdown-panel.ng-select-top,
+body > .ng-dropdown-panel {
+  z-index: 1100;
+}
+
 /* Quill */
 @import "quill/dist/quill.core.css";
 @import "quill/dist/quill.snow.css";

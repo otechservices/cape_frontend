@@ -28,6 +28,7 @@ import { TypeCapeComponent } from './pages/type-cape/type-cape.component';
 import { EspaceEserviceEditComponent } from './pages/espace-eservice/espace-eservice-edit/espace-eservice-edit.component';
 import { EspaceEserviceShowComponent } from './pages/espace-eservice/espace-eservice-show/espace-eservice-show.component';
 import { EspaceEserviceComponent } from './pages/espace-eservice/espace-eservice.component';
+import { ExportDossiersComponent } from './pages/export-dossiers/export-dossiers.component';
 import { MemberComponent } from './pages/member/member.component';
 import { SessionComponent } from './pages/session/session.component';
 import { AvisComponent } from './pages/avis/avis.component';
@@ -96,6 +97,7 @@ import { AbandonComponent } from './pages/abandon/abandon.component';
     RoleComponent,
     UserProfilComponent,
     EspaceEserviceComponent,
+    ExportDossiersComponent,
     EspaceEserviceShowComponent,
     EspaceEserviceEditComponent,
     AuthLayoutComponent,

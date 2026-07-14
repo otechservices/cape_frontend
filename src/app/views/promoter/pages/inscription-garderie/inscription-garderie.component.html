@@ -374,21 +374,21 @@
 
           <div>
             <label class="tw-block tw-text-xs tw-font-medium tw-text-gray-500 tw-uppercase tw-tracking-wide tw-mb-1.5">Département <span class="tw-text-red-500">*</span></label>
-            <ng-select formControlName="department_id" (change)="loadMunicipalities($event)" placeholder="Sélectionner…">
+            <ng-select appendTo="body" formControlName="department_id" (change)="loadMunicipalities($event)" placeholder="Sélectionner…">
               <ng-option *ngFor="let d of data" [value]="d.id">{{ d.name }}</ng-option>
             </ng-select>
           </div>
 
           <div>
             <label class="tw-block tw-text-xs tw-font-medium tw-text-gray-500 tw-uppercase tw-tracking-wide tw-mb-1.5">Commune <span class="tw-text-red-500">*</span></label>
-            <ng-select formControlName="municipality_id" (change)="loadDistricts($event)" placeholder="Sélectionner…">
+            <ng-select appendTo="body" formControlName="municipality_id" (change)="loadDistricts($event)" placeholder="Sélectionner…">
               <ng-option *ngFor="let d of municipalities" [value]="d.id">{{ d.name }}</ng-option>
             </ng-select>
           </div>
 
           <div>
             <label class="tw-block tw-text-xs tw-font-medium tw-text-gray-500 tw-uppercase tw-tracking-wide tw-mb-1.5">Arrondissement <span class="tw-text-red-500">*</span></label>
-            <ng-select formControlName="district_id" placeholder="Sélectionner…">
+            <ng-select appendTo="body" formControlName="district_id" placeholder="Sélectionner…">
               <ng-option *ngFor="let d of districts" [value]="d.id">{{ d.name }}</ng-option>
             </ng-select>
           </div>

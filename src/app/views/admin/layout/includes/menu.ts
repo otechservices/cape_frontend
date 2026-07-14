@@ -24,6 +24,7 @@ export const AdminMenu: menu[] = [
         { id: 'admin-5-6', isTitle:false, name:"CAPE autorisés", route:'/admin/list-requetes/cape', icon:'ri-verified-badge-line', hasChildren:false },
         { id: 'admin-5-7', isTitle:false, name:"CAPE Inscrits", route:'/admin/list-requetes/garderie', icon:'ri-user-star-line', hasChildren:false }
     ] },
+    { id: 'admin-5-b', isTitle:false, name:"Recherche & export", route:'/admin/export-dossiers', icon:'ri-file-excel-2-line', hasChildren:false },
     { id: 'admin-6', isTitle:false, name:"Typologie", icon:'ri-list-settings-line', hasChildren:true, children:[
         { id: 'admin-6-1', isTitle:false, name:"Type Cape", route:'/admin/type-capes', icon:'ri-price-tag-3-line', hasChildren:false },
         { id: 'admin-6-2', isTitle:false, name:"Type Garderie", route:'/admin/type-garderies', icon:'ri-price-tag-line', hasChildren:false },
@@ -77,7 +78,8 @@ export const MinistreMenu: menu[] = [
     { id: 'min-11', isTitle:false, name:"Visites de terrain", route:'/admin/statistiques/controls', icon:'ri-bar-chart-2-line', hasChildren:false },
     { id: 'min-12', isTitle:true, title:"Recherche", hasChildren:false },
     { id: 'min-13', isTitle:false, name:"CAPE inscrits", route:'/admin/search/cape-inscrits', icon:'ri-search-line', hasChildren:false },
-    { id: 'min-14', isTitle:false, name:"CAPE autorisés", route:'/admin/search/cape-autorises', icon:'ri-search-2-line', hasChildren:false }
+    { id: 'min-14', isTitle:false, name:"CAPE autorisés", route:'/admin/search/cape-autorises', icon:'ri-search-2-line', hasChildren:false },
+    { id: 'min-15', isTitle:false, name:"Recherche & export", route:'/admin/export-dossiers', icon:'ri-file-excel-2-line', hasChildren:false }
 ];
 
 // ================== CapeMenu ==================
@@ -220,6 +222,7 @@ export const DFEAMenu: menu[] = [
     { id: 'dfea-6', isTitle:false, name:"Dossiers garderie à inscrire en session", route:'/admin/requetes/finished/garderie', icon:'ri-folder-upload-line', hasChildren:false },
     { id: 'dfea-7', isTitle:true, title:"Agréments existants", hasChildren:false },
     { id: 'dfea-8', isTitle:false, name:"Agréments à valider", route:'/admin/requetes-aggrement-validation', icon:'ri-award-line', hasChildren:false },
+    { id: 'dfea-8-1', isTitle:false, name:"Recherche & export", route:'/admin/export-dossiers', icon:'ri-file-excel-2-line', hasChildren:false },
     { id: 'dfea-9', isTitle:true, title:"Gestion des sessions", hasChildren:false },
     { id: 'dfea-10', isTitle:false, name:"Création de session", route:'/admin/sessions', icon:'ri-calendar-event-line', hasChildren:false },
     { id: 'dfea-11', isTitle:false, name:"Création des membres", route:'/admin/members', icon:'ri-user-add-line', hasChildren:false },

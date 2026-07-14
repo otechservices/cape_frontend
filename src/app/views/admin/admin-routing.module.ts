@@ -24,6 +24,7 @@ import { DistrictComponent } from './pages/district/district.component';
 import { EspaceEserviceEditComponent } from './pages/espace-eservice/espace-eservice-edit/espace-eservice-edit.component';
 import { EspaceEserviceShowComponent } from './pages/espace-eservice/espace-eservice-show/espace-eservice-show.component';
 import { EspaceEserviceComponent } from './pages/espace-eservice/espace-eservice.component';
+import { ExportDossiersComponent } from './pages/export-dossiers/export-dossiers.component';
 import { EvaluatorComponent } from './pages/evaluator/evaluator.component';
 import { FileComponent } from './pages/file/file.component';
 import { FollowCapeShowComponent } from './pages/follow-cape/follow-cape-show/follow-cape-show.component';
@@ -141,6 +142,10 @@ const routes: Routes = [
        {
         path:"abandons",
         component:AbandonComponent
+      },
+      {
+        path:"export-dossiers",
+        component:ExportDossiersComponent
       },
       {
         path:"requetes",

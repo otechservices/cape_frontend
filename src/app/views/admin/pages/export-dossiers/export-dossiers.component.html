@@ -1,0 +1,246 @@
+<div class="tw-bg-white tw-rounded-xl tw-shadow-sm tw-border tw-border-gray-200">
+
+  <div class="tw-px-5 tw-py-4 tw-border-b tw-border-gray-100">
+    <h5 class="tw-font-semibold tw-text-gray-800 tw-mb-0">Recherche et export des dossiers</h5>
+    <p class="tw-text-sm tw-text-gray-500 tw-mb-0">
+      Composez vos critères, vérifiez le résultat ci-dessous, puis exportez cette liste au format Excel.
+    </p>
+  </div>
+
+  <!-- Filtres -->
+  <div class="tw-px-5 tw-py-4 tw-border-b tw-border-gray-100 tw-bg-gray-50">
+    <div class="tw-grid tw-grid-cols-1 md:tw-grid-cols-3 lg:tw-grid-cols-4 tw-gap-3">
+
+      <div>
+        <label class="tw-block tw-text-xs tw-font-medium tw-text-gray-600 tw-mb-1">Agrément</label>
+        <select class="form-control" [(ngModel)]="filters.agrement">
+          <option value="">Tous</option>
+          <option value="non_agree">Non agréés</option>
+          <option value="agree">Agréés</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="tw-block tw-text-xs tw-font-medium tw-text-gray-600 tw-mb-1">Type</label>
+        <select class="form-control" [(ngModel)]="filters.service_id">
+          <option value="">Tous</option>
+          <option value="1">CAPE</option>
+          <option value="2">Garderie</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="tw-block tw-text-xs tw-font-medium tw-text-gray-600 tw-mb-1">Département</label>
+        <select class="form-control" [(ngModel)]="filters.department_id">
+          <option value="">Tous</option>
+          <option *ngFor="let d of departments" [value]="d.id">{{ d.name }}</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="tw-block tw-text-xs tw-font-medium tw-text-gray-600 tw-mb-1">Étape du dossier</label>
+        <select class="form-control" [(ngModel)]="filters.status">
+          <option value="">Toutes</option>
+          <option *ngFor="let s of statuses" [value]="s.value">{{ s.label }}</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="tw-block tw-text-xs tw-font-medium tw-text-gray-600 tw-mb-1">Rapport d'enquête</label>
+        <select class="form-control" [(ngModel)]="filters.enquete">
+          <option value="">Tous</option>
+          <option value="avec">Enquête réalisée</option>
+          <option value="sans">Enquête non réalisée</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="tw-block tw-text-xs tw-font-medium tw-text-gray-600 tw-mb-1">Soumis à partir du</label>
+        <input type="date" class="form-control" [(ngModel)]="filters.date_from">
+      </div>
+
+      <div>
+        <label class="tw-block tw-text-xs tw-font-medium tw-text-gray-600 tw-mb-1">Soumis jusqu'au</label>
+        <input type="date" class="form-control" [(ngModel)]="filters.date_to">
+      </div>
+
+      <div class="lg:tw-col-span-2">
+        <label class="tw-block tw-text-xs tw-font-medium tw-text-gray-600 tw-mb-1">Dénomination, code ou promoteur</label>
+        <input type="text" class="form-control" [(ngModel)]="filters.search" (keyup.enter)="search()"
+               placeholder="Rechercher…">
+      </div>
+    </div>
+
+    <div class="tw-flex tw-items-center tw-gap-2 tw-mt-4">
+      <button (click)="search()" [disabled]="loading"
+        class="tw-inline-flex tw-items-center tw-gap-1.5 tw-px-3 tw-py-1.5 tw-rounded-lg tw-text-sm tw-font-medium tw-bg-blue-600 tw-text-white hover:tw-bg-blue-700 disabled:tw-opacity-50">
+        <i class="ri-search-line"></i>
+        {{ loading ? 'Recherche…' : 'Rechercher' }}
+      </button>
+
+      <button (click)="reset()"
+        class="tw-inline-flex tw-items-center tw-gap-1.5 tw-px-3 tw-py-1.5 tw-rounded-lg tw-text-sm tw-font-medium tw-bg-gray-100 tw-text-gray-700 hover:tw-bg-gray-200">
+        <i class="ri-refresh-line"></i>
+        Réinitialiser
+      </button>
+
+      <div class="tw-flex-1"></div>
+
+      <button (click)="export()" [disabled]="exporting || loading || data.length === 0"
+        class="tw-inline-flex tw-items-center tw-gap-1.5 tw-px-3 tw-py-1.5 tw-rounded-lg tw-text-sm tw-font-medium tw-bg-emerald-600 tw-text-white hover:tw-bg-emerald-700 disabled:tw-bg-gray-200 disabled:tw-text-gray-400 disabled:tw-cursor-not-allowed">
+        <i [ngClass]="exporting ? 'ri-loader-4-line tw-animate-spin' : 'ri-file-excel-2-line'"></i>
+        {{ exporting ? 'Export en cours…' : 'Exporter en Excel' }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Résultat -->
+  <div class="tw-px-5 tw-py-3 tw-border-b tw-border-gray-100">
+    <span class="tw-text-sm tw-text-gray-600">
+      <strong>{{ data.length }}</strong> dossier(s) correspondant aux critères
+    </span>
+  </div>
+
+  <div class="tw-overflow-x-auto">
+    <table class="tw-w-full tw-text-sm">
+      <thead>
+        <tr class="tw-bg-gray-50 tw-border-b tw-border-gray-200">
+          <th class="tw-px-4 tw-py-3 tw-text-left tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase">Code</th>
+          <th class="tw-px-4 tw-py-3 tw-text-left tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase">Dénomination</th>
+          <th class="tw-px-4 tw-py-3 tw-text-left tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase">Type</th>
+          <th class="tw-px-4 tw-py-3 tw-text-left tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase">Agrément</th>
+          <th class="tw-px-4 tw-py-3 tw-text-left tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase">Étape</th>
+          <th class="tw-px-4 tw-py-3 tw-text-left tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase">Enquête</th>
+          <th class="tw-px-4 tw-py-3 tw-text-left tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase">CPS</th>
+          <th class="tw-px-4 tw-py-3 tw-text-left tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase">Soumis le</th>
+          <th class="tw-px-4 tw-py-3 tw-text-right tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase">Rattachement</th>
+        </tr>
+      </thead>
+      <tbody class="tw-divide-y tw-divide-gray-100">
+        <tr *ngFor="let d of data | paginate:currentPage:pageSize" class="hover:tw-bg-gray-50">
+          <td class="tw-px-4 tw-py-3 tw-text-gray-500">{{ d?.code }}</td>
+          <td class="tw-px-4 tw-py-3 tw-text-gray-900 tw-font-medium">{{ d?.name }}</td>
+          <td class="tw-px-4 tw-py-3 tw-text-gray-700">{{ d?.service?.name }}</td>
+          <td class="tw-px-4 tw-py-3">
+            <span class="tw-inline-flex tw-px-2 tw-py-0.5 tw-rounded-full tw-text-xs tw-font-medium"
+                  [ngClass]="isAgree(d) ? 'tw-bg-green-100 tw-text-green-700' : 'tw-bg-amber-100 tw-text-amber-700'">
+              {{ isAgree(d) ? 'Agréé' : 'Non agréé' }}
+            </span>
+          </td>
+          <td class="tw-px-4 tw-py-3 tw-text-gray-700">{{ statusLabel(d?.status) }}</td>
+          <td class="tw-px-4 tw-py-3">
+            <span *ngIf="d?.has_cps_file" class="tw-inline-flex tw-items-center tw-gap-1 tw-text-xs tw-text-green-700"
+                  [title]="'Enquêteur : ' + (d?.social_investigator_name ?? 'non renseigné')">
+              <i class="ri-check-line"></i>Réalisée
+            </span>
+            <span *ngIf="!d?.has_cps_file" class="tw-text-xs tw-text-gray-400">Non réalisée</span>
+          </td>
+          <td class="tw-px-4 tw-py-3">
+            <span *ngIf="d?.district?.cps?.name" class="tw-text-gray-700">{{ d.district.cps.name }}</span>
+            <span *ngIf="!d?.district?.cps?.name"
+                  class="tw-inline-flex tw-items-center tw-gap-1 tw-px-1.5 tw-py-0.5 tw-rounded tw-text-xs tw-font-medium tw-bg-amber-100 tw-text-amber-700"
+                  title="Sans arrondissement rattaché, ce dossier n'est visible ni du CPS ni du DDASM">
+              <i class="ri-error-warning-line"></i>Non rattaché
+            </span>
+          </td>
+          <td class="tw-px-4 tw-py-3 tw-text-gray-500">{{ d?.created_at | date:'dd/MM/yyyy' }}</td>
+          <td class="tw-px-4 tw-py-3 tw-text-right">
+            <button (click)="openTransfer(transferContent, d)"
+              class="tw-inline-flex tw-items-center tw-gap-1 tw-px-2 tw-py-1 tw-rounded-lg tw-text-xs tw-font-medium tw-bg-slate-100 tw-text-slate-700 hover:tw-bg-slate-200 tw-transition-colors">
+              <i class="ri-exchange-line"></i>Transférer
+            </button>
+          </td>
+        </tr>
+
+        <tr *ngIf="!loading && hasSearched && data.length === 0">
+          <td colspan="9" class="tw-px-4 tw-py-10 tw-text-center tw-text-gray-400">
+            Aucun dossier ne correspond à ces critères.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="tw-border-t tw-border-gray-100 tw-px-5 tw-py-3">
+    <app-pagination
+      [totalItems]="data.length"
+      [currentPage]="currentPage"
+      [pageSize]="pageSize"
+      [pageSizeOptions]="[5, 10, 25, 50]"
+      (pageChange)="currentPage = $event"
+      (pageSizeChange)="pageSize = $event; currentPage = 1">
+    </app-pagination>
+  </div>
+</div>
+
+<ng-template #transferContent let-d="dismiss">
+  <div class="modal-header tw-bg-slate-800 tw-text-white">
+    <h6 class="modal-title tw-font-semibold">
+      <i class="ri-exchange-line tw-mr-2"></i>Transférer le dossier
+    </h6>
+    <button type="button" (click)="d('Cross click')" class="tw-text-white hover:tw-text-gray-200">
+      <i class="ri-close-line tw-text-lg"></i>
+    </button>
+  </div>
+
+  <div class="modal-body">
+    <div class="tw-bg-gray-50 tw-rounded-lg tw-p-3 tw-mb-4">
+      <div class="tw-font-medium tw-text-gray-900">{{ selected_data?.name }}</div>
+      <div class="tw-text-xs tw-text-gray-500 tw-mt-0.5">{{ selected_data?.address }}</div>
+      <div class="tw-text-xs tw-text-gray-600 tw-mt-1">
+        Rattachement actuel :
+        <strong>{{ selected_data?.district?.name ?? 'aucun arrondissement' }}</strong>
+        — CPS {{ selected_data?.district?.cps?.name ?? 'non rattaché' }}
+      </div>
+    </div>
+
+    <p class="tw-text-xs tw-text-gray-500 tw-mb-3">
+      L'arrondissement détermine le CPS et le DDASM compétents. Corrigez-le ici si le dossier
+      a été mal ciblé à l'import ou si le centre a déménagé.
+    </p>
+
+    <div class="row">
+      <div class="form-group col-12 mb-3">
+        <label>Département <span class="text-danger">(*)</span></label>
+        <select class="form-control" [(ngModel)]="transfer.department_id"
+                (ngModelChange)="transfer.municipality_id = ''; transfer.district_id = ''">
+          <option value="">Sélectionner…</option>
+          <option *ngFor="let dep of departments" [value]="dep.id">{{ dep.name }}</option>
+        </select>
+      </div>
+
+      <div class="form-group col-12 mb-3">
+        <label>Commune <span class="text-danger">(*)</span></label>
+        <select class="form-control" [(ngModel)]="transfer.municipality_id"
+                (ngModelChange)="transfer.district_id = ''"
+                [disabled]="!transfer.department_id">
+          <option value="">Sélectionner…</option>
+          <option *ngFor="let m of transferMunicipalities" [value]="m.id">{{ m.name }}</option>
+        </select>
+      </div>
+
+      <div class="form-group col-12 mb-3">
+        <label>Arrondissement <span class="text-danger">(*)</span></label>
+        <select class="form-control" [(ngModel)]="transfer.district_id"
+                [disabled]="!transfer.municipality_id">
+          <option value="">Sélectionner…</option>
+          <option *ngFor="let a of transferDistricts" [value]="a.id">{{ a.name }}</option>
+        </select>
+      </div>
+
+      <div class="form-group col-12 mb-3">
+        <label>Motif</label>
+        <input type="text" class="form-control" [(ngModel)]="transfer.motif"
+               placeholder="Ex. : mauvais ciblage à l'import, déménagement du centre…">
+        <small class="tw-text-gray-400">Conservé dans le parcours du dossier.</small>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" (click)="submitTransfer()" [disabled]="transferring || !transfer.district_id"
+      class="btn btn-outline-dark">
+      {{ transferring ? 'Transfert en cours…' : 'Transférer' }}
+    </button>
+  </div>
+</ng-template>

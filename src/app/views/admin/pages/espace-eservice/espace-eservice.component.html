@@ -141,8 +141,12 @@
               {{ getText(d.status) }}
             </span>
           </td>
-          <td *ngIf="state == undefined" class="tw-px-4 tw-py-3 tw-text-gray-600 tw-text-xs">
-            {{ d.last_parcours?.libelle ?? '—' }}
+          <td *ngIf="state == undefined" class="tw-px-4 tw-py-3 tw-text-xs">
+            <div class="tw-text-gray-700">{{ d.last_parcours?.libelle ?? '—' }}</div>
+            <span class="tw-inline-flex tw-items-center tw-gap-1 tw-mt-1 tw-px-1.5 tw-py-0.5 tw-rounded tw-font-medium {{ agingClass(d) }}"
+                  [title]="'Aucun mouvement depuis ' + daysSinceLastStep(d) + ' jour(s)'">
+              <i class="ri-time-line"></i>{{ daysSinceLastStep(d) }} j
+            </span>
           </td>
         </tr>
       </tbody>
@@ -205,8 +209,12 @@
               {{ getText(d.status) }}
             </span>
           </td>
-          <td *ngIf="state == undefined" class="tw-px-4 tw-py-3 tw-text-gray-600 tw-text-xs">
-            {{ d.last_parcours?.libelle ?? '—' }}
+          <td *ngIf="state == undefined" class="tw-px-4 tw-py-3 tw-text-xs">
+            <div class="tw-text-gray-700">{{ d.last_parcours?.libelle ?? '—' }}</div>
+            <span class="tw-inline-flex tw-items-center tw-gap-1 tw-mt-1 tw-px-1.5 tw-py-0.5 tw-rounded tw-font-medium {{ agingClass(d) }}"
+                  [title]="'Aucun mouvement depuis ' + daysSinceLastStep(d) + ' jour(s)'">
+              <i class="ri-time-line"></i>{{ daysSinceLastStep(d) }} j
+            </span>
           </td>
         </tr>
       </tbody>
@@ -240,31 +248,56 @@
     </button>
   </div>
   <div class="modal-body tw-p-0">
+
+    <!-- Où en est le dossier, et depuis combien de temps -->
+    <div class="tw-px-5 tw-py-4 tw-bg-gray-50 tw-border-b tw-border-gray-200">
+      <div class="tw-flex tw-items-center tw-justify-between tw-gap-4">
+        <div>
+          <div class="tw-text-xs tw-text-gray-500 tw-uppercase tw-tracking-wide tw-mb-1">Étape actuelle</div>
+          <span class="tw-inline-flex tw-items-center tw-px-2 tw-py-0.5 tw-rounded-full tw-text-sm tw-font-medium {{ getStatusClass(selected_data?.status) }}">
+            {{ getText(selected_data?.status) }}
+          </span>
+        </div>
+        <div class="tw-text-right">
+          <div class="tw-text-xs tw-text-gray-500 tw-uppercase tw-tracking-wide tw-mb-1">Sans mouvement depuis</div>
+          <span class="tw-inline-flex tw-items-center tw-gap-1 tw-px-2 tw-py-0.5 tw-rounded-full tw-text-sm tw-font-medium {{ agingClass(selected_data) }}">
+            <i class="ri-time-line"></i>{{ daysSinceLastStep(selected_data) }} jour(s)
+          </span>
+        </div>
+      </div>
+      <p *ngIf="daysSinceLastStep(selected_data) > 15" class="tw-text-xs tw-text-red-600 tw-mt-3 tw-mb-0">
+        <i class="ri-alert-line tw-mr-1"></i>Ce dossier est en souffrance : aucune action enregistrée depuis plus de 15 jours.
+      </p>
+    </div>
+
     <div *ngIf="parcours.length === 0" class="tw-flex tw-flex-col tw-items-center tw-justify-center tw-py-10 tw-text-gray-400">
       <i class="ri-inbox-line tw-text-3xl tw-mb-2"></i>
-      <p class="tw-text-sm">Aucun parcours enregistré</p>
+      <p class="tw-text-sm">Aucune étape enregistrée pour ce dossier</p>
     </div>
-    <table *ngIf="parcours.length > 0" class="tw-min-w-full tw-text-sm">
-      <thead>
-        <tr class="tw-bg-gray-50 tw-border-b tw-border-gray-200">
-          <th class="tw-px-4 tw-py-3 tw-text-left tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide">#</th>
-          <th class="tw-px-4 tw-py-3 tw-text-left tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide">Étape</th>
-          <th class="tw-px-4 tw-py-3 tw-text-left tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide">Date et heure</th>
-          <th class="tw-px-4 tw-py-3 tw-text-left tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide">Séjour (jrs)</th>
-          <th class="tw-px-4 tw-py-3 tw-text-left tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide">Auteur</th>
-        </tr>
-      </thead>
-      <tbody class="tw-divide-y tw-divide-gray-100">
-        <tr *ngFor="let p of parcours; let i = index" class="hover:tw-bg-gray-50">
-          <td class="tw-px-4 tw-py-3 tw-text-gray-500 tw-font-mono tw-text-xs">{{ i + 1 }}</td>
-          <td class="tw-px-4 tw-py-3 tw-font-medium tw-text-gray-900">{{ p.libelle }}</td>
-          <td class="tw-px-4 tw-py-3 tw-text-gray-600 tw-whitespace-nowrap">{{ p.created_at | date:'dd/MM/yyyy HH:mm' }}</td>
-          <td class="tw-px-4 tw-py-3 tw-text-gray-600">{{ p.delay }}</td>
-          <td class="tw-px-4 tw-py-3 tw-text-gray-700">
-            {{ p.user == null ? 'CAPE' : (p.user?.firstname ?? '') + ' ' + (p.user?.lastname ?? '') }}
-          </td>
-        </tr>
-      </tbody>
-    </table>
+
+    <!-- Chronologie des étapes franchies -->
+    <ol *ngIf="parcours.length > 0" class="tw-px-5 tw-py-5 tw-mb-0 tw-list-none">
+      <li *ngFor="let p of parcours; let i = index; let last = last" class="tw-flex tw-gap-3">
+
+        <div class="tw-flex tw-flex-col tw-items-center tw-flex-shrink-0">
+          <div class="tw-w-2.5 tw-h-2.5 tw-rounded-full tw-mt-1.5"
+               [ngClass]="last ? 'tw-bg-blue-600 tw-ring-4 tw-ring-blue-100' : 'tw-bg-gray-300'"></div>
+          <div *ngIf="!last" class="tw-w-px tw-flex-1 tw-bg-gray-200 tw-my-1"></div>
+        </div>
+
+        <div class="tw-pb-5 tw-flex-1" [ngClass]="{ 'tw-pb-0': last }">
+          <div class="tw-flex tw-items-baseline tw-justify-between tw-gap-3">
+            <span class="tw-font-medium tw-text-gray-900 tw-text-sm">{{ p.libelle }}</span>
+            <span *ngIf="p.delay != null" class="tw-text-xs tw-text-gray-400 tw-whitespace-nowrap">
+              {{ p.delay }} j sur cette étape
+            </span>
+          </div>
+          <div class="tw-text-xs tw-text-gray-500 tw-mt-0.5">
+            {{ p.created_at | date:'dd/MM/yyyy à HH:mm' }}
+            — {{ p.user == null ? 'CAPE' : (p.user?.firstname ?? '') + ' ' + (p.user?.lastname ?? '') }}
+          </div>
+        </div>
+      </li>
+    </ol>
   </div>
 </ng-template>

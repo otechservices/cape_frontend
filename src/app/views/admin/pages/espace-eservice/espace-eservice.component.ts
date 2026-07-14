@@ -176,6 +176,8 @@ export class EspaceEserviceComponent implements OnInit {
       5: 'tw-bg-purple-100 tw-text-purple-700',
       6: 'tw-bg-orange-100 tw-text-orange-700',
       7: 'tw-bg-teal-100 tw-text-teal-700',
+      8: 'tw-bg-green-100 tw-text-green-800',
+      9: 'tw-bg-green-100 tw-text-green-800',
     };
     return map[status] ?? 'tw-bg-gray-100 tw-text-gray-600';
   }
@@ -190,7 +192,33 @@ export class EspaceEserviceComponent implements OnInit {
       5: 'Transmis au DD',
       6: 'Attente approbation DDASM',
       7: 'Attente inscription session',
+      8: 'Agréé',
+      9: 'Agréé (avant plateforme)',
     };
     return map[status] ?? 'Non défini';
+  }
+
+  /** Un dossier est agréé s'il est autorisé via la plateforme (8) ou issu de l'import des agréments existants (9). */
+  isAgree(d: any): boolean {
+    return d?.status === 8 || d?.status === 9 || d?.has_agreemant === 1 || d?.is_authorized === 1;
+  }
+
+  /**
+   * Nombre de jours écoulés depuis le dernier mouvement du dossier.
+   * À défaut de parcours enregistré, on repart de la date de soumission.
+   */
+  daysSinceLastStep(d: any): number {
+    const last = d?.last_parcours?.created_at ?? d?.created_at;
+    if (!last) return 0;
+    const elapsed = Date.now() - new Date(last).getTime();
+    return Math.max(0, Math.floor(elapsed / 86400000));
+  }
+
+  /** Signale visuellement les dossiers qui stagnent : au-delà de 15 jours, le traitement est en souffrance. */
+  agingClass(d: any): string {
+    const days = this.daysSinceLastStep(d);
+    if (days > 15) return 'tw-bg-red-100 tw-text-red-700';
+    if (days > 7) return 'tw-bg-amber-100 tw-text-amber-700';
+    return 'tw-bg-gray-100 tw-text-gray-600';
   }
 }

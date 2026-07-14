@@ -97,6 +97,7 @@ export class MesDossiersComponent implements OnInit {
       6: 'Visa-DDASM',
       7: 'À inscrire',
       8: 'Autorisé',
+      9: 'Agréé (avant plateforme)',
     };
     return labels[status] ?? 'Non défini';
   }
