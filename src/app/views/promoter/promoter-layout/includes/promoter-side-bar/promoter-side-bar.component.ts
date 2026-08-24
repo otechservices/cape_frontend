@@ -28,6 +28,7 @@ export class PromoterSideBarComponent implements OnInit {
     { id: 'inscription-cape',    label: 'Inscription CAPE',     icon: 'ri-file-add-line' },
     { id: 'inscription-garderie',label: 'Inscription Garderie', icon: 'ri-building-line' },
     { id: 'mes-dossiers',        label: 'Mes Dossiers',         icon: 'ri-folder-2-line' },
+    { id: 'regularisation-agrement', label: 'Régulariser un agrément', icon: 'ri-award-line' },
     { id: 'staff',               label: 'Personnels',           icon: 'ri-user-2-line' },
     { id: 'residents',           label: 'Pensionnaires',        icon: 'ri-team-line' },
     { id: 'referals',            label: 'Recommandations',      icon: 'ri-bookmark-line' },

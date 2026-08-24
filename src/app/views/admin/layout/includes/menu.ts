@@ -222,6 +222,7 @@ export const DFEAMenu: menu[] = [
     { id: 'dfea-6', isTitle:false, name:"Dossiers garderie à inscrire en session", route:'/admin/requetes/finished/garderie', icon:'ri-folder-upload-line', hasChildren:false },
     { id: 'dfea-7', isTitle:true, title:"Agréments existants", hasChildren:false },
     { id: 'dfea-8', isTitle:false, name:"Agréments à valider", route:'/admin/requetes-aggrement-validation', icon:'ri-award-line', hasChildren:false },
+    { id: 'dfea-8-2', isTitle:false, name:"Agréments hors plateforme", route:'/admin/agrements-existants', icon:'ri-shield-check-line', hasChildren:false },
     { id: 'dfea-8-1', isTitle:false, name:"Recherche & export", route:'/admin/export-dossiers', icon:'ri-file-excel-2-line', hasChildren:false },
     { id: 'dfea-9', isTitle:true, title:"Gestion des sessions", hasChildren:false },
     { id: 'dfea-10', isTitle:false, name:"Création de session", route:'/admin/sessions', icon:'ri-calendar-event-line', hasChildren:false },

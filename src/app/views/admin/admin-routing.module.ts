@@ -54,6 +54,7 @@ import { TypeSanctionComponent } from './pages/type-sanction/type-sanction.compo
 import { UniteAdminComponent } from './pages/unite-admin/unite-admin.component';
 import { UserComponent } from './pages/user/user.component';
 import { ValidationAggrementComponent } from './pages/validation-aggrement/validation-aggrement.component';
+import { AgrementExistantComponent } from './pages/agrement-existant/agrement-existant.component';
 import { NaturePromotorComponent } from './pages/nature-promotor/nature-promotor.component';
 import { TypeInfoComponent } from './pages/type-info/type-info.component';
 import { InfoComponent } from './pages/info/info.component';
@@ -271,6 +272,10 @@ const routes: Routes = [
       {
         path:"requetes-aggrement-validation",
         component:ValidationAggrementComponent
+      },
+      {
+        path:"agrements-existants",
+        component:AgrementExistantComponent
       },
       {
         path:"controls",

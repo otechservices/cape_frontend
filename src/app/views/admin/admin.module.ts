@@ -54,6 +54,7 @@ import { UniteAdminComponent } from './pages/unite-admin/unite-admin.component';
 import { ControlComponent } from './pages/control/control.component';
 import { SearchComponent } from './pages/search/search.component';
 import { ValidationAggrementComponent } from './pages/validation-aggrement/validation-aggrement.component';
+import { AgrementExistantComponent } from './pages/agrement-existant/agrement-existant.component';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { NaturePromotorComponent } from './pages/nature-promotor/nature-promotor.component';
 import { TypeInfoComponent } from './pages/type-info/type-info.component';
@@ -127,6 +128,7 @@ import { AbandonComponent } from './pages/abandon/abandon.component';
     ControlComponent,
     SearchComponent,
     ValidationAggrementComponent,
+    AgrementExistantComponent,
     NaturePromotorComponent,
     TypeInfoComponent,
     InfoComponent,

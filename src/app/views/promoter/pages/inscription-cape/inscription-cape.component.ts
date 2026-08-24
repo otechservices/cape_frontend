@@ -106,6 +106,8 @@ export class InscriptionCapeComponent  implements OnInit{
       phone_pomoter: ['', Validators.required],
       chief_is_directeor: [false],
       has_aggrement:[false],
+      aggreement_reference:[''],
+      aggreement_year:[''],
       has_consent: [false, Validators.requiredTrue],
 
 
@@ -226,6 +228,8 @@ export class InscriptionCapeComponent  implements OnInit{
 
         chief_is_directeor: (res.name_pomoter == res.name_chief && res.firstname_pomoter == res.firstname_chief),
         has_aggrement: res.has_agreemant == 1 || res.has_agreemant === true,
+        aggreement_reference: res.aggreement_reference,
+        aggreement_year: res.aggreement_year,
         has_consent: res.has_consent == 1 || res.has_consent === true,
 
         name_chief: res.name_chief,
@@ -454,13 +458,28 @@ validateStep(step: number): boolean {
       return;
     }
 
+    // L'agrément déclaré raccourcit le circuit : sa référence et son scan sont
+    // les seules pièces sur lesquelles la DFEA pourra statuer.
+    if (this.formData.get('has_aggrement')?.value) {
+      if (!this.formData.get('aggreement_reference')?.value?.trim()) {
+        AppSweetAlert.simpleAlert('warning', 'Agrément incomplet', "Renseignez la référence de l'agrément que vous déclarez détenir.");
+        return;
+      }
+      if (!this.fileInput2 && this.code == undefined) {
+        AppSweetAlert.simpleAlert('warning', 'Agrément incomplet', "Joignez le scan de l'agrément que vous déclarez détenir.");
+        return;
+      }
+    }
+
     this.isSubmitting = true;
     this.submitStatus = 'idle';
     let formData2= new FormData()
 
 
       // Vérifie si l'accord est coché et ajoute le fichier correspondant
-  if (this.formData.get('has_consent')?.value && this.fileInput2 && this.code==undefined) {
+  // L'agrément déclaré conditionne l'envoi de son scan — pas le consentement,
+  // qui n'a rien à voir avec ce fichier.
+  if (this.formData.get('has_aggrement')?.value && this.fileInput2) {
     formData2.append("file_aggreement", this.fileInput2);
   }
 

@@ -15,6 +15,7 @@ import { ActivityReportComponent } from './pages/activity-report/activity-report
 import { StatistiqueComponent } from '../admin/pages/statistique/statistique.component';
 import { ControlComponent } from '../admin/pages/control/control.component';
 import { SearchComponent } from '../admin/pages/search/search.component';
+import { RegularisationAgrementComponent } from './pages/regularisation-agrement/regularisation-agrement.component';
 
 
 
@@ -51,6 +52,11 @@ const routes: Routes = [
         {
         path:"mes-dossiers",
         component:MesDossiersComponent
+      },
+
+      {
+        path:"regularisation-agrement",
+        component:RegularisationAgrementComponent
       },
 
       {

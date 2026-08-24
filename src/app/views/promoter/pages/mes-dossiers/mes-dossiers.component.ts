@@ -98,6 +98,7 @@ export class MesDossiersComponent implements OnInit {
       7: 'À inscrire',
       8: 'Autorisé',
       9: 'Agréé (avant plateforme)',
+      10: 'Agrément en validation DFEA',
     };
     return labels[status] ?? 'Non défini';
   }
@@ -114,6 +115,7 @@ export class MesDossiersComponent implements OnInit {
       case 6: return 'tw-bg-purple-100 tw-text-purple-700';
       case 7: return 'tw-bg-indigo-100 tw-text-indigo-700';
       case 8: return 'tw-bg-green-100 tw-text-green-800';
+      case 10: return 'tw-bg-cyan-100 tw-text-cyan-700';
       default: return 'tw-bg-gray-100 tw-text-gray-600';
     }
   }

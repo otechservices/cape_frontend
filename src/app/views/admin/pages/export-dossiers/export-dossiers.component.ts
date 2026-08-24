@@ -48,6 +48,7 @@ export class ExportDossiersComponent implements OnInit {
     { value: 7, label: 'Attente inscription session' },
     { value: 8, label: 'Agréé' },
     { value: 9, label: 'Agréé (avant plateforme)' },
+    { value: 10, label: 'Agrément en validation DFEA' },
   ];
 
   // Transfert d'un dossier vers un autre arrondissement

@@ -20,6 +20,7 @@ import { StaffComponent } from './pages/staff/staff.component';
 import { ResidentComponent } from './pages/resident/resident.component';
 import { ReferalComponent } from './pages/referal/referal.component';
 import { ActivityReportComponent } from './pages/activity-report/activity-report.component';
+import { RegularisationAgrementComponent } from './pages/regularisation-agrement/regularisation-agrement.component';
 
 
 
@@ -39,6 +40,7 @@ import { ActivityReportComponent } from './pages/activity-report/activity-report
     ReferalComponent,
     ActivityReportComponent,
     MesDossiersComponent,
+    RegularisationAgrementComponent,
     MonProfilPromoterComponent
   ],
   imports: [
