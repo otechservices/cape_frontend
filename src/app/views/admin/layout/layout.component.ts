@@ -4,6 +4,7 @@ import { Idle, DEFAULT_INTERRUPTSOURCES } from '@ng-idle/core';
 import { Keepalive } from '@ng-idle/keepalive';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from 'src/app/core/services/auth.service';
+import { SessionService } from 'src/app/core/services/session.service';
 import { GlobalName } from 'src/app/core/utils/global-name';
 import { LocalStorageService } from 'src/app/core/utils/local-stoarge-service';
 
@@ -24,6 +25,7 @@ export class LayoutComponent implements OnInit {
    constructor(
     
     private authService:AuthService,
+    private sessionService:SessionService,
     private router: Router,
     private lsService:LocalStorageService,
     private idle: Idle, 
@@ -37,7 +39,7 @@ export class LayoutComponent implements OnInit {
  
      // do something when the user becomes idle
      idle.onIdleStart.subscribe(() => {
-      this.toastrService.warning('Vous serez déconecté dans 30s si aucune activité détectée')
+      this.toastrService.warning('Vous serez déconnecté dans 2 minutes si aucune activité n\'est détectée')
      });
      // do something when the user is no longer idle
      idle.onIdleEnd.subscribe(() => {
@@ -68,21 +70,28 @@ export class LayoutComponent implements OnInit {
      this.reset();
    }
 
+   /**
+    * Déconnexion sur inactivité.
+    *
+    * La session est fermée localement quel que soit le sort de l'appel à l'API :
+    * un jeton déjà expiré fait échouer cet appel, et le nettoyage n'avait alors
+    * jamais lieu — l'utilisateur restait devant une interface qu'il ne pouvait
+    * plus utiliser. Le rappel d'erreur était d'ailleurs écrit après une virgule,
+    * hors du subscribe : il n'a jamais été appelé.
+    */
    logout(){
-    this.authService.logout().subscribe((res:any)=>{
-      this.lsService.remove(GlobalName.tokenName)
-      this.lsService.remove(GlobalName.refreshTokenName)
-      this.lsService.remove(GlobalName.expireIn)
-      this.lsService.remove(GlobalName.userName)
-      this.lsService.remove(GlobalName.exercice)
-      this.router.navigate(['/admin/auth/login'])
-      this.toastrService.success('Déconnexion réussie', 'Connexion');
-    }),
-    ((err:any)=>{
-      console.log(err)
-      this.toastrService.success('Déconnexion échouée', 'Connexion');
-
+    this.authService.logout().subscribe({
+      next: () => this.terminerSession('Déconnexion réussie'),
+      error: (err:any) => {
+        console.log(err)
+        this.terminerSession('Session fermée pour inactivité')
+      }
     });
+  }
+
+  private terminerSession(message:string){
+    this.sessionService.terminer();
+    this.toastrService.success(message, 'Connexion');
   }
 
 }

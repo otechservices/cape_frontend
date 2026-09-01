@@ -3,6 +3,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { GlobalName } from 'src/app/core/utils/global-name';
+import { SessionService } from 'src/app/core/services/session.service';
 import { LocalStorageService } from 'src/app/core/utils/local-stoarge-service';
 import { ToastrService } from 'ngx-toastr';
 
@@ -42,6 +43,7 @@ export class PromoterSideBarComponent implements OnInit {
     private authService: AuthService,
     private lsService: LocalStorageService,
     private toastr: ToastrService,
+    private sessionService: SessionService,
   ) {}
 
   ngOnInit(): void {
@@ -82,11 +84,7 @@ export class PromoterSideBarComponent implements OnInit {
   }
 
   private clearSession(): void {
-    this.lsService.remove(GlobalName.tokenName);
-    this.lsService.remove(GlobalName.refreshTokenName);
-    this.lsService.remove(GlobalName.expireIn);
-    this.lsService.remove(GlobalName.userName);
+    this.sessionService.terminer();
     this.toastr.success('Déconnexion réussie');
-    this.router.navigate(['/public/auth/login']);
   }
 }

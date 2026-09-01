@@ -12,6 +12,7 @@ import { LocalStorageService } from './local-stoarge-service';
 import { GlobalName } from './global-name';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ConfigService } from './config-service';
+import { SessionService } from '../services/session.service';
 
 @Injectable()
 export class AppHttpInterceptor implements HttpInterceptor {
@@ -19,6 +20,7 @@ export class AppHttpInterceptor implements HttpInterceptor {
     private authService: AuthService,
     private router: Router,
     private lsService: LocalStorageService,
+    private sessionService: SessionService,
     private modalService: NgbModal
   ) {}
 
@@ -51,20 +53,9 @@ export class AppHttpInterceptor implements HttpInterceptor {
             console.log(`error status : ${error.status}`);
             switch (error.status) {
               case 401:
-                this.lsService.remove(GlobalName.tokenName);
-                this.lsService.remove(GlobalName.refreshTokenName);
-                this.lsService.remove(GlobalName.expireIn);
-                this.lsService.remove(GlobalName.userName);
-                this.lsService.remove(GlobalName.exercice);
-                this.modalService.dismissAll();
-                {
-                  const url = this.router.url;
-                  if (url.startsWith('/public') || url.startsWith('/promoter')) {
-                    this.router.navigate(['/public/auth/login']);
-                  } else {
-                    this.router.navigate(['/admin/auth/login']);
-                  }
-                }
+                // Session expirée côté serveur : on ferme tout et on renvoie
+                // à la connexion, sans laisser de fenêtre ouverte par-dessus.
+                this.sessionService.terminer();
                 break;
               case 403:
                 break;

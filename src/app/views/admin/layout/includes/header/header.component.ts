@@ -5,6 +5,7 @@ import { filter, takeUntil } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { GlobalName } from 'src/app/core/utils/global-name';
+import { SessionService } from 'src/app/core/services/session.service';
 import { LocalStorageService } from 'src/app/core/utils/local-stoarge-service';
 import {
   AcaibMenu, AdminMenu, CapeMenu, CpsMenu, DDASMMenu,
@@ -29,7 +30,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private router: Router,
     private toastr: ToastrService,
-    private lsService: LocalStorageService
+    private lsService: LocalStorageService,
+    private sessionService: SessionService
   ) {}
 
   ngOnInit(): void {
@@ -96,11 +98,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   private clearSession(): void {
-    this.lsService.remove(GlobalName.tokenName);
-    this.lsService.remove(GlobalName.refreshTokenName);
-    this.lsService.remove(GlobalName.expireIn);
-    this.lsService.remove(GlobalName.userName);
-    this.lsService.remove(GlobalName.exercice);
-    this.router.navigate(['/admin/auth/login']);
+    this.sessionService.terminer();
   }
 }

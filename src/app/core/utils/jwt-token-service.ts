@@ -1,4 +1,3 @@
-import { formatDate } from '@angular/common';
 import { Injectable } from '@angular/core';
 import jwt_decode from 'jwt-decode';
 import { LocalStorageService } from './local-stoarge-service';
@@ -49,10 +48,41 @@ export class JWTTokenService {
       return decodedToken ? decodedToken['exp'] : '0';
     }
 
+    /**
+     * Échéance de la session, ou null si elle n'est pas déterminable.
+     *
+     * La revendication `exp` du jeton passe en premier : elle est présente quel
+     * que soit l'espace, alors que `capeExpireIn` n'est enregistré que par la
+     * connexion de l'administration.
+     */
+    private getExpiryDate(token:any): Date | null {
+      try {
+        const exp = (this.decodeToken(token) as any)?.exp;
+        if (typeof exp === 'number') {
+          return new Date(exp * 1000);
+        }
+      } catch {
+        // jeton illisible : on se rabat sur la date enregistrée
+      }
+
+      const stockee = this.lsService.get(GlobalName.expireIn);
+      if (!stockee) {
+        return null;
+      }
+      const date = new Date(stockee);
+      return isNaN(date.getTime()) ? null : date;
+    }
+
+    /**
+     * Vrai seulement si l'échéance est connue et dépassée.
+     *
+     * La comparaison porte sur des horodatages. L'implémentation précédente
+     * comparait deux chaînes formatées en `hh` — c'est-à-dire sur 12 heures :
+     * 13:00 s'y écrivait « 01:00 » et passait donc pour antérieur à 09:00, ce
+     * qui rendait le verdict faux une demi-journée sur deux.
+     */
     isTokenExpired(token:any): boolean {
-      let d1=formatDate(new Date(this.lsService.get(GlobalName.expireIn)),'yyyy-MM-dd hh:mm:ss','en_US') 
-      let d2=formatDate(new Date(),'yyyy-MM-dd hh:mm:ss','en_US');
-      console.log(d1,d2)
-      return d1<d2 ? true:false;
+      const echeance = this.getExpiryDate(token);
+      return echeance !== null && echeance.getTime() <= Date.now();
     }
 }
