@@ -38,6 +38,7 @@ import { PublicHeaderComponent } from '../public/layout/includes/public-header/p
 import { PaginationComponent } from './components/pagination/pagination.component';
 import { SearchFilterPipe } from 'src/app/core/pipes/search-filter.pipe';
 import { PaginatePipe } from 'src/app/core/pipes/paginate.pipe';
+import { AgrementRequiredComponent } from './components/agrement-required/agrement-required.component';
 import { SampleSearchPipe } from 'src/app/core/pipes/sample-search.pipe';
 
 
@@ -52,7 +53,8 @@ import { SampleSearchPipe } from 'src/app/core/pipes/sample-search.pipe';
         PaginationComponent,
         SearchFilterPipe,
         PaginatePipe,
-        SampleSearchPipe
+        SampleSearchPipe,
+        AgrementRequiredComponent
   ],
   imports: [
     CommonModule,
@@ -89,6 +91,7 @@ import { SampleSearchPipe } from 'src/app/core/pipes/sample-search.pipe';
     
   ],
   exports: [
+    AgrementRequiredComponent,
     ButtonComponent,
     CardComponent,
     ModalComponent,

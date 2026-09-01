@@ -59,6 +59,19 @@ fileInput:any
   }
 
 
+  /**
+   * Centres dont l'agrément est validé : les seuls sur lesquels une saisie est
+   * acceptée par l'API.
+   */
+  get centresAgrees(): any[] {
+    return this.centres.filter(c => c?.is_agree);
+  }
+
+  /** Aucun centre agréé : la saisie est impossible, il faut le dire. */
+  get agrementManquant(): boolean {
+    return this.centresAgrees.length === 0;
+  }
+
   constructor(
     private residentService:ResidentService,
     private toastrService:ToastrService,

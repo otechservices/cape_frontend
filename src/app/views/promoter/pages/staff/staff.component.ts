@@ -3,6 +3,7 @@ import { NgbModalConfig, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { ToastrService } from 'ngx-toastr';
 import { Subject } from 'rxjs';
+import { RequeteService } from 'src/app/core/services/requete.service';
 import { StaffService } from 'src/app/core/services/staff.service';
 import { TargetService } from 'src/app/core/services/target.service';
 import { AppSweetAlert } from 'src/app/core/utils/app-sweet-alert';
@@ -22,6 +23,7 @@ export class StaffComponent implements OnInit {
 
 
   buttonsPermission :any|undefined;
+  centres:any[] =[]
   structures:any[] =[]
   data:any[] =[]
   selected_data:any;
@@ -52,8 +54,22 @@ export class StaffComponent implements OnInit {
   }
 
 
+  /**
+   * Centres dont l'agrément est validé : les seuls sur lesquels du personnel
+   * peut être déclaré, l'API refusant les autres.
+   */
+  get centresAgrees(): any[] {
+    return this.centres.filter(c => c?.is_agree);
+  }
+
+  /** Aucun centre agréé : la saisie est impossible, il faut le dire. */
+  get agrementManquant(): boolean {
+    return this.centresAgrees.length === 0;
+  }
+
   constructor(
     private staffService:StaffService,
+    private requeteService:RequeteService,
     private toastrService:ToastrService,
       config: NgbModalConfig,
       private lsService:LocalStorageService,
@@ -76,6 +92,16 @@ export class StaffComponent implements OnInit {
 
   init(){
     this.getAll()
+    this.getCentres()
+  }
+
+  getCentres(){
+    this.requeteService.getForPromoter(this.user?.promoter_id).subscribe((res:any)=>{
+      this.centres=res.data ?? []
+    },
+    (err:any)=>{
+
+    })
   }
 
  

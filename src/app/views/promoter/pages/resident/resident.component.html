@@ -4,20 +4,25 @@
            <div class="tw-bg-white tw-rounded-lg tw-shadow">
               
                   <div class="tw-p-6">
+
+                     <app-agrement-required
+                        [bloque]="agrementManquant"
+                        operation="de vos pensionnaires"></app-agrement-required>
+
                      <!-- Barre de recherche et boutons d'action -->
                      <div class="tw-flex tw-flex-col md:tw-flex-row tw-justify-between tw-items-start md:tw-items-center tw-gap-4 tw-mb-5">
                         <!-- Boutons d'action -->
                         <div class="tw-flex tw-flex-wrap tw-gap-2" *ngIf="buttonsPermission">
-                           <button type="button" class="tw-bg-blue-600 tw-text-white tw-text-sm tw-px-3 tw-py-1 tw-rounded hover:tw-bg-blue-700" (click)="add(addContent)">
+                           <button [disabled]="agrementManquant" type="button" class="tw-bg-blue-600 tw-text-white tw-text-sm tw-px-3 tw-py-1 tw-rounded hover:tw-bg-blue-700" (click)="add(addContent)">
                               <i class="ri-add-line"></i> Ajouter un pensionnaire
                            </button>
                            <button *ngIf="buttonsPermission.show" (click)="show(showContent)" type="button" class="tw-border tw-border-blue-500 tw-text-blue-500 tw-text-sm tw-px-3 tw-py-1 tw-rounded hover:tw-bg-blue-50">
                               <i class="ri-eye-line"></i> Consulter
                            </button>
-                           <button *ngIf="buttonsPermission.edit" (click)="edit(editContent)" type="button" class="tw-border tw-border-yellow-500 tw-text-yellow-500 tw-text-sm tw-px-3 tw-py-1 tw-rounded hover:tw-bg-yellow-50">
+                           <button [disabled]="agrementManquant" *ngIf="buttonsPermission.edit" (click)="edit(editContent)" type="button" class="tw-border tw-border-yellow-500 tw-text-yellow-500 tw-text-sm tw-px-3 tw-py-1 tw-rounded hover:tw-bg-yellow-50">
                               <i class="ri-edit-line"></i> Éditer
                            </button>
-                           <button *ngIf="buttonsPermission.delete" (click)="delete()" type="button" class="tw-border tw-border-red-500 tw-text-red-500 tw-text-sm tw-px-3 tw-py-1 tw-rounded hover:tw-bg-red-50">
+                           <button [disabled]="agrementManquant" *ngIf="buttonsPermission.delete" (click)="delete()" type="button" class="tw-border tw-border-red-500 tw-text-red-500 tw-text-sm tw-px-3 tw-py-1 tw-rounded hover:tw-bg-red-50">
                               <i class="ri-delete-bin-line"></i> Supprimer
                            </button>
                            <button *ngIf="is_active!=null && !is_active" (click)="setStatus(1)" type="button" class="tw-border tw-border-green-500 tw-text-green-500 tw-text-sm tw-px-3 tw-py-1 tw-rounded hover:tw-bg-green-50">
@@ -144,7 +149,7 @@
             <div class=" form-goup col-12 mb-3">
                     <label for="">Centre <span class="text-danger ml-2">(*)</span></label>
                    <select name="centre_id" ngModel class="form-control">
-                        <option *ngFor="let c of centres" [value]="c.id">{{c.name}}</option>
+                        <option *ngFor="let c of centresAgrees" [value]="c.id">{{c.name}}</option>
                    </select>
                 </div>
 
@@ -207,7 +212,7 @@
                          <div class=" form-goup col-12 mb-3">
                     <label for="">Centre <span class="text-danger ml-2">(*)</span></label>
                    <select name="centre_id" [(ngModel)]="selected_data.centre_id" class="form-control">
-                        <option *ngFor="let c of centres" [value]="c.id">{{c.name}}</option>
+                        <option *ngFor="let c of centresAgrees" [value]="c.id">{{c.name}}</option>
                    </select>
                 </div>
           

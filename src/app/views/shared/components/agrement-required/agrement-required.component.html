@@ -1,0 +1,18 @@
+<div *ngIf="bloque"
+     class="tw-flex tw-items-start tw-gap-3 tw-rounded-lg tw-border tw-border-amber-300 tw-bg-amber-50 tw-p-4 tw-mb-5">
+
+  <i class="ri-error-warning-line tw-text-xl tw-text-amber-600 tw-mt-0.5"></i>
+
+  <div class="tw-text-sm tw-text-amber-900">
+    <p class="tw-font-semibold tw-mb-1">Agrément en attente de validation</p>
+    <p class="tw-mb-1">
+      Aucun de vos centres n'a encore d'agrément validé par la DFEA.
+      L'enregistrement {{ operation }} n'est donc pas possible pour le moment.
+    </p>
+    <p class="tw-mb-0 tw-text-amber-800">
+      Vous pourrez saisir ces informations dès que la Direction de la Famille, de l'Enfance
+      et de l'Adolescence aura validé l'agrément de votre centre. La consultation de vos
+      données existantes reste accessible.
+    </p>
+  </div>
+</div>
