@@ -15,7 +15,7 @@
       </div>
   
       <ng-container  *ngIf="!showPreview">
-        <div class="tw-grid tw-grid-cols-12 tw-gap-4">
+        <div class="row mb-3">
              <div class="tw-col-span-12">
                <div class="tw-bg-white tw-rounded-lg tw-shadow">
                   
@@ -172,7 +172,7 @@
 
           <fieldset>
             <legend>Localisation du centre</legend>
-            <div class="tw-grid tw-grid-cols-12 tw-gap-4">
+            <div class="row mb-3">
                 <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
                     <label for="">Type de centre <span class="mx-1 text-danger">*</span></label>
                     <select class="form-control" name="type_cape_id" [(ngModel)]="myRequestForm.type_cape_id">
@@ -246,7 +246,7 @@
             </fieldset>
             <fieldset>
                 <legend>Information du centre</legend>
-                <div class="tw-grid tw-grid-cols-12 tw-gap-4">
+                <div class="row mb-3">
                  
                     <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
     
@@ -287,7 +287,7 @@
 
             <fieldset>
                 <legend>Information du directeur</legend>
-                <div class="tw-grid tw-grid-cols-12 tw-gap-4">
+                <div class="row mb-3">
                     <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
                         <label for="">Nom </label>
                         <input type="text" [readonly]="myRequestForm.chief_is_directeor" maxlength="100" name="name_chief" class="form-control"   [(ngModel)]="myRequestForm.name_chief">
@@ -351,7 +351,7 @@
 
         <fieldset>
             <legend>Information du directeur</legend>
-            <div class="tw-grid tw-grid-cols-12 tw-gap-4">
+            <div class="row mb-3">
                 <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
                     <label for="">Nom </label>
                     <input type="text" [readonly]="myRequestForm.chief_is_directeor" maxlength="100" name="name_chief" class="form-control"   [(ngModel)]="myRequestForm.name_chief">
@@ -375,7 +375,7 @@
 
         <fieldset>
             <legend>Information du centre</legend>
-            <div class="tw-grid tw-grid-cols-12 tw-gap-4">
+            <div class="row mb-3">
                 <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
                     <label for="">Type de centre <span class="mx-1 text-danger">*</span></label>
                     <select class="form-control" name="type_cape_id" [(ngModel)]="myRequestForm.type_cape_id">
@@ -424,7 +424,7 @@
    
         <fieldset>
             <legend>Localisation du centre</legend>
-            <div class="tw-grid tw-grid-cols-12 tw-gap-4">
+            <div class="row mb-3">
                 <div class="form-group mb-3 col-lg-6 col-md-6 col-sm-12">
                     <label for="">Sélectionnez un département <span class="mx-1 text-danger">*</span></label>
                     <select class="form-control" (change)="loadMunicipalities($event)" name="department_id" [(ngModel)]="myRequestForm.department_id">
