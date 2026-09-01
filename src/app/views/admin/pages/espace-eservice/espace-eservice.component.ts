@@ -104,7 +104,9 @@ export class EspaceEserviceComponent implements OnInit {
       next: (res: any) => {
         this.loading = false;
         this.spinner.hide();
-        this.data = res;
+        // Les deux sources n'ont pas la même forme : get-by-instance/* renvoie un
+        // tableau nu, l'index des requêtes une enveloppe {success, message, data}.
+        this.data = Array.isArray(res) ? res : (res?.data ?? []);
       },
       error: () => {
         this.loading = false;

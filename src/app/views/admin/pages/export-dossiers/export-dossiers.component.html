@@ -118,7 +118,10 @@
       </thead>
       <tbody class="tw-divide-y tw-divide-gray-100">
         <tr *ngFor="let d of data | paginate:currentPage:pageSize" class="hover:tw-bg-gray-50">
-          <td class="tw-px-4 tw-py-3 tw-text-gray-500">{{ d?.code }}</td>
+          <td class="tw-px-4 tw-py-3">
+            <a [routerLink]="detailLink(d)" target="_blank" rel="noopener"
+               class="tw-text-blue-600 hover:tw-text-blue-800 hover:tw-underline">{{ d?.code }}</a>
+          </td>
           <td class="tw-px-4 tw-py-3 tw-text-gray-900 tw-font-medium">{{ d?.name }}</td>
           <td class="tw-px-4 tw-py-3 tw-text-gray-700">{{ d?.service?.name }}</td>
           <td class="tw-px-4 tw-py-3">
@@ -145,10 +148,18 @@
           </td>
           <td class="tw-px-4 tw-py-3 tw-text-gray-500">{{ d?.created_at | date:'dd/MM/yyyy' }}</td>
           <td class="tw-px-4 tw-py-3 tw-text-right">
-            <button (click)="openTransfer(transferContent, d)"
-              class="tw-inline-flex tw-items-center tw-gap-1 tw-px-2 tw-py-1 tw-rounded-lg tw-text-xs tw-font-medium tw-bg-slate-100 tw-text-slate-700 hover:tw-bg-slate-200 tw-transition-colors">
-              <i class="ri-exchange-line"></i>Transférer
-            </button>
+            <div class="tw-inline-flex tw-gap-1">
+              <!-- Nouvel onglet : la liste filtrée reste en place derrière la consultation. -->
+              <a [routerLink]="detailLink(d)" target="_blank" rel="noopener"
+                title="Ouvrir le dossier dans un nouvel onglet"
+                class="tw-inline-flex tw-items-center tw-gap-1 tw-px-2 tw-py-1 tw-rounded-lg tw-text-xs tw-font-medium tw-bg-blue-50 tw-text-blue-700 hover:tw-bg-blue-100 tw-transition-colors tw-no-underline">
+                <i class="ri-eye-line"></i>Consulter
+              </a>
+              <button (click)="openTransfer(transferContent, d)"
+                class="tw-inline-flex tw-items-center tw-gap-1 tw-px-2 tw-py-1 tw-rounded-lg tw-text-xs tw-font-medium tw-bg-slate-100 tw-text-slate-700 hover:tw-bg-slate-200 tw-transition-colors">
+                <i class="ri-exchange-line"></i>Transférer
+              </button>
+            </div>
           </td>
         </tr>
 

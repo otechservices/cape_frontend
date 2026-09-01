@@ -170,6 +170,17 @@ export class ExportDossiersComponent implements OnInit {
     });
   }
 
+  /**
+   * Lien vers la fiche détaillée du dossier.
+   *
+   * La route attend un segment de service ('cape' ou 'garderie') que l'écran
+   * de détail n'exploite pas, mais sans lequel elle ne résout pas.
+   */
+  detailLink(d: any): any[] {
+    const service = (d?.service?.name ?? 'cape').toLowerCase();
+    return ['/admin/requetes/show', d?.code, service];
+  }
+
   statusLabel(status: number): string {
     return this.statuses.find(s => s.value === status)?.label ?? 'Non défini';
   }
