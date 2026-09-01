@@ -33,6 +33,7 @@ export class EspaceEserviceShowComponent implements OnInit {
   role: any;
   isValid = true;
   pendingObservation: string = '';
+  ficheLoading = false;
 
   constructor(
     private reqService: RequeteService,
@@ -332,6 +333,30 @@ export class EspaceEserviceShowComponent implements OnInit {
       error: (err: any) => {
         AppSweetAlert.simpleAlert('error', 'Traitement de fichier', err.error.message);
         this.loading = false;
+      }
+    });
+  }
+
+  /** Le métier a besoin d'un état complet du centre, hors écran : admin et DFEA seuls. */
+  get canPrintFiche(): boolean {
+    return this.role === 'admin' || this.role === 'dfea';
+  }
+
+  /** Télécharge la fiche d'état du CAPE / de la garderie. */
+  printFiche() {
+    this.ficheLoading = true;
+    this.reqService.ficheEtat(this.data.code).subscribe({
+      next: (blob: Blob) => {
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `fiche_etat_${this.data.code}.pdf`;
+        link.click();
+        URL.revokeObjectURL(link.href);
+        this.ficheLoading = false;
+      },
+      error: () => {
+        this.toastrService.error("La génération de la fiche d'état a échoué");
+        this.ficheLoading = false;
       }
     });
   }

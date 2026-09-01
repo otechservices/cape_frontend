@@ -51,6 +51,13 @@ export class RequeteService {
       { headers: header.headers, responseType: 'blob' });
   }
 
+  /** Fiche d'état PDF d'un centre : tout ce que le système sait du CAPE / de la garderie. */
+  ficheEtat(code:any){
+    const header = ConfigService.httpHeader(localStorage.getItem(GlobalName.tokenName),true);
+    return this.http.get(`${this.url}fiche-etat/${code}`,
+      { headers: header.headers, responseType: 'blob' });
+  }
+
   /** Rattache un dossier à un autre arrondissement (donc à un autre CPS). */
   transferDistrict(requete_id:any, district_id:any, motif?:string){
     return this.http.post<any>(`${this.url}transfer-district`,
