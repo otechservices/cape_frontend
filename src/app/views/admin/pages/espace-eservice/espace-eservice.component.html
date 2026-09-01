@@ -3,8 +3,9 @@
   <!-- Toolbar -->
   <div class="tw-flex tw-items-center tw-gap-2 tw-px-5 tw-py-4 tw-border-b tw-border-gray-100">
 
+    <!-- Toujours proposé : la consultation vaut pour la liste complète comme
+         pour les vues par étape, et c'est le seul accès à la fiche d'état. -->
     <button
-      *ngIf="state != undefined"
       (click)="goToShow()"
       [disabled]="!selected_data"
       class="tw-inline-flex tw-items-center tw-gap-1.5 tw-px-3 tw-py-1.5 tw-rounded-lg tw-text-sm tw-font-medium tw-transition-colors"
