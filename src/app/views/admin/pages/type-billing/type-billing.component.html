@@ -68,7 +68,7 @@
 <ng-template #addContent let-c="close" let-d="dismiss">
   <form #addForm="ngForm" (ngSubmit)="store(addForm.value)">
     <div class="modal-header tw-bg-slate-800 tw-text-white">
-      <h6 class="modal-title tw-font-semibold">Enregistrer un type de info</h6>
+      <h6 class="modal-title tw-font-semibold">Enregistrer un type d'assistance</h6>
       <button type="button" (click)="d('Cross click')" class="tw-text-white hover:tw-text-gray-200 tw-transition-colors">
         <i class="ri-close-line tw-text-lg"></i>
       </button>
@@ -90,7 +90,7 @@
 <ng-template #editContent let-c="close" let-d="dismiss">
   <form #editForm="ngForm" (ngSubmit)="update(editForm.value)">
     <div class="modal-header tw-bg-slate-800 tw-text-white">
-      <h6 class="modal-title tw-font-semibold">Modifier un type de info</h6>
+      <h6 class="modal-title tw-font-semibold">Modifier un type d'assistance</h6>
       <button type="button" (click)="d('Cross click')" class="tw-text-white hover:tw-text-gray-200 tw-transition-colors">
         <i class="ri-close-line tw-text-lg"></i>
       </button>
