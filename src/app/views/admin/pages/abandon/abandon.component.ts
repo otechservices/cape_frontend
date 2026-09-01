@@ -119,7 +119,7 @@ export class AbandonComponent {
       this.loading=false
 
       console.log(err)
-        AppSweetAlert.simpleAlert("error","Personnel",err.error.message)
+        AppSweetAlert.simpleAlert("error","Pensionnaire",err.error.message)
     })
   }
   update(value:any){
@@ -135,7 +135,7 @@ export class AbandonComponent {
       this.loading=false
 
       console.log(err)
-        AppSweetAlert.simpleAlert("error","Personnel",err.error.message)
+        AppSweetAlert.simpleAlert("error","Pensionnaire",err.error.message)
     })
   }
   delete(){
@@ -149,7 +149,7 @@ export class AbandonComponent {
     },
     (err:any)=>{
       console.log(err)
-        AppSweetAlert.simpleAlert("error","Personnel",err.error.message)
+        AppSweetAlert.simpleAlert("error","Pensionnaire",err.error.message)
     })
   }
 })

@@ -147,7 +147,7 @@ export class ControlComponent implements OnInit {
       this.loading=false
 
       console.log(err)
-        AppSweetAlert.simpleAlert("error","Sanctions",err.error.message)
+        AppSweetAlert.simpleAlert("error","Contrôle",err.error.message)
     })
   }
   update(value:any){
@@ -170,7 +170,7 @@ export class ControlComponent implements OnInit {
       this.loading=false
 
       console.log(err)
-        AppSweetAlert.simpleAlert("error","Sanctions",err.error.message)
+        AppSweetAlert.simpleAlert("error","Contrôle",err.error.message)
     })
   }
   delete(){
@@ -184,7 +184,7 @@ export class ControlComponent implements OnInit {
     },
     (err:any)=>{
       console.log(err)
-        AppSweetAlert.simpleAlert("error","Sanctions",err.error.message)
+        AppSweetAlert.simpleAlert("error","Contrôle",err.error.message)
     })
   }
 })
@@ -237,7 +237,7 @@ setStatus(value:any){
     },
     (err:any)=>{
       console.log(err)
-        AppSweetAlert.simpleAlert("error","Département",err.error.message)
+        AppSweetAlert.simpleAlert("error","Contrôle",err.error.message)
     })
 }
 

@@ -106,7 +106,7 @@ export class TypeGarderieComponent implements OnInit {
       this.loading=false
 
       console.log(err)
-        AppSweetAlert.simpleAlert("error","Type Cape",err.error.message)
+        AppSweetAlert.simpleAlert("error","Type Garderie",err.error.message)
     })
   }
   update(value:any){
@@ -122,7 +122,7 @@ export class TypeGarderieComponent implements OnInit {
       this.loading=false
 
       console.log(err)
-        AppSweetAlert.simpleAlert("error","Type Cape",err.error.message)
+        AppSweetAlert.simpleAlert("error","Type Garderie",err.error.message)
     })
   }
   delete(){
@@ -136,7 +136,7 @@ export class TypeGarderieComponent implements OnInit {
     },
     (err:any)=>{
       console.log(err)
-        AppSweetAlert.simpleAlert("error","Type Cape",err.error.message)
+        AppSweetAlert.simpleAlert("error","Type Garderie",err.error.message)
     })
   }
 })
@@ -188,7 +188,7 @@ export class TypeGarderieComponent implements OnInit {
       },
       (err:any)=>{
         console.log(err)
-          AppSweetAlert.simpleAlert("error","Type Cape",err.error.message)
+          AppSweetAlert.simpleAlert("error","Type Garderie",err.error.message)
       })
   }
 

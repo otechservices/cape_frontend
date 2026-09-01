@@ -186,7 +186,7 @@ export class JournalComponent implements OnInit {
       },
       (err:any)=>{
         console.log(err)
-          AppSweetAlert.simpleAlert("error","Suggestions",err.error.message)
+          AppSweetAlert.simpleAlert("error","Historique des activités",err.error.message)
       })
   }
 

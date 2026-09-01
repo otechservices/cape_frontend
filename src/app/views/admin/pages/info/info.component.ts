@@ -102,7 +102,7 @@ export class InfoComponent implements OnInit {
       },
       (err:any)=>{
         console.log(err)
-          AppSweetAlert.simpleAlert("error","Document à joindre",err.error.message)
+          AppSweetAlert.simpleAlert("error","Demande d'information",err.error.message)
       })
   }
 

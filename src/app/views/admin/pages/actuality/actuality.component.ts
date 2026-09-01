@@ -126,7 +126,7 @@ export class ActualityComponent implements OnInit {
       this.loading=false
 
       console.log(err)
-        AppSweetAlert.simpleAlert("error","Département",err.error.message)
+        AppSweetAlert.simpleAlert("error","Actualité",err.error.message)
     })
   }
   update(value:any){
@@ -156,7 +156,7 @@ export class ActualityComponent implements OnInit {
       this.loading=false
 
       console.log(err)
-        AppSweetAlert.simpleAlert("error","Département",err.error.message)
+        AppSweetAlert.simpleAlert("error","Actualité",err.error.message)
     })
   }
   delete(){
@@ -170,7 +170,7 @@ export class ActualityComponent implements OnInit {
     },
     (err:any)=>{
       console.log(err)
-        AppSweetAlert.simpleAlert("error","Département",err.error.message)
+        AppSweetAlert.simpleAlert("error","Actualité",err.error.message)
     })
   }
 })
@@ -222,7 +222,7 @@ export class ActualityComponent implements OnInit {
       },
       (err:any)=>{
         console.log(err)
-          AppSweetAlert.simpleAlert("error","Département",err.error.message)
+          AppSweetAlert.simpleAlert("error","Actualité",err.error.message)
       })
   }
 

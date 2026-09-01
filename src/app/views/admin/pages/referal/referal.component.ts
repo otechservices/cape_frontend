@@ -289,7 +289,7 @@ export class ReferalComponent implements OnInit {
       },
       (err:any)=>{
         console.log(err)
-          AppSweetAlert.simpleAlert("error","Suivi de recommendation",err.error.message)
+          AppSweetAlert.simpleAlert("error","Suivi de recommandation",err.error.message)
       })
   }
 

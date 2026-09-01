@@ -211,7 +211,7 @@ export class FileComponent implements OnInit {
       },
       (err:any)=>{
         console.log(err)
-          AppSweetAlert.simpleAlert("error","Document à joindre",err.error.message)
+          AppSweetAlert.simpleAlert("error","Pièce à fournir",err.error.message)
       })
   }
 

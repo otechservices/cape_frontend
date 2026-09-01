@@ -132,7 +132,7 @@ fileInput:any
       this.loading=false
 
       console.log(err)
-        AppSweetAlert.simpleAlert("error","Personnel",err.error.message)
+        AppSweetAlert.simpleAlert("error","Pensionnaire",err.error.message)
     })
   }
   update(value:any){
@@ -148,7 +148,7 @@ fileInput:any
       this.loading=false
 
       console.log(err)
-        AppSweetAlert.simpleAlert("error","Personnel",err.error.message)
+        AppSweetAlert.simpleAlert("error","Pensionnaire",err.error.message)
     })
   }
 
@@ -173,7 +173,7 @@ fileInput:any
       this.loading=false
 
       console.log(err)
-        AppSweetAlert.simpleAlert("error","Personnel",err.error.message)
+        AppSweetAlert.simpleAlert("error","Pensionnaire",err.error.message)
     })
   }
   delete(){
@@ -187,7 +187,7 @@ fileInput:any
     },
     (err:any)=>{
       console.log(err)
-        AppSweetAlert.simpleAlert("error","Personnel",err.error.message)
+        AppSweetAlert.simpleAlert("error","Pensionnaire",err.error.message)
     })
   }
 })

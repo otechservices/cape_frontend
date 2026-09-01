@@ -105,7 +105,7 @@ export class NaturePromotorComponent implements OnInit {
       this.loading=false
 
       console.log(err)
-        AppSweetAlert.simpleAlert("error","Cible",err.error.message)
+        AppSweetAlert.simpleAlert("error","Nature de promoteur",err.error.message)
     })
   }
   update(value:any){
@@ -121,7 +121,7 @@ export class NaturePromotorComponent implements OnInit {
       this.loading=false
 
       console.log(err)
-        AppSweetAlert.simpleAlert("error","Cible",err.error.message)
+        AppSweetAlert.simpleAlert("error","Nature de promoteur",err.error.message)
     })
   }
   delete(){
@@ -135,7 +135,7 @@ export class NaturePromotorComponent implements OnInit {
     },
     (err:any)=>{
       console.log(err)
-        AppSweetAlert.simpleAlert("error","Cible",err.error.message)
+        AppSweetAlert.simpleAlert("error","Nature de promoteur",err.error.message)
     })
   }
 })

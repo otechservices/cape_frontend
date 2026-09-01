@@ -128,7 +128,7 @@ export class ControlFileElementComponent implements OnInit {
       this.loading=false
 
       console.log(err)
-        AppSweetAlert.simpleAlert("error","Membres",err.error.message)
+        AppSweetAlert.simpleAlert("error","Éléments de fiche de contrôle",err.error.message)
     })
   }
   update(value:any){
@@ -144,7 +144,7 @@ export class ControlFileElementComponent implements OnInit {
       this.loading=false
 
       console.log(err)
-        AppSweetAlert.simpleAlert("error","Membres",err.error.message)
+        AppSweetAlert.simpleAlert("error","Éléments de fiche de contrôle",err.error.message)
     })
   }
   delete(){
@@ -158,7 +158,7 @@ export class ControlFileElementComponent implements OnInit {
     },
     (err:any)=>{
       console.log(err)
-        AppSweetAlert.simpleAlert("error","Membres",err.error.message)
+        AppSweetAlert.simpleAlert("error","Éléments de fiche de contrôle",err.error.message)
     })
   }
 })
@@ -210,7 +210,7 @@ export class ControlFileElementComponent implements OnInit {
       },
       (err:any)=>{
         console.log(err)
-          AppSweetAlert.simpleAlert("error","Membre",err.error.message)
+          AppSweetAlert.simpleAlert("error","Élément de fiche de contrôle",err.error.message)
       })
   }
 

@@ -107,7 +107,7 @@ export class ServiceComponent implements OnInit {
       this.loading=false
 
       console.log(err)
-        AppSweetAlert.simpleAlert("error","Type Avis",err.error.message)
+        AppSweetAlert.simpleAlert("error","Service",err.error.message)
     })
   }
   update(value:any){
@@ -123,7 +123,7 @@ export class ServiceComponent implements OnInit {
       this.loading=false
 
       console.log(err)
-        AppSweetAlert.simpleAlert("error","Type Avis",err.error.message)
+        AppSweetAlert.simpleAlert("error","Service",err.error.message)
     })
   }
   delete(){
@@ -137,7 +137,7 @@ export class ServiceComponent implements OnInit {
     },
     (err:any)=>{
       console.log(err)
-        AppSweetAlert.simpleAlert("error","Type Avis",err.error.message)
+        AppSweetAlert.simpleAlert("error","Service",err.error.message)
     })
   }
 })
@@ -189,7 +189,7 @@ export class ServiceComponent implements OnInit {
       },
       (err:any)=>{
         console.log(err)
-          AppSweetAlert.simpleAlert("error","Type Avis",err.error.message)
+          AppSweetAlert.simpleAlert("error","Service",err.error.message)
       })
   }
 

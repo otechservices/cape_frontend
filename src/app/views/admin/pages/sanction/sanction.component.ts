@@ -288,7 +288,7 @@ setStatus(value:any){
     },
     (err:any)=>{
       console.log(err)
-        AppSweetAlert.simpleAlert("error","Département",err.error.message)
+        AppSweetAlert.simpleAlert("error","Sanction",err.error.message)
     })
 }
 

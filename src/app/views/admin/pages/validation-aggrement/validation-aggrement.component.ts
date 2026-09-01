@@ -218,7 +218,7 @@ export class ValidationAggrementComponent implements OnInit {
       },
       (err:any)=>{
         console.log(err)
-          AppSweetAlert.simpleAlert("error","Document à joindre",err.error.message)
+          AppSweetAlert.simpleAlert("error","Agrément hors plateforme",err.error.message)
       })
   }
 
@@ -312,7 +312,7 @@ export class ValidationAggrementComponent implements OnInit {
     },
     (err:any)=>{
       console.log(err)
-        AppSweetAlert.simpleAlert("error","Département",err.error.message)
+        AppSweetAlert.simpleAlert("error","Agrément hors plateforme",err.error.message)
     })
   }
 })
