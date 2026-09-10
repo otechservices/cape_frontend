@@ -20,6 +20,14 @@
             "tsConfig": "tsconfig.app.json",
             "assets": [
               "src/favicon.ico",
+              "src/favicon-32x32.png",
+              "src/favicon-16x16.png",
+              "src/apple-touch-icon.png",
+              "src/icon-192.png",
+              "src/icon-512.png",
+              "src/robots.txt",
+              "src/sitemap.xml",
+              "src/manifest.webmanifest",
               "src/assets",
               {
                 "glob": "**/*",
@@ -29,7 +37,6 @@
             ],
             "styles": [
               "src/styles.css",
-            
               "node_modules/igniteui-angular/styles/igniteui-angular.css",
               "node_modules/select2/dist/css/select2.min.css",
               "node_modules/ngx-spinner/animations/ball-scale-multiple.css"

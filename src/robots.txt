@@ -1,0 +1,11 @@
+# Plateforme CAPE — Ministère de la Famille et de l'Action Sociale
+# Les espaces authentifiés n'ont rien à faire dans un index public : ils
+# exigent une connexion et ne renverraient qu'un écran de login.
+
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /promoter/
+Disallow: /public/auth/
+
+Sitemap: https://cape.social.gouv.bj/sitemap.xml

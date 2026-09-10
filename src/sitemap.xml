@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Seules les pages publiques y figurent. Les espaces authentifiés (/admin,
+  /promoter, /public/auth) sont exclus par robots.txt : ils ne renverraient
+  qu'un écran de connexion.
+-->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://cape.social.gouv.bj/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://cape.social.gouv.bj/accueil</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://cape.social.gouv.bj/list-capes/authorized</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://cape.social.gouv.bj/request</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://cape.social.gouv.bj/actualites</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://cape.social.gouv.bj/contact</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://cape.social.gouv.bj/requested-support</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://cape.social.gouv.bj/requested-infos</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+</urlset>
