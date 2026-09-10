@@ -133,6 +133,19 @@ export class RequeteService {
     return this.http.get<any>(`${this.url}authorized/set-all`,
      ConfigService.httpHeader(localStorage.getItem(GlobalName.tokenName),true));
   }
+  /**
+   * Valide un agrément avec sa pièce justificative.
+   *
+   * Envoi en FormData : la requête transporte un fichier, que le JSON ne sait
+   * pas véhiculer. L'en-tête est donc construit sans Content-Type, laissé au
+   * navigateur qui doit y placer la frontière multipart.
+   */
+  validateAgrement(data:FormData){
+    return this.http.post<any>(`${this.url}validate-agrement`,
+    data,
+     ConfigService.httpHeader(localStorage.getItem(GlobalName.tokenName),false));
+  }
+
   setStatus(resource:any){
     return this.http.post<any>(`${this.url}set-status2`,
     resource,

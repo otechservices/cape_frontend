@@ -29,7 +29,7 @@
                                Editer</button>
                          
 
-                                 <button *ngIf="selected_data && !selected_data.is_validate"  (click)="setStatus(1)" type="button" class="btn btn-outline-success btn-sm  me-3">
+                                 <button *ngIf="selected_data && !selected_data.is_validate"  (click)="openValidation(validationContent)" type="button" class="btn btn-outline-success btn-sm  me-3">
                                     Valider </button>
                                    <button *ngIf="selected_data && selected_data.is_validate"  (click)="setStatus(0)" type="button" class="tw-border tw-border-red-500 tw-text-red-500 tw-text-sm tw-px-3 tw-py-1 tw-rounded hover:tw-bg-red-50 tw-me-3">
                                     Rejeter</button>
@@ -497,4 +497,55 @@
             </table>
         </div>
       </div>
+</ng-template>
+
+<!-- Validation d'un agrément : la pièce justificative est exigée, pour que la
+     décision garde la trace de ce qui la fonde. -->
+<ng-template #validationContent let-modal>
+  <div class="modal-header bg-secondary">
+    <h6 class="tw-modal-title tw-text-white">Valider l'agrément</h6>
+    <button type="button" class="btn-close" aria-label="Fermer" (click)="modal.dismiss()"></button>
+  </div>
+
+  <div class="modal-body">
+    <p class="tw-text-sm tw-text-gray-600">
+      Dossier <strong>{{ selected_data?.name }}</strong> — {{ selected_data?.code }}
+    </p>
+
+    <div class="row">
+      <div class="form-group col-12 mb-3">
+        <label>Référence de l'arrêté <span class="text-danger">(*)</span></label>
+        <input type="text" class="form-control" [(ngModel)]="validation.aggreement_reference"
+               placeholder="N° ..../MFAS/DC/SGM/DGAS/DFEA/...">
+      </div>
+
+      <div class="form-group col-12 mb-3">
+        <label>Année de l'agrément</label>
+        <input type="number" class="form-control" [(ngModel)]="validation.aggreement_year"
+               placeholder="2026" min="1900" max="2100">
+      </div>
+
+      <div class="form-group col-12 mb-3">
+        <label>Arrêté scanné <span class="text-danger">(*)</span></label>
+        <input type="file" class="form-control" accept=".pdf,.jpg,.jpeg,.png"
+               (change)="uploadAggreement($event)">
+        <small class="tw-text-gray-500">PDF ou image, 5 Mo maximum.</small>
+      </div>
+
+      <div class="form-group col-12 mb-3">
+        <label>Observation</label>
+        <textarea rows="3" class="form-control" [(ngModel)]="validation.observation"
+                  placeholder="Facultatif"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary btn-sm" (click)="modal.dismiss()">Annuler</button>
+    <button type="button" class="btn btn-success btn-sm"
+            [disabled]="validating || !validation.aggreement_reference || !fileAggreement"
+            (click)="confirmValidation(modal)">
+      {{ validating ? 'Validation…' : "Valider l'agrément" }}
+    </button>
+  </div>
 </ng-template>

@@ -205,6 +205,68 @@ export class ValidationAggrementComponent implements OnInit {
   
   
 
+  /** Saisie de la modale de validation. */
+  validation:any = { aggreement_reference:'', aggreement_year:'', observation:'' }
+  fileAggreement:any = null
+  validating = false
+
+  /**
+   * Ouvre la modale de validation.
+   *
+   * La validation exige désormais l'arrêté qui la justifie : cocher une case
+   * ne laissait aucune trace de ce sur quoi la décision reposait.
+   */
+  openValidation(content:any){
+    if (!this.selected_data) {
+      this.toastrService.warning('Aucun dossier sélectionné')
+      return
+    }
+    this.validation = {
+      aggreement_reference: this.selected_data.aggreement_reference ?? '',
+      aggreement_year: this.selected_data.aggreement_year ?? '',
+      observation: ''
+    }
+    this.fileAggreement = null
+    this.modalService.open(content, { size:'lg' })
+  }
+
+  uploadAggreement(ev:any){
+    this.fileAggreement = ev.target.files?.length ? ev.target.files[0] : null
+  }
+
+  confirmValidation(modal:any){
+    if (!this.fileAggreement) {
+      this.toastrService.warning("Joignez l'arrêté d'agrément scanné")
+      return
+    }
+
+    const data = new FormData()
+    data.append('id', this.selected_data.id)
+    data.append('aggreement_reference', this.validation.aggreement_reference)
+    if (this.validation.aggreement_year) {
+      data.append('aggreement_year', this.validation.aggreement_year)
+    }
+    if (this.validation.observation) {
+      data.append('observation', this.validation.observation)
+    }
+    data.append('file_aggreement', this.fileAggreement)
+
+    this.validating = true
+    this.requeteService.validateAgrement(data).subscribe({
+      next: (res:any) => {
+        this.validating = false
+        this.toastrService.success(res.message)
+        modal.close()
+        this.getAll()
+      },
+      error: (err:any) => {
+        this.validating = false
+        AppSweetAlert.simpleAlert('error', 'Validation impossible',
+          err?.error?.message ?? "La validation a échoué")
+      }
+    })
+  }
+
   setStatus(value:any){
 
     this.toastrService.warning("Opération en cours")
