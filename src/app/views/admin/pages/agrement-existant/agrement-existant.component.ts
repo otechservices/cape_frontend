@@ -96,6 +96,7 @@ export class AgrementExistantComponent implements OnInit {
   show(content: any, el: any): void {
     this.selected_data = el;
     this.observation = '';
+    this.closePreview(); // sinon l'aperçu du dossier précédent reste affiché
     this.modalService.open(content, { size: 'xl', scrollable: true });
   }
 

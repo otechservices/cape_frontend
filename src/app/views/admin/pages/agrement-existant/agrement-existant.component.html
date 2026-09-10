@@ -204,13 +204,22 @@
           </div>
         </dl>
 
-        <a *ngIf="selected_data?.requete?.file_aggreement" target="_blank"
-           [href]="toFileUrl(selected_data?.requete?.code, selected_data?.requete?.file_aggreement)"
-           class="tw-inline-flex tw-items-center tw-gap-2 tw-mt-4 tw-bg-blue-600 tw-text-white
-                  tw-px-4 tw-py-2 tw-rounded tw-text-sm hover:tw-bg-blue-700">
-          <i class="bx bx-file"></i>
-          <span>Consulter l'agrément scanné</span>
-        </a>
+        <div *ngIf="selected_data?.requete?.file_aggreement" class="tw-flex tw-gap-2 tw-mt-4">
+          <button type="button"
+             (click)="preview(selected_data?.requete?.file_aggreement, selected_data?.requete?.code)"
+             class="tw-inline-flex tw-items-center tw-gap-2 tw-bg-blue-600 tw-text-white
+                    tw-px-4 tw-py-2 tw-rounded tw-text-sm hover:tw-bg-blue-700">
+            <i class="bx bx-file"></i>
+            <span>Consulter l'agrément scanné</span>
+          </button>
+          <a target="_blank" rel="noopener"
+             [href]="toFileUrl(selected_data?.requete?.code, selected_data?.requete?.file_aggreement)"
+             title="Ouvrir dans un nouvel onglet"
+             class="tw-inline-flex tw-items-center tw-gap-1 tw-border tw-border-gray-300 tw-text-gray-600
+                    tw-px-3 tw-py-2 tw-rounded tw-text-sm hover:tw-bg-gray-50">
+            <i class="bx bx-link-external"></i>
+          </a>
+        </div>
       </div>
     </div>
 
@@ -231,9 +240,14 @@
             <td class="tw-px-3 tw-py-2">{{ f.file?.name || f.reference }}</td>
             <td class="tw-px-3 tw-py-2 tw-text-gray-500">{{ f.file?.type_file?.name || f.type }}</td>
             <td class="tw-px-3 tw-py-2 tw-text-right">
-              <a target="_blank" [href]="toFileUrl(selected_data?.requete?.code, f.filename)"
-                 class="tw-text-blue-600 tw-text-xs">
+              <button type="button" (click)="preview(f.filename, selected_data?.requete?.code)"
+                 class="tw-text-blue-600 tw-text-xs hover:tw-underline">
                 <i class="bx bx-show"></i> Consulter
+              </button>
+              <a target="_blank" rel="noopener" [href]="toFileUrl(selected_data?.requete?.code, f.filename)"
+                 title="Ouvrir dans un nouvel onglet"
+                 class="tw-text-gray-400 tw-text-xs tw-ml-2 hover:tw-text-gray-600">
+                <i class="bx bx-link-external"></i>
               </a>
             </td>
           </tr>
@@ -244,6 +258,21 @@
           </tr>
         </tbody>
       </table>
+    </div>
+
+    <!-- Aperçu du document, dans la fenêtre plutôt que dans un onglet séparé :
+         la décision se prend en gardant la pièce sous les yeux. -->
+    <div *ngIf="showPreview" class="tw-mt-5 tw-border tw-border-gray-300 tw-rounded tw-overflow-hidden">
+      <div class="tw-flex tw-items-center tw-justify-between tw-bg-gray-100 tw-px-3 tw-py-2">
+        <span class="tw-text-sm tw-font-medium tw-text-gray-700">
+          <i class="bx bx-file"></i> Aperçu du document
+        </span>
+        <button type="button" (click)="closePreview()"
+                class="tw-text-gray-500 hover:tw-text-gray-800 tw-text-sm">
+          <i class="bx bx-x tw-text-lg"></i> Fermer l'aperçu
+        </button>
+      </div>
+      <iframe [src]="url" class="tw-w-full tw-border-0" style="height: 70vh;"></iframe>
     </div>
 
     <!-- Décision -->
