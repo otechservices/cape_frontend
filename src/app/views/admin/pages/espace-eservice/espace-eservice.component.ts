@@ -30,6 +30,13 @@ export class EspaceEserviceComponent implements OnInit {
   role: any;
   user: any;
   state: any;
+  doublons: any[][] = [];
+  doublonIds = new Set<number>();
+  seuil: number = 90;
+  doublonsLoading = false;
+  declaration = { aggreement_reference: '', aggreement_year: '', observation: '' };
+  fileDeclaration: File | null = null;
+  declaring = false;
 
   get filteredData(): any[] {
     if (!this.searchTerm || this.searchTerm.trim() === '') return this.data;
@@ -70,6 +77,8 @@ export class EspaceEserviceComponent implements OnInit {
       this.selected_data = null;
       this.is_active = null;
       this.data = [];
+      this.doublons = [];
+      this.doublonIds = new Set<number>();
       this.service_id = undefined;
       this.state = this.activatedRoute.snapshot.paramMap.get('state');
       this.type = this.activatedRoute.snapshot.paramMap.get('service');
@@ -107,6 +116,7 @@ export class EspaceEserviceComponent implements OnInit {
         // Les deux sources n'ont pas la même forme : get-by-instance/* renvoie un
         // tableau nu, l'index des requêtes une enveloppe {success, message, data}.
         this.data = Array.isArray(res) ? res : (res?.data ?? []);
+        this.loadDoublons();
       },
       error: () => {
         this.loading = false;
@@ -163,6 +173,104 @@ export class EspaceEserviceComponent implements OnInit {
     this.modalService.dismissAll();
   }
 
+  /** Doublons et déclaration d'agrément ne concernent que la liste DFEA « à inscrire en session ». */
+  get isFinishedDfea(): boolean {
+    return this.state === 'finished' && this.role === 'dfea';
+  }
+
+  loadDoublons(): void {
+    if (!this.isFinishedDfea) return;
+    this.doublonsLoading = true;
+    this.reqService.getFinishedDuplicates(this.service_id, this.seuil).subscribe({
+      next: (res: any) => {
+        this.doublonsLoading = false;
+        this.doublons = res?.data ?? [];
+        this.doublonIds = new Set(this.doublons.flat().map((m: any) => m.id));
+      },
+      error: () => {
+        this.doublonsLoading = false;
+      }
+    });
+  }
+
+  openDoublons(content: any): void {
+    this.loadDoublons();
+    this.modalService.open(content, { size: 'xl', scrollable: true });
+  }
+
+  consulterDoublon(m: any): void {
+    this.modalService.dismissAll();
+    this.router.navigate(['/admin/requetes/show/' + m.code + '/' + this.type]);
+  }
+
+  deleteDoublon(m: any): void {
+    AppSweetAlert.confirmBox('warning', 'Suppression du doublon',
+      `Supprimer définitivement le dossier « ${m.name} » (${m.code}) ? Ses pièces, réponses et parcours seront effacés.`)
+      .then((result: any) => {
+        if (!result.isConfirmed) return;
+        this.reqService.delete(m.id).subscribe({
+          next: (res: any) => {
+            this.toastrService.success(res.message);
+            if (this.selected_data?.id === m.id) this.selected_data = null;
+            // Recharge la liste, et avec elle les groupes de doublons.
+            this.getAll();
+          },
+          error: (err: any) => {
+            AppSweetAlert.simpleAlert('error', 'Suppression', err.error?.message);
+          }
+        });
+      });
+  }
+
+  openDeclareAgree(content: any): void {
+    if (!this.verifyIfElementChecked()) return;
+    this.declaration = { aggreement_reference: '', aggreement_year: '', observation: '' };
+    this.fileDeclaration = null;
+    this.modalService.open(content, { size: 'lg' });
+  }
+
+  uploadDeclaration(ev: any): void {
+    this.fileDeclaration = ev.target.files?.length ? ev.target.files[0] : null;
+  }
+
+  confirmDeclareAgree(modal: any): void {
+    const reference = this.declaration.aggreement_reference.trim();
+    if (!reference) {
+      this.toastrService.warning("Indiquez la référence de l'arrêté d'agrément");
+      return;
+    }
+    if (!this.fileDeclaration) {
+      this.toastrService.warning("Joignez l'arrêté d'agrément scanné");
+      return;
+    }
+
+    const data = new FormData();
+    data.append('id', String(this.selected_data.id));
+    data.append('aggreement_reference', reference);
+    if (this.declaration.aggreement_year) data.append('aggreement_year', this.declaration.aggreement_year);
+    if (this.declaration.observation) data.append('observation', this.declaration.observation);
+    data.append('file_aggreement', this.fileDeclaration);
+
+    this.declaring = true;
+    this.reqService.declareAgree(data).subscribe({
+      next: (res: any) => {
+        this.declaring = false;
+        modal.close();
+        // L'agrément est acté même si le promoteur n'a pas pu être prévenu :
+        // la DFEA doit alors le savoir pour le contacter autrement.
+        res.warning
+          ? AppSweetAlert.simpleAlert('warning', res.message, res.warning)
+          : AppSweetAlert.simpleAlert('success', 'Déclaration enregistrée', res.message);
+        this.selected_data = null;
+        this.getAll();
+      },
+      error: (err: any) => {
+        this.declaring = false;
+        AppSweetAlert.simpleAlert('error', 'Déclaration impossible', err?.error?.message ?? 'La déclaration a échoué');
+      }
+    });
+  }
+
   getJson(value: any): any[] {
     if (!value) return [];
     try { return JSON.parse(value); } catch { return []; }
@@ -180,6 +288,7 @@ export class EspaceEserviceComponent implements OnInit {
       7: 'tw-bg-teal-100 tw-text-teal-700',
       8: 'tw-bg-green-100 tw-text-green-800',
       9: 'tw-bg-green-100 tw-text-green-800',
+      10: 'tw-bg-cyan-100 tw-text-cyan-700',
     };
     return map[status] ?? 'tw-bg-gray-100 tw-text-gray-600';
   }
@@ -192,10 +301,11 @@ export class EspaceEserviceComponent implements OnInit {
       3: 'Dossier corrigé',
       4: 'Invitation envoyée',
       5: 'Transmis au DD',
-      6: 'Attente approbation DDASM',
+      6: 'Approuvé DDASM, attente DFEA',
       7: 'Attente inscription session',
       8: 'Agréé',
       9: 'Agréé (avant plateforme)',
+      10: 'Agrément en validation DFEA',
     };
     return map[status] ?? 'Non défini';
   }
@@ -214,6 +324,19 @@ export class EspaceEserviceComponent implements OnInit {
     if (!last) return 0;
     const elapsed = Date.now() - new Date(last).getTime();
     return Math.max(0, Math.floor(elapsed / 86400000));
+  }
+
+  /**
+   * Dossier sorti du circuit d'instruction : autorisé via la plateforme (8) ou agréé avant elle (9).
+   * Plus aucune action n'y est attendue, l'ancienneté du dernier mouvement n'a donc pas de sens.
+   */
+  isClos(d: any): boolean {
+    return d?.status === 8 || d?.status === 9;
+  }
+
+  /** Un dossier encore en instruction est en souffrance au-delà de 15 jours sans mouvement. */
+  isEnSouffrance(d: any): boolean {
+    return !this.isClos(d) && this.daysSinceLastStep(d) > 15;
   }
 
   /** Signale visuellement les dossiers qui stagnent : au-delà de 15 jours, le traitement est en souffrance. */

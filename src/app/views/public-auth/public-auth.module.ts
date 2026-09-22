@@ -5,6 +5,7 @@ import { LoginComponent } from './Pages/login/login.component';
 import { RegisterComponent } from './Pages/register/register.component';
 import { PublicForgetPasswordComponent } from './Pages/forget-password/forget-password.component';
 import { PublicResetPasswordComponent } from './Pages/reset-password/reset-password.component';
+import { PromoterInvitationComponent } from './Pages/invitation/invitation.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { SharedModule } from '../shared/shared.module';
@@ -21,7 +22,8 @@ import { ToastrModule } from 'ngx-toastr';
     RegisterComponent,
     PublicAuthLayoutComponent,
     PublicForgetPasswordComponent,
-    PublicResetPasswordComponent
+    PublicResetPasswordComponent,
+    PromoterInvitationComponent
   ],
   imports: [
     CommonModule,

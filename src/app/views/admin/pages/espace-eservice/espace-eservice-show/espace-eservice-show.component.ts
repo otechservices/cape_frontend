@@ -75,6 +75,16 @@ export class EspaceEserviceShowComponent implements OnInit {
     });
   }
 
+  /**
+   * Seul le détenteur actuel du dossier (dernière affectation) peut agir dessus.
+   * Ouverte depuis « Parcours traitement », la fiche n'est qu'une consultation
+   * pour tous les autres, quel que soit le statut du dossier.
+   */
+  get canAct(): boolean {
+    const holder = this.data?.affectation?.user_down;
+    return holder != null && Number(holder) === Number(this.user?.id);
+  }
+
   getJson(value: any) {
     if (value == undefined) return [];
     try { return JSON.parse(value); } catch { return []; }
@@ -383,7 +393,7 @@ export class EspaceEserviceShowComponent implements OnInit {
       3: 'Dossier corrigé',
       4: 'Invitation envoyée',
       5: 'Transmis au DD',
-      6: 'Attente approbation DDASM',
+      6: 'Approuvé DDASM, attente DFEA',
       7: 'Attente inscription session',
     };
     return map[status] ?? 'Non défini';

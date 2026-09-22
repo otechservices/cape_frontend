@@ -99,6 +99,7 @@
                                                 <span *ngIf="d.is_validated == null" class="text-secondary" style="font-weight: 700; color: gray;">En attente de validation</span>
                                                 <span *ngIf="d.is_validated == 1" class="text-success" style="font-weight: 700; color: green;">Validé</span>
                                                 <span *ngIf="d.is_validated == 0" class="text-secondary" style="font-weight: 700; color: red;">Validation retirée</span>
+                                                <span *ngIf="d.status == 9" class="tw-block tw-mt-1 tw-text-xs tw-text-green-700">Agréé avant plateforme</span>
                                             </td>
                                        
                                         </tr>

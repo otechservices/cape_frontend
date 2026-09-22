@@ -31,6 +31,30 @@
     </button>
 
     <button
+      *ngIf="isFinishedDfea"
+      (click)="openDoublons(doublonsContent)"
+      class="tw-inline-flex tw-items-center tw-gap-1.5 tw-px-3 tw-py-1.5 tw-rounded-lg tw-text-sm tw-font-medium tw-transition-colors tw-border tw-border-amber-300 tw-text-amber-700 hover:tw-bg-amber-50"
+    >
+      <i class="ri-file-copy-2-line"></i>
+      Doublons
+      <span *ngIf="doublons.length > 0"
+            class="tw-inline-flex tw-items-center tw-justify-center tw-min-w-[1.25rem] tw-h-5 tw-px-1 tw-rounded-full tw-bg-amber-500 tw-text-white tw-text-xs">{{ doublons.length }}</span>
+    </button>
+
+    <button
+      *ngIf="isFinishedDfea"
+      (click)="openDeclareAgree(declareContent)"
+      [disabled]="!selected_data"
+      class="tw-inline-flex tw-items-center tw-gap-1.5 tw-px-3 tw-py-1.5 tw-rounded-lg tw-text-sm tw-font-medium tw-transition-colors"
+      [ngClass]="selected_data
+        ? 'tw-bg-green-600 tw-text-white hover:tw-bg-green-700'
+        : 'tw-bg-gray-100 tw-text-gray-400 tw-cursor-not-allowed'"
+    >
+      <i class="ri-award-line"></i>
+      Déclarer agréé
+    </button>
+
+    <button
       *ngIf="state == undefined"
       (click)="add(parcoursContent)"
       [disabled]="!selected_data"
@@ -121,7 +145,14 @@
               {{ d.type_cape?.name ?? d.type_garderie?.name ?? '—' }}
             </span>
           </td>
-          <td class="tw-px-4 tw-py-3 tw-font-medium tw-text-gray-900">{{ d.name }}</td>
+          <td class="tw-px-4 tw-py-3 tw-font-medium tw-text-gray-900">
+            {{ d.name }}
+            <span *ngIf="doublonIds.has(d.id)"
+                  class="tw-ml-1 tw-inline-flex tw-items-center tw-gap-0.5 tw-px-1.5 tw-py-0.5 tw-rounded tw-text-xs tw-font-medium tw-bg-amber-100 tw-text-amber-700"
+                  title="Nom très proche d'un autre dossier : voir « Doublons »">
+              <i class="ri-file-copy-2-line"></i>Doublon ?
+            </span>
+          </td>
           <td class="tw-px-4 tw-py-3 tw-text-gray-700 tw-whitespace-nowrap">{{ d.name_pomoter }} {{ d.firstname_pomoter }}</td>
           <td class="tw-px-4 tw-py-3">
             <div class="tw-flex tw-flex-wrap tw-gap-1">
@@ -144,7 +175,7 @@
           </td>
           <td *ngIf="state == undefined" class="tw-px-4 tw-py-3 tw-text-xs">
             <div class="tw-text-gray-700">{{ d.last_parcours?.libelle ?? '—' }}</div>
-            <span class="tw-inline-flex tw-items-center tw-gap-1 tw-mt-1 tw-px-1.5 tw-py-0.5 tw-rounded tw-font-medium {{ agingClass(d) }}"
+            <span *ngIf="!isClos(d)" class="tw-inline-flex tw-items-center tw-gap-1 tw-mt-1 tw-px-1.5 tw-py-0.5 tw-rounded tw-font-medium {{ agingClass(d) }}"
                   [title]="'Aucun mouvement depuis ' + daysSinceLastStep(d) + ' jour(s)'">
               <i class="ri-time-line"></i>{{ daysSinceLastStep(d) }} j
             </span>
@@ -198,7 +229,14 @@
               >{{ el.type_garderie?.name }}</span>
             </div>
           </td>
-          <td class="tw-px-4 tw-py-3 tw-font-medium tw-text-gray-900">{{ d.name }}</td>
+          <td class="tw-px-4 tw-py-3 tw-font-medium tw-text-gray-900">
+            {{ d.name }}
+            <span *ngIf="doublonIds.has(d.id)"
+                  class="tw-ml-1 tw-inline-flex tw-items-center tw-gap-0.5 tw-px-1.5 tw-py-0.5 tw-rounded tw-text-xs tw-font-medium tw-bg-amber-100 tw-text-amber-700"
+                  title="Nom très proche d'un autre dossier : voir « Doublons »">
+              <i class="ri-file-copy-2-line"></i>Doublon ?
+            </span>
+          </td>
           <td class="tw-px-4 tw-py-3 tw-text-gray-700 tw-whitespace-nowrap">{{ d.name_pomoter }} {{ d.firstname_pomoter }}</td>
           <td class="tw-px-4 tw-py-3 tw-text-gray-600 tw-max-w-[160px] tw-truncate" [title]="d.address">{{ d.address ?? '—' }}</td>
           <td class="tw-px-4 tw-py-3">
@@ -212,7 +250,7 @@
           </td>
           <td *ngIf="state == undefined" class="tw-px-4 tw-py-3 tw-text-xs">
             <div class="tw-text-gray-700">{{ d.last_parcours?.libelle ?? '—' }}</div>
-            <span class="tw-inline-flex tw-items-center tw-gap-1 tw-mt-1 tw-px-1.5 tw-py-0.5 tw-rounded tw-font-medium {{ agingClass(d) }}"
+            <span *ngIf="!isClos(d)" class="tw-inline-flex tw-items-center tw-gap-1 tw-mt-1 tw-px-1.5 tw-py-0.5 tw-rounded tw-font-medium {{ agingClass(d) }}"
                   [title]="'Aucun mouvement depuis ' + daysSinceLastStep(d) + ' jour(s)'">
               <i class="ri-time-line"></i>{{ daysSinceLastStep(d) }} j
             </span>
@@ -259,14 +297,14 @@
             {{ getText(selected_data?.status) }}
           </span>
         </div>
-        <div class="tw-text-right">
+        <div *ngIf="!isClos(selected_data)" class="tw-text-right">
           <div class="tw-text-xs tw-text-gray-500 tw-uppercase tw-tracking-wide tw-mb-1">Sans mouvement depuis</div>
           <span class="tw-inline-flex tw-items-center tw-gap-1 tw-px-2 tw-py-0.5 tw-rounded-full tw-text-sm tw-font-medium {{ agingClass(selected_data) }}">
             <i class="ri-time-line"></i>{{ daysSinceLastStep(selected_data) }} jour(s)
           </span>
         </div>
       </div>
-      <p *ngIf="daysSinceLastStep(selected_data) > 15" class="tw-text-xs tw-text-red-600 tw-mt-3 tw-mb-0">
+      <p *ngIf="isEnSouffrance(selected_data)" class="tw-text-xs tw-text-red-600 tw-mt-3 tw-mb-0">
         <i class="ri-alert-line tw-mr-1"></i>Ce dossier est en souffrance : aucune action enregistrée depuis plus de 15 jours.
       </p>
     </div>
@@ -300,5 +338,168 @@
         </div>
       </li>
     </ol>
+  </div>
+</ng-template>
+
+
+<!-- Modal : doublons probables de la liste « à inscrire en session » -->
+<ng-template #doublonsContent let-d="dismiss">
+  <div class="modal-header tw-bg-slate-800 tw-text-white">
+    <h6 class="modal-title tw-font-semibold">
+      <i class="ri-file-copy-2-line tw-mr-2"></i>Doublons probables
+    </h6>
+    <button type="button" (click)="d('Cross click')" class="tw-text-white hover:tw-text-gray-200 tw-transition-colors">
+      <i class="ri-close-line tw-text-lg"></i>
+    </button>
+  </div>
+  <div class="modal-body tw-p-0">
+
+    <div class="tw-px-5 tw-py-4 tw-bg-gray-50 tw-border-b tw-border-gray-200">
+      <div class="tw-flex tw-flex-wrap tw-items-center tw-gap-3">
+        <label for="seuilDoublons" class="tw-text-sm tw-text-gray-700 tw-mb-0">Similarité minimale du nom</label>
+        <input id="seuilDoublons" type="range" min="90" max="100" step="1"
+               [(ngModel)]="seuil" (change)="loadDoublons()" class="tw-w-48">
+        <span class="tw-text-sm tw-font-semibold tw-text-gray-900">{{ seuil }} %</span>
+      </div>
+      <p class="tw-text-xs tw-text-gray-500 tw-mt-2 tw-mb-0">
+        Chaque dossier à inscrire est comparé à tous les dossiers du service, quel que soit leur statut
+        (majuscules, accents et ponctuation ignorés). Vérifiez la localisation avant de supprimer :
+        deux centres homonymes de communes différentes ne sont pas des doublons.
+      </p>
+    </div>
+
+    <div *ngIf="doublonsLoading" class="tw-py-10 tw-text-center tw-text-sm tw-text-gray-400">Recherche en cours…</div>
+
+    <div *ngIf="!doublonsLoading && doublons.length === 0" class="tw-flex tw-flex-col tw-items-center tw-justify-center tw-py-10 tw-text-gray-400">
+      <i class="ri-checkbox-circle-line tw-text-3xl tw-mb-2"></i>
+      <p class="tw-text-sm tw-mb-0">Aucun doublon probable au seuil de {{ seuil }} %.</p>
+    </div>
+
+    <div *ngIf="!doublonsLoading" class="tw-divide-y tw-divide-gray-200">
+      <div *ngFor="let groupe of doublons; let gi = index" class="tw-px-5 tw-py-4">
+        <div class="tw-text-xs tw-font-semibold tw-text-gray-500 tw-uppercase tw-tracking-wide tw-mb-2">
+          Groupe {{ gi + 1 }} · {{ groupe.length }} dossiers
+        </div>
+        <div class="tw-overflow-x-auto">
+          <table class="tw-min-w-full tw-text-sm">
+            <thead>
+              <tr class="tw-text-left tw-text-xs tw-text-gray-500">
+                <th class="tw-py-1 tw-pr-3 tw-font-medium">Centre</th>
+                <th class="tw-py-1 tw-pr-3 tw-font-medium">Statut</th>
+                <th class="tw-py-1 tw-pr-3 tw-font-medium">Localisation</th>
+                <th class="tw-py-1 tw-pr-3 tw-font-medium">Promoteur</th>
+                <th class="tw-py-1 tw-pr-3 tw-font-medium">Déposé le</th>
+                <th class="tw-py-1 tw-pr-3 tw-font-medium">Similarité</th>
+                <th class="tw-py-1"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let m of groupe" class="tw-border-t tw-border-gray-100">
+                <td class="tw-py-2 tw-pr-3">
+                  <div class="tw-font-medium tw-text-gray-900">{{ m.name }}</div>
+                  <div class="tw-text-xs tw-text-gray-500">
+                    <span class="tw-font-mono">{{ m.code }}</span>
+                    <span *ngIf="m.dans_liste" class="tw-ml-1 tw-text-blue-700">· dans cette liste</span>
+                  </div>
+                </td>
+                <td class="tw-py-2 tw-pr-3">
+                  <span class="tw-inline-flex tw-items-center tw-px-2 tw-py-0.5 tw-rounded-full tw-text-xs tw-font-medium tw-whitespace-nowrap {{ getStatusClass(m.status) }}">
+                    {{ getText(m.status) }}
+                  </span>
+                </td>
+                <td class="tw-py-2 tw-pr-3 tw-text-gray-700">
+                  {{ m.commune ?? '—' }}
+                  <div *ngIf="m.district && m.district !== m.commune" class="tw-text-xs tw-text-gray-500">{{ m.district }}</div>
+                </td>
+                <td class="tw-py-2 tw-pr-3 tw-text-gray-700">{{ m.promoteur || '—' }}</td>
+                <td class="tw-py-2 tw-pr-3 tw-text-gray-600 tw-whitespace-nowrap">{{ m.created_at | date:'dd/MM/yyyy' }}</td>
+                <td class="tw-py-2 tw-pr-3 tw-font-medium tw-text-gray-900">{{ m.similarite }} %</td>
+                <td class="tw-py-2 tw-text-right tw-whitespace-nowrap">
+                  <button (click)="consulterDoublon(m)"
+                          class="tw-inline-flex tw-items-center tw-gap-1 tw-px-2 tw-py-1 tw-rounded-md tw-text-xs tw-font-medium tw-bg-gray-100 tw-text-gray-700 hover:tw-bg-gray-200 tw-transition-colors">
+                    <i class="ri-eye-line"></i>Consulter
+                  </button>
+                  <button *ngIf="m.supprimable" (click)="deleteDoublon(m)"
+                          class="tw-inline-flex tw-items-center tw-gap-1 tw-ml-1 tw-px-2 tw-py-1 tw-rounded-md tw-text-xs tw-font-medium tw-bg-red-600 tw-text-white hover:tw-bg-red-700 tw-transition-colors">
+                    <i class="ri-delete-bin-line"></i>Supprimer
+                  </button>
+                  <span *ngIf="!m.supprimable" class="tw-ml-1 tw-text-xs tw-text-gray-400"
+                        title="Un centre agréé ne peut pas être supprimé">Centre agréé</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</ng-template>
+
+
+<!-- Modal : déclaration d'un centre déjà agréé -->
+<ng-template #declareContent let-modal>
+  <div class="modal-header tw-bg-slate-800 tw-text-white">
+    <h6 class="modal-title tw-font-semibold">
+      <i class="ri-award-line tw-mr-2"></i>Déclarer le centre déjà agréé
+    </h6>
+    <button type="button" (click)="modal.dismiss()" class="tw-text-white hover:tw-text-gray-200 tw-transition-colors">
+      <i class="ri-close-line tw-text-lg"></i>
+    </button>
+  </div>
+  <div class="modal-body tw-p-5 tw-space-y-4">
+
+    <div class="tw-rounded-lg tw-border tw-border-gray-200 tw-bg-gray-50 tw-p-4 tw-text-sm">
+      <div class="tw-font-semibold tw-text-gray-900">{{ selected_data?.name }}</div>
+      <div class="tw-text-xs tw-text-gray-500 tw-font-mono">{{ selected_data?.code }}</div>
+      <div class="tw-mt-2 tw-text-gray-700">
+        Promoteur : {{ selected_data?.name_pomoter }} {{ selected_data?.firstname_pomoter }}
+        <span *ngIf="selected_data?.email_pomoter" class="tw-text-gray-500">· {{ selected_data?.email_pomoter }}</span>
+      </div>
+    </div>
+
+    <p class="tw-text-xs tw-text-gray-600 tw-mb-0">
+      Le dossier passe au statut « Agréé » sans passer en session, et quitte cette liste.
+      Le promoteur reçoit la confirmation par email avec l'invitation à renseigner le personnel,
+      les pensionnaires et les rapports d'activité. S'il n'a pas de compte, le mail contient un lien
+      de création de compte valable 7 jours, qui lui rattachera le centre.
+    </p>
+
+    <div class="tw-grid tw-grid-cols-1 sm:tw-grid-cols-3 tw-gap-4">
+      <div class="sm:tw-col-span-2">
+        <label for="declRef" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 tw-mb-1">Référence de l'arrêté <span class="text-danger">(*)</span></label>
+        <input id="declRef" type="text" [(ngModel)]="declaration.aggreement_reference"
+               class="tw-w-full tw-px-3 tw-py-2 tw-border tw-border-gray-300 tw-rounded-lg tw-text-sm">
+      </div>
+      <div>
+        <label for="declYear" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 tw-mb-1">Année</label>
+        <input id="declYear" type="text" inputmode="numeric" maxlength="4" [(ngModel)]="declaration.aggreement_year"
+               class="tw-w-full tw-px-3 tw-py-2 tw-border tw-border-gray-300 tw-rounded-lg tw-text-sm">
+      </div>
+    </div>
+
+    <div>
+      <label for="declScan" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 tw-mb-1">Arrêté d'agrément scanné <span class="text-danger">(*)</span></label>
+      <input id="declScan" type="file" accept=".pdf,.jpg,.jpeg,.png" (change)="uploadDeclaration($event)"
+             class="tw-block tw-w-full tw-text-sm">
+      <p class="tw-text-xs tw-text-gray-500 tw-mt-1 tw-mb-0">PDF, JPG ou PNG, 5 Mo maximum.</p>
+    </div>
+
+    <div>
+      <label for="declObs" class="tw-block tw-text-sm tw-font-medium tw-text-gray-700 tw-mb-1">Observation</label>
+      <textarea id="declObs" rows="2" [(ngModel)]="declaration.observation"
+                class="tw-w-full tw-px-3 tw-py-2 tw-border tw-border-gray-300 tw-rounded-lg tw-text-sm"></textarea>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" (click)="modal.dismiss()"
+            class="tw-px-3 tw-py-1.5 tw-rounded-lg tw-text-sm tw-font-medium tw-bg-gray-100 tw-text-gray-700 hover:tw-bg-gray-200 tw-transition-colors">
+      Annuler
+    </button>
+    <button type="button" (click)="confirmDeclareAgree(modal)" [disabled]="declaring"
+            class="tw-inline-flex tw-items-center tw-gap-1.5 tw-px-3 tw-py-1.5 tw-rounded-lg tw-text-sm tw-font-medium tw-bg-green-600 tw-text-white hover:tw-bg-green-700 disabled:tw-opacity-50 tw-transition-colors">
+      <i *ngIf="declaring" class="ri-loader-4-line tw-animate-spin"></i>
+      Déclarer agréé
+    </button>
   </div>
 </ng-template>

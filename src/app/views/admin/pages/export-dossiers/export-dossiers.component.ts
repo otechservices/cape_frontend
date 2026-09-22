@@ -44,7 +44,7 @@ export class ExportDossiersComponent implements OnInit {
     { value: 3, label: 'Dossier corrigé' },
     { value: 4, label: 'Invitation envoyée' },
     { value: 5, label: 'Transmis au DD' },
-    { value: 6, label: 'Attente approbation DDASM' },
+    { value: 6, label: 'Approuvé DDASM, attente DFEA' },
     { value: 7, label: 'Attente inscription session' },
     { value: 8, label: 'Agréé' },
     { value: 9, label: 'Agréé (avant plateforme)' },

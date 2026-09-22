@@ -33,6 +33,7 @@
           <app-loading [isVisible]="ficheLoading"></app-loading>
         </button>
 
+        <ng-container *ngIf="canAct">
         <button [disabled]="loading" (click)="add(backContent)"
           *ngIf="(data.status==5 || data.status==6) && role!='cps'"
           class="tw-inline-flex tw-items-center tw-gap-1.5 tw-px-3 tw-py-1.5 tw-rounded-lg tw-text-sm tw-font-medium tw-bg-gray-100 tw-text-gray-700 hover:tw-bg-gray-200 tw-transition-colors disabled:tw-opacity-50 disabled:tw-cursor-not-allowed">
@@ -50,7 +51,7 @@
         </button>
 
         <button [disabled]="loading" (click)="add(resp)"
-          *ngIf="data.status==5 || data.affectation.sens==-1"
+          *ngIf="data.status==5 || data.affectation?.sens==-1"
           class="tw-inline-flex tw-items-center tw-gap-1.5 tw-px-3 tw-py-1.5 tw-rounded-lg tw-text-sm tw-font-medium tw-bg-blue-600 tw-text-white hover:tw-bg-blue-700 tw-transition-colors disabled:tw-opacity-50 disabled:tw-cursor-not-allowed">
           <i class="ri-send-plane-line"></i>
           Transmettre
@@ -88,13 +89,14 @@
           Inviter pour dépôt physique
           <app-loading [isVisible]="loading"></app-loading>
         </button>
+        </ng-container>
 
       </div>
     </div>
   </div>
 
   <!-- ── Correction alert ───────────────────────────────────────── -->
-  <div *ngIf="data.affectation.sens==-1"
+  <div *ngIf="data.affectation?.sens==-1"
        class="tw-bg-amber-50 tw-border tw-border-amber-200 tw-rounded-xl tw-p-4 tw-mb-6 tw-flex tw-gap-3">
     <i class="ri-error-warning-line tw-text-amber-500 tw-text-xl tw-flex-shrink-0 tw-mt-0.5"></i>
     <div>
@@ -480,7 +482,7 @@
           <i class="ri-survey-line tw-text-blue-600"></i>
           <h3 class="tw-text-sm tw-font-semibold tw-text-gray-800">Rapport social</h3>
         </div>
-        <button *ngIf="data.has_cps_file && data.status==4" (click)="add(finishContent1M)"
+        <button *ngIf="canAct && data.has_cps_file && data.status==4" (click)="add(finishContent1M)"
           class="tw-inline-flex tw-items-center tw-gap-1.5 tw-px-3 tw-py-1.5 tw-rounded-lg tw-text-xs tw-font-medium tw-bg-amber-100 tw-text-amber-700 hover:tw-bg-amber-200 tw-transition-colors">
           <i class="ri-edit-line"></i> Modifier
         </button>
@@ -524,7 +526,7 @@
           <i class="ri-inbox-archive-line tw-text-blue-600"></i>
           <h3 class="tw-text-sm tw-font-semibold tw-text-gray-800">Dépôt physique</h3>
         </div>
-        <button *ngIf="data.has_physical_deposit && data.status==4" (click)="add(finishContent2M)"
+        <button *ngIf="canAct && data.has_physical_deposit && data.status==4" (click)="add(finishContent2M)"
           class="tw-inline-flex tw-items-center tw-gap-1.5 tw-px-3 tw-py-1.5 tw-rounded-lg tw-text-xs tw-font-medium tw-bg-amber-100 tw-text-amber-700 hover:tw-bg-amber-200 tw-transition-colors">
           <i class="ri-edit-line"></i> Modifier
         </button>
@@ -634,12 +636,12 @@
         class="tw-inline-flex tw-items-center tw-gap-1.5 tw-px-3 tw-py-1.5 tw-rounded-lg tw-text-sm tw-font-medium tw-bg-gray-100 tw-text-gray-700 hover:tw-bg-gray-200 tw-transition-colors">
         <i class="ri-close-line"></i> Fermer
       </button>
-      <button *ngIf="fileSelected && !fileSelected.is_treated && data.status<4"
+      <button *ngIf="canAct && fileSelected && !fileSelected.is_treated && data.status<4"
         (click)="add(fileTreatmentContent)"
         class="tw-inline-flex tw-items-center tw-gap-1.5 tw-px-3 tw-py-1.5 tw-rounded-lg tw-text-sm tw-font-medium tw-bg-blue-600 tw-text-white hover:tw-bg-blue-700 tw-transition-colors">
         <i class="ri-edit-2-line"></i> Enregistrer les observations
       </button>
-      <button *ngIf="fileSelected && fileSelected.is_treated && data.status<4"
+      <button *ngIf="canAct && fileSelected && fileSelected.is_treated && data.status<4"
         (click)="add(fileTreatmentEditContent)"
         class="tw-inline-flex tw-items-center tw-gap-1.5 tw-px-3 tw-py-1.5 tw-rounded-lg tw-text-sm tw-font-medium tw-bg-amber-500 tw-text-white hover:tw-bg-amber-600 tw-transition-colors">
         <i class="ri-edit-line"></i> Modifier les observations
