@@ -64,6 +64,15 @@ export class EspaceEserviceComponent implements OnInit {
     return !!d?.affectation && Number(d?.status) <= 7;
   }
 
+  /**
+    * CPS en charge du dossier : celui de l'agent qui le détient, à défaut celui
+    * de son arrondissement. Aux étapes DDASM et DFEA, le détenteur n'a pas de
+    * CPS : c'est alors le rattachement territorial qui est montré.
+    */
+  cpsEnCharge(d: any): string {
+    return d?.affectation?.detenteur?.cps?.name ?? d?.district?.cps?.name ?? '—';
+  }
+
   /** Dossier encore à instruire mais confié à personne : anomalie à signaler. */
   jamaisAffecte(d: any): boolean {
     return !d?.affectation && Number(d?.status) <= 7;

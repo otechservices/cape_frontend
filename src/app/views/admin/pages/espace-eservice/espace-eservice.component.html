@@ -336,6 +336,16 @@
             {{ getText(selected_data?.status) }}
           </span>
         </div>
+        <div>
+          <div class="tw-text-xs tw-text-gray-500 tw-uppercase tw-tracking-wide tw-mb-1">CPS en charge</div>
+          <div class="tw-text-sm tw-font-medium tw-text-gray-900">{{ cpsEnCharge(selected_data) }}</div>
+          <div *ngIf="selected_data?.affectation?.detenteur" class="tw-text-xs tw-text-gray-500">
+            Détenu par {{ selected_data.affectation.detenteur.email || selected_data.affectation.detenteur.name }}
+          </div>
+          <div *ngIf="!selected_data?.affectation" class="tw-text-xs tw-text-orange-600">
+            Dossier confié à personne
+          </div>
+        </div>
         <div *ngIf="!isClos(selected_data)" class="tw-text-right">
           <div class="tw-text-xs tw-text-gray-500 tw-uppercase tw-tracking-wide tw-mb-1">Sans mouvement depuis</div>
           <span class="tw-inline-flex tw-items-center tw-gap-1 tw-px-2 tw-py-0.5 tw-rounded-full tw-text-sm tw-font-medium {{ agingClass(selected_data) }}">
