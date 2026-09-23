@@ -1,0 +1,14 @@
+{
+  "name": "CAPE — Structures de protection de l'enfant",
+  "short_name": "CAPE",
+  "description": "Inscription et suivi des centres d'accueil et de protection de l'enfance et des garderies, Ministère de la Famille et de l'Action Sociale du Bénin.",
+  "lang": "fr",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#008852",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ]
+}
