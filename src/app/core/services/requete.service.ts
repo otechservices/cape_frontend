@@ -68,9 +68,16 @@ export class RequeteService {
     return this.http.get<any[]>(`${this.url}get-by-instance/${state}?service_id=${service}`);
   }
 
-  /** Groupes de dossiers au nom quasi identique, pour la liste « à inscrire en session ». */
-  getFinishedDuplicates(service:any, seuil:number){
-    return this.http.get<any>(`${this.url}duplicates/finished?service_id=${service}&seuil=${seuil}`);
+  /** Groupes de dossiers au nom quasi identique. Portée : 'finished' ou 'parcours'. */
+  getDuplicates(portee:string, service:any, seuil:number){
+    return this.http.get<any>(`${this.url}duplicates/${portee}?service_id=${service}&seuil=${seuil}`);
+  }
+
+  /** Export de la liste « à inscrire en session ». Format : 'xlsx' ou 'pdf'. */
+  exportFinished(service:any, format:string){
+    const header = ConfigService.httpHeader(localStorage.getItem(GlobalName.tokenName),true);
+    return this.http.get(`${this.url}finished/export?service_id=${service}&format=${format}`,
+      { headers: header.headers, responseType: 'blob' });
   }
 
   /** La DFEA déclare agréé un dossier à inscrire en session (arrêté scanné joint). */

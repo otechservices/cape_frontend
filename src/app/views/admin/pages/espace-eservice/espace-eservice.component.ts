@@ -37,11 +37,40 @@ export class EspaceEserviceComponent implements OnInit {
   declaration = { aggreement_reference: '', aggreement_year: '', observation: '' };
   fileDeclaration: File | null = null;
   declaring = false;
+  circuitOnly = false;
+  exporting = '';
+
+  /**
+    * Dossiers affichés, une fois le filtre « circuit » appliqué. La recherche
+    * et la pagination travaillent ensuite sur cette base.
+    */
+  get baseData(): any[] {
+    return this.circuitOnly ? this.data.filter(d => this.dansCircuit(d)) : this.data;
+  }
 
   get filteredData(): any[] {
-    if (!this.searchTerm || this.searchTerm.trim() === '') return this.data;
+    if (!this.searchTerm || this.searchTerm.trim() === '') return this.baseData;
     const term = this.searchTerm.toLowerCase().trim();
-    return this.data.filter(item => this.deepSearch(item, term));
+    return this.baseData.filter(item => this.deepSearch(item, term));
+  }
+
+  /**
+    * Un dossier suit le circuit s'il est confié à quelqu'un (affectation en
+    * cours) et n'a pas terminé son instruction. Les autres sont soit agréés,
+    * soit des lignes chargées en base qui ne sont jamais entrées dans le
+    * circuit : personne ne les voit dans « À valider ».
+    */
+  dansCircuit(d: any): boolean {
+    return !!d?.affectation && Number(d?.status) <= 7;
+  }
+
+  /** Dossier encore à instruire mais confié à personne : anomalie à signaler. */
+  jamaisAffecte(d: any): boolean {
+    return !d?.affectation && Number(d?.status) <= 7;
+  }
+
+  get horsCircuitCount(): number {
+    return this.data.filter(d => !this.dansCircuit(d)).length;
   }
 
   private deepSearch(obj: any, term: string): boolean {
@@ -173,15 +202,25 @@ export class EspaceEserviceComponent implements OnInit {
     this.modalService.dismissAll();
   }
 
-  /** Doublons et déclaration d'agrément ne concernent que la liste DFEA « à inscrire en session ». */
+  /** La déclaration d'agrément ne concerne que la liste DFEA « à inscrire en session ». */
   get isFinishedDfea(): boolean {
     return this.state === 'finished' && this.role === 'dfea';
   }
 
+  /** Les doublons se cherchent depuis « à inscrire en session » et « Parcours traitement ». */
+  get canDoublons(): boolean {
+    return this.isFinishedDfea
+      || (!this.state && ['cps', 'ddasm', 'dfea', 'ministre'].includes(this.role));
+  }
+
+  get porteeDoublons(): string {
+    return this.state === 'finished' ? 'finished' : 'parcours';
+  }
+
   loadDoublons(): void {
-    if (!this.isFinishedDfea) return;
+    if (!this.canDoublons) return;
     this.doublonsLoading = true;
-    this.reqService.getFinishedDuplicates(this.service_id, this.seuil).subscribe({
+    this.reqService.getDuplicates(this.porteeDoublons, this.service_id, this.seuil).subscribe({
       next: (res: any) => {
         this.doublonsLoading = false;
         this.doublons = res?.data ?? [];
@@ -220,6 +259,30 @@ export class EspaceEserviceComponent implements OnInit {
           }
         });
       });
+  }
+
+  /** Télécharge la liste « à inscrire en session » au format demandé. */
+  exportFinished(format: 'xlsx' | 'pdf'): void {
+    if (this.data.length === 0) {
+      this.toastrService.warning('Aucun dossier à exporter');
+      return;
+    }
+
+    this.exporting = format;
+    this.reqService.exportFinished(this.service_id, format).subscribe({
+      next: (blob: Blob) => {
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `dossiers_a_inscrire_${this.type}_${new Date().toISOString().slice(0, 10)}.${format}`;
+        link.click();
+        URL.revokeObjectURL(link.href);
+        this.exporting = '';
+      },
+      error: () => {
+        this.toastrService.error("L'export a échoué");
+        this.exporting = '';
+      }
+    });
   }
 
   openDeclareAgree(content: any): void {
