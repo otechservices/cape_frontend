@@ -34,6 +34,13 @@
         </button>
 
         <ng-container *ngIf="canAct">
+        <button [disabled]="loading" (click)="openGupsTransfer(gupsTransferContent)"
+          *ngIf="canTransferGups"
+          class="tw-inline-flex tw-items-center tw-gap-1.5 tw-px-3 tw-py-1.5 tw-rounded-lg tw-text-sm tw-font-medium tw-border tw-border-slate-300 tw-text-slate-700 hover:tw-bg-slate-50 tw-transition-colors disabled:tw-opacity-50 disabled:tw-cursor-not-allowed">
+          <i class="ri-share-forward-line"></i>
+          Transférer à un autre GUPS
+        </button>
+
         <button [disabled]="loading" (click)="add(backContent)"
           *ngIf="(data.status==5 || data.status==6) && role!='cps'"
           class="tw-inline-flex tw-items-center tw-gap-1.5 tw-px-3 tw-py-1.5 tw-rounded-lg tw-text-sm tw-font-medium tw-bg-gray-100 tw-text-gray-700 hover:tw-bg-gray-200 tw-transition-colors disabled:tw-opacity-50 disabled:tw-cursor-not-allowed">
@@ -242,6 +249,10 @@
             <div>
               <dt class="tw-text-xs tw-text-gray-500">Arrondissement</dt>
               <dd class="tw-text-sm tw-font-medium tw-text-gray-900 tw-mt-0.5">{{data.district?.name}}</dd>
+            </div>
+            <div>
+              <dt class="tw-text-xs tw-text-gray-500">GUPS en charge</dt>
+              <dd class="tw-text-sm tw-font-medium tw-text-gray-900 tw-mt-0.5">{{data.gups?.name || 'Non renseigné'}}</dd>
             </div>
             <div>
               <dt class="tw-text-xs tw-text-gray-500">Quartier / Village</dt>
@@ -954,6 +965,57 @@
 </ng-template>
 
 <!-- Retourner le dossier -->
+<ng-template #gupsTransferContent let-c="close" let-d="dismiss">
+  <form #gupsForm="ngForm" (ngSubmit)="transferGups()">
+    <div class="tw-bg-slate-800 tw-text-white tw-px-4 tw-py-3 tw-flex tw-items-center tw-justify-between">
+      <h6 class="tw-text-sm tw-font-semibold tw-m-0">Transférer le dossier à un autre GUPS</h6>
+      <button type="button" (click)="d('Cross click')"
+        class="tw-flex tw-items-center tw-justify-center tw-w-6 tw-h-6 tw-rounded tw-text-slate-300 hover:tw-text-white hover:tw-bg-slate-700 tw-transition-colors">
+        <i class="ri-close-line"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p class="tw-text-sm tw-text-gray-600 tw-mb-4">
+        Seuls les GUPS qui couvrent aussi l'arrondissement <strong>{{data.district?.name}}</strong> peuvent recevoir ce dossier.
+        Il quittera votre liste de travail.
+      </p>
+
+      <p *ngIf="!gupsCandidats.length" class="tw-p-3 tw-rounded-lg tw-bg-yellow-50 tw-text-sm tw-text-yellow-800">
+        Aucun autre GUPS ne couvre cet arrondissement. Si le dossier ne relève pas de votre GUPS, signalez-le à l'administrateur
+        pour qu'il mette à jour la couverture.
+      </p>
+
+      <ng-container *ngIf="gupsCandidats.length">
+        <div class="form-group mb-3">
+          <label for="gupsCible">GUPS destinataire <span class="text-danger ml-2">(*)</span></label>
+          <select id="gupsCible" name="cps_id" class="form-select" [(ngModel)]="gupsTransfer.cps_id" required>
+            <option [ngValue]="null" disabled>Choisir un GUPS</option>
+            <option *ngFor="let g of gupsCandidats" [ngValue]="g.id" [disabled]="!g.has_agent">
+              {{g.name}}{{ g.has_agent ? '' : ' — aucun agent actif' }}
+            </option>
+          </select>
+        </div>
+        <div class="form-group mb-3">
+          <label for="gupsMotif">Motif <span class="text-danger ml-2">(*)</span></label>
+          <textarea id="gupsMotif" name="motif" class="form-control" rows="3" [(ngModel)]="gupsTransfer.motif" required minlength="5" maxlength="500"
+            placeholder="Ex. : le centre est situé dans le quartier suivi par ce GUPS"></textarea>
+          <small class="text-muted">Le motif est inscrit dans le parcours du dossier.</small>
+        </div>
+      </ng-container>
+    </div>
+    <div class="modal-footer">
+      <button type="button" (click)="d('Cross click')"
+        class="tw-inline-flex tw-items-center tw-px-4 tw-py-2 tw-rounded-lg tw-text-sm tw-font-medium tw-bg-gray-100 tw-text-gray-700 hover:tw-bg-gray-200 tw-transition-colors">
+        Annuler
+      </button>
+      <button type="submit" *ngIf="gupsCandidats.length" [disabled]="gupsForm.invalid || loading"
+        class="tw-inline-flex tw-items-center tw-gap-1.5 tw-px-4 tw-py-2 tw-rounded-lg tw-text-sm tw-font-medium tw-bg-blue-600 tw-text-white hover:tw-bg-blue-700 tw-transition-colors disabled:tw-opacity-50 disabled:tw-cursor-not-allowed">
+        Transférer <app-loading [isVisible]="loading"></app-loading>
+      </button>
+    </div>
+  </form>
+</ng-template>
+
 <ng-template #backContent let-c="close" let-d="dismiss">
   <form #addSusp="ngForm" (ngSubmit)="transDown(addSusp.value)">
     <div class="tw-bg-slate-800 tw-text-white tw-px-4 tw-py-3 tw-flex tw-items-center tw-justify-between">

@@ -52,7 +52,8 @@ export const AdminMenu: menu[] = [
     ] },
     { id: 'admin-10', isTitle:false, name:"Maintenances", icon:'ri-tools-line', hasChildren:true, children:[
         { id: 'admin-10-1', isTitle:false, name:"Sauvegardes", route:'/admin/backups', icon:'ri-save-line', hasChildren:false },
-        { id: 'admin-10-2', isTitle:false, name:"Restauration", route:'/admin/backups', icon:'ri-refresh-line', hasChildren:false }
+        { id: 'admin-10-2', isTitle:false, name:"Restauration", route:'/admin/backups', icon:'ri-refresh-line', hasChildren:false },
+        { id: 'admin-10-3', isTitle:false, name:"Test d'envoi de mail", route:'/admin/mail-test', icon:'ri-mail-check-line', hasChildren:false }
     ] },
     { id: 'admin-11', isTitle:false, name:"Support", icon:'ri-customer-service-2-line', hasChildren:true, children:[
         { id: 'admin-11-1', isTitle:false, name:"Assistance", route:'/admin/billings', icon:'ri-questionnaire-line', hasChildren:false },

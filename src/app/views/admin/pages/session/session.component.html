@@ -43,6 +43,11 @@
           Clôturer
         </button>
 
+        <button *ngIf="canForceClose" (click)="show(forceCloseContent)" type="button"
+          class="tw-inline-flex tw-items-center tw-gap-1.5 tw-px-3 tw-py-1.5 tw-rounded-lg tw-text-sm tw-font-medium tw-border tw-border-red-500 tw-text-red-600 hover:tw-bg-red-50 tw-transition-colors">
+          <i class="ri-error-warning-line"></i> Clôture forcée
+        </button>
+
         <button (click)="show(arrContent)" type="button"
           [disabled]="!selected_data"
           class="tw-inline-flex tw-items-center tw-gap-1.5 tw-px-3 tw-py-1.5 tw-rounded-lg tw-text-sm tw-font-medium tw-transition-colors"
@@ -112,9 +117,13 @@
                 class="tw-inline-flex tw-items-center tw-px-2 tw-py-0.5 tw-rounded-full tw-text-xs tw-font-medium tw-bg-green-100 tw-text-green-700">
                 Ouvert
               </span>
-              <span *ngIf="d.is_active==false"
+              <span *ngIf="d.is_active==false && d.closure_mode!='forced_cancel'"
                 class="tw-inline-flex tw-items-center tw-px-2 tw-py-0.5 tw-rounded-full tw-text-xs tw-font-medium tw-bg-red-100 tw-text-red-700">
-                Fermé
+                Fermé<ng-container *ngIf="d.closure_mode=='forced_continue'"> (forcée)</ng-container>
+              </span>
+              <span *ngIf="d.is_active==false && d.closure_mode=='forced_cancel'"
+                class="tw-inline-flex tw-items-center tw-px-2 tw-py-0.5 tw-rounded-full tw-text-xs tw-font-medium tw-bg-gray-200 tw-text-gray-700">
+                Annulée
               </span>
             </td>
           </tr>
@@ -320,6 +329,59 @@
   </form>
 </ng-template>
 
+<ng-template #forceCloseContent let-c="close" let-d="dismiss">
+  <form #forceForm="ngForm" (ngSubmit)="forceClose(forceForm.value)">
+    <div class="modal-header tw-bg-red-700 tw-text-white">
+      <h6 class="modal-title tw-font-semibold">Clôture forcée — {{selected_data.name}}</h6>
+      <button type="button" (click)="d('Cross click')" class="tw-text-white hover:tw-text-gray-200">
+        <i class="ri-close-line tw-text-lg"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p class="tw-text-sm tw-text-gray-700 tw-mb-3">
+        {{undecidedRequetes.length}} dossier(s) sur {{requetes.length}} n'ont pas encore de décision.
+      </p>
+
+      <div class="form-group mb-3">
+        <label class="tw-font-medium">Sort des dossiers <span class="text-danger ml-2">(*)</span></label>
+        <div class="form-check tw-mt-2">
+          <input class="form-check-input" type="radio" name="mode" id="modeContinue" value="continue" ngModel required>
+          <label class="form-check-label" for="modeContinue">
+            <strong>Poursuivre</strong> — les décisions prises sont conservées et passent à l'autorisation ;
+            les {{undecidedRequetes.length}} dossier(s) sans décision retournent dans la liste « à inscrire en session ».
+          </label>
+        </div>
+        <div class="form-check tw-mt-2">
+          <input class="form-check-input" type="radio" name="mode" id="modeCancel" value="cancel" ngModel required>
+          <label class="form-check-label" for="modeCancel">
+            <strong>Annuler / reprendre</strong> — aucune décision de cette session n'est retenue ;
+            les {{requetes.length}} dossier(s) retournent dans la liste « à inscrire en session ».
+          </label>
+        </div>
+        <p *ngIf="forceForm.value.mode=='cancel'" class="tw-text-xs tw-text-red-600 tw-mt-2 tw-mb-0">
+          Les mails de rejet déjà envoyés aux promoteurs ne peuvent pas être rappelés.
+        </p>
+      </div>
+
+      <div class="form-group mb-3">
+        <label>Motif <span class="text-danger ml-2">(*)</span></label>
+        <textarea name="reason" class="form-control" rows="4" ngModel required minlength="10" maxlength="2000"
+          placeholder="Ex. : quorum non atteint, membres indisponibles…"></textarea>
+        <small class="text-muted">10 caractères minimum. Le motif est inscrit dans le parcours de chaque dossier concerné.</small>
+      </div>
+
+      <p class="tw-text-xs tw-text-gray-500 tw-mb-0">
+        Comme pour une clôture normale, les comptes des membres de la session seront supprimés.
+      </p>
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-danger" [disabled]="forceForm.invalid || loading">
+        Confirmer la clôture forcée <app-loading [isVisible]="loading"></app-loading>
+      </button>
+    </div>
+  </form>
+</ng-template>
+
 <ng-template #showContent let-c="close" let-d="dismiss">
   <div class="modal-header tw-bg-slate-800 tw-text-white">
     <h6 class="modal-title tw-font-semibold">Détails des informations</h6>
@@ -342,6 +404,10 @@
           <tr>
             <td class="fw-medium">Date fin</td>
             <td>{{selected_data.date_end | date:"shortDate"}}</td>
+          </tr>
+          <tr *ngIf="selected_data.closure_reason">
+            <td class="fw-medium">{{selected_data.closure_mode=='forced_cancel' ? "Motif d'annulation" : 'Motif de clôture forcée'}}</td>
+            <td>{{selected_data.closure_reason}}<br><small class="text-muted">le {{selected_data.closed_at | date:"short"}}</small></td>
           </tr>
           <tr>
             <td class="fw-medium">Ouvrir l'acte d'ouverture</td>

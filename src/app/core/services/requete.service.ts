@@ -59,6 +59,18 @@ export class RequeteService {
   }
 
   /** Rattache un dossier à un autre arrondissement (donc à un autre CPS). */
+  /** Autres GUPS couvrant l'arrondissement du dossier (cibles possibles d'un transfert). */
+  gupsCandidats(requete_id:any){
+    return this.http.get<any>(`${this.url}${requete_id}/gups-candidats`,
+     ConfigService.httpHeader(localStorage.getItem(GlobalName.tokenName),true));
+  }
+
+  /** Transfère un dossier en instruction vers un autre GUPS qui couvre son arrondissement. */
+  transferGups(requete_id:any, cps_id:any, motif:string){
+    return this.http.post<any>(`${this.url}transfer-gups`, {requete_id, cps_id, motif},
+     ConfigService.httpHeader(localStorage.getItem(GlobalName.tokenName),true));
+  }
+
   transferDistrict(requete_id:any, district_id:any, motif?:string){
     return this.http.post<any>(`${this.url}transfer-district`,
       { requete_id, district_id, motif },

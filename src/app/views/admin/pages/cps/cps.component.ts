@@ -251,6 +251,35 @@ export class CpsComponent implements OnInit {
       })
   }
 
+  removeDistrict(cps:any, district:any){
+    const msg = district.cps_id == cps.id
+      ? `${cps.name} ne couvrira plus ${district.name}. Un autre GUPS qui le couvre recevra désormais ses nouveaux dossiers, et les dossiers en instruction de ${cps.name} dans cet arrondissement lui seront confiés.`
+      : `${cps.name} ne couvrira plus ${district.name}. Ses dossiers en instruction dans cet arrondissement seront confiés au GUPS par défaut.`
+    AppSweetAlert.confirmBox('warning','Couverture',msg).then((result:any)=>{
+      if (!result.isConfirmed) return
+      this.cpsService.removeDistrict(cps.id, district.id).subscribe((res:any)=>{
+        this.toastrService.success(res.message)
+        this.getAll()
+      },
+      (err:any)=>{
+        AppSweetAlert.simpleAlert("error","CPS",err.error.message)
+      })
+    })
+  }
+
+  setDefaultDistrict(cps:any, district:any){
+    AppSweetAlert.confirmBox('info','GUPS par défaut',`${cps.name} recevra les nouveaux dossiers de ${district.name}. Les dossiers en cours ne bougent pas.`).then((result:any)=>{
+      if (!result.isConfirmed) return
+      this.cpsService.setDefaultDistrict(cps.id, district.id).subscribe((res:any)=>{
+        this.toastrService.success(res.message)
+        this.getAll()
+      },
+      (err:any)=>{
+        AppSweetAlert.simpleAlert("error","CPS",err.error.message)
+      })
+    })
+  }
+
   onItemSelect(item: any) {
     console.log(item);
     console.log(this.selectedItems);

@@ -54,6 +54,12 @@ export class SessionServiceService {
      ConfigService.httpHeader(localStorage.getItem(GlobalName.tokenName),true));
   }
 
+  /** Clôture forcée par la DFEA. mode : 'continue' ou 'cancel'. */
+  forceClose(id:any,ressource:{mode:string,reason:string}){
+    return this.http.post<any>(`${this.url}/force-close/${id}`, ressource,
+     ConfigService.httpHeader(localStorage.getItem(GlobalName.tokenName),true));
+  }
+
   storeMembers(ressource:any){
     return this.http.post<any>(`${this.url}/store-members/all`, ressource,
      ConfigService.httpHeader(localStorage.getItem(GlobalName.tokenName),true));

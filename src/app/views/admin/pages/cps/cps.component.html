@@ -84,8 +84,18 @@
           <td class="tw-px-4 tw-py-3 tw-text-gray-900">{{ d.name }}</td>
           <td class="tw-px-4 tw-py-3">
             <div class="tw-flex tw-flex-wrap tw-gap-1">
-              <span *ngFor="let a of d.districts"
-                class="tw-inline-flex tw-items-center tw-px-1.5 tw-py-0.5 tw-rounded tw-text-xs tw-bg-slate-100 tw-text-slate-600 tw-mr-1">{{ a.name }}</span>
+              <!-- Couverture : ★ = GUPS par défaut (reçoit les nouveaux dépôts de l'arrondissement) -->
+              <span *ngFor="let a of d.couverture"
+                class="tw-inline-flex tw-items-center tw-gap-1 tw-px-1.5 tw-py-0.5 tw-rounded tw-text-xs tw-mr-1"
+                [ngClass]="a.cps_id == d.id ? 'tw-bg-blue-100 tw-text-blue-800' : 'tw-bg-slate-100 tw-text-slate-600'"
+                [title]="a.cps_id == d.id ? 'GUPS par défaut : reçoit les nouveaux dossiers' : 'Couverture partagée'">
+                <i *ngIf="a.cps_id == d.id" class="ri-star-fill"></i>
+                {{ a.name }}
+                <button *ngIf="a.cps_id != d.id" type="button" (click)="$event.stopPropagation(); setDefaultDistrict(d, a)"
+                  class="tw-text-slate-400 hover:tw-text-blue-600" title="Définir comme GUPS par défaut"><i class="ri-star-line"></i></button>
+                <button type="button" (click)="$event.stopPropagation(); removeDistrict(d, a)"
+                  class="tw-text-slate-400 hover:tw-text-red-600" title="Retirer de la couverture"><i class="ri-close-line"></i></button>
+              </span>
             </div>
           </td>
         </tr>

@@ -98,6 +98,7 @@ export class SessionComponent implements OnInit {
 
   ngOnInit(): void {
     this.user=this.lsService.get(GlobalName.userName)
+    this.role=this.user?.roles?.[0]?.name
     this.init()
     this.buttonsPermission = {
       show:true,
@@ -382,6 +383,40 @@ export class SessionComponent implements OnInit {
           AppSweetAlert.simpleAlert("error","Session",err.error.message)
       })
   }
+  get canForceClose(): boolean {
+    return this.selected_data?.is_active == true && ['dfea','admin'].includes(this.role)
+  }
+
+  /** Dossiers de la session sélectionnée encore sans décision (has_agreemant non renseigné). */
+  get undecidedRequetes(): any[] {
+    return (this.requetes ?? []).filter((r:any) => r.has_agreemant === null || r.has_agreemant === undefined)
+  }
+
+  forceClose(value:any){
+    const cancel = value.mode === 'cancel'
+    const text = cancel
+      ? `La session sera annulée : ses décisions seront effacées et ses ${this.requetes.length} dossier(s) devront être réinscrits. Les mails de rejet déjà envoyés ne peuvent pas être rappelés.`
+      : `La session sera clôturée : les dossiers décidés poursuivent le workflow, les ${this.undecidedRequetes.length} dossier(s) sans décision retournent dans la liste à inscrire.`
+    AppSweetAlert.confirmBox('warning', cancel ? 'Annulation de session' : 'Clôture forcée', text).then((result:any)=>{
+      if (!result.isConfirmed) return
+      this.loading=true
+      this.sessionService.forceClose(this.selected_data.id,{mode:value.mode,reason:value.reason}).subscribe((res:any)=>{
+        this.loading=false
+        AppSweetAlert.simpleAlert("success","Session",res.message)
+        this.selected_data=null
+        this.is_active=null
+        this.members=[]
+        this.requetes=[]
+        this.getAll()
+        this.getRequetes()
+      },
+      (err:any)=>{
+        this.loading=false
+        AppSweetAlert.simpleAlert("error","Session",err.error.message)
+      })
+    })
+  }
+
   storeDistricts(value:any){
 
     this.toastrService.warning("Opération en cours")

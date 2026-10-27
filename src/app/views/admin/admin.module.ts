@@ -49,6 +49,7 @@ import { TypeFileComponent } from './pages/type-file/type-file.component';
 import { TypeSanctionComponent } from './pages/type-sanction/type-sanction.component';
 import { RequetesComponent } from './pages/requetes/requetes.component';
 import { BackupsComponent } from './pages/backups/backups.component';
+import { MailTestComponent } from './pages/mail-test/mail-test.component';
 import { JournalComponent } from './pages/journal/journal.component';
 import { UniteAdminComponent } from './pages/unite-admin/unite-admin.component';
 import { ControlComponent } from './pages/control/control.component';
@@ -123,6 +124,7 @@ import { AbandonComponent } from './pages/abandon/abandon.component';
     TypeSanctionComponent,
     RequetesComponent,
     BackupsComponent,
+    MailTestComponent,
     JournalComponent,
     UniteAdminComponent,
     ControlComponent,

@@ -1,0 +1,72 @@
+<div class="tw-grid tw-grid-cols-12 tw-gap-4">
+  <div class="tw-col-span-12 lg:tw-col-span-8">
+    <div class="tw-bg-white tw-rounded-xl tw-shadow-sm tw-border tw-border-gray-200">
+      <div class="tw-px-5 tw-py-4 tw-border-b tw-border-gray-100">
+        <h6 class="tw-text-sm tw-font-semibold tw-text-gray-700 tw-mb-1">Test d'envoi de mail</h6>
+        <p class="tw-text-xs tw-text-gray-500 tw-mb-0">
+          Vérifie la configuration, la connexion au serveur SMTP puis envoie un vrai mail à l'adresse indiquée.
+        </p>
+      </div>
+
+      <form #mailForm="ngForm" (ngSubmit)="test()" class="tw-px-5 tw-py-4 tw-flex tw-flex-wrap tw-items-end tw-gap-3">
+        <div class="tw-flex-1 tw-min-w-[16rem]">
+          <label class="tw-text-sm tw-text-gray-600" for="mailTestEmail">Adresse destinataire</label>
+          <input id="mailTestEmail" type="email" name="email" class="form-control" [(ngModel)]="email" required email>
+        </div>
+        <button type="submit" [disabled]="mailForm.invalid || loading"
+          class="tw-inline-flex tw-items-center tw-gap-1.5 tw-px-4 tw-py-2 tw-rounded-lg tw-text-sm tw-font-medium tw-bg-blue-600 tw-text-white hover:tw-bg-blue-700 disabled:tw-bg-gray-300 disabled:tw-cursor-not-allowed">
+          <i class="ri-mail-send-line"></i> Lancer le test <app-loading [isVisible]="loading"></app-loading>
+        </button>
+      </form>
+
+      <div *ngIf="error" class="tw-mx-5 tw-mb-4 tw-p-3 tw-rounded-lg tw-bg-red-50 tw-text-sm tw-text-red-700">
+        {{error}}
+      </div>
+
+      <ng-container *ngIf="result">
+        <div class="tw-mx-5 tw-mb-4 tw-p-3 tw-rounded-lg tw-text-sm tw-font-medium"
+          [ngClass]="ok ? 'tw-bg-green-50 tw-text-green-700' : 'tw-bg-red-50 tw-text-red-700'">
+          <i [class]="ok ? 'ri-checkbox-circle-line' : 'ri-close-circle-line'"></i>
+          {{ ok ? 'Envoi opérationnel' : "L'envoi de mails ne fonctionne pas" }}
+        </div>
+
+        <ul class="tw-mx-5 tw-mb-4 tw-p-0 tw-list-none tw-divide-y tw-divide-gray-100 tw-border tw-border-gray-200 tw-rounded-lg">
+          <li *ngFor="let s of result.steps" class="tw-px-4 tw-py-3 tw-flex tw-gap-3">
+            <i class="tw-text-lg"
+              [ngClass]="s.ok === true ? 'ri-checkbox-circle-fill tw-text-green-600' : s.ok === false ? 'ri-close-circle-fill tw-text-red-600' : 'ri-indeterminate-circle-line tw-text-gray-400'"></i>
+            <div class="tw-flex-1 tw-min-w-0">
+              <div class="tw-text-sm tw-font-medium tw-text-gray-800">
+                {{s.step}} <span class="tw-text-xs tw-text-gray-400 tw-font-normal">{{s.ms}} ms</span>
+              </div>
+              <div class="tw-text-xs tw-break-words" [ngClass]="s.ok === false ? 'tw-text-red-700 tw-font-mono' : 'tw-text-gray-600'">{{s.message}}</div>
+            </div>
+          </li>
+        </ul>
+
+        <div *ngIf="result.warnings?.length" class="tw-mx-5 tw-mb-4 tw-p-3 tw-rounded-lg tw-bg-yellow-50 tw-text-sm tw-text-yellow-800">
+          <div *ngFor="let w of result.warnings"><i class="ri-alert-line"></i> {{w}}</div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+
+  <div class="tw-col-span-12 lg:tw-col-span-4" *ngIf="result?.config as conf">
+    <div class="tw-bg-white tw-rounded-xl tw-shadow-sm tw-border tw-border-gray-200">
+      <div class="tw-px-5 tw-py-4 tw-border-b tw-border-gray-100">
+        <h6 class="tw-text-sm tw-font-semibold tw-text-gray-700 tw-mb-0">Configuration utilisée</h6>
+      </div>
+      <table class="table table-borderless align-middle mb-0 tw-text-sm">
+        <tbody>
+          <tr><td class="fw-medium">Mailer</td><td>{{conf.mailer}}</td></tr>
+          <tr><td class="fw-medium">Serveur</td><td class="tw-break-all">{{conf.host || '—'}}</td></tr>
+          <tr><td class="fw-medium">Port</td><td>{{conf.port || '—'}}</td></tr>
+          <tr><td class="fw-medium">Chiffrement</td><td>{{conf.encryption || 'aucun'}}</td></tr>
+          <tr><td class="fw-medium">Utilisateur</td><td class="tw-break-all">{{conf.username || '—'}}</td></tr>
+          <tr><td class="fw-medium">Mot de passe</td><td>{{conf.password_defined ? 'défini' : 'absent'}}</td></tr>
+          <tr><td class="fw-medium">Expéditeur</td><td class="tw-break-all">{{conf.from_name}} &lt;{{conf.from_address || '—'}}&gt;</td></tr>
+          <tr><td class="fw-medium">Config en cache</td><td>{{conf.config_cached ? 'oui (relancer config:cache après modification du .env)' : 'non'}}</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

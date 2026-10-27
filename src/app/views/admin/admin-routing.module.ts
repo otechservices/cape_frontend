@@ -16,6 +16,7 @@ import { RecoveryPasswordComponent } from './pages/auth/recovery-password/recove
 import { RoleComponent } from './pages/auth/role/role.component';
 import { UserProfilComponent } from './pages/auth/user-profil/user-profil.component';
 import { BackupsComponent } from './pages/backups/backups.component';
+import { MailTestComponent } from './pages/mail-test/mail-test.component';
 import { CapeComponent } from './pages/cape/cape.component';
 import { ControlComponent } from './pages/control/control.component';
 import { CpsComponent } from './pages/cps/cps.component';
@@ -224,6 +225,10 @@ const routes: Routes = [
       {
         path:"backups",
         component:BackupsComponent
+      },
+      {
+        path:"mail-test",
+        component:MailTestComponent
       },
       {
         path:"journals",

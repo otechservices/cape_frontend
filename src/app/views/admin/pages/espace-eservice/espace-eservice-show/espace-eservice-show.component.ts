@@ -347,6 +347,43 @@ export class EspaceEserviceShowComponent implements OnInit {
     });
   }
 
+  gupsCandidats: any[] = [];
+  gupsTransfer: any = { cps_id: null, motif: '' };
+
+  /** Le GUPS détenteur peut confier un dossier en instruction (statuts 0 à 4) à un autre GUPS qui couvre l'arrondissement. */
+  get canTransferGups(): boolean {
+    return this.canAct && this.role === 'cps' && [0, 1, 2, 3, 4].includes(Number(this.data?.status));
+  }
+
+  openGupsTransfer(content: any) {
+    this.gupsTransfer = { cps_id: null, motif: '' };
+    this.gupsCandidats = [];
+    this.reqService.gupsCandidats(this.data.id).subscribe({
+      next: (res: any) => {
+        this.gupsCandidats = res.data;
+        this.modalService.open(content, { size: 'lg' });
+      },
+      error: (err: any) => AppSweetAlert.simpleAlert('error', 'Transfert de GUPS', err.error.message)
+    });
+  }
+
+  transferGups() {
+    this.loading = true;
+    this.reqService.transferGups(this.data.id, this.gupsTransfer.cps_id, this.gupsTransfer.motif).subscribe({
+      next: (res: any) => {
+        this.loading = false;
+        this.modalService.dismissAll();
+        AppSweetAlert.simpleAlert('success', 'Transfert de GUPS', res.message);
+        // Le dossier n'est plus dans la liste de travail de cet agent.
+        this.router.navigate(['/admin/requetes/new']);
+      },
+      error: (err: any) => {
+        this.loading = false;
+        AppSweetAlert.simpleAlert('error', 'Transfert de GUPS', err.error.message);
+      }
+    });
+  }
+
   /** Le métier a besoin d'un état complet du centre, hors écran : admin et DFEA seuls. */
   get canPrintFiche(): boolean {
     return this.role === 'admin' || this.role === 'dfea';

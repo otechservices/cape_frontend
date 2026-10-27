@@ -24,6 +24,18 @@ export class CpsService {
      ConfigService.httpHeader(localStorage.getItem(GlobalName.tokenName),true));
   }
 
+  /** Retire un arrondissement de la couverture du GUPS. */
+  removeDistrict(cps_id:any, district_id:any){
+    return this.http.delete<any>(`${this.url}${cps_id}/districts/${district_id}`,
+     ConfigService.httpHeader(localStorage.getItem(GlobalName.tokenName),true));
+  }
+
+  /** Fait de ce GUPS celui qui reçoit les nouveaux dossiers de l'arrondissement. */
+  setDefaultDistrict(cps_id:any, district_id:any){
+    return this.http.post<any>(`${this.url}${cps_id}/districts/${district_id}/default`, {},
+     ConfigService.httpHeader(localStorage.getItem(GlobalName.tokenName),true));
+  }
+
   update(id:any,ressource:any){
     //ressource['method']='_patch';
 
