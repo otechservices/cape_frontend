@@ -388,7 +388,7 @@ export class SessionComponent implements OnInit {
     const opening = value == 1
     const text = opening
       ? `Ouvrir la session « ${this.selected_data.name} » avec ${this.members.length} membre(s) et ${this.requetes.length} dossier(s) ? Elle ne pourra plus être modifiée ni supprimée.`
-      : `Clôturer la session « ${this.selected_data.name} » ? Les comptes des membres seront supprimés et la session ne pourra plus être rouverte.`
+      : `Clôturer la session « ${this.selected_data.name} » ? Les promoteurs des dossiers rejetés seront informés par mail, les comptes des membres supprimés, et la session ne pourra plus être rouverte.`
     AppSweetAlert.confirmBox('warning', opening ? 'Ouverture de session' : 'Clôture de session', text).then((result:any)=>{
       if (!result.isConfirmed) return
       this.loading=true
@@ -415,8 +415,8 @@ export class SessionComponent implements OnInit {
   forceClose(value:any){
     const cancel = value.mode === 'cancel'
     const text = cancel
-      ? `La session sera annulée : ses décisions seront effacées et ses ${this.requetes.length} dossier(s) devront être réinscrits. Les mails de rejet déjà envoyés ne peuvent pas être rappelés.`
-      : `La session sera clôturée : les dossiers décidés poursuivent le workflow, les ${this.undecidedRequetes.length} dossier(s) sans décision retournent dans la liste à inscrire.`
+      ? `La session sera annulée : ses décisions seront effacées et ses ${this.requetes.length} dossier(s) devront être réinscrits. Aucun mail de rejet ne sera envoyé.`
+      : `La session sera clôturée : les dossiers décidés poursuivent le workflow et les promoteurs des dossiers rejetés sont informés par mail ; les ${this.undecidedRequetes.length} dossier(s) sans décision retournent dans la liste à inscrire.`
     AppSweetAlert.confirmBox('warning', cancel ? 'Annulation de session' : 'Clôture forcée', text).then((result:any)=>{
       if (!result.isConfirmed) return
       this.loading=true
