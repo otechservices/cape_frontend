@@ -132,16 +132,22 @@ export class SessionComponent implements OnInit {
 
  
  
+  /** Recharge les sessions et garde la session sélectionnée à jour (membres, dossiers, statut). */
   getAll(){
     this.sessionService.getAll().subscribe((res:any)=>{
       this.data=res.data
       this.selectedItems=[]
       this.selectedItems2=[]
-      this.dropdownList=[]
-      this.dropdownList2=[]
       this.modalService.dismissAll()
-
-      
+      const selected=this.data.find((d:any)=>d.id==this.selected_data?.id)
+      if (selected) {
+        this.checked(selected)
+      } else {
+        this.selected_data=null
+        this.is_active=null
+        this.members=[]
+        this.requetes=[]
+      }
     },
     (err:any)=>{
 
@@ -160,6 +166,7 @@ export class SessionComponent implements OnInit {
   getRequetes(){
     this.reqService.getByInstance('admissible').subscribe((res:any)=>{
       this.requetesAll=res
+      this.dropdownList2=this.requetesAll.map((r:any)=>({id:r.id,itemName:r.name}))
     },
     (err:any)=>{
 
@@ -205,8 +212,10 @@ export class SessionComponent implements OnInit {
     this.loading=true
     this.sessionService.store(formData).subscribe((res:any)=>{
       this.loading=false
+      this.fileInput=undefined
 
         this.toastrService.success(res.message)
+        this.selected_data=res.data
         this.getAll()
 
     },
@@ -271,8 +280,9 @@ export class SessionComponent implements OnInit {
      }
     this.loading=true
 
-    this.sessionService.update(this.selected_data.id,value).subscribe((res:any)=>{
+    this.sessionService.update(this.selected_data.id,formData).subscribe((res:any)=>{
       this.loading=false
+      this.fileInput=undefined
 
         this.toastrService.success(res.message)
         this.getAll()
@@ -291,7 +301,9 @@ export class SessionComponent implements OnInit {
        if (result.isConfirmed) {
     this.sessionService.delete(this.selected_data.id).subscribe((res:any)=>{
         this.toastrService.success(res.message)
+        this.selected_data=null
         this.getAll()
+        this.getRequetes()
     },
     (err:any)=>{
       console.log(err)
@@ -303,22 +315,14 @@ export class SessionComponent implements OnInit {
   checked(el?:any){
     this.selected_data=el;
     this.is_active=el.is_active
-    this.members=this.selected_data.session_members
-    this.requetes=this.selected_data.requetes
+    this.members=this.selected_data.session_members ?? []
+    this.requetes=this.selected_data.requetes ?? []
 
-
-      this.membersAll.forEach((element:any) =>  {
-        if (this.members.findIndex((el:any) => el.member?.id == element.id)==-1) {
-          this.dropdownList.push({id:element.id,itemName:element.lastname+" "+element.firstname})
-        }
-      });
-    
- 
-    this.requetesAll.forEach((element:any) =>  {
-      if (this.requetes.findIndex((el:any) => el.id != element.id)) {
-        this.dropdownList2.push({id:element.id,itemName:element.name})
-      }
-    });
+    // Membres pas encore affectés à cette session. Les dossiers proposés
+    // (dropdownList2) sont déjà filtrés par l'API : admissibles et sans session.
+    this.dropdownList=this.membersAll
+      .filter((m:any) => !this.members.some((sm:any) => sm.member_id == m.id))
+      .map((m:any) => ({id:m.id,itemName:m.lastname+" "+m.firstname}))
 
 
         this.requetesNotation = this.requetes.map((r: any) => ({
@@ -368,20 +372,36 @@ export class SessionComponent implements OnInit {
 
   }
 
-  setStatus(value:any){
+  /** Cycle de vie de la session sélectionnée : is_active null → vrai → faux, sans retour. */
+  get isPending(): boolean {
+    return !!this.selected_data && (this.selected_data.is_active === null || this.selected_data.is_active === undefined)
+  }
+  get isOpen(): boolean {
+    return !!this.selected_data && !this.isPending && this.selected_data.is_active == true
+  }
+  get isClosed(): boolean {
+    return !!this.selected_data && !this.isPending && this.selected_data.is_active == false
+  }
 
-    this.toastrService.warning("Opération en cours")
-  
-        this.sessionService.setStatus(this.selected_data.id,value).subscribe((res:any)=>{
+  setStatus(value:any){
+    if(!this.verifyIfElementChecked()) return ;
+    const opening = value == 1
+    const text = opening
+      ? `Ouvrir la session « ${this.selected_data.name} » avec ${this.members.length} membre(s) et ${this.requetes.length} dossier(s) ? Elle ne pourra plus être modifiée ni supprimée.`
+      : `Clôturer la session « ${this.selected_data.name} » ? Les comptes des membres seront supprimés et la session ne pourra plus être rouverte.`
+    AppSweetAlert.confirmBox('warning', opening ? 'Ouverture de session' : 'Clôture de session', text).then((result:any)=>{
+      if (!result.isConfirmed) return
+      this.loading=true
+      this.sessionService.setStatus(this.selected_data.id,value).subscribe((res:any)=>{
+          this.loading=false
           this.toastrService.success(res.message)
           this.getAll()
-          this.members=[]
-          this.requetes=[]
       },
       (err:any)=>{
-        console.log(err)
+        this.loading=false
           AppSweetAlert.simpleAlert("error","Session",err.error.message)
       })
+    })
   }
   get canForceClose(): boolean {
     return this.selected_data?.is_active == true && ['dfea','admin'].includes(this.role)
@@ -418,8 +438,10 @@ export class SessionComponent implements OnInit {
   }
 
   storeDistricts(value:any){
-
-    this.toastrService.warning("Opération en cours")
+    if (!this.selectedItems.length) {
+      this.toastrService.warning("Sélectionnez au moins un membre")
+      return
+    }
     this.loading=true
 
         this.sessionService.storeMembers({
@@ -437,8 +459,10 @@ export class SessionComponent implements OnInit {
       })
   }
   storeRequetes(value:any){
-
-    this.toastrService.warning("Opération en cours")
+    if (!this.selectedItems2.length) {
+      this.toastrService.warning("Sélectionnez au moins un dossier")
+      return
+    }
     this.loading=true
         this.sessionService.storeRequetes({
           id:this.selected_data.id,
@@ -448,6 +472,7 @@ export class SessionComponent implements OnInit {
           this.selectedItems2=[];
           this.toastrService.success(res.message)
           this.getAll()
+          this.getRequetes()
       },
       (err:any)=>{
         this.loading=false
@@ -489,7 +514,6 @@ removeMember(id:any, index:any){
      if (result.isConfirmed) {
   this.sessionService.removeMember(id).subscribe((res:any)=>{
       this.toastrService.success(res.message)
-      this.members.splice(index,1)
       this.getAll()
   },
   (err:any)=>{
@@ -505,8 +529,8 @@ removeRequete(id:any, index:any){
      if (result.isConfirmed) {
   this.sessionService.removeRequete(id).subscribe((res:any)=>{
       this.toastrService.success(res.message)
-      this.requetes.splice(index,1)
       this.getAll()
+      this.getRequetes()
   },
   (err:any)=>{
     console.log(err)

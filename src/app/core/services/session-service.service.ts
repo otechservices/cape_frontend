@@ -34,7 +34,12 @@ export class SessionServiceService {
   }
 
   update(id:any,ressource:any){
-    //ressource['method']='_patch';
+    // PHP ne lit pas le multipart d'un PUT : un FormData (nouvelle note
+    // d'accord) part en POST, Laravel le traite en PUT grâce à `_method`.
+    if (ressource instanceof FormData) {
+      ressource.append('_method','PUT')
+      return this.http.post<any>(`${this.url}/${id}`, ressource,  ConfigService.httpHeader(localStorage.getItem(GlobalName.tokenName),true));
+    }
 
     return this.http.put<any>(`${this.url}/${id}`, ressource,  ConfigService.httpHeader(localStorage.getItem(GlobalName.tokenName),true));
   }
