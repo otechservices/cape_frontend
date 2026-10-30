@@ -71,10 +71,17 @@ export class RequeteService {
      ConfigService.httpHeader(localStorage.getItem(GlobalName.tokenName),true));
   }
 
-  transferDistrict(requete_id:any, district_id:any, motif?:string){
+  /** cps_id : GUPS choisi quand plusieurs couvrent l'arrondissement d'arrivée (sinon choix automatique). */
+  transferDistrict(requete_id:any, district_id:any, motif:string, cps_id?:any){
     return this.http.post<any>(`${this.url}transfer-district`,
-      { requete_id, district_id, motif },
+      { requete_id, district_id, motif, cps_id: cps_id || null },
       ConfigService.httpHeader(localStorage.getItem(GlobalName.tokenName),true));
+  }
+
+  /** GUPS qui couvrent un arrondissement (is_default, has_agent). */
+  gupsArrondissement(district_id:any){
+    return this.http.get<any>(`${this.url}transfer-district/gups/${district_id}`,
+     ConfigService.httpHeader(localStorage.getItem(GlobalName.tokenName),true));
   }
   getByInstance(state:any,service?:any){
     return this.http.get<any[]>(`${this.url}get-by-instance/${state}?service_id=${service}`);

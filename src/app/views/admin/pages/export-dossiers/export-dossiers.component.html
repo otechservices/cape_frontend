@@ -155,7 +155,7 @@
                 class="tw-inline-flex tw-items-center tw-gap-1 tw-px-2 tw-py-1 tw-rounded-lg tw-text-xs tw-font-medium tw-bg-blue-50 tw-text-blue-700 hover:tw-bg-blue-100 tw-transition-colors tw-no-underline">
                 <i class="ri-eye-line"></i>Consulter
               </a>
-              <button (click)="openTransfer(transferContent, d)"
+              <button *ngIf="canTransfer" (click)="openTransfer(transferContent, d)"
                 class="tw-inline-flex tw-items-center tw-gap-1 tw-px-2 tw-py-1 tw-rounded-lg tw-text-xs tw-font-medium tw-bg-slate-100 tw-text-slate-700 hover:tw-bg-slate-200 tw-transition-colors">
                 <i class="ri-exchange-line"></i>Transférer
               </button>
@@ -201,13 +201,13 @@
       <div class="tw-text-xs tw-text-gray-600 tw-mt-1">
         Rattachement actuel :
         <strong>{{ selected_data?.district?.name ?? 'aucun arrondissement' }}</strong>
-        — CPS {{ selected_data?.district?.cps?.name ?? 'non rattaché' }}
+        — GUPS {{ selected_data?.gups?.name ?? selected_data?.district?.cps?.name ?? 'non rattaché' }}
       </div>
     </div>
 
     <p class="tw-text-xs tw-text-gray-500 tw-mb-3">
-      L'arrondissement détermine le CPS et le DDASM compétents. Corrigez-le ici si le dossier
-      a été mal ciblé à l'import ou si le centre a déménagé.
+      L'arrondissement détermine le GUPS et le DDASM compétents. Corrigez-le ici si le dossier
+      a été mal ciblé à l'import ou si le centre a déménagé. Impossible pendant une session ouverte.
     </p>
 
     <div class="row">
@@ -233,23 +233,52 @@
       <div class="form-group col-12 mb-3">
         <label>Arrondissement <span class="text-danger">(*)</span></label>
         <select class="form-control" [(ngModel)]="transfer.district_id"
+                (ngModelChange)="onTransferDistrictChange()"
                 [disabled]="!transfer.municipality_id">
           <option value="">Sélectionner…</option>
           <option *ngFor="let a of transferDistricts" [value]="a.id">{{ a.name }}</option>
         </select>
+        <small *ngIf="transfer.district_id && transfer.district_id == selected_data?.district_id" class="tw-text-amber-600">
+          C'est l'arrondissement actuel du dossier.
+        </small>
+      </div>
+
+      <div class="form-group col-12 mb-3" *ngIf="transfer.district_id && transfer.district_id != selected_data?.district_id">
+        <label>GUPS en charge <span *ngIf="transferGups.length > 1" class="text-danger">(*)</span></label>
+        <div *ngIf="loadingGups" class="tw-text-xs tw-text-gray-500">Recherche des GUPS qui couvrent l'arrondissement…</div>
+        <ng-container *ngIf="!loadingGups">
+          <p *ngIf="transferGups.length === 0" class="tw-text-xs tw-text-amber-700 tw-mb-0">
+            Aucun GUPS ne couvre cet arrondissement. Un dossier encore en instruction au GUPS ne pourra pas y être transféré.
+          </p>
+          <p *ngIf="transferGups.length === 1" class="tw-text-sm tw-mb-0">
+            {{ transferGups[0].name }} <span class="tw-text-xs tw-text-gray-500">(seul GUPS couvrant l'arrondissement)</span>
+          </p>
+          <ng-container *ngIf="transferGups.length > 1">
+            <select class="form-control" [(ngModel)]="transfer.cps_id">
+              <option value="">Sélectionner…</option>
+              <option *ngFor="let g of transferGups" [value]="g.id">
+                {{ g.name }}{{ g.is_default ? ' (par défaut)' : '' }}{{ g.id == selected_data?.cps_id ? ' (actuel)' : '' }}{{ g.has_agent ? '' : ' — sans agent actif' }}
+              </option>
+            </select>
+            <small class="tw-text-gray-400">{{ transferGups.length }} GUPS couvrent cet arrondissement.</small>
+          </ng-container>
+          <p *ngIf="selectedTransferGups && !selectedTransferGups.has_agent" class="tw-text-xs tw-text-amber-700 tw-mt-1 tw-mb-0">
+            Ce GUPS n'a pas d'agent actif : un dossier encore en instruction au GUPS ne pourra pas lui être confié.
+          </p>
+        </ng-container>
       </div>
 
       <div class="form-group col-12 mb-3">
-        <label>Motif</label>
-        <input type="text" class="form-control" [(ngModel)]="transfer.motif"
+        <label>Motif <span class="text-danger">(*)</span></label>
+        <input type="text" class="form-control" [(ngModel)]="transfer.motif" maxlength="255"
                placeholder="Ex. : mauvais ciblage à l'import, déménagement du centre…">
-        <small class="tw-text-gray-400">Conservé dans le parcours du dossier.</small>
+        <small class="tw-text-gray-400">5 caractères minimum. Conservé dans le parcours du dossier.</small>
       </div>
     </div>
   </div>
 
   <div class="modal-footer">
-    <button type="button" (click)="submitTransfer()" [disabled]="transferring || !transfer.district_id"
+    <button type="button" (click)="submitTransfer()" [disabled]="transferring || transferInvalid"
       class="btn btn-outline-dark">
       {{ transferring ? 'Transfert en cours…' : 'Transférer' }}
     </button>

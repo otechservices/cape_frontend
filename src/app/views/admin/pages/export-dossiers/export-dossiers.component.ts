@@ -5,6 +5,8 @@ import { DepartmentService } from 'src/app/core/services/department.service';
 import { DistrictService } from 'src/app/core/services/district.service';
 import { MunicipalityService } from 'src/app/core/services/municipality.service';
 import { RequeteService } from 'src/app/core/services/requete.service';
+import { GlobalName } from 'src/app/core/utils/global-name';
+import { LocalStorageService } from 'src/app/core/utils/local-stoarge-service';
 
 /**
  * Écran de recherche et d'export des dossiers CAPE / Garderies.
@@ -55,8 +57,12 @@ export class ExportDossiersComponent implements OnInit {
   selected_data: any;
   municipalities: any[] = [];
   districts: any[] = [];
-  transfer: any = { department_id: '', municipality_id: '', district_id: '', motif: '' };
+  transfer: any = { department_id: '', municipality_id: '', district_id: '', cps_id: '', motif: '' };
   transferring = false;
+  /** GUPS qui couvrent l'arrondissement choisi : plusieurs peuvent le couvrir. */
+  transferGups: any[] = [];
+  loadingGups = false;
+  role: any;
 
   constructor(
     private reqService: RequeteService,
@@ -65,6 +71,7 @@ export class ExportDossiersComponent implements OnInit {
     private districtService: DistrictService,
     private modalService: NgbModal,
     private toastrService: ToastrService,
+    private lsService: LocalStorageService,
     config: NgbModalConfig,
   ) {
     config.backdrop = 'static';
@@ -72,6 +79,7 @@ export class ExportDossiersComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.role = this.lsService.get(GlobalName.userName)?.roles?.[0]?.name;
     this.departmentService.getAll().subscribe((res: any) => this.departments = res.data);
     this.municipalityService.getAll().subscribe((res: any) => this.municipalities = res.data);
     this.districtService.getAll().subscribe((res: any) => this.districts = res.data);
@@ -90,25 +98,63 @@ export class ExportDossiersComponent implements OnInit {
     return this.districts.filter(d => d.municipality_id == this.transfer.municipality_id);
   }
 
+  /** Transfert réservé à l'administrateur, à la DFEA et à la DDASM (contrôlé aussi par l'API). */
+  get canTransfer(): boolean {
+    return ['admin', 'dfea', 'ddasm'].includes(this.role);
+  }
+
   openTransfer(content: any, d: any): void {
     this.selected_data = d;
     this.transfer = {
       department_id: d?.district?.municipality?.department_id ?? '',
       municipality_id: d?.district?.municipality_id ?? '',
       district_id: d?.district_id ?? '',
+      cps_id: '',
       motif: '',
     };
+    this.transferGups = [];
     this.modalService.open(content, { size: 'lg' });
   }
 
+  /** Arrondissement d'arrivée choisi : charge les GUPS qui le couvrent et en présélectionne un. */
+  onTransferDistrictChange(): void {
+    this.transfer.cps_id = '';
+    this.transferGups = [];
+    if (!this.transfer.district_id || this.transfer.district_id == this.selected_data?.district_id) return;
+
+    this.loadingGups = true;
+    this.reqService.gupsArrondissement(this.transfer.district_id).subscribe({
+      next: (res: any) => {
+        this.transferGups = res.data ?? [];
+        // Même règle que l'API sans choix : le GUPS actuel s'il couvre aussi
+        // l'arrondissement, sinon celui par défaut, sinon le seul qui le couvre.
+        const actuel = this.transferGups.find(g => g.id == this.selected_data?.cps_id);
+        const defaut = this.transferGups.find(g => g.is_default);
+        const choix = actuel ?? defaut ?? (this.transferGups.length === 1 ? this.transferGups[0] : null);
+        this.transfer.cps_id = choix?.id ?? '';
+        this.loadingGups = false;
+      },
+      error: () => this.loadingGups = false,
+    });
+  }
+
+  get selectedTransferGups(): any {
+    return this.transferGups.find(g => g.id == this.transfer.cps_id);
+  }
+
+  /** Arrondissement d'arrivée identique, motif trop court ou GUPS à choisir. */
+  get transferInvalid(): boolean {
+    return !this.transfer.district_id
+      || this.transfer.district_id == this.selected_data?.district_id
+      || (this.transfer.motif ?? '').trim().length < 5
+      || (this.transferGups.length > 1 && !this.transfer.cps_id);
+  }
+
   submitTransfer(): void {
-    if (!this.transfer.district_id) {
-      this.toastrService.warning('Sélectionnez un arrondissement');
-      return;
-    }
+    if (this.transferInvalid) return;
 
     this.transferring = true;
-    this.reqService.transferDistrict(this.selected_data.id, this.transfer.district_id, this.transfer.motif)
+    this.reqService.transferDistrict(this.selected_data.id, this.transfer.district_id, this.transfer.motif.trim(), this.transfer.cps_id)
       .subscribe({
         next: (res: any) => {
           this.toastrService.success(res.message);
